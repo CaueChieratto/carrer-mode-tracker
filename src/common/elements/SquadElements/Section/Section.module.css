@@ -1,0 +1,26 @@
+.player {
+  align-items: flex-end;
+  color: var(--blackColor);
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #cdcdcd;
+
+  margin: 0 20px;
+  padding: 10px 0;
+}
+
+.player:last-of-type {
+  border: none;
+}
+
+.data_title {
+  color: #222226;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.data {
+  color: #22222673;
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -1,0 +1,32 @@
+.input_placeholder {
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  height: 100%;
+  width: 95%;
+  color: var(--club-color);
+  font-weight: bold;
+  font-size: 18px;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: #ffffff !important;
+}
+
+.input_placeholder::placeholder {
+  color: var(--club-color);
+  opacity: 1;
+}
+
+.input_placeholder:-webkit-autofill {
+  font-family: inherit !important;
+  font-weight: bold !important;
+  color: var(--club-color) !important;
+  -webkit-text-fill-color: var(--club-color) !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+.input_placeholder:focus {
+  background-color: #ffffff !important;
+}

@@ -1,0 +1,56 @@
+.card {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px #0003;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  color: var(--blackColor);
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.h1 {
+  font-size: 20px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  padding: 12px 0;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 1px solid #cdcdcd;
+  position: relative;
+}
+
+.section_leagues {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  padding: 4px 0;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 1px solid #cdcdcd;
+  position: relative;
+}
+
+.section_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.container_icon {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  z-index: 999;
+}

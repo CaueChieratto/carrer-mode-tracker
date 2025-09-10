@@ -1,0 +1,12 @@
+.icon {
+  position: absolute;
+  left: 2%;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.black {
+  color: #333;
+}

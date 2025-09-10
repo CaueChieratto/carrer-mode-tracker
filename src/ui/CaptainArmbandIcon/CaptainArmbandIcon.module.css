@@ -1,0 +1,16 @@
+.container {
+  border-radius: 100%;
+  background-color: white;
+  border: 1px solid #16a34a;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.c {
+  font-size: 12px;
+  color: #16a34a;
+  font-weight: bold;
+}

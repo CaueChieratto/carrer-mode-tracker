@@ -1,0 +1,50 @@
+.container_p__label_img {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.p {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color);
+}
+
+.container_label_img {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.label_img {
+  border: 1px dashed black;
+  position: relative;
+  width: 75px;
+  height: 75px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewImage {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  object-fit: cover;
+}
+
+.span {
+  color: var(--colorSpan);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.hiddenInput {
+  display: none;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}

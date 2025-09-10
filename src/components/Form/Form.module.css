@@ -1,0 +1,13 @@
+.form {
+  padding: 0 22px 22px 22px;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.big {
+  gap: 50px;
+}

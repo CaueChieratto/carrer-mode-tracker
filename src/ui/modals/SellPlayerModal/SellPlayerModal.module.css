@@ -1,0 +1,15 @@
+.form {
+  padding: 0 22px 22px 22px;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.container {
+  display: grid;
+  gap: 8px 12px;
+  grid-template-columns: 1fr 1fr;
+}

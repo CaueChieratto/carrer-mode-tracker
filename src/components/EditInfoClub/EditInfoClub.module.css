@@ -1,0 +1,49 @@
+.container_club_info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.p {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color);
+}
+
+.container_infos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+}
+
+.container_info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 90%;
+  position: relative;
+}
+
+.h3 {
+  font-size: 14px;
+  color: var(--colorSpan);
+}
+
+.icon {
+  position: absolute;
+  bottom: 10.5%;
+  left: 2%;
+}
+
+.input {
+  width: 90%;
+  padding: 12px 12px 12px 22px;
+  height: 35px;
+  border-radius: 6px;
+  border: 1px solid #2b5842;
+  font-weight: bold;
+}
+
+.input::placeholder {
+  color: #2b5842;
+}

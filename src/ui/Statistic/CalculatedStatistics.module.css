@@ -1,0 +1,43 @@
+.icons {
+  height: 16px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.stats {
+  font-weight: bold;
+  min-width: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.statsLeague {
+  font-weight: bold;
+  min-width: 17px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating {
+  border-radius: 3px;
+  color: white;
+  height: 21px;
+  width: 40px;
+}
+
+.ratingLeague {
+  border-radius: 3px;
+  color: white;
+  height: 20px;
+  width: 40px;
+}

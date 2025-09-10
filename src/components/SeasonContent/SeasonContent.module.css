@@ -1,0 +1,16 @@
+.container_button {
+  position: sticky;
+  top: 90%;
+  z-index: 50000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.container {
+  min-height: 527px;
+  padding: 0 12px 100px;
+  position: relative;
+}

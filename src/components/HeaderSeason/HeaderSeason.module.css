@@ -1,0 +1,51 @@
+.header {
+  height: 110px;
+  padding: 0 24px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  z-index: 501;
+}
+
+.container_club {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.img {
+  width: 50px;
+}
+
+.h1 {
+  color: #eaeaea;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.p {
+  position: absolute;
+  top: 90%;
+  left: 28%;
+}
+
+.button {
+  background: #0000;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  color: #eaeaea;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 20px;
+}
