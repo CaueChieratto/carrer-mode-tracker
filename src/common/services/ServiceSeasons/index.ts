@@ -27,7 +27,7 @@ export const ServiceSeasons = {
 
     const playersForNewSeason = playersFromPreviousSeason.map((player) => {
       if (player.sell === true) {
-        return { ...player };
+        return { ...player, statsLeagues: [] };
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
