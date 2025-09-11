@@ -25,22 +25,21 @@ export const ServiceSeasons = {
       ? previousSeason.players
       : [];
 
-    const playersForNewSeason = playersFromPreviousSeason.map((player) => {
-      if (player.sell === true) {
-        return { ...player, statsLeagues: [] };
-      }
+    const playersForNewSeason = playersFromPreviousSeason
+      .filter((player) => !player.sell)
+      .map((player) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { statsLeagues, ballonDor, ...playerData } = player;
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { statsLeagues, ballonDor, ...playerData } = player;
-
-      return {
-        ...playerData,
-        age: (player.age || 0) + 1,
-        contractTime: Math.max(0, (player.contractTime || 0) - 1),
-        statsLeagues: [],
-        ballonDor: 0,
-      };
-    });
+        return {
+          ...playerData,
+          age: (player.age || 0) + 1,
+          contractTime: Math.max(0, (player.contractTime || 0) - 1),
+          statsLeagues: [],
+          ballonDor: 0,
+          buy: false,
+        };
+      });
 
     const newSeason: ClubData = {
       players: playersForNewSeason,

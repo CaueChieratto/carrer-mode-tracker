@@ -9,6 +9,7 @@ import TransfersPanel from "../../components/TransfersPanel";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import SeasonContent from "../../components/SeasonContent";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
+import { getSeasonDateRange } from "../../common/utils/GetSeasonDateRange";
 
 const Season = () => {
   const { careerId, seasonId } = useParams<{
@@ -29,11 +30,26 @@ const Season = () => {
   );
 
   const handleOpenTransfers = (type: "arrivals" | "exit") => {
-    if (!season) return;
+    if (!season || !career) return;
+
+    const { startDate, endDate } = getSeasonDateRange(
+      season.seasonNumber,
+      career.createdAt,
+      career.nation
+    );
+
     let filteredPlayers: Players[];
     if (type === "arrivals") {
       filteredPlayers = season.players
-        .filter((p) => p.buy && p.contract?.[0]?.dataArrival)
+        .filter((p) => {
+          const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
+          return (
+            p.buy &&
+            arrivalDate &&
+            new Date(arrivalDate) >= startDate &&
+            new Date(arrivalDate) <= endDate
+          );
+        })
         .sort(
           (a, b) =>
             new Date(b.contract![0].dataArrival!).getTime() -
@@ -41,7 +57,15 @@ const Season = () => {
         );
     } else {
       filteredPlayers = season.players
-        .filter((p) => p.sell && p.contract?.[0]?.dataExit)
+        .filter((p) => {
+          const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
+          return (
+            p.sell &&
+            exitDate &&
+            new Date(exitDate) >= startDate &&
+            new Date(exitDate) <= endDate
+          );
+        })
         .sort(
           (a, b) =>
             new Date(b.contract![0].dataExit!).getTime() -
