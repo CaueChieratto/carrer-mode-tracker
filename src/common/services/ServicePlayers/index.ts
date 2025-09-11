@@ -4,6 +4,7 @@ import { Players } from "../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../interfaces/playersStats/leagueStats";
 import { parseBrasilDate } from "../../utils/Date";
 import { parseValue } from "../../utils/FormatValue";
+import { getSeasonDateRange } from "../../utils/GetSeasonDateRange";
 import { auth } from "../Firebase";
 import { v4 as uuidv4 } from "uuid";
 
@@ -96,6 +97,14 @@ export const ServicePlayers = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
+    const seasonToUpdate = career.clubData.find((s) => s.id === seasonId);
+    if (!seasonToUpdate) throw new Error("Temporada não encontrada");
+
+    const { startDate, endDate } = getSeasonDateRange(
+      seasonToUpdate.seasonNumber,
+      career.createdAt,
+      career.nation
+    );
 
     const updatedClubData = career.clubData.map((season) => {
       if (season.id === seasonId) {
@@ -111,15 +120,26 @@ export const ServicePlayers = {
                 sellValue: 0,
                 leftClub: "",
                 dataArrival: null,
-                dataExit: null,
               };
               contractHistory.push(lastContract);
             }
 
+            const [month] = dateExit.split("/").map(Number);
+            const saleMonth = month - 1;
+
+            const sellYear =
+              saleMonth < startDate.getMonth()
+                ? endDate.getFullYear()
+                : startDate.getFullYear();
+
+            const parsedExit = parseBrasilDate(dateExit, sellYear);
+
+            if (!parsedExit) {
+              throw new Error("Data de saída inválida");
+            }
+
             lastContract.sellValue = parseValue(sellValue);
             lastContract.leftClub = toClub;
-            const parsedExit = parseBrasilDate(dateExit);
-            if (!parsedExit) throw new Error("Data de saída inválida");
             lastContract.dataExit = parsedExit;
 
             return { ...player, sell: true, contract: contractHistory };
