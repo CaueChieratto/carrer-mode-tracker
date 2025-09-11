@@ -4,6 +4,8 @@ import {
   validateMonetaryInput,
   validateRequiredFields,
 } from "../../../helpers/Validators";
+import { Career } from "../../../interfaces/Career";
+import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { ServicePlayers } from "../../../services/ServicePlayers";
 
@@ -13,6 +15,8 @@ type UseEditSquadPlayerProps = {
   playerId: string;
   onPlayerEdited: () => void;
   currentPlayers?: Players[];
+  career: Career;
+  season: ClubData;
 };
 
 export const useEditSquadPlayer = ({
@@ -21,6 +25,8 @@ export const useEditSquadPlayer = ({
   playerId,
   currentPlayers,
   onPlayerEdited,
+  career,
+  season,
 }: UseEditSquadPlayerProps) => {
   const editPlayer = async (formData: FormData) => {
     validateMonetaryInput(
@@ -37,7 +43,7 @@ export const useEditSquadPlayer = ({
     const playerBeingEdited = currentPlayers?.find((p) => p.id === playerId);
     validateCaptainLimit(isBecomingCaptain, playerBeingEdited, currentPlayers);
 
-    const updatedPlayerData = mapFormDataToPlayerData(formData);
+    const updatedPlayerData = mapFormDataToPlayerData(formData, career, season);
     delete updatedPlayerData.buy;
     delete updatedPlayerData.statsLeagues;
     delete updatedPlayerData.ballonDor;

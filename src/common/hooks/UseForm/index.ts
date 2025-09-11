@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { Field } from "../../../components/FormSection";
 import { capitalizeWords } from "../Formatters/Capitalize";
-import { formatDateInput } from "../../utils/Date";
+import { formatDateInputShort } from "../../utils/Date";
 
 export const useForm = () => {
   const [booleanValues, setBooleanValues] = useState<Record<string, boolean>>({
@@ -34,7 +34,7 @@ export const useForm = () => {
       if (["playerValue", "buyValue", "salary"].includes(field.id)) {
         processedValue = value.replace(",", ".");
       } else if (field.id === "dateArrival") {
-        processedValue = formatDateInput(value);
+        processedValue = formatDateInputShort(value);
       } else if (field.transform === "uppercase") {
         processedValue = processedValue.toUpperCase();
       } else if (field.transform === "capitalize") {

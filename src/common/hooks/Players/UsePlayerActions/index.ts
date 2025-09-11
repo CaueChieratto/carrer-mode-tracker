@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { useAddSquadPlayer } from "../UseAddSquadPlayer";
 import { useEditSquadPlayer } from "../UseEditSquadPlayer";
+import { Career } from "../../../interfaces/Career";
+import { ClubData } from "../../../interfaces/club/clubData";
 
 type UsePlayerActionsProps = {
   careerId: string;
@@ -9,6 +11,8 @@ type UsePlayerActionsProps = {
   player?: Players;
   currentPlayers?: Players[];
   onSuccess: () => void;
+  career: Career;
+  season: ClubData;
 };
 
 export const usePlayerActions = ({
@@ -17,6 +21,8 @@ export const usePlayerActions = ({
   player,
   currentPlayers,
   onSuccess,
+  career,
+  season,
 }: UsePlayerActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,6 +31,8 @@ export const usePlayerActions = ({
     seasonId,
     onPlayerAdded: onSuccess,
     currentPlayers,
+    career,
+    season,
   });
 
   const { editPlayer, deletePlayer, sellPlayer } = useEditSquadPlayer({
@@ -33,6 +41,8 @@ export const usePlayerActions = ({
     playerId: player?.id ?? "",
     onPlayerEdited: onSuccess,
     currentPlayers,
+    career,
+    season,
   });
 
   const handleAddOrEditPlayer = async (formData: FormData) => {

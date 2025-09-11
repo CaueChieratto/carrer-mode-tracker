@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { parseBrasilDate } from "../../../utils/Date";
+import { parseFullBrasilDate } from "../../../utils/Date";
 import { Career } from "../../../interfaces/Career";
 import { fetchTeamByClubName } from "../../../services/APICareerService";
 import { ColorsService } from "../../../services/ColorsService";
@@ -18,7 +18,7 @@ export async function UseCreateCareer({
   createdAt,
 }: UseCreateCareerProps): Promise<Career> {
   const team = await fetchTeamByClubName(club);
-  const createdAtParsed = parseBrasilDate(createdAt) ?? new Date();
+  const createdAtParsed = parseFullBrasilDate(createdAt) ?? new Date();
 
   const newCareer: Career = {
     id: uuidv4(),

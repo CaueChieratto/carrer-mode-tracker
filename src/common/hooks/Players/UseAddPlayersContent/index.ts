@@ -4,6 +4,8 @@ import { Players } from "../../../interfaces/playersInfo/players";
 import { useModalManager } from "../../Modal/UseModalManager";
 import { usePlayerActions } from "../UsePlayerActions";
 import { usePlayerStats } from "../UsePlayerStats";
+import { Career } from "../../../interfaces/Career";
+import { ClubData } from "../../../interfaces/club/clubData";
 
 type UseAddPlayersContentProps = {
   origin: string | null;
@@ -12,6 +14,8 @@ type UseAddPlayersContentProps = {
   player?: Players;
   currentPlayers?: Players[];
   handleGoBack: () => void;
+  career: Career;
+  season: ClubData;
 };
 
 export const useAddPlayersContent = ({
@@ -21,6 +25,8 @@ export const useAddPlayersContent = ({
   player,
   currentPlayers,
   handleGoBack,
+  career,
+  season,
 }: UseAddPlayersContentProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -37,6 +43,8 @@ export const useAddPlayersContent = ({
     player,
     currentPlayers,
     onSuccess: handleGoBack,
+    career,
+    season,
   });
 
   const { handleStatsSave, isStatsLoading } = usePlayerStats({

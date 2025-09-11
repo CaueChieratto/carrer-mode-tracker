@@ -8,8 +8,9 @@ import { Players } from "../../interfaces/playersInfo/players";
 import { formatDisplayValue, parseValue } from "../../utils/FormatValue";
 import { Contract } from "../../interfaces/playersInfo/contract";
 import { Positions } from "../../types/Positions";
-import { brasilDatePlaceholder, parseBrasilDate } from "../../utils/Date";
+import { brasilDatePlaceholderShort, parseBrasilDate } from "../../utils/Date";
 import { ClubData } from "../../interfaces/club/clubData";
+import { getSeasonDateRange } from "../../utils/GetSeasonDateRange";
 
 export const mapDocToCareer = (
   doc: QueryDocumentSnapshot<DocumentData>
@@ -65,7 +66,7 @@ export const mapPlayerToFormValues = (player: Players) => {
         ? formatDisplayValue(latestContract.buyValue as number)
         : "",
     dateArrival: latestContract?.dataArrival
-      ? brasilDatePlaceholder(new Date(latestContract.dataArrival))
+      ? brasilDatePlaceholderShort(new Date(latestContract.dataArrival))
       : "",
   };
 
@@ -73,12 +74,20 @@ export const mapPlayerToFormValues = (player: Players) => {
 };
 
 export const mapFormDataToPlayerData = (
-  formData: FormData
+  formData: FormData,
+  career: Career,
+  season: ClubData
 ): Partial<Players> => {
   const isSigning = (formData.get("isSigning") as string) === "true";
   const buyValueRaw = formData.get("buyValue") as string;
   const fromClubRaw = formData.get("fromClub") as string;
   const dateArrivalRaw = formData.get("dateArrival") as string;
+
+  const { startDate } = getSeasonDateRange(
+    season.seasonNumber,
+    career.createdAt,
+    career.nation
+  );
 
   const newContract: Contract[] = [];
   if (isSigning) {
@@ -87,7 +96,7 @@ export const mapFormDataToPlayerData = (
       fromClub: fromClubRaw,
       sellValue: 0,
       leftClub: "",
-      dataArrival: parseBrasilDate(dateArrivalRaw),
+      dataArrival: parseBrasilDate(dateArrivalRaw, startDate.getFullYear()),
       dataExit: null,
     });
   } else {
@@ -97,7 +106,7 @@ export const mapFormDataToPlayerData = (
         fromClub: fromClubRaw,
         sellValue: 0,
         leftClub: "",
-        dataArrival: parseBrasilDate(dateArrivalRaw),
+        dataArrival: parseBrasilDate(dateArrivalRaw, startDate.getFullYear()),
         dataExit: null,
       });
     }

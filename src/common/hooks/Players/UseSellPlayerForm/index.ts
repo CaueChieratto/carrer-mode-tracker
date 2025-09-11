@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDateInput } from "../../../utils/Date";
+import { formatDateInputShort } from "../../../utils/Date";
 
 type UseSellPlayerFormProps = {
   onConfirm: (
@@ -20,7 +20,7 @@ export const useSellPlayerForm = ({
 
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!sellValue || !toClub) {
+    if (!sellValue || !toClub || !dateExit) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -46,7 +46,7 @@ export const useSellPlayerForm = ({
         setToClub(value);
         break;
       case "dateExit":
-        setDateExit(formatDateInput(value));
+        setDateExit(formatDateInputShort(value));
         break;
       default:
         break;

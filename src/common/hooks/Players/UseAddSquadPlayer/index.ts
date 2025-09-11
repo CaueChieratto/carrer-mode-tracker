@@ -4,6 +4,8 @@ import {
   validateRequiredFields,
   validateCaptainLimit,
 } from "../../../helpers/Validators";
+import { Career } from "../../../interfaces/Career";
+import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { ServicePlayers } from "../../../services/ServicePlayers";
 
@@ -12,6 +14,8 @@ type UseAddSquadPlayerProps = {
   seasonId: string;
   onPlayerAdded: () => void;
   currentPlayers?: Players[];
+  career: Career;
+  season: ClubData;
 };
 
 export const useAddSquadPlayer = ({
@@ -19,6 +23,8 @@ export const useAddSquadPlayer = ({
   seasonId,
   onPlayerAdded,
   currentPlayers,
+  career,
+  season,
 }: UseAddSquadPlayerProps) => {
   const addPlayer = async (formData: FormData) => {
     validateMonetaryInput(
@@ -38,7 +44,11 @@ export const useAddSquadPlayer = ({
     const isBecomingCaptain = (formData.get("isCaptain") as string) === "true";
     validateCaptainLimit(isBecomingCaptain, undefined, currentPlayers);
 
-    const playerData = mapFormDataToPlayerData(formData) as Omit<Players, "id">;
+    const playerData = mapFormDataToPlayerData(
+      formData,
+      career,
+      season
+    ) as Omit<Players, "id">;
 
     try {
       await ServicePlayers.addPlayerToSeason(careerId, seasonId, playerData);

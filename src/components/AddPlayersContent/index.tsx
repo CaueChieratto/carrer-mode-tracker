@@ -49,6 +49,8 @@ const AddPlayersContent = ({
     player,
     currentPlayers,
     handleGoBack,
+    career,
+    season,
   });
 
   const {

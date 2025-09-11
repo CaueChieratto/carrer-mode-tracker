@@ -192,7 +192,7 @@ export const squadFormFields = [
           placeholder: "Ex: 11/07",
           icon: <RxLapTimer />,
           isSigningOnly: true,
-          maxLength: 8,
+          maxLength: 5,
         },
       ],
     ],
