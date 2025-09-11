@@ -83,33 +83,30 @@ export const mapFormDataToPlayerData = (
   const fromClubRaw = formData.get("fromClub") as string;
   const dateArrivalRaw = formData.get("dateArrival") as string;
 
-  const { startDate } = getSeasonDateRange(
+  const { startDate, endDate } = getSeasonDateRange(
     season.seasonNumber,
     career.createdAt,
     career.nation
   );
 
   const newContract: Contract[] = [];
-  if (isSigning) {
+  if (isSigning || buyValueRaw || fromClubRaw || dateArrivalRaw) {
+    const [month] = dateArrivalRaw.split("/").map(Number);
+    const arrivalMonth = month - 1;
+
+    const arrivalYear =
+      arrivalMonth < startDate.getMonth()
+        ? endDate.getFullYear()
+        : startDate.getFullYear();
+
     newContract.push({
       buyValue: parseValue(buyValueRaw),
       fromClub: fromClubRaw,
       sellValue: 0,
       leftClub: "",
-      dataArrival: parseBrasilDate(dateArrivalRaw, startDate.getFullYear()),
+      dataArrival: parseBrasilDate(dateArrivalRaw, arrivalYear),
       dataExit: null,
     });
-  } else {
-    if (buyValueRaw || fromClubRaw || dateArrivalRaw) {
-      newContract.push({
-        buyValue: parseValue(buyValueRaw),
-        fromClub: fromClubRaw,
-        sellValue: 0,
-        leftClub: "",
-        dataArrival: parseBrasilDate(dateArrivalRaw, startDate.getFullYear()),
-        dataExit: null,
-      });
-    }
   }
 
   return {
