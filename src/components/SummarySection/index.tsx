@@ -4,14 +4,15 @@ import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import StatsSummary from "../StatsSummary";
 import ContainerIcon from "../ContainerIcon";
-import { Trophy } from "../../common/interfaces/club/trophy";
+import { Career } from "../../common/interfaces/Career";
 
 type SummarySectionProps = {
-  trophies: Trophy[];
+  career: Career;
 };
 
-const SummarySection = ({ trophies }: SummarySectionProps) => {
+const SummarySection = ({ career }: SummarySectionProps) => {
   const [showStats, setShowStats] = useState(false);
+  const trophies = career.trophies;
 
   return (
     <section className={Styles.section}>
@@ -32,7 +33,7 @@ const SummarySection = ({ trophies }: SummarySectionProps) => {
           {showStats ? <LuEye size={16} /> : <LuEyeClosed size={16} />}
         </ContainerIcon>
       </div>
-      {showStats && <StatsSummary />}
+      {showStats && <StatsSummary career={career} />}
     </section>
   );
 };

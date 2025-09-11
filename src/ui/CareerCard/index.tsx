@@ -39,7 +39,7 @@ const CareerCard = ({
           managerName={career.managerName}
           teamBadge={career.teamBadge}
         />
-        <SummarySection trophies={career.trophies} />
+        <SummarySection career={career} />
         <footer className={Styles.footer}>
           <DataInCard createdAt={career.createdAt} />
           <ContainerButton>
