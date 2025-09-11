@@ -80,7 +80,6 @@ const Season = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    window.location.reload();
   };
 
   if (loading) return <Load />;

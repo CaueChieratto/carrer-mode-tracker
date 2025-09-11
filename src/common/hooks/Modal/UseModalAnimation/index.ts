@@ -16,8 +16,7 @@ export const useModalAnimation = (
   useEffect(() => {
     if (isOpen) {
       lastScrollRef.current = window.scrollY;
-      document.body.style.overflowY = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      document.body.classList.add("modal-open");
 
       setVisible(true);
       setTranslateY(0);
@@ -31,14 +30,12 @@ export const useModalAnimation = (
 
   const close = () => {
     window.scrollTo({ top: lastScrollRef.current });
-    document.body.style.overflowY = "auto";
-    document.documentElement.style.overflow = "auto";
+    document.body.classList.remove("modal-open");
 
     setClosing(true);
 
     setTimeout(() => {
       setVisible(false);
-      // Sempre chama o callback, se ele existir
       if (onCloseCallback) onCloseCallback();
     }, 300);
   };
