@@ -2,24 +2,24 @@ import { leaguesByContinent } from "./Leagues";
 
 export const getSeasonDateRange = (
   seasonNumber: number,
+  careerCreatedAt: Date,
   nation: string
 ): { startDate: Date; endDate: Date } => {
   const europeanNations = Object.keys(leaguesByContinent.Europa);
   const isEuropean = europeanNations.includes(nation);
 
-  // Usar o ano base da SEASON, não da data de criação
-  const baseYear = 2024; // ou algum ano fixo que você definiu para season 1
+  const startYear = new Date(careerCreatedAt).getFullYear();
   const seasonOffset = seasonNumber - 1;
 
   let startDate: Date;
   let endDate: Date;
 
   if (isEuropean) {
-    startDate = new Date(baseYear + seasonOffset, 6, 1); // 1/jul
-    endDate = new Date(baseYear + seasonOffset + 1, 5, 31); // 30/jun do ano seguinte
+    startDate = new Date(startYear + seasonOffset, 6, 1);
+    endDate = new Date(startYear + seasonOffset + 1, 5, 30, 23, 59, 59, 999);
   } else {
-    startDate = new Date(baseYear + seasonOffset, 0, 1); // 1/jan
-    endDate = new Date(baseYear + seasonOffset, 11, 31); // 31/dez
+    startDate = new Date(startYear + seasonOffset, 0, 1);
+    endDate = new Date(startYear + seasonOffset, 11, 31, 23, 59, 59, 999);
   }
 
   return { startDate, endDate };

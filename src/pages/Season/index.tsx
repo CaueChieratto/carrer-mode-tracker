@@ -34,6 +34,7 @@ const Season = () => {
 
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
+      career.createdAt,
       career.nation
     );
 

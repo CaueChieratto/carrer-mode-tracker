@@ -3,18 +3,48 @@ import Styles from "./TransferCardBalance.module.css";
 import Titles from "../../components/GeneralTab/GeneralTab.module.css";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { formatDisplayValue } from "../../common/utils/FormatValue";
+import { useParams } from "react-router-dom";
+import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
+import { getSeasonDateRange } from "../../common/utils/GetSeasonDateRange";
+import Load from "../../components/Load";
 
 type TransferCardBalanceProps = {
   season: ClubData;
 };
 
 const TransferCardBalance = ({ season }: TransferCardBalanceProps) => {
-  const signings = season.players.filter(
-    (p) => p.buy && p.contract && p.contract.length > 0
+  const { careerId } = useParams<{ careerId: string }>();
+  const { career } = useSeasonData(careerId, season.id);
+
+  if (!career) {
+    return <Load />;
+  }
+
+  const { startDate, endDate } = getSeasonDateRange(
+    season.seasonNumber,
+    career.createdAt,
+    career.nation
   );
-  const sales = season.players.filter(
-    (p) => p.sell && p.contract && p.contract.length > 0
-  );
+
+  const signings = season.players.filter((p) => {
+    const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
+    return (
+      p.buy &&
+      arrivalDate &&
+      new Date(arrivalDate) >= startDate &&
+      new Date(arrivalDate) <= endDate
+    );
+  });
+
+  const sales = season.players.filter((p) => {
+    const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
+    return (
+      p.sell &&
+      exitDate &&
+      new Date(exitDate) >= startDate &&
+      new Date(exitDate) <= endDate
+    );
+  });
 
   const totalSpent = signings.reduce((acc, player) => {
     const contract = player.contract[player.contract.length - 1];
