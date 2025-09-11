@@ -27,7 +27,7 @@ const SeasonContent = ({
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
   const handleActionClick = tabsConfig[activeIndex]?.action;
 
-  console.log(season);
+  console.log(career);
 
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>

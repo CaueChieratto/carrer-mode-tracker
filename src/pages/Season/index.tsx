@@ -34,7 +34,6 @@ const Season = () => {
 
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
-      career.createdAt,
       career.nation
     );
 
@@ -50,11 +49,19 @@ const Season = () => {
             new Date(arrivalDate) <= endDate
           );
         })
-        .sort(
-          (a, b) =>
-            new Date(b.contract![0].dataArrival!).getTime() -
-            new Date(a.contract![0].dataArrival!).getTime()
-        );
+        .sort((a, b) => {
+          const aContract = a.contract?.[a.contract.length - 1];
+          const bContract = b.contract?.[b.contract.length - 1];
+
+          const aDate = new Date(
+            aContract?.dataArrival || aContract?.dataExit || 0
+          );
+          const bDate = new Date(
+            bContract?.dataArrival || bContract?.dataExit || 0
+          );
+
+          return bDate.getTime() - aDate.getTime();
+        });
     } else {
       filteredPlayers = season.players
         .filter((p) => {
