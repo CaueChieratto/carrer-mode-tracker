@@ -91,7 +91,7 @@ export const mapFormDataToPlayerData = (
 
   const newContract: Contract[] = [];
   if (isSigning || buyValueRaw || fromClubRaw || dateArrivalRaw) {
-    const [month] = dateArrivalRaw.split("/").map(Number);
+    const [, month] = dateArrivalRaw.split("/").map(Number);
     const arrivalMonth = month - 1;
 
     const arrivalYear =

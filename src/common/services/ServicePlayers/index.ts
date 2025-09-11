@@ -124,7 +124,7 @@ export const ServicePlayers = {
               contractHistory.push(lastContract);
             }
 
-            const [month] = dateExit.split("/").map(Number);
+            const [, month] = dateExit.split("/").map(Number);
             const saleMonth = month - 1;
 
             const sellYear =
