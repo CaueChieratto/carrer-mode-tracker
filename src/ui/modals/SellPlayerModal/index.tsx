@@ -38,7 +38,7 @@ const formFields = [
     id: "dateExit",
     name: "Data da venda",
     icon: <BsCalendar2Event />,
-    placeholder: "Ex: 11/07/27",
+    placeholder: "Ex: 11/07",
   },
 ];
 

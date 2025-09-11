@@ -20,11 +20,8 @@ export const useModalAnimation = (
 
       setVisible(true);
       setTranslateY(0);
+      currentTranslateY.current = 0;
       setClosing(false);
-
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 0);
     }
   }, [isOpen]);
 

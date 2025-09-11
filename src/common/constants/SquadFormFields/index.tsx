@@ -189,7 +189,7 @@ export const squadFormFields = [
         {
           id: "dateArrival",
           name: "Data da contratação",
-          placeholder: "Ex: 11/07/27",
+          placeholder: "Ex: 11/07",
           icon: <RxLapTimer />,
           isSigningOnly: true,
           maxLength: 8,

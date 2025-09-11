@@ -7,7 +7,7 @@ type SlideUpModalProps = {
 
 const SlideUpModal = ({ children }: SlideUpModalProps) => {
   return (
-    <div className={Styles.container}>
+    <div className={Styles.container} onTouchMove={(e) => e.stopPropagation()}>
       <div className={Styles.scroll}>{children}</div>
     </div>
   );
