@@ -4,11 +4,13 @@ import SquadTab from "../../../components/SquadTab";
 import { StatsTab_Club } from "../../../components/StatsTab_Club";
 import { Buttons } from "../../elements/Buttons";
 import { ClubData } from "../../interfaces/club/clubData";
+import { Career } from "../../interfaces/Career";
 
 export type TabConfig = {
   title: string;
   component: React.FC<{
     season: ClubData;
+    career: Career;
     onOpenTransfers?: (type: "arrivals" | "exit") => void;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;

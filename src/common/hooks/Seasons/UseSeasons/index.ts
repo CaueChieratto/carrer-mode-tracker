@@ -27,8 +27,13 @@ export const useSeasons = (careerId: string) => {
     [careerId]
   );
 
+  const handleNavigateToGeral = useCallback((careerId: string) => {
+    window.location.href = `/Career/${careerId}/Geral`;
+  }, []);
+
   return {
     handleNavigateToSeason,
     handleDeleteSeason,
+    handleNavigateToGeral,
   };
 };

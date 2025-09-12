@@ -5,9 +5,11 @@ import { POSITION_DATA } from "../../common/types/Positions";
 import Card from "../../ui/Card";
 import Styles from "./SquadTab.module.css";
 import { groupAndSortPlayersByPosition } from "../../common/helpers";
+import { Career } from "../../common/interfaces/Career";
 
 type SquadTabProps = {
   season: ClubData;
+  career: Career;
 };
 
 const SquadTab = ({ season }: SquadTabProps) => {

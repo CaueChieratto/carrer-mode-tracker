@@ -9,6 +9,7 @@ import Styles from "../../ui/Statistic/CalculatedStatistics.module.css";
 import { calculateTotalStats } from "../../common/utils/PlayerStatsCalculator";
 import Statistic from "../../ui/Statistic";
 import { FcFullTrash } from "react-icons/fc";
+import { useLocation } from "react-router-dom";
 
 type CalculatedStatisticsProps = {
   info?: boolean;
@@ -29,6 +30,9 @@ const CalculatedStatistics = ({
   leagueStats,
   handleDeleteLeague,
 }: CalculatedStatisticsProps) => {
+  const location = useLocation();
+  const isGeralPage = location.pathname.includes("/Geral");
+
   const totalStats = useMemo(() => {
     if (!total || !player) return null;
     return calculateTotalStats(player);
@@ -100,6 +104,7 @@ const CalculatedStatistics = ({
   ];
 
   const filteredStats = statsData.filter((stat) => {
+    if (isGeralPage && stat.label === "Deletar") return false;
     if (stat.showOnlyForLeague && !league) return false;
     if (stat.showOnlyForTotal && !total) return false;
     if (isGoalkeeper) {

@@ -56,7 +56,11 @@ const SeasonContent = ({
         {tabsConfig.map(({ title, component: TabComponent }) => (
           <SwiperSlide key={title}>
             <div className={Styles.container}>
-              <TabComponent season={season} onOpenTransfers={onOpenTransfers} />
+              <TabComponent
+                season={season}
+                career={career}
+                onOpenTransfers={onOpenTransfers}
+              />
             </div>
           </SwiperSlide>
         ))}

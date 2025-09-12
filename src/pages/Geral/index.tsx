@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
 import { getSeasonTabsConfig } from "../../common/constants/SeasonTabsConfig";
 import Load from "../../components/Load";
 import Modal from "../../components/Modal";
@@ -9,19 +8,34 @@ import TransfersPanel from "../../components/TransfersPanel";
 import SeasonContent from "../../components/SeasonContent";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useOpenTransfersModal } from "../../common/hooks/Modal/UseOpenTransfersModal";
+import { useCareers } from "../../common/hooks/Career/UseCareer";
+import { ClubData } from "../../common/interfaces/club/clubData";
 
-const Season = () => {
-  const { careerId, seasonId } = useParams<{
+const Geral = () => {
+  const { careerId } = useParams<{
     careerId: string;
-    seasonId: string;
   }>();
   const navigate = useNavigate();
-  const { career, season, loading } = useSeasonData(careerId, seasonId);
+  const { careers, loading } = useCareers();
 
-  const tabsConfig = useMemo(
-    () => getSeasonTabsConfig(careerId!, seasonId!, navigate),
-    [careerId, seasonId, navigate]
+  const career = useMemo(
+    () => careers.find((c) => c.id === careerId),
+    [careers, careerId]
   );
+
+  const latestSeason = useMemo(() => {
+    if (!career || !career.clubData || career.clubData.length === 0) {
+      return null;
+    }
+    return career.clubData.reduce((latest: ClubData, current: ClubData) => {
+      return current.seasonNumber > latest.seasonNumber ? current : latest;
+    });
+  }, [career]);
+
+  const tabsConfig = useMemo(() => {
+    if (!latestSeason) return [];
+    return getSeasonTabsConfig(careerId!, latestSeason.id, navigate);
+  }, [careerId, latestSeason, navigate]);
 
   const {
     isModalOpen,
@@ -29,16 +43,16 @@ const Season = () => {
     playersToShow,
     handleOpenTransfers,
     handleCloseModal,
-  } = useOpenTransfersModal(career, season);
+  } = useOpenTransfersModal(career, latestSeason ?? undefined);
 
   if (loading) return <Load />;
-  if (!career || !season) return <NotFoundDisplay />;
+  if (!career || !latestSeason) return <NotFoundDisplay />;
 
   return (
     <>
       <SeasonContent
         career={career}
-        season={season}
+        season={latestSeason}
         tabsConfig={tabsConfig}
         onOpenTransfers={handleOpenTransfers}
       />
@@ -59,4 +73,4 @@ const Season = () => {
   );
 };
 
-export default Season;
+export default Geral;

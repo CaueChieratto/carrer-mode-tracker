@@ -12,7 +12,8 @@ type SeasonListProps = {
 };
 
 const SeasonList = ({ clubData, careerId }: SeasonListProps) => {
-  const { handleNavigateToSeason, handleDeleteSeason } = useSeasons(careerId);
+  const { handleNavigateToSeason, handleDeleteSeason, handleNavigateToGeral } =
+    useSeasons(careerId);
 
   const sortedClubData = useMemo(
     () => sortSeasonsByNumber(clubData),
@@ -30,7 +31,10 @@ const SeasonList = ({ clubData, careerId }: SeasonListProps) => {
         />
       ))}
 
-      <div className={Styles.card}>
+      <div
+        className={Styles.card}
+        onClick={() => handleNavigateToGeral(careerId)}
+      >
         <h1 className={Styles.general}>Geral</h1>
         <TbHandClick />
       </div>

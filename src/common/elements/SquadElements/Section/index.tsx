@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FooterSection_Player from "../../../../components/FooterSection_Player";
 import HeaderSection_Player from "../../../../components/HeaderSection_Player";
 import Data from "./Section.module.css";
@@ -30,9 +30,14 @@ export const Section = ({
 }: SectionProps) => {
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
+  const location = useLocation();
 
   const handleNavigate = () => {
-    navigate(`/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`);
+    if (location.pathname.includes("/Geral")) {
+      navigate(`/Career/${careerId}/Geral/Player/${id}`);
+    } else {
+      navigate(`/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`);
+    }
   };
 
   return (
