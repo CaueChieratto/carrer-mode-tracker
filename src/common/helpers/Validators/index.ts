@@ -17,7 +17,9 @@ export const validateCaptainLimit = (
   currentPlayers: Players[] = []
 ): void => {
   if (isBecomingCaptain && !playerBeingEdited?.captain) {
-    const captainCount = currentPlayers.filter((p) => p.captain).length;
+    const captainCount = currentPlayers.filter(
+      (p) => p.captain && !p.sell
+    ).length;
     if (captainCount >= 5) {
       throw new Error("Já existem 5 capitães. Não é possível adicionar mais.");
     }
