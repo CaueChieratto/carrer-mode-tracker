@@ -8,9 +8,26 @@
   justify-content: center;
   align-items: center;
   gap: 12px;
+}
+
+.icon {
+  font-size: 48px;
+  color: #a0aec0;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
   color: var(--blackColor);
 }
 
-.p {
+.text {
+  margin: 0;
+  font-size: 14px;
+  color: #718096;
+  max-width: 300px;
+  line-height: 1.5;
   text-align: center;
 }
