@@ -10,6 +10,7 @@ import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useOpenTransfersModal } from "../../common/hooks/Modal/UseOpenTransfersModal";
 import { useCareers } from "../../common/hooks/Career/UseCareer";
 import { ClubData } from "../../common/interfaces/club/clubData";
+import { useAggregatedPlayers } from "../../common/hooks/Players/UseAggregatedPlayers";
 
 const Geral = () => {
   const { careerId } = useParams<{
@@ -23,6 +24,8 @@ const Geral = () => {
     [careers, careerId]
   );
 
+  const aggregatedPlayers = useAggregatedPlayers(career);
+
   const latestSeason = useMemo(() => {
     if (!career || !career.clubData || career.clubData.length === 0) {
       return null;
@@ -31,6 +34,14 @@ const Geral = () => {
       return current.seasonNumber > latest.seasonNumber ? current : latest;
     });
   }, [career]);
+
+  const generalViewSeason = useMemo(() => {
+    if (!latestSeason) return null;
+    return {
+      ...latestSeason,
+      players: aggregatedPlayers,
+    };
+  }, [latestSeason, aggregatedPlayers]);
 
   const tabsConfig = useMemo(() => {
     if (!latestSeason) return [];
@@ -46,13 +57,14 @@ const Geral = () => {
   } = useOpenTransfersModal(career, latestSeason ?? undefined);
 
   if (loading) return <Load />;
-  if (!career || !latestSeason) return <NotFoundDisplay />;
+  if (!career || !generalViewSeason) return <NotFoundDisplay />;
 
   return (
     <>
       <SeasonContent
+        title="Geral"
         career={career}
-        season={latestSeason}
+        season={generalViewSeason}
         tabsConfig={tabsConfig}
         onOpenTransfers={handleOpenTransfers}
       />

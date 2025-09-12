@@ -4,8 +4,6 @@ import NoStatsMessage from "../NoStatsMessage";
 import { useSortedPlayersWithStats } from "../../common/hooks/Players/UseSortedPlayersWithStats";
 import PlayerStatsList from "../../ui/PlayerStatsList";
 import { Career } from "../../common/interfaces/Career";
-import { useLocation } from "react-router-dom";
-import { useAggregatedPlayers } from "../../common/hooks/Players/UseAggregatedPlayers";
 
 type StatsTab_ClubProps = {
   season: ClubData;
@@ -13,13 +11,7 @@ type StatsTab_ClubProps = {
 };
 
 export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
-  const location = useLocation();
-  const isGeralPage = location.pathname.includes("/Geral");
-
-  const aggregatedPlayers = useAggregatedPlayers(career);
-  const playersToDisplay = isGeralPage ? aggregatedPlayers : season.players;
-
-  const playersWithStats = useSortedPlayersWithStats(playersToDisplay);
+  const playersWithStats = useSortedPlayersWithStats(season.players);
 
   return (
     <div className={Styles.container_stats}>

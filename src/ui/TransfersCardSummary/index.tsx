@@ -3,66 +3,92 @@ import Titles from "../../components/GeneralTab/GeneralTab.module.css";
 import Styles from "./TransfersCardSummary.module.css";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { ClubData } from "../../common/interfaces/club/clubData";
-import { useParams } from "react-router-dom";
-import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
 import { getSeasonDateRange } from "../../common/utils/GetSeasonDateRange";
 import Load from "../../components/Load";
+import { Career } from "../../common/interfaces/Career";
+import { useLocation } from "react-router-dom";
+import { Players } from "../../common/interfaces/playersInfo/players";
 
 type TransfersCardSummaryProps = {
   season: ClubData;
+  career: Career;
   onOpenTransfers?: (type: "arrivals" | "exit") => void;
 };
 
 const TransfersCardSummary = ({
   season,
+  career,
   onOpenTransfers,
 }: TransfersCardSummaryProps) => {
-  const { careerId } = useParams<{ careerId: string }>();
-  const { career } = useSeasonData(careerId, season.id);
+  const location = useLocation();
+  const isGeralPage = location.pathname.includes("/Geral");
 
   if (!career) {
     return <Load />;
   }
 
-  const { startDate, endDate } = getSeasonDateRange(
-    season.seasonNumber,
-    career.createdAt,
-    career.nation
-  );
+  let arrivals: Players[], departures: Players[];
 
-  const arrivals = season.players
-    .filter((p) => {
-      const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
-      return (
-        p.buy &&
-        arrivalDate &&
-        new Date(arrivalDate) >= startDate &&
-        new Date(arrivalDate) <= endDate
-      );
-    })
-    .sort(
-      (a, b) =>
-        new Date(b.contract![b.contract!.length - 1].dataArrival!).getTime() -
-        new Date(a.contract![a.contract!.length - 1].dataArrival!).getTime()
-    )
-    .slice(0, 3);
+  if (isGeralPage) {
+    const allPlayers = career.clubData.flatMap((s) => s.players);
+    arrivals = allPlayers
+      .filter((p) => p.buy)
+      .sort(
+        (a, b) =>
+          new Date(b.contract![b.contract!.length - 1].dataArrival!).getTime() -
+          new Date(a.contract![a.contract!.length - 1].dataArrival!).getTime()
+      )
+      .slice(0, 3);
 
-  const departures = season.players
-    .filter((p) => {
-      const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
-      return (
-        p.sell &&
-        exitDate &&
-        new Date(exitDate) >= startDate &&
-        new Date(exitDate) <= endDate
-      );
-    })
-    .sort(
-      (a, b) =>
-        new Date(b.contract![b.contract!.length - 1].dataExit!).getTime() -
-        new Date(a.contract![a.contract!.length - 1].dataExit!).getTime()
-    )
-    .slice(0, 3);
+    departures = allPlayers
+      .filter((p) => p.sell)
+      .sort(
+        (a, b) =>
+          new Date(b.contract![b.contract!.length - 1].dataExit!).getTime() -
+          new Date(a.contract![a.contract!.length - 1].dataExit!).getTime()
+      )
+      .slice(0, 3);
+  } else {
+    const { startDate, endDate } = getSeasonDateRange(
+      season.seasonNumber,
+      career.createdAt,
+      career.nation
+    );
+
+    arrivals = season.players
+      .filter((p) => {
+        const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
+        return (
+          p.buy &&
+          arrivalDate &&
+          new Date(arrivalDate) >= startDate &&
+          new Date(arrivalDate) <= endDate
+        );
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.contract![b.contract!.length - 1].dataArrival!).getTime() -
+          new Date(a.contract![a.contract!.length - 1].dataArrival!).getTime()
+      )
+      .slice(0, 3);
+
+    departures = season.players
+      .filter((p) => {
+        const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
+        return (
+          p.sell &&
+          exitDate &&
+          new Date(exitDate) >= startDate &&
+          new Date(exitDate) <= endDate
+        );
+      })
+      .sort(
+        (a, b) =>
+          new Date(b.contract![b.contract!.length - 1].dataExit!).getTime() -
+          new Date(a.contract![a.contract!.length - 1].dataExit!).getTime()
+      )
+      .slice(0, 3);
+  }
 
   const content = [
     {

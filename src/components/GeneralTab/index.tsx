@@ -10,12 +10,16 @@ type GeneralTabProps = {
   onOpenTransfers?: (type: "arrivals" | "exit") => void;
 };
 
-const GeneralTab = ({ season, onOpenTransfers }: GeneralTabProps) => {
+const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
   return (
     <>
       <SummaryCard season={season} />
-      <TransfersCardSummary season={season} onOpenTransfers={onOpenTransfers} />
-      <TransferCardBalance season={season} />
+      <TransfersCardSummary
+        season={season}
+        career={career}
+        onOpenTransfers={onOpenTransfers}
+      />
+      <TransferCardBalance season={season} career={career} />
     </>
   );
 };

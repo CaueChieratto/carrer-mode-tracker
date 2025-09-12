@@ -15,11 +15,13 @@ const SeasonContent = ({
   season,
   tabsConfig,
   onOpenTransfers,
+  title,
 }: {
   career: Career;
   season: ClubData;
   tabsConfig: TabConfig[];
   onOpenTransfers: (type: "arrivals" | "exit") => void;
+  title?: string;
 }) => {
   const storageKey = `season-tab-${career.id}-${season.id}`;
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
@@ -27,14 +29,13 @@ const SeasonContent = ({
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
   const handleActionClick = tabsConfig[activeIndex]?.action;
 
-  console.log(season);
-
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
       <HeaderSeason
         career={career}
         careerId={career.id}
-        season={season.seasonNumber}
+        season={!title ? season.seasonNumber : undefined}
+        titleText={title}
       />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}

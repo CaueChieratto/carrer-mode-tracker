@@ -67,7 +67,7 @@ const AddPlayersContent = ({
         career={career}
         careerId={careerId}
         backSeasons={handleGoBack}
-        player={playerName}
+        titleText={playerName}
       />
       <Navbar
         save={handleSave}

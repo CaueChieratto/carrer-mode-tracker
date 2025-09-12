@@ -8,7 +8,7 @@ type HeaderSeasonProps = {
   career: Career;
   careerId: string;
   season?: number;
-  player?: string;
+  titleText?: string;
   backSeasons?: () => void;
 };
 
@@ -16,7 +16,7 @@ const HeaderSeason = ({
   career,
   careerId,
   season,
-  player,
+  titleText,
   backSeasons,
 }: HeaderSeasonProps) => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const HeaderSeason = ({
             <div className={Styles.container}>
               <h1 className={Styles.h1}>{career.clubName}</h1>
               {season && <p className={Styles.season}>Temporada {season}</p>}
-              {player && <p className={Styles.season}>{player}</p>}
+              {titleText && <p className={Styles.season}>{titleText}</p>}
             </div>
           </>
         )}
