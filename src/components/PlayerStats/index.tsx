@@ -1,13 +1,14 @@
 import Card from "../../ui/Card";
 import Styles from "./PlayerStats.module.css";
 import StatisticsTable_Title from "../StatisticsTable_Title";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CalculatedStatistics from "../CalculatedStatistics";
 import { usePlayerSeasonStats } from "../../common/hooks/Players/UsePlayerSeasonStats";
 import { Career } from "../../common/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
+import { sortLeaguesByLevel } from "../../common/utils/Sorts";
 
 type PlayerStatsProps = {
   player: Players;
@@ -32,6 +33,11 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
     player,
     leagueFormRef,
   });
+
+  const sortedLeagues = useMemo(
+    () => sortLeaguesByLevel(player.statsLeagues),
+    [player.statsLeagues]
+  );
 
   const navigatePlayer = () => {
     if (location.pathname.includes("/Geral")) {
@@ -72,7 +78,7 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
       </section>
       {expand && (
         <>
-          {player.statsLeagues.map((league) => (
+          {sortedLeagues.map((league) => (
             <section className={Styles.section_leagues} key={league.leagueName}>
               <StatisticsTable_Title
                 type="league"

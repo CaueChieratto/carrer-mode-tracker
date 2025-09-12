@@ -1,7 +1,11 @@
+import { useLocation } from "react-router-dom";
 import { Career } from "../../common/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import { sortedPlayers } from "../../common/utils/Sorts";
+import {
+  sortedPlayers,
+  sortPlayersByContributions,
+} from "../../common/utils/Sorts";
 import PlayerStats from "../../components/PlayerStats";
 
 type PlayerStatsListProps = {
@@ -11,7 +15,12 @@ type PlayerStatsListProps = {
 };
 
 const PlayerStatsList = ({ players, career, season }: PlayerStatsListProps) => {
-  const sortedPlayerList = sortedPlayers(players);
+  const location = useLocation();
+  const isGeralPage = location.pathname.includes("/Geral");
+
+  const sortedPlayerList = isGeralPage
+    ? sortPlayersByContributions(players)
+    : sortedPlayers(players);
 
   return (
     <>

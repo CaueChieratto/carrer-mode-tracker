@@ -23,27 +23,9 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
       const allPlayers = career.clubData.flatMap((s) => s.players);
 
       if (type === "arrivals") {
-        filteredPlayers = allPlayers
-          .filter((p) => p.buy)
-          .sort(
-            (a, b) =>
-              new Date(
-                b.contract![b.contract!.length - 1].dataArrival!
-              ).getTime() -
-              new Date(
-                a.contract![a.contract!.length - 1].dataArrival!
-              ).getTime()
-          );
+        filteredPlayers = allPlayers.filter((p) => p.buy);
       } else {
-        filteredPlayers = allPlayers
-          .filter((p) => p.sell)
-          .sort(
-            (a, b) =>
-              new Date(
-                b.contract![b.contract!.length - 1].dataExit!
-              ).getTime() -
-              new Date(a.contract![a.contract!.length - 1].dataExit!).getTime()
-          );
+        filteredPlayers = allPlayers.filter((p) => p.sell);
       }
     } else {
       const { startDate, endDate } = getSeasonDateRange(
@@ -53,47 +35,25 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
       );
 
       if (type === "arrivals") {
-        filteredPlayers = season.players
-          .filter((p) => {
-            const arrivalDate =
-              p.contract?.[p.contract.length - 1]?.dataArrival;
-            return (
-              p.buy &&
-              arrivalDate &&
-              new Date(arrivalDate) >= startDate &&
-              new Date(arrivalDate) <= endDate
-            );
-          })
-          .sort((a, b) => {
-            const aArrivalDate =
-              a.contract?.[a.contract.length - 1]?.dataArrival || 0;
-            const bArrivalDate =
-              b.contract?.[b.contract.length - 1]?.dataArrival || 0;
-            return (
-              new Date(bArrivalDate).getTime() -
-              new Date(aArrivalDate).getTime()
-            );
-          });
+        filteredPlayers = season.players.filter((p) => {
+          const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
+          return (
+            p.buy &&
+            arrivalDate &&
+            new Date(arrivalDate) >= startDate &&
+            new Date(arrivalDate) <= endDate
+          );
+        });
       } else {
-        filteredPlayers = season.players
-          .filter((p) => {
-            const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
-            return (
-              p.sell &&
-              exitDate &&
-              new Date(exitDate) >= startDate &&
-              new Date(exitDate) <= endDate
-            );
-          })
-          .sort((a, b) => {
-            const aExitDate =
-              a.contract?.[a.contract.length - 1]?.dataExit || 0;
-            const bExitDate =
-              b.contract?.[b.contract.length - 1]?.dataExit || 0;
-            return (
-              new Date(bExitDate).getTime() - new Date(aExitDate).getTime()
-            );
-          });
+        filteredPlayers = season.players.filter((p) => {
+          const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
+          return (
+            p.sell &&
+            exitDate &&
+            new Date(exitDate) >= startDate &&
+            new Date(exitDate) <= endDate
+          );
+        });
       }
     }
 

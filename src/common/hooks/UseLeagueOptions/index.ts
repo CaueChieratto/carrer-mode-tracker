@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { getContinentByCountry } from "../../services/GetContinentByCountry";
 import { leaguesByContinent } from "../../utils/Leagues";
+import { sortLeaguesForSelect } from "../../utils/Sorts";
 
 export const useLeagueOptions = (country: string) => {
   const continent = useMemo(() => getContinentByCountry(country), [country]);
@@ -19,7 +20,11 @@ export const useLeagueOptions = (country: string) => {
         continent as keyof typeof continentSpecificLeagues
       ] || [];
 
-    return [...countryLeagues, ...specificLeagues].map((league) => league.name);
+    const allLeaguesNames = [...countryLeagues, ...specificLeagues].map(
+      (league) => league.name
+    );
+
+    return sortLeaguesForSelect(allLeaguesNames);
   }, [continent, country]);
 
   return leaguesOptions;

@@ -3,6 +3,7 @@ import Styles from "./TransfersPanel.module.css";
 import { formatDisplayValue } from "../../common/utils/FormatValue";
 import { formatDateToLongBrazilian } from "../../common/utils/Date";
 import { FaTrashAlt } from "react-icons/fa";
+import { sortTransfersByValue } from "../../common/utils/Sorts";
 
 type TransfersPanelProps = {
   title: string;
@@ -10,6 +11,11 @@ type TransfersPanelProps = {
 };
 
 const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
+  const isArrival = title === "Chegadas";
+  const transferType = isArrival ? "arrivals" : "exit";
+
+  const sortedPlayers = sortTransfersByValue(players, transferType);
+
   return (
     <div className={Styles.container}>
       {players.length === 0 ? (
@@ -18,9 +24,8 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
         </p>
       ) : (
         <ul className={Styles.list}>
-          {players.map((player) => {
+          {sortedPlayers.map((player) => {
             const contract = player.contract[player.contract.length - 1];
-            const isArrival = title === "Chegadas";
             const club = isArrival ? contract.fromClub : contract.leftClub;
             const value = isArrival ? contract.buyValue : contract.sellValue;
             const date = isArrival ? contract.dataArrival : contract.dataExit;
