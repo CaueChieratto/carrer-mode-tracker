@@ -1,4 +1,3 @@
-// src/components/StatsSummary/index.tsx
 import { useMemo } from "react";
 import { Career } from "../../common/interfaces/Career";
 import Styles from "./StatsSummary.module.css";
