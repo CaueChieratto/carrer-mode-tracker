@@ -13,8 +13,8 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
 
     career.clubData.forEach((season) => {
       season.players.forEach((player) => {
-        const history = playerHistoryMap.get(player.id) || [];
-        playerHistoryMap.set(player.id, [...history, player]);
+        const history = playerHistoryMap.get(player.name) || [];
+        playerHistoryMap.set(player.name, [...history, player]);
       });
     });
 
@@ -22,6 +22,9 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
 
     playerHistoryMap.forEach((history) => {
       const latestPlayerState = { ...history[history.length - 1] };
+
+      const maxOverall = Math.max(...history.map((p) => p.overall));
+      latestPlayerState.overall = maxOverall;
 
       const leagueStatsMap = new Map<string, LeagueStats>();
       let totalBallonDor = 0;
