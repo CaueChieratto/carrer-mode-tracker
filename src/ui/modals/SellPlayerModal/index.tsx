@@ -1,13 +1,11 @@
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import Button from "../../../components/Button";
 import Form from "../../../components/Form";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { BsCalendar2Event } from "react-icons/bs";
-import { GiPoliceBadge } from "react-icons/gi";
 import { useSellPlayerForm } from "../../../common/hooks/Players/UseSellPlayerForm";
 import SellFormField from "../../../components/SellFormField";
 import SellPlayerInfos_Modal from "../../../components/SellPlayerInfos_Modal";
 import Styles from "./SellPlayerModal.module.css";
+import { formFields } from "../../../common/constants/SellPlayerFormFields";
 
 type SellPlayerModalProps = {
   closeModal: () => void;
@@ -20,27 +18,6 @@ type SellPlayerModalProps = {
   clubColor?: string;
   darkClubColor?: string;
 };
-
-const formFields = [
-  {
-    id: "toClub",
-    name: "Clube de destino",
-    icon: <GiPoliceBadge />,
-    placeholder: "Ex: Barcelona",
-  },
-  {
-    id: "sellValue",
-    name: "Valor da venda",
-    icon: <FaMoneyBillTransfer />,
-    placeholder: "Ex: 150k, 50M",
-  },
-  {
-    id: "dateExit",
-    name: "Data da venda",
-    icon: <BsCalendar2Event />,
-    placeholder: "Ex: 11/07",
-  },
-];
 
 const SellPlayerModal = ({
   closeModal,

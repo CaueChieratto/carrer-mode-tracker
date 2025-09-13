@@ -1,35 +1,21 @@
-import { useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
-import { getSeasonTabsConfig } from "../../common/constants/SeasonTabsConfig";
 import Load from "../../components/Load";
-import Modal from "../../components/Modal";
-import SlideUpModal from "../../ui/modals/SlideUpModal";
-import TransfersPanel from "../../components/TransfersPanel";
 import SeasonContent from "../../components/SeasonContent";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
-import { useOpenTransfersModal } from "../../common/hooks/Modal/UseOpenTransfersModal";
+import TransfersModal from "../../components/TransfersModal";
+import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
 
 const Season = () => {
-  const { careerId, seasonId } = useParams<{
-    careerId: string;
-    seasonId: string;
-  }>();
-  const navigate = useNavigate();
-  const { career, season, loading } = useSeasonData(careerId, seasonId);
-
-  const tabsConfig = useMemo(
-    () => getSeasonTabsConfig(careerId!, seasonId!, navigate),
-    [careerId, seasonId, navigate]
-  );
-
   const {
+    loading,
+    career,
+    season,
+    tabsConfig,
     isModalOpen,
     transferType,
     playersToShow,
     handleOpenTransfers,
     handleCloseModal,
-  } = useOpenTransfersModal(career, season);
+  } = useSeasonView(false);
 
   if (loading) return <Load />;
   if (!career || !season) return <NotFoundDisplay />;
@@ -42,19 +28,12 @@ const Season = () => {
         tabsConfig={tabsConfig}
         onOpenTransfers={handleOpenTransfers}
       />
-      <Modal
+      <TransfersModal
         isOpen={isModalOpen}
         closeModal={handleCloseModal}
-        slideUp
-        text={transferType === "arrivals" ? "Chegadas" : "Saídas"}
-      >
-        <SlideUpModal>
-          <TransfersPanel
-            title={transferType === "arrivals" ? "Chegadas" : "Saídas"}
-            players={playersToShow}
-          />
-        </SlideUpModal>
-      </Modal>
+        transferType={transferType}
+        playersToShow={playersToShow}
+      />
     </>
   );
 };

@@ -1,0 +1,34 @@
+.infos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.h2 {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.icon {
+  height: 17px;
+}
+
+.players {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.player {
+  font-size: 14px;
+  font-weight: 500;
+}
