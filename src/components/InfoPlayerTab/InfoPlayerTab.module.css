@@ -1,0 +1,58 @@
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px #0003;
+  margin-bottom: 16px;
+  padding: 20px 12px;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100px;
+}
+
+.title {
+  font-size: 22px;
+}
+
+.content_container {
+  align-content: space-between;
+  display: grid;
+  gap: 12px 6px;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  min-height: 50px;
+  width: 100%;
+}
+
+.profit_container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 50px;
+  width: 100%;
+}
+
+.contents {
+  align-items: center;
+  color: #22222673;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.info {
+  font-size: 14px;
+}
+
+.value {
+  color: #222226;
+  font-size: 16px;
+}
+
+.icon {
+  font-size: 40px;
+}
