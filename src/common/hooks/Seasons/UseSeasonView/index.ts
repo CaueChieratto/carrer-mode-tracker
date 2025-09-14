@@ -6,7 +6,7 @@ import { useCareers } from "../../Career/UseCareer";
 import { useOpenTransfersModal } from "../../Modal/UseOpenTransfersModal";
 import { useAggregatedPlayers } from "../../Players/UseAggregatedPlayers";
 
-export const useSeasonView = (isGeralPage: boolean) => {
+export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
   const { careerId, seasonId } = useParams<{
     careerId: string;
     seasonId?: string;
@@ -44,11 +44,16 @@ export const useSeasonView = (isGeralPage: boolean) => {
   const tabsConfig = useMemo(() => {
     if (isGeralPage) {
       if (!latestSeason) return [];
-      return getSeasonTabsConfig(careerId!, latestSeason.id, navigate);
+      return getSeasonTabsConfig(
+        careerId!,
+        latestSeason.id,
+        navigate,
+        !!isPlayer
+      );
     }
     if (!seasonId) return [];
-    return getSeasonTabsConfig(careerId!, seasonId, navigate);
-  }, [careerId, seasonId, navigate, isGeralPage, latestSeason]);
+    return getSeasonTabsConfig(careerId!, seasonId, navigate, !!isPlayer);
+  }, [careerId, seasonId, navigate, isGeralPage, latestSeason, isPlayer]);
 
   const {
     isModalOpen,

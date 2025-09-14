@@ -9,6 +9,7 @@ import Navbar from "../../ui/Navbar";
 import ContainerButton from "../ContainerButton";
 import HeaderSeason from "../HeaderSeason";
 import Styles from "./SectionView.module.css";
+import { Players } from "../../common/interfaces/playersInfo/players";
 
 const SectionView = ({
   career,
@@ -16,12 +17,18 @@ const SectionView = ({
   tabsConfig,
   onOpenTransfers,
   title,
+  notSeason,
+  isPlayer,
+  player,
 }: {
   career: Career;
   season: ClubData;
   tabsConfig: TabConfig[];
-  onOpenTransfers: (type: "arrivals" | "exit") => void;
+  onOpenTransfers?: (type: "arrivals" | "exit") => void;
   title?: string;
+  notSeason?: boolean;
+  isPlayer?: boolean;
+  player?: Players;
 }) => {
   const storageKey = `season-tab-${career.id}-${season.id}`;
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
@@ -32,10 +39,11 @@ const SectionView = ({
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
       <HeaderSeason
+        isPlayer={isPlayer}
         career={career}
-        careerId={career.id}
         season={!title ? season.seasonNumber : undefined}
         titleText={title}
+        player={player}
       />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
@@ -43,9 +51,13 @@ const SectionView = ({
         onOptionClick={handleTabClick}
       />
       {ActionButton && (
-        <ContainerButton className={Styles.container_button}>
-          <ActionButton onClick={handleActionClick} />
-        </ContainerButton>
+        <>
+          {!notSeason && (
+            <ContainerButton className={Styles.container_button}>
+              <ActionButton onClick={handleActionClick} />
+            </ContainerButton>
+          )}
+        </>
       )}
       <Swiper
         initialSlide={activeIndex}
@@ -56,11 +68,17 @@ const SectionView = ({
       >
         {tabsConfig.map(({ title, component: TabComponent }) => (
           <SwiperSlide key={title}>
-            <div className={Styles.container}>
+            <div
+              className={
+                notSeason ? Styles.containerNotSeason : Styles.container
+              }
+            >
               <TabComponent
                 season={season}
                 career={career}
                 onOpenTransfers={onOpenTransfers}
+                isPlayer={isPlayer}
+                player={player}
               />
             </div>
           </SwiperSlide>

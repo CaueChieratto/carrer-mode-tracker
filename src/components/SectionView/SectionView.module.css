@@ -14,3 +14,10 @@
   padding: 0 12px 100px;
   position: relative;
 }
+
+.containerNotSeason {
+  min-height: 527px;
+  padding: 0 12px 100px;
+  position: relative;
+  margin-top: 43px;
+}

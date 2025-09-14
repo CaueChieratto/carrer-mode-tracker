@@ -65,7 +65,6 @@ const AddPlayersContent = ({
     <>
       <HeaderSeason
         career={career}
-        careerId={careerId}
         backSeasons={handleGoBack}
         titleText={playerName}
       />

@@ -23,6 +23,7 @@ const Geral = () => {
   return (
     <>
       <SectionView
+        notSeason
         title="Geral"
         career={career}
         season={season}
