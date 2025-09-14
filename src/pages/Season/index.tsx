@@ -1,5 +1,5 @@
 import Load from "../../components/Load";
-import SeasonContent from "../../components/SeasonContent";
+import SectionView from "../../components/SectionView";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import TransfersModal from "../../components/TransfersModal";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
@@ -22,7 +22,7 @@ const Season = () => {
 
   return (
     <>
-      <SeasonContent
+      <SectionView
         career={career}
         season={season}
         tabsConfig={tabsConfig}

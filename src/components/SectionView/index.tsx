@@ -8,9 +8,9 @@ import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import Navbar from "../../ui/Navbar";
 import ContainerButton from "../ContainerButton";
 import HeaderSeason from "../HeaderSeason";
-import Styles from "./SeasonContent.module.css";
+import Styles from "./SectionView.module.css";
 
-const SeasonContent = ({
+const SectionView = ({
   career,
   season,
   tabsConfig,
@@ -70,4 +70,4 @@ const SeasonContent = ({
   );
 };
 
-export default SeasonContent;
+export default SectionView;
