@@ -8,6 +8,7 @@ import { Players } from "../../common/interfaces/playersInfo/players";
 type HeaderSeasonProps = {
   career: Career;
   season?: number;
+  careerId: string;
   titleText?: string;
   backSeasons?: () => void;
   isPlayer?: boolean;
@@ -17,6 +18,7 @@ type HeaderSeasonProps = {
 const HeaderSeason = ({
   career,
   season,
+  careerId,
   titleText,
   backSeasons,
   player,
@@ -60,7 +62,13 @@ const HeaderSeason = ({
         )}
       </div>
       <Button
-        onClick={() => (!backSeasons ? navigate(-1) : backSeasons())}
+        onClick={() =>
+          !backSeasons
+            ? navigate(
+                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`
+              )
+            : backSeasons()
+        }
         className={Styles.button}
       >
         Voltar

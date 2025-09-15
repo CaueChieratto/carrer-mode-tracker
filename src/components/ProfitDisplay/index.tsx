@@ -3,39 +3,71 @@ import { formatDisplayValue } from "../../common/utils/FormatValue";
 import Styles from "../InfoPlayerTab/InfoPlayerTab.module.css";
 
 type ProfitDisplayProps = {
-  buyValue: number;
-  sellValue: number;
+  buyValue?: number;
+  sellValue?: number;
+  playerValue?: number;
+  salary?: number;
+  contractTime?: number;
+  textOne: string;
+  textTwo: string;
+  textTree: string;
+  isProfit?: boolean;
 };
 
 const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
-  buyValue,
-  sellValue,
+  buyValue = 0,
+  sellValue = 0,
+  playerValue = 0,
+  salary = 0,
+  contractTime = 0,
+  textOne,
+  textTwo,
+  textTree,
+  isProfit,
 }) => {
   const profit = sellValue - buyValue;
 
   return (
     <div className={Styles.profit_container}>
       <div className={Styles.contents}>
-        <h1 className={Styles.info}>Valor da venda</h1>
-        <h2 className={Styles.value} style={{ color: "#0bb32aff" }}>
-          {formatDisplayValue(sellValue)}
-        </h2>
-      </div>
-      -
-      <div className={Styles.contents}>
-        <h1 className={Styles.info}>Valor da compra</h1>
-        <h2 className={Styles.value} style={{ color: "#c81419ff" }}>
-          {formatDisplayValue(buyValue)}
-        </h2>
-      </div>
-      =
-      <div className={Styles.contents}>
-        <h1 className={Styles.info}>Lucro total</h1>
+        <h1 className={Styles.info}>{textOne}</h1>
         <h2
           className={Styles.value}
-          style={{ color: profit >= 0 ? "#0bb32aff" : "#c81419ff" }}
+          style={{ color: isProfit ? "#0bb32aff" : "#222226" }}
         >
-          {formatDisplayValue(profit)}
+          {isProfit
+            ? formatDisplayValue(sellValue)
+            : formatDisplayValue(playerValue)}
+        </h2>
+      </div>
+
+      {isProfit && <span className={Styles.operator}>-</span>}
+
+      <div className={Styles.contents}>
+        <h1 className={Styles.info}>{textTwo}</h1>
+        <h2
+          className={Styles.value}
+          style={{ color: isProfit ? "#c81419ff" : "#222226" }}
+        >
+          {isProfit ? formatDisplayValue(buyValue) : formatDisplayValue(salary)}
+        </h2>
+      </div>
+
+      {isProfit && <span className={Styles.operator}>=</span>}
+
+      <div className={Styles.contents}>
+        <h1 className={Styles.info}>{textTree}</h1>
+        <h2
+          className={Styles.value}
+          style={{
+            color: isProfit
+              ? profit >= 0
+                ? "#0bb32aff"
+                : "#c81419ff"
+              : "#222226",
+          }}
+        >
+          {isProfit ? formatDisplayValue(Math.abs(profit)) : contractTime}
         </h2>
       </div>
     </div>

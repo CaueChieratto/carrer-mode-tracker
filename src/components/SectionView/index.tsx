@@ -30,15 +30,23 @@ const SectionView = ({
   isPlayer?: boolean;
   player?: Players;
 }) => {
-  const storageKey = `season-tab-${career.id}-${season.id}`;
+  const storageKey = isPlayer
+    ? `player-tab-${career.id}-${player?.id}`
+    : notSeason
+    ? `geral-tab-${career.id}`
+    : `season-tab-${career.id}-${season.id}`;
+
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
+
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
+
   const handleActionClick = tabsConfig[activeIndex]?.action;
 
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
       <HeaderSeason
+        careerId={career.id}
         isPlayer={isPlayer}
         career={career}
         season={!title ? season.seasonNumber : undefined}
