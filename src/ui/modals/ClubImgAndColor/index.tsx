@@ -1,19 +1,12 @@
-import Form from "../../../components/Form";
-import AddClubImg from "../../../components/AddClubImg";
-import AddClubColors from "../../../components/AddClubColors";
-import Button from "../../../components/Button";
+import { Dispatch, SetStateAction } from "react";
 import { Career } from "../../../common/interfaces/Career";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { useClubImgAndColor } from "../../../common/hooks/Modal/UseClubImgAndColors";
-import { SaveEditClub } from "../../../common/services/SaveEditClub";
-import EditInfoClub from "../../../components/EditInfoClub";
+import Button from "../../../components/Button";
+import Form from "../../../components/Form";
 import Load from "../../../components/Load";
+import AddClubColors from "./components/AddClubColors";
+import AddClubImg from "./components/AddClubImg";
+import EditInfoClub from "./components/EditInfoClub";
+import { useClubImgAndColorModal } from "./hooks/useClubImgAndColorModal";
 
 type ClubImgAndColorProps = {
   closeModal: () => void;
@@ -29,53 +22,29 @@ const ClubImgAndColor = ({
   edit,
 }: ClubImgAndColorProps) => {
   const {
+    isLoading,
+    clubName,
+    setClubName,
+    managerName,
+    setManagerName,
+    badge,
     file,
-    fileDataUrl,
     pickFile,
     onFileChange,
     inputRef,
     primaryColor,
-    secondaryColor,
     setPrimaryColor,
+    secondaryColor,
     setSecondaryColor,
-  } = useClubImgAndColor(selectedCareer);
-
-  const [load, setLoad] = useState(false);
-  const [clubName, setClubName] = useState(selectedCareer.clubName || "");
-  const [managerName, setManagerName] = useState(
-    selectedCareer.managerName || ""
-  );
-
-  useEffect(() => {
-    setClubName(selectedCareer.clubName || "");
-    setManagerName(selectedCareer.managerName || "");
-  }, [selectedCareer]);
-
-  const badge = selectedCareer?.teamBadge;
-
-  const save = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoad(true);
-    try {
-      const updatedCareer = await SaveEditClub(
-        selectedCareer,
-        primaryColor,
-        secondaryColor,
-        fileDataUrl ?? undefined,
-        clubName,
-        managerName
-      );
-      setSelectedCareer(updatedCareer);
-      closeModal();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoad(false);
-    }
-  };
+    handleSave,
+  } = useClubImgAndColorModal({
+    selectedCareer,
+    setSelectedCareer,
+    closeModal,
+  });
 
   return (
-    <Form onSubmit={save}>
+    <Form onSubmit={handleSave}>
       {edit && (
         <EditInfoClub
           clubName={clubName}
@@ -99,10 +68,16 @@ const ClubImgAndColor = ({
         onFileChange={onFileChange}
         inputRef={inputRef}
       />
-      <Button width="big" fontWeight="bold" fontSize="large" isActive>
+      <Button
+        width="big"
+        fontWeight="bold"
+        fontSize="large"
+        isActive
+        type="submit"
+      >
         Salvar
       </Button>
-      {load && <Load />}
+      {isLoading && <Load />}
     </Form>
   );
 };

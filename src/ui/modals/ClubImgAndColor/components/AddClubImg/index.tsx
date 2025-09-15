@@ -1,8 +1,8 @@
 import { FaPlus } from "react-icons/fa6";
-import Label from "../Label";
+import Label from "../../../../../components/Label";
 import Styles from "./AddClubImg.module.css";
 import { ChangeEventHandler, RefObject } from "react";
-import { Inputs } from "../../common/elements/Inputs";
+import { Inputs } from "../../../../../common/elements/Inputs";
 
 type AddClubImgProps = {
   edit: boolean;

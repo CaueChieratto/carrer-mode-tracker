@@ -1,6 +1,6 @@
-import { Inputs } from "../../common/elements/Inputs";
-import ContainerIcon from "../ContainerIcon";
-import Label from "../Label";
+import { Inputs } from "../../../../../common/elements/Inputs";
+import ContainerIcon from "../../../../../components/ContainerIcon";
+import Label from "../../../../../components/Label";
 import Styles from "./EditInfoClub.module.css";
 import { GiCheckedShield } from "react-icons/gi";
 import { GrUserManager } from "react-icons/gr";
