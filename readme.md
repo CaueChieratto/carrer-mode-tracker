@@ -1,7 +1,5 @@
 # Career Mode Tracker
 
-![Logo](./public/Logo.png)
-
 ##
 
 Welcome to the Career Mode Tracker, a web application designed for football gaming enthusiasts who want to take their career mode experience to the next level. This app allows you to meticulously track every detail of your managerial journey, from player stats and transfers to seasonal performance and trophy cabinets. Say goodbye to spreadsheets and notebooks, and hello to a streamlined, interactive, and visually engaging way to manage your virtual football career.
