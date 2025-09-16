@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "../../ui/Card";
-import Styles from "../InfoPlayerTab/InfoPlayerTab.module.css";
+import Styles from "../DetailedPlayerSeasons/InfoPlayerTab/InfoPlayerTab.module.css";
 
 type InfoCardProps = {
   title: string;

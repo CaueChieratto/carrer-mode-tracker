@@ -1,5 +1,5 @@
 import React from "react";
-import Styles from "../InfoPlayerTab/InfoPlayerTab.module.css";
+import Styles from "../DetailedPlayerSeasons/InfoPlayerTab/InfoPlayerTab.module.css";
 
 type InfoRowProps = {
   children: React.ReactNode;

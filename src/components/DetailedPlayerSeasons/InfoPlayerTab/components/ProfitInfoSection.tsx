@@ -1,6 +1,6 @@
 import React from "react";
-import InfoCard from "../../InfoCard";
-import ProfitDisplay from "../../ProfitDisplay";
+import InfoCard from "../../../InfoCard";
+import ProfitDisplay from "../../../ProfitDisplay";
 
 type ProfitInfoSectionProps = {
   buyValue: number;

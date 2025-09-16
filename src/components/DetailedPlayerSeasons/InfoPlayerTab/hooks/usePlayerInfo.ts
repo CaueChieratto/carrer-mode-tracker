@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../../common/interfaces/Career";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
 
 export const usePlayerInfo = (player?: Players, career?: Career) => {
   const latestContract = useMemo(() => {

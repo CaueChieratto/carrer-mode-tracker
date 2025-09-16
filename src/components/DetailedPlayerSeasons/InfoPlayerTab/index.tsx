@@ -1,12 +1,12 @@
 import React from "react";
-import { Career } from "../../common/interfaces/Career";
-import { Players } from "../../common/interfaces/playersInfo/players";
 import ContractInfoSection from "./components/ContractInfoSection";
 import PlayerInfoSection from "./components/PlayerInfoSection";
 import PlayerNotFound from "./components/PlayerNotFound";
 import ProfitInfoSection from "./components/ProfitInfoSection";
 import TransactionInfoSection from "./components/TransactionInfoSection";
 import { usePlayerInfo } from "./hooks/usePlayerInfo";
+import { Career } from "../../../common/interfaces/Career";
+import { Players } from "../../../common/interfaces/playersInfo/players";
 
 type InfoPlayerTabProps = {
   player?: Players;

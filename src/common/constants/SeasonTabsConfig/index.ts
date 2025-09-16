@@ -6,9 +6,9 @@ import { Buttons } from "../../elements/Buttons";
 import { ClubData } from "../../interfaces/club/clubData";
 import { Career } from "../../interfaces/Career";
 import { Players } from "../../interfaces/playersInfo/players";
-import InfoPlayerTab from "../../../components/InfoPlayerTab";
 import TotalPlayerTab from "../../../components/DetailedPlayerSeasons/TotalPlayerTab";
 import SeasonsPlayerTab from "../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
+import InfoPlayerTab from "../../../components/DetailedPlayerSeasons/InfoPlayerTab";
 
 export type TabConfig = {
   title: string;

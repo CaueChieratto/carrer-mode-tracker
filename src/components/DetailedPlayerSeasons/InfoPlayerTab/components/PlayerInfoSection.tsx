@@ -1,11 +1,11 @@
 import React from "react";
 import { GrMap } from "react-icons/gr";
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import InfoCard from "../../InfoCard";
-import InfoItem from "../../InfoItem";
-import InfoRow from "../../InfoRow";
 import { FaCalendar, FaTshirt } from "react-icons/fa";
 import { FaUserLarge } from "react-icons/fa6";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import InfoCard from "../../../InfoCard";
+import InfoItem from "../../../InfoItem";
+import InfoRow from "../../../InfoRow";
 
 type PlayerInfoSectionProps = {
   player: Players;

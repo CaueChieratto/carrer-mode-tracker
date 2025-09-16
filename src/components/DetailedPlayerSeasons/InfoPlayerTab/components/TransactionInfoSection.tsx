@@ -2,12 +2,12 @@ import React from "react";
 import { BiRefresh } from "react-icons/bi";
 import { GiMoneyStack, GiPoliceBadge } from "react-icons/gi";
 import { RiCalendarScheduleLine } from "react-icons/ri";
-import { brasilDatePlaceholder } from "../../../common/utils/Date";
-import { formatDisplayValue } from "../../../common/utils/FormatValue";
-import InfoCard from "../../InfoCard";
-import InfoItem from "../../InfoItem";
-import InfoRow from "../../InfoRow";
 import { transactionConfig } from "../constants/TransactionConfig";
+import { brasilDatePlaceholder } from "../../../../common/utils/Date";
+import { formatDisplayValue } from "../../../../common/utils/FormatValue";
+import InfoCard from "../../../InfoCard";
+import InfoItem from "../../../InfoItem";
+import InfoRow from "../../../InfoRow";
 
 type TransactionInfoSectionProps = {
   type: "buy" | "sell";

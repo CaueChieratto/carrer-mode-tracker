@@ -1,6 +1,6 @@
 import React from "react";
 import { formatDisplayValue } from "../../common/utils/FormatValue";
-import Styles from "../InfoPlayerTab/InfoPlayerTab.module.css";
+import Styles from "../DetailedPlayerSeasons/InfoPlayerTab/InfoPlayerTab.module.css";
 
 type ProfitDisplayProps = {
   buyValue?: number;
