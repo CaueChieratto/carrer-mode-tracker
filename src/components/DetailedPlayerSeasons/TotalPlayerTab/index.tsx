@@ -8,6 +8,7 @@ import LeagueStatsRowTotal from "./components/LeagueStatsRowTotal";
 import { useAggregatedLeagueStats } from "./hooks/useAggregatedLeagueStats";
 import { useTotalPlayerTab } from "./hooks/useTotalPlayerTab";
 import Styles from "./TotalPlayerTab.module.css";
+import NoStatsMessage from "../../NoStatsMessage";
 
 type TotalPlayerTabProps = {
   player?: Players;
@@ -25,6 +26,12 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
       [leagueName]: !prev[leagueName],
     }));
   };
+
+  if (aggregatedLeagueStats.length === 0) {
+    return (
+      <NoStatsMessage text="Este jogador não possui nenhuma estatística registrada ou temporada válida para ser exibida." />
+    );
+  }
 
   return (
     <>

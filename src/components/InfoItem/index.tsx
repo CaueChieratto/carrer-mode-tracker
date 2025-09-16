@@ -2,7 +2,7 @@ import React from "react";
 import Styles from "../DetailedPlayerSeasons/InfoPlayerTab/InfoPlayerTab.module.css";
 
 type InfoItemProps = {
-  label: string;
+  label: string | number;
   value: string | number;
   icon: React.ReactNode;
   color?: string;

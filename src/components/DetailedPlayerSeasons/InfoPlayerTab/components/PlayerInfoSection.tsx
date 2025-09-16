@@ -20,7 +20,7 @@ const PlayerInfoSection: React.FC<PlayerInfoSectionProps> = ({ player }) => (
         icon={<FaUserLarge />}
       />
       <InfoItem label={player.position} value={"Posição"} icon={<GrMap />} />
-      <InfoItem label={"Idade"} value={player.age} icon={<FaCalendar />} />
+      <InfoItem label={player.age} value={"Idade"} icon={<FaCalendar />} />
       <InfoItem
         label={player.shirtNumber}
         value={"Número da camisa"}
