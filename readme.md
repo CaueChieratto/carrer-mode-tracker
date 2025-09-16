@@ -1,7 +1,16 @@
-# Career Mode Tracker
+# <img src="./public/Logo.png" alt="Career Mode Tracker" width="40"/> Career Mode Tracker
 
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18-blue?logo=react" alt="React"/>
+  <img src="https://img.shields.io/badge/TypeScript-4.9-blue?logo=typescript" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Firebase-BaaS-orange?logo=firebase" alt="Firebase"/>
+</p>
 
-Welcome to the Career Mode Tracker, a web application designed for football gaming enthusiasts who want to take their career mode experience to the next level. This app allows you to meticulously track every detail of your managerial journey, from player stats and transfers to seasonal performance and trophy cabinets. Say goodbye to spreadsheets and notebooks, and hello to a streamlined, interactive, and visually engaging way to manage your virtual football career.
+Welcome to **Career Mode Tracker**, a web application designed for football gaming enthusiasts who want to take their career mode experience to the next level.  
+
+This app allows you to meticulously track every detail of your managerial journey, from player stats and transfers to seasonal performance and trophy cabinets.  
+
+Say goodbye to spreadsheets and notebooks, and hello to a streamlined, interactive, and visually engaging way to manage your virtual football career.  
 
 ## Features
 
