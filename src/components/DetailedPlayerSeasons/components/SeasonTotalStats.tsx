@@ -46,7 +46,11 @@ const SeasonTotalStats = ({
         />
       </section>
       {isExpanded && (
-        <TrophyList isTotal={isTotal} trophies={trophiesWonInSeason} />
+        <TrophyList
+          isTotal={isTotal}
+          trophies={trophiesWonInSeason}
+          player={playerInSeason}
+        />
       )}
     </>
   );

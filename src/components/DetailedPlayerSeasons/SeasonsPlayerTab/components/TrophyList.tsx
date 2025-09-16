@@ -2,16 +2,24 @@ import { Trophy } from "../../../../common/interfaces/club/trophy";
 import Styles from "../SeasonsPlayerTab.module.css";
 import LeagueStatsRow from "./LeagueStatsRow";
 import NoTitleSeason from "../../components/NoTitleSeason";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
 
 type TrophyListProps = {
   trophies: Trophy[];
   isTotal?: boolean;
+  player?: Players;
 };
 
-const TrophyList = ({ trophies, isTotal }: TrophyListProps) => {
+const TrophyList = ({ trophies, isTotal, player }: TrophyListProps) => {
   if (trophies.length === 0) {
     return <NoTitleSeason text="Nenhum" leagueName="título na temporada" />;
   }
+
+  const ballonDors = player?.ballonDor ?? 0;
+  const hasBallonDors = isTotal && ballonDors > 0;
+
+  const ballonDorImage = "/bolaDeOuro.jpeg";
+  const titleText = `${ballonDors} Bola${ballonDors > 1 ? "s" : ""} de ouro`;
 
   return (
     <div className={Styles.seasonTitle}>
@@ -25,6 +33,16 @@ const TrophyList = ({ trophies, isTotal }: TrophyListProps) => {
           trophy={trophy}
         />
       ))}
+      {hasBallonDors && (
+        <div className={Styles.containerSeason}>
+          <img
+            src={ballonDorImage}
+            alt="Bola de Ouro"
+            className={Styles.ballonDor}
+          />
+          <h1 className={Styles.leagueNameTitles}>{titleText}</h1>
+        </div>
+      )}
     </div>
   );
 };

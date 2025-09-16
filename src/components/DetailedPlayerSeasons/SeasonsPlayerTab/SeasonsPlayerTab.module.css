@@ -57,6 +57,16 @@
   object-fit: cover;
 }
 
+.ballonDor {
+  margin-left: 12px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  padding: 10px;
+  object-fit: cover;
+  width: 120px;
+  height: 120px;
+}
+
 .leagueName {
   margin: 0 auto;
   font-size: 24px;
