@@ -22,7 +22,7 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
           season={season}
         />
       ) : (
-        <NoStatsMessage />
+        <NoStatsMessage text="Primeiro, adicione jogadores ao elenco para poder registrar suas estatísticas." />
       )}
     </div>
   );

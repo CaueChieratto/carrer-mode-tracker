@@ -2,14 +2,15 @@ import { BsBarChart } from "react-icons/bs";
 import Card from "../../ui/Card";
 import Styles from "./NoStatsMessage.module.css";
 
-const NoStatsMessage = () => (
+type NoStatsMessageProps = {
+  text: string;
+};
+
+const NoStatsMessage = ({ text }: NoStatsMessageProps) => (
   <Card className={Styles.card}>
     <BsBarChart className={Styles.icon} />
     <h2 className={Styles.title}>Nenhuma estatística encontrada</h2>
-    <p className={Styles.text}>
-      Primeiro, adicione jogadores ao elenco para poder registrar suas
-      estatísticas.
-    </p>
+    <p className={Styles.text}>{text}</p>
   </Card>
 );
 
