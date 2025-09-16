@@ -12,6 +12,7 @@ type UseStatisticsProps = {
   player?: Players;
   leagueStats?: LeagueStats;
   handleDeleteLeague?: (leagueName: string) => void;
+  isPlayer?: boolean;
 };
 
 export const useStatistics = ({
@@ -21,6 +22,7 @@ export const useStatistics = ({
   player,
   leagueStats,
   handleDeleteLeague,
+  isPlayer,
 }: UseStatisticsProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
@@ -94,6 +96,7 @@ export const useStatistics = ({
   const filteredStats = useMemo(
     () =>
       statsData.filter((stat) => {
+        if (isPlayer && stat.label === "Bola de Ouro") return false;
         if (isGeralPage && stat.label === "Deletar") return false;
         if (stat.showOnlyForLeague && !league) return false;
         if (stat.showOnlyForTotal && !total) return false;
@@ -103,7 +106,7 @@ export const useStatistics = ({
           return !stat.showForGoalkeeper;
         }
       }),
-    [statsData, isGeralPage, league, total, isGoalkeeper]
+    [statsData, isGeralPage, league, total, isGoalkeeper, isPlayer]
   );
 
   return { filteredStats };

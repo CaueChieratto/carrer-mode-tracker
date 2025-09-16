@@ -1,6 +1,12 @@
 import { Career } from "../../common/interfaces/Career";
 import { Players } from "../../common/interfaces/playersInfo/players";
-// import { getContinentByCountry } from "../../common/services/GetContinentByCountry";
+import Styles from "./SeasonsPlayerTab.module.css";
+import Card from "../../ui/Card";
+import { useSeasonsPlayerTab } from "./hooks/useSeasonsPlayerTab";
+import SeasonRow from "./components/SeasonRow";
+import TrophyRow from "./components/TrophyRow";
+import { sortLeaguesByLevel } from "../../common/utils/Sorts";
+import SeasonTotalStats from "./components/SeasonTotalStats";
 
 type SeasonsPlayerTabProps = {
   career: Career;
@@ -8,47 +14,55 @@ type SeasonsPlayerTabProps = {
 };
 
 const SeasonsPlayerTab = ({ player, career }: SeasonsPlayerTabProps) => {
-  // const playerId = player?.id;
-
-  // const seasonsPlayerPlayed = career.clubData.filter((s) =>
-  //   s.players.some((p) => p.id === playerId)
-  // );
-
-  // const playerDataPerSeason = seasonsPlayerPlayed.map((season) =>
-  //   season.players.find((p) => p.id === playerId)
-  // );
-
-  // const getSeasonString = (seasonNumber: number): string => {
-  //   const startYear =
-  //     new Date(career.createdAt).getFullYear() + seasonNumber - 1;
-  //   const continent = getContinentByCountry(career.nation);
-
-  //   if (continent === "Europa") {
-  //     const endYear = (startYear + 1).toString().slice(-2);
-  //     return `${startYear.toString().slice(-2)}/${endYear}`;
-  //   } else {
-  //     return startYear.toString();
-  //   }
-  // };
-
-  // const titlesBySeason = seasonsPlayerPlayed
-  //   .map((season) => {
-  //     const seasonStr = getSeasonString(season.seasonNumber);
-  //     const trophiesWonInSeason = career.trophies
-  //       .filter((trophy) => trophy.seasons.includes(seasonStr))
-  //       .map((trophy) => ({ ...trophy, seasons: [seasonStr] }));
-  //     return {
-  //       seasonNumber: season.seasonNumber,
-  //       trophies: trophiesWonInSeason,
-  //     };
-  //   })
-  //   .filter((season) => season.trophies.length > 0);
+  const {
+    expand,
+    toggleExpand,
+    seasonsPlayerPlayed,
+    getSeasonString,
+    getTrophiesWonInSeason,
+    playerId,
+  } = useSeasonsPlayerTab(career, player);
 
   return (
-    <div>
-      {player?.name}
-      {career.clubName}
-    </div>
+    <>
+      {seasonsPlayerPlayed.map((season) => {
+        const seasonString = getSeasonString(season.seasonNumber);
+        const playerInSeason = season.players.find((p) => p.id === playerId);
+        if (!playerInSeason) return null;
+
+        const trophiesWonInSeason = getTrophiesWonInSeason(seasonString);
+        const sortedLeagues = sortLeaguesByLevel(playerInSeason.statsLeagues);
+
+        return (
+          <Card className={Styles.card} key={season.id}>
+            <SeasonRow seasonString={seasonString} player={player} />
+            {sortedLeagues.map((leagueStats) => {
+              const trophy = trophiesWonInSeason.find(
+                (t) => t.leagueName === leagueStats.leagueName
+              );
+              const leagueKey = `${season.id}-${leagueStats.leagueName}`;
+
+              return (
+                <div key={leagueKey}>
+                  <TrophyRow
+                    trophy={trophy}
+                    playerInSeason={playerInSeason}
+                    seasonId={season.id}
+                    isExpanded={!!expand[leagueKey]}
+                    toggleExpand={toggleExpand}
+                    leagueStats={leagueStats}
+                  />
+                </div>
+              );
+            })}
+            <SeasonTotalStats
+              playerInSeason={playerInSeason}
+              trophiesWonInSeason={trophiesWonInSeason}
+            />
+          </Card>
+        );
+      })}
+    </>
   );
 };
 

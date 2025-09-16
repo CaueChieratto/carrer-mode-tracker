@@ -12,6 +12,7 @@ type StatisticProps = {
   className?: string;
   deleteIcon?: ReactNode;
   onClick?: () => void;
+  isPlayer?: boolean;
 };
 
 const Statistic = ({
@@ -24,13 +25,16 @@ const Statistic = ({
   className,
   deleteIcon,
   onClick,
+  isPlayer,
 }: StatisticProps) => {
   const divClass = isInfo ? Styles.icons : `${Styles.icons} ${className ?? ""}`;
 
-  const divStyle =
-    !isInfo && getColor && typeof value === "number"
+  const divStyle = {
+    ...(!isInfo && getColor && typeof value === "number"
       ? { backgroundColor: UseRatingColor(value) }
-      : {};
+      : {}),
+    ...(isPlayer ? { width: "50px", height: "26px" } : {}),
+  };
 
   return (
     <div className={divClass} style={divStyle}>
@@ -44,7 +48,10 @@ const Statistic = ({
           {icon}
         </>
       ) : (
-        <span className={!isLeague ? Styles.stats : Styles.statsLeague}>
+        <span
+          className={!isLeague ? Styles.stats : Styles.statsLeague}
+          style={isPlayer ? { fontSize: "16px" } : {}}
+        >
           {typeof value === "number" ? value : 0}
         </span>
       )}

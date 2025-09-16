@@ -8,6 +8,7 @@ type CalculatedStatisticsProps = {
   info?: boolean;
   total?: boolean;
   league?: boolean;
+  isPlayer?: boolean;
   isGoalkeeper?: boolean;
   player?: Players;
   leagueStats?: LeagueStats;
@@ -31,6 +32,7 @@ const CalculatedStatistics = (props: CalculatedStatisticsProps) => {
           getColor={stat.getColor}
           className={stat.className}
           onClick={stat.onClick}
+          isPlayer={props.isPlayer}
         />
       ))}
     </>
