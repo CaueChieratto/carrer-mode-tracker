@@ -60,7 +60,10 @@ const TrophyRow = ({
               leagueImage={trophy.leagueImage}
             />
           ) : (
-            <NoTitleSeason leagueName={leagueStats.leagueName} />
+            <NoTitleSeason
+              text="Não ganhou a"
+              leagueName={leagueStats.leagueName}
+            />
           )}
         </>
       )}

@@ -23,6 +23,8 @@ const SeasonsPlayerTab = ({ player, career }: SeasonsPlayerTabProps) => {
     playerId,
   } = useSeasonsPlayerTab(career, player);
 
+  console.log(player);
+
   return (
     <>
       {seasonsPlayerPlayed.map((season) => {

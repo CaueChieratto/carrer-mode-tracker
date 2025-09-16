@@ -1,13 +1,16 @@
 import Styles from "../SeasonsPlayerTab.module.css";
 
 type NoTitleSeasonProps = {
+  text: string;
   leagueName: string;
 };
 
-const NoTitleSeason = ({ leagueName }: NoTitleSeasonProps) => {
+const NoTitleSeason = ({ text, leagueName }: NoTitleSeasonProps) => {
   return (
     <section className={Styles.container}>
-      <h1 className={Styles.leagueName_noTitle}>Não ganhou a {leagueName}</h1>
+      <h1 className={Styles.leagueName_noTitle}>
+        {text} {leagueName}
+      </h1>
     </section>
   );
 };

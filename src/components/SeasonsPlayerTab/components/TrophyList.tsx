@@ -9,7 +9,7 @@ type TrophyListProps = {
 
 const TrophyList = ({ trophies }: TrophyListProps) => {
   if (trophies.length === 0) {
-    return <NoTitleSeason leagueName="nenhum título na temporada" />;
+    return <NoTitleSeason text="Nenhum" leagueName="título na temporada" />;
   }
 
   return (
