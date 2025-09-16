@@ -1,7 +1,7 @@
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import CalculatedStatistics from "../../CalculatedStatistics";
 import StatisticsTable_Title from "../../StatisticsTable_Title";
-import Styles from "../SeasonsPlayerTab.module.css";
+import Styles from "../SeasonsPlayerTab/SeasonsPlayerTab.module.css";
 
 type SeasonRowProps = {
   seasonString: string;

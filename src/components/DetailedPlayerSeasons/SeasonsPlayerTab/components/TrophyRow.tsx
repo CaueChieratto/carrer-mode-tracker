@@ -1,11 +1,11 @@
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import CalculatedStatistics from "../../CalculatedStatistics";
-import StatisticsTable_Title from "../../StatisticsTable_Title";
+import { Trophy } from "../../../../common/interfaces/club/trophy";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
+import CalculatedStatistics from "../../../CalculatedStatistics";
+import StatisticsTable_Title from "../../../StatisticsTable_Title";
 import Styles from "../SeasonsPlayerTab.module.css";
-import { Trophy } from "../../../common/interfaces/club/trophy";
 import LeagueStatsRow from "./LeagueStatsRow";
-import { LeagueStats } from "../../../common/interfaces/playersStats/leagueStats";
-import NoTitleSeason from "./NoTitleSeason";
+import NoTitleSeason from "../../components/NoTitleSeason";
 
 type TrophyRowProps = {
   trophy?: Trophy;

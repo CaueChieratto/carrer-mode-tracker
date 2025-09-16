@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Career } from "../../../common/interfaces/Career";
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import { getContinentByCountry } from "../../../common/services/GetContinentByCountry";
-import { League, leaguesByContinent } from "../../../common/utils/Leagues";
-import { LeagueLevels } from "../../../common/constants/LeagueLevels";
+import { LeagueLevels } from "../../../../common/constants/LeagueLevels";
+import { Career } from "../../../../common/interfaces/Career";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import { getContinentByCountry } from "../../../../common/services/GetContinentByCountry";
+import { League, leaguesByContinent } from "../../../../common/utils/Leagues";
 
 export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
   const [expand, setExpand] = useState<Record<string, boolean>>({});

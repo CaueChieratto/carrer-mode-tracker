@@ -7,8 +7,8 @@ import { ClubData } from "../../interfaces/club/clubData";
 import { Career } from "../../interfaces/Career";
 import { Players } from "../../interfaces/playersInfo/players";
 import InfoPlayerTab from "../../../components/InfoPlayerTab";
-import SeasonsPlayerTab from "../../../components/SeasonsPlayerTab";
-import TotalPlayerTab from "../../../components/TotalPlayerTab";
+import TotalPlayerTab from "../../../components/DetailedPlayerSeasons/TotalPlayerTab";
+import SeasonsPlayerTab from "../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
 
 export type TabConfig = {
   title: string;

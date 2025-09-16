@@ -1,20 +1,22 @@
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import Styles from "../SeasonsPlayerTab.module.css";
+import Styles from "../SeasonsPlayerTab/SeasonsPlayerTab.module.css";
 import { FcCalculator } from "react-icons/fc";
-import CalculatedStatistics from "../../CalculatedStatistics";
 import { useState } from "react";
+import TrophyList from "../SeasonsPlayerTab/components/TrophyList";
 import { Trophy } from "../../../common/interfaces/club/trophy";
+import { Players } from "../../../common/interfaces/playersInfo/players";
+import CalculatedStatistics from "../../CalculatedStatistics";
 import StatisticsTable_Title from "../../StatisticsTable_Title";
-import TrophyList from "./TrophyList";
 
 type SeasonTotalStatsProps = {
   playerInSeason?: Players;
   trophiesWonInSeason: Trophy[];
+  isTotal?: boolean;
 };
 
 const SeasonTotalStats = ({
   playerInSeason,
   trophiesWonInSeason,
+  isTotal,
 }: SeasonTotalStatsProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -43,7 +45,9 @@ const SeasonTotalStats = ({
           isGoalkeeper={isGoalkeeper}
         />
       </section>
-      {isExpanded && <TrophyList trophies={trophiesWonInSeason} />}
+      {isExpanded && (
+        <TrophyList isTotal={isTotal} trophies={trophiesWonInSeason} />
+      )}
     </>
   );
 };

@@ -1,9 +1,9 @@
-import { Career } from "../../common/interfaces/Career";
-import { Players } from "../../common/interfaces/playersInfo/players";
 import { useSeasonsPlayerTab } from "./hooks/useSeasonsPlayerTab";
 import PlayerSeason from "./components/PlayerSeason";
 import { useRenderableSeasons } from "./hooks/useRenderableSeasons";
-import NoStatsMessage from "../NoStatsMessage";
+import { Career } from "../../../common/interfaces/Career";
+import { Players } from "../../../common/interfaces/playersInfo/players";
+import NoStatsMessage from "../../NoStatsMessage";
 
 type SeasonsPlayerTabProps = {
   career: Career;

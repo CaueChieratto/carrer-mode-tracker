@@ -1,16 +1,23 @@
+import { Trophy } from "../../../../common/interfaces/club/trophy";
 import Styles from "../SeasonsPlayerTab.module.css";
 
 type LeagueStatsRowProps = {
   leagueImage: string;
   leagueName: string;
   seasonTitle?: boolean;
+  isTotal?: boolean;
+  trophy?: Trophy;
 };
 
 const LeagueStatsRow = ({
   leagueImage,
   leagueName,
   seasonTitle,
+  isTotal,
+  trophy,
 }: LeagueStatsRowProps) => {
+  const numberTitles = trophy?.seasons.length;
+
   return (
     <section
       className={!seasonTitle ? Styles.container : Styles.containerSeason}
@@ -22,11 +29,20 @@ const LeagueStatsRow = ({
       >
         {!seasonTitle ? (
           <>
-            Campeão da <br />
+            {isTotal && numberTitles ? `${numberTitles}x ` : ""}Campeão da{" "}
+            <br />
             {leagueName}
           </>
         ) : (
-          <>{leagueName}</>
+          <>
+            {!isTotal ? (
+              <>{leagueName}</>
+            ) : (
+              <>
+                {numberTitles} {leagueName}
+              </>
+            )}
+          </>
         )}
       </h1>
     </section>

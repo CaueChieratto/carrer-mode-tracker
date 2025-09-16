@@ -1,12 +1,12 @@
-import { Players } from "../../../common/interfaces/playersInfo/players";
-import Card from "../../../ui/Card";
-import SeasonRow from "./SeasonRow";
+import SeasonRow from "../../components/SeasonRow";
 import TrophyRow from "./TrophyRow";
-import SeasonTotalStats from "./SeasonTotalStats";
-import { sortLeaguesByLevel } from "../../../common/utils/Sorts";
-import { Trophy } from "../../../common/interfaces/club/trophy";
-import { ClubData } from "../../../common/interfaces/club/clubData";
+import SeasonTotalStats from "../../components/SeasonTotalStats";
 import Styles from "../SeasonsPlayerTab.module.css";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Trophy } from "../../../../common/interfaces/club/trophy";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import { sortLeaguesByLevel } from "../../../../common/utils/Sorts";
+import Card from "../../../../ui/Card";
 
 type PlayerSeasonProps = {
   season: ClubData;

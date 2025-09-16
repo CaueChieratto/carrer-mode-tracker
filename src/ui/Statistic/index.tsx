@@ -33,7 +33,7 @@ const Statistic = ({
     ...(!isInfo && getColor && typeof value === "number"
       ? { backgroundColor: UseRatingColor(value) }
       : {}),
-    ...(isPlayer ? { width: "50px", height: "26px" } : {}),
+    ...(isPlayer ? { width: "50px", height: "26px", fontSize: "20px" } : {}),
   };
 
   return (

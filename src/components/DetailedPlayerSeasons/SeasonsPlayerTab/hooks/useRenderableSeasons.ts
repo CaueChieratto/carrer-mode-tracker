@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { ClubData } from "../../../common/interfaces/club/clubData";
-import { calculateTotalStats } from "../../../common/utils/PlayerStatsCalculator";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { calculateTotalStats } from "../../../../common/utils/PlayerStatsCalculator";
 
 export const useRenderableSeasons = (
   seasonsPlayerPlayed: ClubData[],
