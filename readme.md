@@ -1,6 +1,6 @@
 # Career Mode Tracker
 
-![Logo](/Logo.png)
+![Logo](./public/Logo.png)
 
 ##
 
