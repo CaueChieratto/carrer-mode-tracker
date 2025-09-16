@@ -29,7 +29,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
   return (
     <>
       <Card className={Styles.card}>
-        <SeasonRow seasonString="Total por Liga" />
+        <SeasonRow seasonString="Total por Liga" player={player} />
         {aggregatedLeagueStats.map((league) => {
           const trophy = allTrophiesWon.find(
             (t) => t.leagueName === league.leagueName
@@ -42,6 +42,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
               isExpanded={!!expand[league.leagueName]}
               toggleExpand={toggleExpand}
               trophy={trophy}
+              player={player}
             />
           );
         })}

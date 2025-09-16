@@ -47,6 +47,10 @@ export const sortedPlayers = (players: Players[]) => {
 
 export const sortPlayersByContributions = (players: Players[]) => {
   return [...players].sort((a, b) => {
+    if (b.ballonDor !== a.ballonDor) {
+      return b.ballonDor - a.ballonDor;
+    }
+
     const statsA = calculateTotalStats(a);
     const statsB = calculateTotalStats(b);
 

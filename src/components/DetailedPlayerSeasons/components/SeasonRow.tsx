@@ -8,11 +8,21 @@ type SeasonRowProps = {
   player?: Players;
 };
 
-const SeasonRow = ({ seasonString, player }: SeasonRowProps) => (
-  <section className={Styles.section}>
-    <StatisticsTable_Title isPlayer type="info" playerName={seasonString} />
-    <CalculatedStatistics info total isPlayer player={player} />
-  </section>
-);
+const SeasonRow = ({ seasonString, player }: SeasonRowProps) => {
+  const isGoalkeeper = player?.position === "GOL";
+
+  return (
+    <section className={Styles.section}>
+      <StatisticsTable_Title isPlayer type="info" playerName={seasonString} />
+      <CalculatedStatistics
+        info
+        total
+        isPlayer
+        player={player}
+        isGoalkeeper={isGoalkeeper}
+      />
+    </section>
+  );
+};
 
 export default SeasonRow;

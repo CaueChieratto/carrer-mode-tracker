@@ -31,6 +31,8 @@ const TrophyRow = ({
     (stats) => stats.leagueName === leagueStats.leagueName
   );
 
+  const isGoalkeeper = playerInSeason?.position === "GOL";
+
   return (
     <>
       <section
@@ -49,6 +51,7 @@ const TrophyRow = ({
           league
           isPlayer
           leagueStats={detailedLeagueStats}
+          isGoalkeeper={isGoalkeeper}
         />
       </section>
 

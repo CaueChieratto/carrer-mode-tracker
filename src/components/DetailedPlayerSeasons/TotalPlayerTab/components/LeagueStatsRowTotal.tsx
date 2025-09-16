@@ -1,4 +1,5 @@
 import { Trophy } from "../../../../common/interfaces/club/trophy";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
 import CalculatedStatistics from "../../../CalculatedStatistics";
 import StatisticsTable_Title from "../../../StatisticsTable_Title";
@@ -11,6 +12,7 @@ type LeagueStatsRowTotalProps = {
   isExpanded: boolean;
   toggleExpand: (leagueName: string) => void;
   trophy?: Trophy;
+  player?: Players;
 };
 
 const LeagueStatsRowTotal = ({
@@ -18,7 +20,10 @@ const LeagueStatsRowTotal = ({
   isExpanded,
   toggleExpand,
   trophy,
+  player,
 }: LeagueStatsRowTotalProps) => {
+  const isGoalkeeper = player?.position === "GOL";
+
   return (
     <>
       <section
@@ -31,7 +36,12 @@ const LeagueStatsRowTotal = ({
           leagueImage={leagueStats.leagueImage}
           expand={isExpanded}
         />
-        <CalculatedStatistics league isPlayer leagueStats={leagueStats} />
+        <CalculatedStatistics
+          league
+          isPlayer
+          leagueStats={leagueStats}
+          isGoalkeeper={isGoalkeeper}
+        />
       </section>
       {isExpanded && (
         <>
