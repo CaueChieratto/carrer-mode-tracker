@@ -98,7 +98,7 @@ export const useLeagueStatsManager = ({
 
     try {
       await ServicePlayers.updatePlayerStatsLeagues(
-        career.id,
+        career,
         season.id,
         selectedPlayer.id,
         updatedLeagues

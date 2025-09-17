@@ -1,5 +1,6 @@
 import { getCareerById } from "../../helpers/Getters";
 import { updateCareerFirestore } from "../../helpers/Setters";
+import { Career } from "../../interfaces/Career";
 import { Players } from "../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../interfaces/playersStats/leagueStats";
 import { parseBrasilDate } from "../../utils/Date";
@@ -215,15 +216,13 @@ export const ServicePlayers = {
   },
 
   updatePlayerStatsLeagues: async (
-    careerId: string,
+    career: Career,
     seasonId: string,
     playerId: string,
     allLeagueStats: LeagueStats[]
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
-
-    const career = await getCareerById(user.uid, careerId);
 
     const updatedClubData = career.clubData.map((season) => {
       if (season.id === seasonId) {
@@ -241,7 +240,7 @@ export const ServicePlayers = {
       return season;
     });
 
-    await updateCareerFirestore(user.uid, careerId, {
+    await updateCareerFirestore(user.uid, career.id, {
       clubData: updatedClubData,
     });
   },

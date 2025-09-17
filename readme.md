@@ -6,11 +6,11 @@
   <img src="https://img.shields.io/badge/Firebase-BaaS-orange?logo=firebase" alt="Firebase"/>
 </p>
 
-Welcome to **Career Mode Tracker**, a web application designed for football gaming enthusiasts who want to take their career mode experience to the next level.  
+Welcome to **Career Mode Tracker**, a web application designed for football gaming enthusiasts who want to take their career mode experience to the next level.
 
-This app allows you to meticulously track every detail of your managerial journey, from player stats and transfers to seasonal performance and trophy cabinets.  
+This app allows you to meticulously track every detail of your managerial journey, from player stats and transfers to seasonal performance and trophy cabinets.
 
-Say goodbye to spreadsheets and notebooks, and hello to a streamlined, interactive, and visually engaging way to manage your virtual football career.  
+Say goodbye to spreadsheets and notebooks, and hello to a streamlined, interactive, and visually engaging way to manage your virtual football career.
 
 ## Features
 
@@ -81,7 +81,6 @@ The project is organized into the following directory structure:
 ```
 
 src
-├── assets
 ├── common
 │ ├── constants
 │ ├── elements
@@ -101,7 +100,6 @@ src
 
 ```
 
-- **`src/assets`**: Contains static assets like images and logos.
 - **`src/common`**: A centralized module for shared logic, including:
   - **`constants`**: Application-wide constants.
   - **`elements`**: Reusable UI elements and components.
