@@ -2,7 +2,6 @@ import { Players } from "../../common/interfaces/playersInfo/players";
 import Styles from "./TransfersPanel.module.css";
 import { formatDisplayValue } from "../../common/utils/FormatValue";
 import { formatDateToLongBrazilian } from "../../common/utils/Date";
-import { FaTrashAlt } from "react-icons/fa";
 import { sortTransfersByValue } from "../../common/utils/Sorts";
 
 type TransfersPanelProps = {
@@ -38,9 +37,7 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
                     {isArrival ? "De:" : "Para:"} {club}
                   </span>
                 </div>
-                <div className={Styles.icon}>
-                  <FaTrashAlt />
-                </div>
+
                 <div className={Styles.transferInfo}>
                   <span
                     className={Styles.value}
