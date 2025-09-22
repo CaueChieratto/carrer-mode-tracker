@@ -100,6 +100,33 @@ export const leaguesByContinent: ContinentLeagues = {
         trophy: "/images/trophies/england/bsm.png",
       },
     ],
+    Alemanha: [
+      {
+        name: "Bundesliga",
+        logo: "/images/leagues/germany/bundesliga.png",
+        trophy: "/images/trophies/germany/bundesliga.png",
+      },
+      {
+        name: "DFB-Pokal",
+        logo: "/images/leagues/germany/pokal.png",
+        trophy: "/images/trophies/germany/pokal.png",
+      },
+      {
+        name: "Supercup",
+        logo: "/images/leagues/germany/supercopa.png",
+        trophy: "/images/trophies/germany/supercopa.png",
+      },
+      {
+        name: "Bundesliga 2",
+        logo: "/images/leagues/germany/bundesliga2.png",
+        trophy: "/images/trophies/germany/bundesliga2.png",
+      },
+      {
+        name: "3. Liga",
+        logo: "/images/leagues/germany/3liga.png",
+        trophy: "/images/trophies/germany/3liga.png",
+      },
+    ],
   },
   América: {
     Conmebol: [
