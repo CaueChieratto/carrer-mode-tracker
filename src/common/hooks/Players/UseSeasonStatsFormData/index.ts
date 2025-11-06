@@ -31,7 +31,10 @@ export const useSeasonStatsFormData = ({
       return [player.name];
     }
     const availablePlayers = players.filter(
-      (p) => !p.sell && (!p.statsLeagues || p.statsLeagues.length === 0)
+      (p) =>
+        !p.sell &&
+        p.shirtNumber &&
+        (!p.statsLeagues || p.statsLeagues.length === 0)
     );
     const sorted = sortPlayersByPosition(availablePlayers);
     return sorted.map((p) => p.name);

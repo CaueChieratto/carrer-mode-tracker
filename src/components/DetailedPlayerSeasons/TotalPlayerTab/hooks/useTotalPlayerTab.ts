@@ -4,6 +4,7 @@ import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { getContinentByCountry } from "../../../../common/services/GetContinentByCountry";
 import { Trophy } from "../../../../common/interfaces/club/trophy";
 import { LeagueLevels } from "../../../../common/constants/LeagueLevels";
+import { calculateTotalStats } from "../../../../common/utils/PlayerStatsCalculator";
 
 const getSeasonString = (seasonNumber: number, career: Career): string => {
   const startYear = new Date(career.createdAt).getFullYear() + seasonNumber - 1;
@@ -22,9 +23,18 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
     if (!player) return [];
 
     const seasonsPlayerPlayedStrings = career.clubData
-      .filter((season) =>
-        season.players.some((p) => p.id === player.id && !p.sell)
-      )
+      .filter((season) => {
+        const playerInSeason = season.players.find((p) => p.id === player.id);
+        if (!playerInSeason) return false;
+
+        const totalStats = calculateTotalStats(playerInSeason);
+        return (
+          totalStats.games > 0 ||
+          totalStats.goals > 0 ||
+          totalStats.assists > 0 ||
+          totalStats.cleanSheets > 0
+        );
+      })
       .map((season) => getSeasonString(season.seasonNumber, career));
 
     const playerTrophies = career.trophies

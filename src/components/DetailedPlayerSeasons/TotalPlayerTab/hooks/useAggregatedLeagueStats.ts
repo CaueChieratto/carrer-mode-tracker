@@ -3,13 +3,23 @@ import { Career } from "../../../../common/interfaces/Career";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
 import { LeagueLevels } from "../../../../common/constants/LeagueLevels";
+import { calculateTotalStats } from "../../../../common/utils/PlayerStatsCalculator";
 
 export const useAggregatedLeagueStats = (career: Career, player?: Players) => {
   const seasonsPlayerPlayed = useMemo(() => {
     if (!player) return [];
-    return career.clubData.filter((season) =>
-      season.players.some((p) => p.id === player.id && !p.sell)
-    );
+    return career.clubData.filter((season) => {
+      const playerInSeason = season.players.find((p) => p.id === player.id);
+      if (!playerInSeason) return false;
+
+      const totalStats = calculateTotalStats(playerInSeason);
+      return (
+        totalStats.games > 0 ||
+        totalStats.goals > 0 ||
+        totalStats.assists > 0 ||
+        totalStats.cleanSheets > 0
+      );
+    });
   }, [career.clubData, player]);
 
   const aggregatedLeagueStats = useMemo((): LeagueStats[] => {
