@@ -3,6 +3,7 @@ import SectionView from "../../components/SectionView";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
 import { useParams } from "react-router-dom";
+import { calculateTotalStats } from "../../common/utils/PlayerStatsCalculator";
 
 const Player = () => {
   const { loading, career, season, tabsConfig } = useSeasonView(true, true);
@@ -12,9 +13,20 @@ const Player = () => {
 
   const player = season.players.find((p) => p.id === playerId);
 
-  const seasonsPlayerPlayed = career.clubData.filter((s) =>
-    s.players.some((p) => p.id === playerId && !p.sell)
-  ).length;
+  const seasonsPlayerPlayed = career.clubData.filter((s) => {
+    const playerInSeason = s.players.find((p) => p.id === playerId);
+
+    if (!playerInSeason) return false;
+
+    const totalStats = calculateTotalStats(playerInSeason);
+
+    return (
+      totalStats.games > 0 ||
+      totalStats.goals > 0 ||
+      totalStats.assists > 0 ||
+      totalStats.cleanSheets > 0
+    );
+  }).length;
 
   const titleText = `${seasonsPlayerPlayed} ${
     seasonsPlayerPlayed === 1 ? "Temporada" : "Temporadas"
