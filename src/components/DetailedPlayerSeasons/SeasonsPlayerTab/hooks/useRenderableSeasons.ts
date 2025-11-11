@@ -9,7 +9,7 @@ export const useRenderableSeasons = (
   const renderableSeasons = useMemo(() => {
     return seasonsPlayerPlayed.filter((season) => {
       const playerInSeason = season.players.find((p) => p.id === playerId);
-      if (!playerInSeason || !playerInSeason.shirtNumber) {
+      if (!playerInSeason) {
         return false;
       }
       const totalStats = calculateTotalStats(playerInSeason);
