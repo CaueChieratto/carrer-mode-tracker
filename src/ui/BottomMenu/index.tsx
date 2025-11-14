@@ -1,5 +1,5 @@
 import { LuSun } from "react-icons/lu";
-import Styles from "./bottomMenu.module.css";
+import Styles from "./BottomMenu.module.css";
 import { FiMoon } from "react-icons/fi";
 import { BsQuestionCircle } from "react-icons/bs";
 import { useTheme } from "../../contexts/LightThemeContext";
