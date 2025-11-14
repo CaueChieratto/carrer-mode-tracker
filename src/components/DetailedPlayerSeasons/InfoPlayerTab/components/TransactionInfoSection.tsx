@@ -27,7 +27,7 @@ const TransactionInfoSection: React.FC<TransactionInfoSectionProps> = ({
   const config = transactionConfig[type];
 
   return (
-    <InfoCard title={config.title} color={config.color}>
+    <InfoCard title={config.title}>
       <InfoRow>
         <InfoItem
           label={config.clubLabel}
