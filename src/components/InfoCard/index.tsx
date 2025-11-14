@@ -4,16 +4,13 @@ import Styles from "../DetailedPlayerSeasons/InfoPlayerTab/InfoPlayerTab.module.
 
 type InfoCardProps = {
   title: string;
-  color: string;
   children: React.ReactNode;
 };
 
-const InfoCard: React.FC<InfoCardProps> = ({ title, color, children }) => (
+const InfoCard: React.FC<InfoCardProps> = ({ title, children }) => (
   <Card className={Styles.card}>
     <div className={Styles.container}>
-      <h1 className={Styles.title} style={{ color }}>
-        {title}
-      </h1>
+      <h1 className={Styles.title}>{title}</h1>
       {children}
     </div>
   </Card>

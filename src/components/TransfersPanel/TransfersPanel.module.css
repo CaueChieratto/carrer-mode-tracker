@@ -58,7 +58,7 @@
 
 .club {
   font-size: 14px;
-  color: #555;
+  color: var(--color-add-player);
 }
 
 .transferInfo {
@@ -75,5 +75,5 @@
 
 .date {
   font-size: 14px;
-  color: #777;
+  color: var(--color-add-player);
 }

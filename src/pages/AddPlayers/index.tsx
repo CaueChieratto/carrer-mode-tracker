@@ -5,6 +5,9 @@ import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
 import Load from "../../components/Load";
 import AddPlayersContent from "../../components/AddPlayersContent";
+import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../common/types/enums/ModalType";
+import BottomMenu from "../../ui/BottomMenu";
 
 const AddPlayers = () => {
   const [searchParams] = useSearchParams();
@@ -17,6 +20,7 @@ const AddPlayers = () => {
   const { career, season, loading } = useSeasonData(careerId, seasonId);
   const { handleNavigateToSeason } = useSeasons(careerId!);
   const origin = searchParams.get("from");
+  const { activeModal } = useModalManager();
 
   const player = season?.players.find((p) => p.id === playerId);
 
@@ -46,6 +50,7 @@ const AddPlayers = () => {
         playerName={player?.name}
         currentPlayers={season?.players}
       />
+      {activeModal === ModalType.NONE && <BottomMenu />}
     </SeasonThemeProvider>
   );
 };

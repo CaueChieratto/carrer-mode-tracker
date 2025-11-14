@@ -3,13 +3,56 @@
 :root {
   --blackColor: #010127;
   --color: #919191;
+  --navbar-color: #999;
   --colorSpan: #323232;
-  background-color: #f5f5f5;
+  --color-add-player: #555;
+  --color-secondary: #323232;
+  --color-tertiary: #22222673;
+  --color-quaternary: #222226;
+  --background-color: #f5f5f5;
+  --card-background: #ffffff;
+  --background-color-modal: #f2efe8;
+  --card-background-modal: #fefefe;
+  --icon-background-subtle: #eeeeff;
+  --border-input: #c1c1c1;
+  --border-navbar: #e6e6e6;
+  --card-titles: #f9f9f9;
+  --border-card-titles: #e0e0e0;
+  --image-trophy-league: #f0f0f0;
+  --logo-image: transparent;
+}
+
+:root[data-theme="dark"] {
+  --blackColor: #ffffff;
+  --color: #a3a3a3;
+  --navbar-color: #ffffff;
+  --colorSpan: #c2c2c2;
+  --color-add-player: #aeaeae;
+  --color-secondary: #f0f0f0;
+  --color-tertiary: #919191;
+  --color-quaternary: #ffffff;
+  --background-color: #1a1a1a;
+  --card-background: #2b2b2b;
+  --background-color-modal: #1a1a1a;
+  --card-background-modal: #2b2b2b;
+  --icon-background-subtle: rgba(255, 255, 255, 0.08);
+  --border-input: #606060;
+  --border-navbar: #313131;
+  --card-titles: #1e1e1e;
+  --border-card-titles: #333333;
+  --image-trophy-league: #323232;
+  --logo-image: #ffffff;
 }
 
 * {
   box-sizing: border-box;
   font-family: "Arimo", sans-serif;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--blackColor);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.modal-open {

@@ -3,17 +3,17 @@
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
-  color: #22222673;
+  color: var(--color-tertiary);
   font-size: 12px;
 }
 
 .h2 {
-  color: #22222673;
+  color: var(--color-tertiary);
   font-size: 14px;
 }
 
 .span {
-  color: #222226;
+  color: var(--color-quaternary);
 }
 
 .h3 {

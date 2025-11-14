@@ -4,10 +4,10 @@
   height: 80px;
   gap: 32px;
   padding: 0 24px;
-  background-color: white;
+  background-color: var(--card-background);
   justify-items: center;
   align-items: center;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid var(--border-navbar);
   box-shadow: 0 6px 8px #00000011;
   position: sticky;
   top: 0;
@@ -21,10 +21,10 @@
   grid-template-columns: 1fr 6fr 1fr;
   height: 80px;
   padding: 0 24px;
-  background-color: white;
+  background-color: var(--card-background);
   justify-items: center;
   align-items: center;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid var(--border-navbar);
   box-shadow: 0 6px 8px #00000011;
   position: sticky;
   top: 0;

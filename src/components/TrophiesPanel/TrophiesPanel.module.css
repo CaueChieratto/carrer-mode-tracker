@@ -26,8 +26,8 @@
 }
 
 .card_titles {
-  background: #f9f9f9;
-  border: 1px solid #e0e0e0;
+  background: var(--card-titles);
+  border: 1px solid var(--border-card-titles);
   border-radius: 16px;
   box-shadow: 0 4px 16px #0000000d;
   width: 100%;

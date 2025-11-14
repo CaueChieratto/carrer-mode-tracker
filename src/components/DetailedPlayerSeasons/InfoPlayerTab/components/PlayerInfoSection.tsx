@@ -12,7 +12,7 @@ type PlayerInfoSectionProps = {
 };
 
 const PlayerInfoSection: React.FC<PlayerInfoSectionProps> = ({ player }) => (
-  <InfoCard title="Informações do jogador" color="#010127">
+  <InfoCard title="Informações do jogador">
     <InfoRow>
       <InfoItem
         label={player.nation}

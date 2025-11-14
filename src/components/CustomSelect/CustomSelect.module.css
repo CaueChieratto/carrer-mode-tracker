@@ -16,7 +16,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 14px;
-  background-color: #fff;
+  background-color: var(--card-background);
   cursor: pointer;
   user-select: none;
 }
@@ -26,7 +26,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #fff;
+  background-color: var(--background-color);
   border: 1px solid #ddd;
   border-radius: 8px;
   margin-top: 4px;
@@ -39,7 +39,7 @@
 }
 
 .option_item.highlighted {
-  background-color: #f0f0f0;
+  background-color: var(--image-trophy-league);
 }
 
 .option_item {
@@ -49,12 +49,12 @@
 }
 
 .option_item:hover {
-  background-color: #f0f0f0;
+  background-color: var(--image-trophy-league);
 }
 
 .option_item.selected {
   font-weight: bold;
-  background-color: #e6e6e6;
+  background-color: var(--image-trophy-league);
 }
 
 .chevron {

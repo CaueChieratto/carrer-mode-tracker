@@ -1,5 +1,5 @@
 .img {
-  background-color: #f0f0f0;
+  background-color: var(--image-trophy-league);
   border-radius: 12px;
   height: 100px;
   object-fit: cover;

@@ -1,5 +1,5 @@
 .label {
-  border: 1px solid #b8dbca;
+  border: 1px solid var(--border-input);
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
   display: flex;
@@ -7,7 +7,7 @@
   align-items: center;
   height: 40px;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: var(--card-background);
   position: relative;
   padding-left: 25px;
 }

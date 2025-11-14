@@ -33,7 +33,7 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
         <h1 className={Styles.info}>{textOne}</h1>
         <h2
           className={Styles.value}
-          style={{ color: isProfit ? "#0bb32aff" : "#222226" }}
+          style={{ color: isProfit ? "#0bb32aff" : "var(--color-quaternary)" }}
         >
           {isProfit
             ? formatDisplayValue(sellValue)
@@ -47,7 +47,7 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
         <h1 className={Styles.info}>{textTwo}</h1>
         <h2
           className={Styles.value}
-          style={{ color: isProfit ? "#c81419ff" : "#222226" }}
+          style={{ color: isProfit ? "#c81419ff" : "var(--color-quaternary)" }}
         >
           {isProfit ? formatDisplayValue(buyValue) : formatDisplayValue(salary)}
         </h2>
@@ -64,7 +64,7 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
               ? profit >= 0
                 ? "#0bb32aff"
                 : "#c81419ff"
-              : "#222226",
+              : "var(--color-quaternary)",
           }}
         >
           {isProfit ? formatDisplayValue(Math.abs(profit)) : contractTime}

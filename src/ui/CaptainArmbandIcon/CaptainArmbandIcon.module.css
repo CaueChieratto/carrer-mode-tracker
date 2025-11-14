@@ -1,6 +1,6 @@
 .container {
   border-radius: 100%;
-  background-color: white;
+  background-color: var(--card-background);
   border: 1px solid #16a34a;
   width: 18px;
   height: 18px;

@@ -33,6 +33,7 @@
   position: absolute;
   bottom: 10.5%;
   left: 2%;
+  color: var(--blackColor);
 }
 
 .input {
@@ -40,10 +41,12 @@
   padding: 12px 12px 12px 22px;
   height: 35px;
   border-radius: 6px;
-  border: 1px solid #2b5842;
+  border: 1px solid var(--border-input);
   font-weight: bold;
+  background-color: var(--card-background);
+  color: var(--blackColor);
 }
 
 .input::placeholder {
-  color: #2b5842;
+  color: var(--blackColor);
 }

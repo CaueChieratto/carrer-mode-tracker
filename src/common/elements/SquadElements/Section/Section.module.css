@@ -14,13 +14,13 @@
 }
 
 .data_title {
-  color: #222226;
+  color: var(--color-quaternary);
   font-size: 16px;
   font-weight: 600;
 }
 
 .data {
-  color: #22222673;
+  color: var(--color-tertiary);
   font-size: 14px;
   font-weight: 600;
 }

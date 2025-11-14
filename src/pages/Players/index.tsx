@@ -4,10 +4,14 @@ import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
 import { useParams } from "react-router-dom";
 import { calculateTotalStats } from "../../common/utils/PlayerStatsCalculator";
+import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../common/types/enums/ModalType";
+import BottomMenu from "../../ui/BottomMenu";
 
 const Player = () => {
   const { loading, career, season, tabsConfig } = useSeasonView(true, true);
   const { playerId } = useParams<{ playerId: string }>();
+  const { activeModal } = useModalManager();
   if (loading) return <Load />;
   if (!career || !season) return <NotFoundDisplay />;
 
@@ -33,15 +37,18 @@ const Player = () => {
   } no clube`;
 
   return (
-    <SectionView
-      isPlayer
-      notSeason
-      player={player}
-      title={titleText}
-      career={career}
-      season={season}
-      tabsConfig={tabsConfig}
-    />
+    <>
+      <SectionView
+        isPlayer
+        notSeason
+        player={player}
+        title={titleText}
+        career={career}
+        season={season}
+        tabsConfig={tabsConfig}
+      />
+      {activeModal === ModalType.NONE && <BottomMenu />}
+    </>
   );
 };
 

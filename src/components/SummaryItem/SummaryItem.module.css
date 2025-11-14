@@ -1,6 +1,6 @@
 .infos {
   align-items: center;
-  color: #22222673;
+  color: var(--color-tertiary);
   display: flex;
   flex-direction: column-reverse;
 }

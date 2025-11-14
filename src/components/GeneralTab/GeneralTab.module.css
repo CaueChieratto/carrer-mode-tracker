@@ -1,5 +1,5 @@
 .card {
-  background-color: #fff;
+  background-color: var(--card-background);
   border-radius: 8px;
   box-shadow: 0 4px 12px #0003;
   margin-bottom: 16px;
@@ -35,7 +35,7 @@
 }
 
 .number {
-  color: #222226;
+  color: var(--color-quaternary);
   font-size: 16px;
   font-weight: 600;
 }

@@ -3,6 +3,9 @@ import SectionView from "../../components/SectionView";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import TransfersModal from "../../components/TransfersModal";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
+import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../common/types/enums/ModalType";
+import BottomMenu from "../../ui/BottomMenu";
 
 const Geral = () => {
   const {
@@ -16,6 +19,7 @@ const Geral = () => {
     handleOpenTransfers,
     handleCloseModal,
   } = useSeasonView(true);
+  const { activeModal } = useModalManager();
 
   if (loading) return <Load />;
   if (!career || !season) return <NotFoundDisplay />;
@@ -36,6 +40,7 @@ const Geral = () => {
         transferType={transferType}
         playersToShow={playersToShow}
       />
+      {activeModal === ModalType.NONE && !isModalOpen && <BottomMenu />}
     </>
   );
 };

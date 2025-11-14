@@ -4,28 +4,28 @@
   border-radius: 12px;
   height: 100%;
   width: 95%;
-  color: #2b5842;
+  color: var(--blackColor);
   font-weight: bold;
   font-size: 18px;
   appearance: none !important;
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
-  background-color: #ffffff !important;
+  background-color: var(--card-background) !important;
 }
 
 .input::placeholder {
-  color: rgba(43, 88, 66, 0.8);
+  color: var(--blackColor);
 }
 
 .input:-webkit-autofill {
   font-family: inherit !important;
   font-weight: bold !important;
-  color: #2b5842 !important;
-  -webkit-text-fill-color: #2b5842 !important;
+  color: var(--blackColor) !important;
+  -webkit-text-fill-color: var(--blackColor) !important;
   transition: background-color 9999s ease-in-out 0s !important;
-  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--card-background) inset !important;
 }
 
 .input:focus {
-  background-color: #ffffff !important;
+  background-color: var(--card-background) !important;
 }

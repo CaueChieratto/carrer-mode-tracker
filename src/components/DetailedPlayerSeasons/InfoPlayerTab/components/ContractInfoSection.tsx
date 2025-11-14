@@ -10,7 +10,7 @@ type ContractInfoSectionProps = {
 const ContractInfoSection: React.FC<ContractInfoSectionProps> = ({
   player,
 }) => (
-  <InfoCard title="Informações do contrato" color="#010127">
+  <InfoCard title="Informações do contrato">
     <ProfitDisplay
       playerValue={player.playerValue}
       salary={player.salary}

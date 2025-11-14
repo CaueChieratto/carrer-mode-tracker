@@ -93,11 +93,13 @@ const StatisticsTable_Title = ({
                 </>
               ) : isPlayer ? (
                 <>
-                  <img
-                    src={leagueImage}
-                    alt={leagueName}
-                    className={Styles.logo}
-                  />
+                  <div className={Styles.logo_container}>
+                    <img
+                      src={leagueImage}
+                      alt={leagueName}
+                      className={Styles.logo}
+                    />
+                  </div>
                   {expand ? <IoIosArrowUp /> : <IoIosArrowDown />}
                 </>
               ) : (
@@ -119,11 +121,13 @@ const StatisticsTable_Title = ({
             onTouchMove={(e) => e.stopPropagation()}
           >
             <div className={Styles.league_container}>
-              <img
-                src={leagueImage}
-                alt={leagueName}
-                className={Styles.league_image}
-              />
+              <div className={Styles.league_image_container}>
+                <img
+                  src={leagueImage}
+                  alt={leagueName}
+                  className={Styles.league_image}
+                />
+              </div>
               <span className={Styles.league_name}>{leagueName}</span>
             </div>
           </div>

@@ -1,5 +1,5 @@
 .card {
-  background-color: #fff;
+  background-color: var(--card-background);
   border-radius: 4px;
   box-shadow: 0 4px 12px #0003;
   margin-bottom: 14px;
@@ -51,7 +51,7 @@
 
 .card_img {
   margin-left: 12px;
-  background-color: #f0f0f0;
+  background-color: var(--image-trophy-league);
   border-radius: 12px;
   padding: 10px;
   object-fit: cover;
@@ -59,7 +59,7 @@
 
 .ballonDor {
   margin-left: 12px;
-  background-color: #f0f0f0;
+  background-color: var(--image-trophy-league);
   border-radius: 12px;
   padding: 10px;
   object-fit: cover;

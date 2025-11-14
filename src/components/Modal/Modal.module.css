@@ -1,5 +1,6 @@
 .overlay {
-  background-color: rgb(242, 239, 232);
+  background-color: var(--background-color-modal);
+  transition: background-color 0.3s ease, color 0.3s ease;
   min-width: 100vw;
   min-height: 100dvh;
   position: fixed;
@@ -13,9 +14,9 @@
 
 .card_modal {
   z-index: 1000;
-  background-color: #fefefe;
+  background-color: var(--card-background-modal);
   border-radius: 12px;
-  color: #2b5842;
+  color: var(--color-secondary);
   font-weight: 500;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   position: absolute;
@@ -53,7 +54,7 @@
 .slide_up_card {
   width: 100%;
   height: 575px;
-  background-color: white;
+  background-color: var(--card-background-modal);
   border-radius: 24px 24px 0 0;
   box-shadow: 0 -12px 30px #0000001a;
   position: relative;
@@ -67,7 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: var(--card-background-modal);
   box-shadow: 0 2px 4px #0000000d;
   cursor: grab;
   position: sticky;
@@ -96,7 +97,8 @@
   left: 8px;
   top: 8px;
   cursor: pointer;
-  background-color: #eeeeff;
+  background-color: var(--icon-background-subtle);
+  color: var(--color-secondary);
   border-radius: 100%;
   display: flex;
   justify-content: center;

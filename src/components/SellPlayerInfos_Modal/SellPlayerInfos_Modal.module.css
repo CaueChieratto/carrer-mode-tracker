@@ -3,11 +3,11 @@
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  padding: 8px 22px 22px; /* Ajuste no padding para alinhar com o form */
+  padding: 8px 22px 22px;
 }
 
 .player_info_card {
-  background-color: #f7f7f7;
+  background-color: var(--card-background);
   border-radius: 12px;
   padding: 16px;
   border: 1px solid #e0e0e0;
@@ -32,7 +32,7 @@
 .player_name {
   font-size: 20px;
   font-weight: 700;
-  color: #333;
+  color: var(--blackColor);
 }
 
 .player_position {
@@ -63,7 +63,7 @@
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #555;
+  color: var(--color-add-player);
 }
 
 .form {

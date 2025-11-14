@@ -38,6 +38,7 @@ const SeasonTotalStats = ({
           icon={<FcCalculator size={28} />}
           expand={isExpanded}
         />
+
         <CalculatedStatistics
           total
           isPlayer

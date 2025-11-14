@@ -42,7 +42,7 @@
 
 .label {
   font-weight: bold;
-  color: #555;
+  color: var(--color-add-player);
   font-size: 14px;
   display: flex;
   align-items: center;

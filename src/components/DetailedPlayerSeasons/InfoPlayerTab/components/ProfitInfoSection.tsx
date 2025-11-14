@@ -11,7 +11,7 @@ const ProfitInfoSection: React.FC<ProfitInfoSectionProps> = ({
   buyValue,
   sellValue,
 }) => (
-  <InfoCard title="Lucro com o jogador" color="#010127">
+  <InfoCard title="Lucro com o jogador">
     <ProfitDisplay
       isProfit
       buyValue={buyValue}

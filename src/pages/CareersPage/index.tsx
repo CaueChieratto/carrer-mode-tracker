@@ -12,6 +12,7 @@ import Load from "../../components/Load";
 import CareerCard from "../../ui/CareerCard";
 import { useCareers } from "../../common/hooks/Career/UseCareer";
 import { CareerCardButtons } from "../../common/constants/CareerCardButtons";
+import BottomMenu from "../../ui/BottomMenu";
 
 const CareersPage = () => {
   const { careers, loading } = useCareers();
@@ -68,6 +69,8 @@ const CareersPage = () => {
       ) : (
         <EmptyCareers onOpenModal={onOpenModal} />
       )}
+
+      {activeModal === ModalType.NONE && <BottomMenu />}
 
       <ModalManager
         saveClick={saveClick}

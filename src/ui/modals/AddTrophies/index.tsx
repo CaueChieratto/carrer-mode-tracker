@@ -63,7 +63,7 @@ const AddTrophies = ({
             name="league"
             value={selectedLeague}
             onChange={(e) => setSelectedLeague(e.target.value)}
-            style={{ color: clubColor, backgroundColor: "white" }}
+            style={{ color: clubColor }}
           >
             <option value="" disabled>
               Selecione uma liga

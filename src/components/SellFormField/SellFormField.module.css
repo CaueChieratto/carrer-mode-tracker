@@ -16,7 +16,7 @@
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 12px;
-  background-color: #ffffff;
+  background-color: var(--card-background);
   padding: 0 12px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
