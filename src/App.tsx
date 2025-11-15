@@ -8,6 +8,7 @@ import Season from "./pages/Season";
 import AddPlayers from "./pages/AddPlayers";
 import Geral from "./pages/Geral";
 import Players from "./pages/Players";
+import Tutorial from "./pages/Tutorial";
 
 type AppProps = {
   career?: Career;
@@ -32,6 +33,7 @@ export default function App({ career }: AppProps) {
       path: "/Career/:careerId/Season/:seasonId/EditPlayer/:playerId",
       element: <AddPlayers />,
     },
+    { path: "/tutorial", element: <Tutorial /> },
   ]);
 
   return <RouterProvider router={router} />;
