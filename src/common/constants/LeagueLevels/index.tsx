@@ -9,6 +9,8 @@ export const LeagueLevels: Record<string, number> = {
   "Saudi Pro League": 1,
   Eredivisie: 1,
   SUPERLIGA: 1,
+  "Torneo Apertura": 1,
+  "Torneo Clausura": 1,
 
   // Campeonato continental principal
   "Champions League": 2,
@@ -38,6 +40,7 @@ export const LeagueLevels: Record<string, number> = {
   "Europa League": 6,
   "Sul-Americana": 6,
   "Conference League": 7,
+  "CONMEBOL Recopa": 6,
 
   // Copa nacional inferior
   "Carabao Cup": 7,
@@ -67,6 +70,8 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Saudi Pro League": 1,
   Eredivisie: 1,
   SUPERLIGA: 1,
+  "Torneo Apertura": 1,
+  "Torneo Clausura": 3,
 
   // Campeonato continental principal
   "Champions League": 1,

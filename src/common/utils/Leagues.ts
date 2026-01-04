@@ -140,6 +140,11 @@ export const leaguesByContinent: ContinentLeagues = {
         logo: "/images/leagues/conmebol/sulamericana.png",
         trophy: "/images/trophies/conmebol/sulamericana.png",
       },
+      {
+        name: "CONMEBOL Recopa",
+        logo: "/images/leagues/conmebol/recopa.png",
+        trophy: "/images/trophies/conmebol/recopa.png",
+      },
     ],
     Brasil: [
       {
@@ -151,6 +156,18 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Copa do Brasil",
         logo: "/images/leagues/brasil/copaDoBrasil.png",
         trophy: "/images/trophies/brasil/copaDoBrasil.png",
+      },
+    ],
+    Argentina: [
+      {
+        name: "Torneo Apertura",
+        logo: "/images/leagues/argentina/ligaArgentina.png",
+        trophy: "/images/trophies/argentina/ligaArgentina.png",
+      },
+      {
+        name: "Torneo Clausura",
+        logo: "/images/leagues/argentina/ligaArgentina.png",
+        trophy: "/images/trophies/argentina/ligaArgentina.png",
       },
     ],
   },
