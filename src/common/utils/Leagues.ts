@@ -127,6 +127,18 @@ export const leaguesByContinent: ContinentLeagues = {
         trophy: "/images/trophies/germany/3liga.png",
       },
     ],
+    Escócia: [
+      {
+        name: "Scottish Prem",
+        logo: "/images/leagues/scotland/scottishPremiership.png",
+        trophy: "/images/trophies/scotland/scottishPremiership.png",
+      },
+      {
+        name: "Scottish Cup",
+        logo: "/images/leagues/scotland/scottishCup.png",
+        trophy: "/images/trophies/scotland/scottishCup.png",
+      },
+    ],
   },
   América: {
     Conmebol: [

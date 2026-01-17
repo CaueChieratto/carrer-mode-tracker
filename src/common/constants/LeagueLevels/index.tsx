@@ -11,6 +11,7 @@ export const LeagueLevels: Record<string, number> = {
   SUPERLIGA: 1,
   "Torneo Apertura": 1,
   "Torneo Clausura": 1,
+  "Scottish Prem": 1,
 
   // Campeonato continental principal
   "Champions League": 2,
@@ -26,6 +27,7 @@ export const LeagueLevels: Record<string, number> = {
   "Coupe de France": 3,
   "Oranje Beker": 3,
   "Copa Romena": 3,
+  "Scottish Cup": 3,
 
   // Supercopa nacional
   Supercopa: 4,
@@ -72,6 +74,7 @@ export const leagueLevelsInSelect: Record<string, number> = {
   SUPERLIGA: 1,
   "Torneo Apertura": 1,
   "Torneo Clausura": 3,
+  "Scottish Prem": 1,
 
   // Campeonato continental principal
   "Champions League": 1,
@@ -87,6 +90,7 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Coupe de France": 3,
   "Oranje Beker": 3,
   "Copa Romena": 3,
+  "Scottish Cup": 3,
 
   // Supercopa nacional
   Supercopa: 6,
