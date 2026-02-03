@@ -11,8 +11,6 @@ type SellFormFieldProps = {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  clubColor?: string;
-  darkClubColor?: string;
 };
 
 const SellFormField = ({
@@ -22,31 +20,14 @@ const SellFormField = ({
   placeholder,
   value,
   onChange,
-  clubColor,
-  darkClubColor,
 }: SellFormFieldProps) => {
-  const iconAndTextColor = clubColor;
-
   return (
     <ContainerForm className={Styles.form_group}>
-      <Label
-        htmlFor={id}
-        className={Styles.label}
-        style={{ color: iconAndTextColor }}
-      >
+      <Label htmlFor={id} className={Styles.label}>
         {name}
       </Label>
-      <Label
-        htmlFor={id}
-        className={Styles.input_wrapper}
-        style={{ borderColor: darkClubColor }}
-      >
-        <ContainerIcon
-          className={Styles.icon}
-          style={{ color: iconAndTextColor }}
-        >
-          {icon}
-        </ContainerIcon>
+      <Label htmlFor={id} className={Styles.input_wrapper}>
+        <ContainerIcon className={Styles.icon}>{icon}</ContainerIcon>
         <Input
           id={id}
           name={id}
@@ -54,11 +35,6 @@ const SellFormField = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          style={
-            clubColor
-              ? ({ "--club-color": clubColor } as React.CSSProperties)
-              : undefined
-          }
         />
       </Label>
     </ContainerForm>

@@ -1,6 +1,6 @@
 .container_button {
   position: sticky;
-  top: 78%;
+  top: 74%;
   z-index: 50000;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
 
 .container {
   min-height: 527px;
-  padding: 0 12px 100px;
+  padding: 0 12px 300px;
   position: relative;
 }
 

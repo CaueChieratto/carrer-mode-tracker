@@ -1,6 +1,8 @@
 .overlay {
   background-color: var(--background-color-modal);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   min-width: 100vw;
   min-height: 100dvh;
   position: fixed;
@@ -88,6 +90,12 @@
 .h1 {
   font-size: 26px;
   font-weight: 700;
+}
+
+.sell {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--card-background);
 }
 
 .icon {

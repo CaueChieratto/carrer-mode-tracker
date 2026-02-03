@@ -12,7 +12,7 @@ type SellPlayerModalProps = {
   onConfirm: (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ) => void | Promise<void>;
   player: Players;
   clubColor?: string;
@@ -48,8 +48,6 @@ const SellPlayerModal = ({
             placeholder={field.placeholder}
             value={fieldValues[field.id]}
             onChange={handleInputChange}
-            clubColor={clubColor}
-            darkClubColor={darkClubColor}
           />
         ))}
       </div>

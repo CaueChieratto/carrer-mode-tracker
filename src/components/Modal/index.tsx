@@ -8,6 +8,7 @@ import { useModalAnimation } from "../../common/hooks/Modal/UseModalAnimation";
 type ModalProps = {
   isOpen: boolean;
   text: string;
+  sellPlayer?: string;
   goBack?: () => void;
   children: ReactNode;
   animationContainer?: "normal" | "left" | "right" | "grow";
@@ -19,6 +20,7 @@ type ModalProps = {
 const Modal = ({
   isOpen,
   text,
+  sellPlayer,
   goBack,
   closeModal,
   animationContainer = "normal",
@@ -77,7 +79,7 @@ const Modal = ({
               animationContainer === "right" && closing && Styles.closingRight,
               animationContainer === "grow" && closing && Styles.closingGrow,
             ]
-          : Styles.slide_up_overlay
+          : Styles.slide_up_overlay,
       )}
       onClick={handleClose}
     >
@@ -96,8 +98,10 @@ const Modal = ({
         {!slideUp ? (
           <header className={Styles.container_title}>
             <h1
-              className={Styles.h1}
-              style={clubColor ? { color: clubColor } : undefined}
+              className={`${Styles.h1} ${sellPlayer ? sellPlayer : ""}`}
+              style={
+                !sellPlayer && clubColor ? { color: clubColor } : undefined
+              }
             >
               {text}
             </h1>

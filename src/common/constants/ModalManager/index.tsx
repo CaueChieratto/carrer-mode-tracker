@@ -20,7 +20,7 @@ type ModalManagerProps = {
   onSellConfirm?: (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ) => void | Promise<void>;
   saveClick?: number;
   player?: Players;
@@ -134,10 +134,10 @@ const ModalManager = ({
       return (
         <Modal
           isOpen
+          sellPlayer="sell"
           closeModal={closeModal}
           animationContainer="left"
           text={`Vender ${player?.name}?`}
-          clubColor={clubColor!}
         >
           <SellPlayerModal
             player={player!}
