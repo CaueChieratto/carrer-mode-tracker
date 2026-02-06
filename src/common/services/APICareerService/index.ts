@@ -1,10 +1,17 @@
 export async function fetchTeamByClubName(club: string) {
-  const url = `https://corsproxy.io/?${encodeURIComponent(
-    `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${club}`
+  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+    `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${club}`,
   )}`;
 
-  const res = await fetch(url);
-  const json = await res.json();
+  try {
+    const res = await fetch(url);
 
-  return json.teams?.[0];
+    if (!res.ok) throw new Error("Erro ao buscar dados do time");
+
+    const json = await res.json();
+    return json.teams?.[0];
+  } catch (error) {
+    console.error("Erro na busca do time:", error);
+    return null;
+  }
 }
