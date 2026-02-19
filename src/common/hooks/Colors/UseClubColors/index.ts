@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTheme } from "../../../../contexts/LightThemeContext";
 
 const hexToRgba = (hex: string, alpha: number = 1): string => {
   const cleanHex = hex.replace("#", "");
@@ -20,6 +21,8 @@ const getLuminance = (hex?: string): number => {
 };
 
 export function useClubColors(colors: string[] | string) {
+  const { theme } = useTheme();
+
   const colorInfo = useMemo(() => {
     const colorsArray = Array.isArray(colors) ? colors : [colors];
     const hexColor1 = colorsArray[0];
@@ -29,16 +32,22 @@ export function useClubColors(colors: string[] | string) {
     const defaultLightColor = "#52a383";
     const defaultDarkColor = "#256648";
 
+    const maxLuminance = theme === "dark" ? 240 : 180;
+
     const clubColor =
-      luminance1 > 180 ? defaultLightColor : hexColor1 || defaultLightColor;
+      luminance1 > maxLuminance
+        ? defaultLightColor
+        : hexColor1 || defaultLightColor;
     const darkClubColor =
-      luminance1 > 180 ? defaultDarkColor : hexColor1 || defaultDarkColor;
+      luminance1 > maxLuminance
+        ? defaultDarkColor
+        : hexColor1 || defaultDarkColor;
 
     return {
       clubColor: hexToRgba(clubColor, 0.9),
       darkClubColor: darkClubColor,
     };
-  }, [colors]);
+  }, [colors, theme]);
 
   return colorInfo;
 }
