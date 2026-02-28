@@ -62,11 +62,34 @@ export const LeagueLevels: Record<string, number> = {
 };
 
 export const leagueLevelsInSelect: Record<string, number> = {
-  // Liga nacional
+  // Inglaterra
+  "Premier League": 1.3,
+  "FA Cup": 1.4,
+  "Carabao Cup": 1,
+  "Community Shield": 1.2,
+  "EFL Championship": 7,
+  "BSM Trophy": 15,
+  "League One": 8,
+  "League Two": 9,
+  "Playoff EFL": 10,
+  "Playoff Lg One": 11,
+  "Playoff Lg Two": 12,
+
+  // Espanha
   "La Liga": 3,
-  "Premier League": 1.1,
-  Brasileirao: 1,
+  "Copa do Rey": 5,
+  Supercopa: 6,
+  "La Liga 2": 7,
+
+  // Alemanha
   Bundesliga: 3,
+  "DFB-Pokal": 1,
+  Supercup: 4,
+  "Bundesliga 2": 7,
+  "3. Liga": 8,
+
+  // Liga nacional
+  Brasileirao: 1,
   "Serie A": 1,
   "Ligue 1": 1,
   "Saudi Pro League": 1,
@@ -77,15 +100,12 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Scottish Prem": 1,
 
   // Campeonato continental principal
-  "Champions League": 1.2,
+  "Champions League": 1.5,
   Libertadores: 2,
   "Champions Asiatica": 2,
 
   // Copa nacional
-  "Copa do Rey": 5,
   "Copa do Brasil": 3,
-  "FA Cup": 4,
-  "DFB-Pokal": 1,
   "Coppa Italia": 3,
   "Coupe de France": 3,
   "Oranje Beker": 3,
@@ -93,8 +113,6 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Scottish Cup": 3,
 
   // Supercopa nacional
-  Supercopa: 6,
-  Supercup: 4,
   Supercoppa: 4,
   "Super Cup": 4,
 
@@ -105,20 +123,4 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Europa League": 7,
   "Sul-Americana": 6,
   "Conference League": 8,
-
-  // Copa nacional inferior
-  "Carabao Cup": 2,
-  "Community Shield": 1,
-  "BSM Trophy": 15,
-
-  // Outras divisões
-  "La Liga 2": 7,
-  "EFL Championship": 7,
-  "Bundesliga 2": 7,
-  "3. Liga": 8,
-  "League One": 8,
-  "League Two": 9,
-  "Playoff EFL": 10,
-  "Playoff Lg One": 11,
-  "Playoff Lg Two": 12,
 };
