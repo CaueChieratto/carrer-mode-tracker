@@ -64,7 +64,7 @@ export const LeagueLevels: Record<string, number> = {
 export const leagueLevelsInSelect: Record<string, number> = {
   // Liga nacional
   "La Liga": 3,
-  "Premier League": 1,
+  "Premier League": 1.1,
   Brasileirao: 1,
   Bundesliga: 3,
   "Serie A": 1,
@@ -77,14 +77,14 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Scottish Prem": 1,
 
   // Campeonato continental principal
-  "Champions League": 1,
+  "Champions League": 1.2,
   Libertadores: 2,
   "Champions Asiatica": 2,
 
   // Copa nacional
   "Copa do Rey": 5,
   "Copa do Brasil": 3,
-  "FA Cup": 3,
+  "FA Cup": 4,
   "DFB-Pokal": 1,
   "Coppa Italia": 3,
   "Coupe de France": 3,
@@ -107,8 +107,8 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Conference League": 8,
 
   // Copa nacional inferior
-  "Carabao Cup": 7,
-  "Community Shield": 7,
+  "Carabao Cup": 2,
+  "Community Shield": 1,
   "BSM Trophy": 15,
 
   // Outras divisões
