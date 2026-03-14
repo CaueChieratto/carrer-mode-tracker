@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { useSave } from "../UseSave";
 import { formatSeason } from "../../../utils/FormatSeason";
 import { getContinentByCountry } from "../../../services/GetContinentByCountry";

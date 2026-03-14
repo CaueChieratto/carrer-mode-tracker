@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
 import { Stats } from "../../../interfaces/playersStats/stats";
@@ -85,7 +85,7 @@ export const useLeagueStatsManager = ({
               leagueImage: leagueData.logo,
               stats: newStats,
             }
-          : l
+          : l,
       );
     } else {
       const newLeague: LeagueStats = {
@@ -101,7 +101,7 @@ export const useLeagueStatsManager = ({
         career,
         season.id,
         selectedPlayer.id,
-        updatedLeagues
+        updatedLeagues,
       );
       setLeagues(updatedLeagues);
     } catch (error) {

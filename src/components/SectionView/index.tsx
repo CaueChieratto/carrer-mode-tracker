@@ -2,7 +2,7 @@ import { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { TabConfig } from "../../common/constants/SeasonTabsConfig";
 import { useTabView } from "../../common/hooks/UseTabView";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import Navbar from "../../ui/Navbar";
@@ -33,8 +33,8 @@ const SectionView = ({
   const storageKey = isPlayer
     ? `player-tab-${career.id}-${player?.id}`
     : notSeason
-    ? `geral-tab-${career.id}`
-    : `season-tab-${career.id}-${season.id}`;
+      ? `geral-tab-${career.id}`
+      : `season-tab-${career.id}-${season.id}`;
 
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);

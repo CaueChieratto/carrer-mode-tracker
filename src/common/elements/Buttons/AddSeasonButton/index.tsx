@@ -1,5 +1,5 @@
 import Button from "../../../../components/Button";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 
 type AddSeasonButtonProps = {
   clubColor: string;

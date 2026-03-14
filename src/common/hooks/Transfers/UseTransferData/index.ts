@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { getSeasonDateRange } from "../../../utils/GetSeasonDateRange";
 
 const sortPlayersByDate = (
   players: Players[],
-  dateField: "dataArrival" | "dataExit"
+  dateField: "dataArrival" | "dataExit",
 ) => {
   return players
     .sort((a, b) => {
@@ -28,14 +28,14 @@ export const useTransferData = (career: Career, season: ClubData) => {
       const allPlayers = career.clubData.flatMap((s) => s.players);
       return sortPlayersByDate(
         allPlayers.filter((p) => p.buy),
-        "dataArrival"
+        "dataArrival",
       );
     }
 
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
-      career.nation
+      career.nation,
     );
 
     const seasonArrivals = season.players.filter((p) => {
@@ -55,14 +55,14 @@ export const useTransferData = (career: Career, season: ClubData) => {
       const allPlayers = career.clubData.flatMap((s) => s.players);
       return sortPlayersByDate(
         allPlayers.filter((p) => p.sell),
-        "dataExit"
+        "dataExit",
       );
     }
 
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
-      career.nation
+      career.nation,
     );
 
     const seasonDepartures = season.players.filter((p) => {

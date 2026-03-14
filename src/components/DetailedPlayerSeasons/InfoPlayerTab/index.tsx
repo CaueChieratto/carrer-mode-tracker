@@ -5,7 +5,7 @@ import PlayerNotFound from "./components/PlayerNotFound";
 import ProfitInfoSection from "./components/ProfitInfoSection";
 import TransactionInfoSection from "./components/TransactionInfoSection";
 import { usePlayerInfo } from "./hooks/usePlayerInfo";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../common/interfaces/playersInfo/players";
 
 type InfoPlayerTabProps = {

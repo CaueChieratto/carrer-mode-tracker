@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ColorsService } from "../../../services/ColorsService";
 import { ServiceSeasons } from "../../../services/ServiceSeasons";
-import { useCareers } from "../../Career/UseCareer";
+import { useCareers } from "../../../../pages/CareersPage/hooks/UseCareer";
 import { useClubColors } from "../../Colors/UseClubColors";
 
 export const useAddSeasons = () => {
@@ -16,7 +16,7 @@ export const useAddSeasons = () => {
   const career = careers.find((c) => c.id === careerId);
 
   const { clubColor, darkClubColor } = useClubColors(
-    ColorsService.getColorSaved(career?.id || "default") || "#ffffff"
+    ColorsService.getColorSaved(career?.id || "default") || "#ffffff",
   );
 
   const handleAddSeason = async (career: Career) => {

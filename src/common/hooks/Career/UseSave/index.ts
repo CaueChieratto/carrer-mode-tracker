@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
 import { UseCreateCareer } from "../UseCreateCareer";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ServiceCareer } from "../../../services/ServiceCareer";
 
 type useSaveProps = {
@@ -16,7 +16,7 @@ export function useSave({
 }: useSaveProps) {
   const saveCareer = async (
     event: React.FormEvent<HTMLFormElement>,
-    createdAtInput: string
+    createdAtInput: string,
   ) => {
     event.preventDefault();
 
@@ -47,7 +47,7 @@ export function useSave({
   const saveTrophies = async (
     event: FormEvent<HTMLFormElement>,
     careerId: string,
-    selectedLeague: string
+    selectedLeague: string,
   ) => {
     event.preventDefault();
 
@@ -68,7 +68,7 @@ export function useSave({
     const updatedTrophies = await ServiceCareer.saveClubTrophie(
       careerId,
       selectedLeague,
-      seasons
+      seasons,
     );
 
     if (selectedCareer && setSelectedCareer) {

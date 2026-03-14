@@ -1,12 +1,12 @@
-import Load from "../../components/Load";
+import Load from "../../ui/Load";
 import SectionView from "../../components/SectionView";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
 import { useParams } from "react-router-dom";
 import { calculateTotalStats } from "../../common/utils/PlayerStatsCalculator";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
-import { ModalType } from "../../common/types/enums/ModalType";
-import BottomMenu from "../../ui/BottomMenu";
+import { useModalManager } from "../../managers/hooks/useModalManager";
+import { ModalType } from "../../managers/enum/ModalType";
+import BottomMenu from "../../layouts/BottomMenu";
 
 const Player = () => {
   const { loading, career, season, tabsConfig } = useSeasonView(true, true);

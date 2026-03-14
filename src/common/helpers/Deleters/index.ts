@@ -1,11 +1,11 @@
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../services/Firebase";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Trophy } from "../../interfaces/club/trophy";
 
 export const deleteCareerFromFirestore = async (
   userId: string,
-  careerId: string
+  careerId: string,
 ) => {
   const docRef = doc(db, `users/${userId}/careers/${careerId}`);
   await deleteDoc(docRef);
@@ -22,7 +22,7 @@ export const deleteCareerLocalStorage = (careerId: string) => {
 export const deleteSeasonFromTrophies = (
   career: Career,
   leagueName: string,
-  seasonToRemove: string
+  seasonToRemove: string,
 ): Trophy[] => {
   let trophies: Trophy[] = career.trophies || [];
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { useFilePicker } from "../../Images/UseFilePicker";
 
 export const useClubImgAndColor = (selectedCareer: Career) => {

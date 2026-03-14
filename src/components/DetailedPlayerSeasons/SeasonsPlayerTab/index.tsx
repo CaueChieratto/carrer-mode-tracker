@@ -1,7 +1,7 @@
 import { useSeasonsPlayerTab } from "./hooks/useSeasonsPlayerTab";
 import PlayerSeason from "./components/PlayerSeason";
 import { useRenderableSeasons } from "./hooks/useRenderableSeasons";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import NoStatsMessage from "../../NoStatsMessage";
 
@@ -21,7 +21,7 @@ const SeasonsPlayerTab = ({ player, career }: SeasonsPlayerTabProps) => {
 
   const renderableSeasons = useRenderableSeasons(
     seasonsPlayerPlayed,
-    player?.id
+    player?.id,
   );
 
   if (renderableSeasons.length === 0) {

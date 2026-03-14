@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { formatDisplayValue } from "../../../utils/FormatValue";
@@ -9,12 +9,12 @@ import { getSeasonDateRange } from "../../../utils/GetSeasonDateRange";
 const getPlayersByDate = (
   players: Players[],
   career: Career,
-  season: ClubData
+  season: ClubData,
 ) => {
   const { startDate, endDate } = getSeasonDateRange(
     season.seasonNumber,
     career.createdAt,
-    career.nation
+    career.nation,
   );
 
   const signings = players.filter((p) => {
@@ -63,7 +63,7 @@ export const useTransferBalance = (career: Career, season: ClubData) => {
           acc + (typeof contract.buyValue === "number" ? contract.buyValue : 0)
         );
       }, 0),
-    [signings]
+    [signings],
   );
 
   const totalEarned = useMemo(
@@ -75,12 +75,12 @@ export const useTransferBalance = (career: Career, season: ClubData) => {
           (typeof contract.sellValue === "number" ? contract.sellValue : 0)
         );
       }, 0),
-    [sales]
+    [sales],
   );
 
   const profit = useMemo(
     () => totalEarned - totalSpent,
-    [totalEarned, totalSpent]
+    [totalEarned, totalSpent],
   );
 
   const content = [

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Career } from "../../../../common/interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { getContinentByCountry } from "../../../../common/services/GetContinentByCountry";
 import { Trophy } from "../../../../common/interfaces/club/trophy";
@@ -40,7 +40,7 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
     const playerTrophies = career.trophies
       .map((trophy) => {
         const seasonsWonByPlayer = trophy.seasons.filter((season) =>
-          seasonsPlayerPlayedStrings.includes(season)
+          seasonsPlayerPlayedStrings.includes(season),
         );
 
         if (seasonsWonByPlayer.length > 0) {
@@ -57,7 +57,7 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
     return playerTrophies.sort(
       (a, b) =>
         (LeagueLevels[a.leagueName] ?? 999) -
-        (LeagueLevels[b.leagueName] ?? 999)
+        (LeagueLevels[b.leagueName] ?? 999),
     );
   }, [career, player]);
 

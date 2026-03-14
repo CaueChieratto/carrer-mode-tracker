@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import Styles from "./HeaderSeason.module.css";
 import Button from "../Button";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
@@ -65,7 +65,7 @@ const HeaderSeason = ({
         onClick={() =>
           !backSeasons
             ? navigate(
-                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`
+                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`,
               )
             : backSeasons()
         }

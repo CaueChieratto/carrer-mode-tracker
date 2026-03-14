@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import Navbar from "../../ui/Navbar";
 import HeaderSeason from "../HeaderSeason";
 import Styles from "./AddPlayersContent.module.css";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import Load from "../Load";
-import ModalManager from "../../common/constants/ModalManager";
+import Load from "../../ui/Load";
+import ModalManager from "../../managers/ModalManager";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { useAddPlayersContent } from "../../common/hooks/Players/UseAddPlayersContent";

@@ -1,9 +1,9 @@
 import AddSeason_Player from "../../../components/AddSeason_Player";
 import AddSquad_Player from "../../../components/AddSquad_Player";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../interfaces/club/clubData";
 import { Players } from "../../interfaces/playersInfo/players";
-import { ModalType } from "../../types/enums/ModalType";
+import { ModalType } from "../../../managers/enum/ModalType";
 
 type SaveAction = (formData: FormData) => void;
 
@@ -31,7 +31,7 @@ type ConfigMap = {
 export const getAddPlayerConfig = (
   player: Players | undefined,
   squadSaveAction: SaveAction,
-  statsSaveAction: SaveAction
+  statsSaveAction: SaveAction,
 ): ConfigMap => ({
   squad: {
     label: player ? "Editar Jogador" : "Adicionar Jogador",

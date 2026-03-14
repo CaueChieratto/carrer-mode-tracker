@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { parseFullBrasilDate } from "../../../utils/Date";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { fetchTeamByClubName } from "../../../services/APICareerService";
 import { ColorsService } from "../../../services/ColorsService";
 

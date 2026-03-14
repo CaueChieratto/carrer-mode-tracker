@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { getSeasonDateRange } from "../../../utils/GetSeasonDateRange";
@@ -31,7 +31,7 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
       const { startDate, endDate } = getSeasonDateRange(
         season.seasonNumber,
         career.createdAt,
-        career.nation
+        career.nation,
       );
 
       if (type === "arrivals") {

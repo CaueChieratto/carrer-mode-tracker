@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Career } from "../../../../common/interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
 import { LeagueLevels } from "../../../../common/constants/LeagueLevels";
@@ -45,13 +45,13 @@ export const useAggregatedLeagueStats = (career: Career, player?: Players) => {
             existingLeague.stats.rating =
               totalGames > 0
                 ? parseFloat(
-                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2)
+                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2),
                   )
                 : 0;
           } else {
             leagueStatsMap.set(
               leagueStat.leagueName,
-              JSON.parse(JSON.stringify(leagueStat))
+              JSON.parse(JSON.stringify(leagueStat)),
             );
           }
         }
@@ -61,7 +61,7 @@ export const useAggregatedLeagueStats = (career: Career, player?: Players) => {
     return aggregatedStats.sort(
       (a, b) =>
         (LeagueLevels[a.leagueName] ?? 999) -
-        (LeagueLevels[b.leagueName] ?? 999)
+        (LeagueLevels[b.leagueName] ?? 999),
     );
   }, [seasonsPlayerPlayed, player]);
 

@@ -1,4 +1,4 @@
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { ServiceCareer } from "../../../common/services/ServiceCareer";
 import Button from "../../../components/Button";
 import ContainerButton from "../../../components/ContainerButton";

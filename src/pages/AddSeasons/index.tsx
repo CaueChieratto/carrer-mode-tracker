@@ -1,13 +1,13 @@
-import PrimaryHeader from "../../ui/PrimaryHeader";
+import PrimaryHeader from "../../layouts/PrimaryHeader";
 import Styles from "./AddSeasons.module.css";
-import Load from "../../components/Load";
-import EmptySeason from "../../ui/EmptySeason";
+import Load from "../../ui/Load";
+import EmptySeason from "./components/EmptySeason";
 import { Buttons } from "../../common/elements/Buttons";
 import { useAddSeasons } from "../../common/hooks/Seasons/UseAddSeasons";
-import SeasonList from "../../components/SeasonList";
-import { ModalType } from "../../common/types/enums/ModalType";
-import BottomMenu from "../../ui/BottomMenu";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import SeasonList from "./components/SeasonList";
+import { ModalType } from "../../managers/enum/ModalType";
+import BottomMenu from "../../layouts/BottomMenu";
+import { useModalManager } from "../../managers/hooks/useModalManager";
 
 const AddSeasons = () => {
   const { loading, career, clubColor, darkClubColor, handleAddSeason, goBack } =

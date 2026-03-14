@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { seasonsFormFields } from "../../../constants/SeasonsFormFields";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
@@ -34,7 +34,7 @@ export const useSeasonStatsFormData = ({
       (p) =>
         !p.sell &&
         p.shirtNumber &&
-        (!p.statsLeagues || p.statsLeagues.length === 0)
+        (!p.statsLeagues || p.statsLeagues.length === 0),
     );
     const sorted = sortPlayersByPosition(availablePlayers);
     return sorted.map((p) => p.name);
@@ -44,14 +44,15 @@ export const useSeasonStatsFormData = ({
     const existingLeagueNames = leagues.map((l) => l.leagueName);
     return leagueNames.filter(
       (name) =>
-        !existingLeagueNames.includes(name) || name === originalLeagueNameToEdit
+        !existingLeagueNames.includes(name) ||
+        name === originalLeagueNameToEdit,
     );
   }, [leagueNames, leagues, originalLeagueNameToEdit]);
 
   const finalFormItems = useMemo(() => {
     const items = seasonsFormFields(
       filteredLeagueNames,
-      playerNames as readonly string[]
+      playerNames as readonly string[],
     );
     if (!isEditing) {
       return items;
@@ -60,8 +61,8 @@ export const useSeasonStatsFormData = ({
       ...section,
       fields: section.fields.map((row) =>
         row.map((field) =>
-          field.id === "playerName" ? { ...field, disabled: true } : field
-        )
+          field.id === "playerName" ? { ...field, disabled: true } : field,
+        ),
       ),
     }));
   }, [filteredLeagueNames, playerNames, isEditing]);

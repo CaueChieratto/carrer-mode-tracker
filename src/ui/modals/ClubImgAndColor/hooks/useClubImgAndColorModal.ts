@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import { Career } from "../../../../common/interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { useClubImgAndColor } from "../../../../common/hooks/Modal/UseClubImgAndColors";
 import { SaveEditClub } from "../../../../common/services/SaveEditClub";
 
@@ -29,7 +29,7 @@ export const useClubImgAndColorModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [clubName, setClubName] = useState(selectedCareer.clubName || "");
   const [managerName, setManagerName] = useState(
-    selectedCareer.managerName || ""
+    selectedCareer.managerName || "",
   );
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const useClubImgAndColorModal = ({
         secondaryColor,
         fileDataUrl ?? undefined,
         clubName,
-        managerName
+        managerName,
       );
       setSelectedCareer(updatedCareer);
       closeModal();

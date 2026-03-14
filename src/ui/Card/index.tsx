@@ -2,8 +2,8 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 import Styles from "./Card.module.css";
 import ContainerIcon from "../../components/ContainerIcon";
 import { FaRegEdit } from "react-icons/fa";
-import { ModalType } from "../../common/types/enums/ModalType";
-import { Career } from "../../common/interfaces/Career";
+import { ModalType } from "../../managers/enum/ModalType";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 
 type CardProps = {
   children: ReactNode;

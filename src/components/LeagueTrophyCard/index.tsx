@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { ElementsCardTitles } from "../../common/elements/ElementsCardTitles";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import { Trophy } from "../../common/interfaces/club/trophy";
 import Styles from "./LeagueTrophyCard.module.css";
 import { ServiceCareer } from "../../common/services/ServiceCareer";
@@ -21,7 +21,7 @@ const LeagueTrophyCard = ({
 }: LeagueTrophyCardProps) => {
   const sortedSeasons = useMemo(
     () => sortTrophySeasons(trophy.seasons),
-    [trophy.seasons]
+    [trophy.seasons],
   );
 
   return (
@@ -31,14 +31,14 @@ const LeagueTrophyCard = ({
         {sortedSeasons.map((season, index) => {
           const deleteSeason = async () => {
             const ok = confirm(
-              `Deseja excluir permanentemente a temporada ${season}?`
+              `Deseja excluir permanentemente a temporada ${season}?`,
             );
             if (!ok) return;
 
             const updatedTrophies = await ServiceCareer.removeSeason(
               selectedCareer.id,
               trophy.leagueName,
-              season
+              season,
             );
 
             setSelectedCareer({

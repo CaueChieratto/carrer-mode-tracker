@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { sortTrophies } from "../../../utils/Sorts";
 
 export const useSlideUpModal = (selectedCareer: Career) => {
@@ -7,7 +7,7 @@ export const useSlideUpModal = (selectedCareer: Career) => {
 
   const sortedTrophies = useMemo(
     () => sortTrophies(selectedCareer.trophies),
-    [selectedCareer.trophies]
+    [selectedCareer.trophies],
   );
 
   return { view, setView, sortedTrophies };

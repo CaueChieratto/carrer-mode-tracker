@@ -1,11 +1,11 @@
-import Load from "../../components/Load";
+import Load from "../../ui/Load";
 import SectionView from "../../components/SectionView";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import TransfersModal from "../../components/TransfersModal";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
-import { ModalType } from "../../common/types/enums/ModalType";
-import BottomMenu from "../../ui/BottomMenu";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../managers/enum/ModalType";
+import BottomMenu from "../../layouts/BottomMenu";
+import { useModalManager } from "../../managers/hooks/useModalManager";
 
 const Season = () => {
   const {

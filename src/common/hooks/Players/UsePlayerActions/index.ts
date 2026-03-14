@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { useAddSquadPlayer } from "../UseAddSquadPlayer";
 import { useEditSquadPlayer } from "../UseEditSquadPlayer";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 
 type UsePlayerActionsProps = {
@@ -55,7 +55,7 @@ export const usePlayerActions = ({
       }
     } catch (error: unknown) {
       alert(
-        error instanceof Error ? error.message : "Ocorreu um erro inesperado."
+        error instanceof Error ? error.message : "Ocorreu um erro inesperado.",
       );
     } finally {
       setIsLoading(false);
@@ -76,7 +76,7 @@ export const usePlayerActions = ({
   const handleSellPlayer = async (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ) => {
     setIsLoading(true);
     try {

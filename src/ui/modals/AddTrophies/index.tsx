@@ -7,7 +7,7 @@ import Styles from "./AddTrophies.module.css";
 import { HiOutlineSelector } from "react-icons/hi";
 import { IoCalendar } from "react-icons/io5";
 import ContainerIcon from "../../../components/ContainerIcon";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { useClubColors } from "../../../common/hooks/Colors/UseClubColors";
 import { useAddTrophies } from "../../../common/hooks/Career/UseAddTrophies";
 import { Buttons } from "../../../common/elements/Buttons";
@@ -30,7 +30,7 @@ const AddTrophies = ({
   setSelectedCareer,
 }: AddTrophiesProps) => {
   const { clubColor, darkClubColor } = useClubColors(
-    ColorsService.getColorSaved(selectedCareer.id) || "#ffffff"
+    ColorsService.getColorSaved(selectedCareer.id) || "#ffffff",
   );
   const {
     selectedLeague,

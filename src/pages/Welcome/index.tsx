@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Styles from "./Welcome.module.css";
-import Login from "../../ui/Login";
-import { slidesContent } from "../../common/constants/SlidesContent";
+import { slidesContent } from "./constants/SlidesContent";
+import Login from "./ui/Login";
 
 const Welcome = () => {
   const [activeIndex, setActiveIndex] = useState(0);

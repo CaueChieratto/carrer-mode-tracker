@@ -1,18 +1,18 @@
 import classNames from "classnames";
 import Styles from "./CareersPage.module.css";
 import Button from "../../components/Button";
-import PrimaryHeader from "../../ui/PrimaryHeader";
-import EmptyCareers from "../../ui/EmptyCareers";
-import ModalManager from "../../common/constants/ModalManager";
-import { ModalType } from "../../common/types/enums/ModalType";
-import { Career } from "../../common/interfaces/Career";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import PrimaryHeader from "../../layouts/PrimaryHeader";
+import EmptyCareers from "./ui/EmptyCareers";
+import ModalManager from "../../managers/ModalManager";
+import { ModalType } from "../../managers/enum/ModalType";
+import { Career } from "./interfaces/Career";
+import { useModalManager } from "../../managers/hooks/useModalManager";
 import { useSaveClick } from "../../common/hooks/UseSaveClick";
-import Load from "../../components/Load";
-import CareerCard from "../../ui/CareerCard";
-import { useCareers } from "../../common/hooks/Career/UseCareer";
-import { CareerCardButtons } from "../../common/constants/CareerCardButtons";
-import BottomMenu from "../../ui/BottomMenu";
+import Load from "../../ui/Load";
+import CareerCard from "./components/CareerCard";
+import { useCareers } from "./hooks/UseCareer";
+import { CareerCardButtons } from "./config/CareerCardButtons";
+import BottomMenu from "../../layouts/BottomMenu";
 
 const CareersPage = () => {
   const { careers, loading } = useCareers();

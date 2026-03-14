@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
 
@@ -49,13 +49,13 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
             existingLeague.stats.rating =
               totalGames > 0
                 ? parseFloat(
-                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2)
+                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2),
                   )
                 : 0;
           } else {
             leagueStatsMap.set(
               leagueStat.leagueName,
-              JSON.parse(JSON.stringify(leagueStat))
+              JSON.parse(JSON.stringify(leagueStat)),
             );
           }
         });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { LeagueLevels } from "../../../../common/constants/LeagueLevels";
-import { Career } from "../../../../common/interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { getContinentByCountry } from "../../../../common/services/GetContinentByCountry";
 import { League, leaguesByContinent } from "../../../../common/utils/Leagues";
@@ -18,7 +18,7 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
   const playerId = player?.id;
 
   const seasonsPlayerPlayed = career.clubData.filter((s) =>
-    s.players.some((p) => p.id === playerId)
+    s.players.some((p) => p.id === playerId),
   );
 
   const getSeasonString = (seasonNumber: number): string => {
@@ -44,7 +44,7 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
       .sort(
         (a, b) =>
           (LeagueLevels[a.leagueName] ?? 999) -
-          (LeagueLevels[b.leagueName] ?? 999)
+          (LeagueLevels[b.leagueName] ?? 999),
       );
   };
 

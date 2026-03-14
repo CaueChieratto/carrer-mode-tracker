@@ -4,7 +4,7 @@ import "swiper/css";
 import Styles from "./Tutorial.module.css";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
-import { tutorialContent } from "../../common/constants/TutorialContent";
+import { tutorialContent } from "./constants/TutorialContent";
 import { MdOutlineClose } from "react-icons/md";
 import ContainerIcon from "../../components/ContainerIcon";
 

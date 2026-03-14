@@ -5,7 +5,7 @@ import { POSITION_DATA } from "../../common/types/Positions";
 import Card from "../../ui/Card";
 import Styles from "./SquadTab.module.css";
 import { groupAndSortPlayersByPosition } from "../../common/helpers";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 
 type SquadTabProps = {
   season: ClubData;
@@ -15,7 +15,7 @@ type SquadTabProps = {
 const SquadTab = ({ season }: SquadTabProps) => {
   const playersByGroupKey = useMemo(
     () => groupAndSortPlayersByPosition(season.players),
-    [season.players]
+    [season.players],
   );
 
   return (

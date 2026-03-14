@@ -1,4 +1,4 @@
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import SummaryCard from "../../ui/SummaryCard";
 import TransferCardBalance from "../../ui/TransferCardBalance";

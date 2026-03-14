@@ -4,7 +4,7 @@ import SquadTab from "../../../components/SquadTab";
 import { StatsTab_Club } from "../../../components/StatsTab_Club";
 import { Buttons } from "../../elements/Buttons";
 import { ClubData } from "../../interfaces/club/clubData";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../interfaces/playersInfo/players";
 import TotalPlayerTab from "../../../components/DetailedPlayerSeasons/TotalPlayerTab";
 import SeasonsPlayerTab from "../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
@@ -27,7 +27,7 @@ export const getSeasonTabsConfig = (
   careerId: string,
   seasonId: string,
   navigate: NavigateFunction,
-  isPlayer: boolean
+  isPlayer: boolean,
 ): TabConfig[] => [
   {
     title: isPlayer ? "Jogador" : "Elenco",

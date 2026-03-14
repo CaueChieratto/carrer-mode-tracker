@@ -1,4 +1,4 @@
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 
 export const buildCareerUpdates = (updates: {
   colorsTeams?: string[];

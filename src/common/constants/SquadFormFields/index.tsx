@@ -11,7 +11,7 @@ import { BsCalendar } from "react-icons/bs";
 import { RxLapTimer } from "react-icons/rx";
 import CaptainArmbandIcon from "../../../ui/CaptainArmbandIcon";
 import { FaTrashCan } from "react-icons/fa6";
-import { ModalType } from "../../types/enums/ModalType";
+import { ModalType } from "../../../managers/enum/ModalType";
 import { TbBrandElectronicArts } from "react-icons/tb";
 
 export const positionOptionsBySector = {

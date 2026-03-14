@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ColorsService } from "../../../services/ColorsService";
 
 type changeProps = {

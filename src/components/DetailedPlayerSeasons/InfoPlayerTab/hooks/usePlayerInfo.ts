@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Career } from "../../../../common/interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 
 export const usePlayerInfo = (player?: Players, career?: Career) => {

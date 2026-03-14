@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { positionOptionsBySector } from "../../common/constants/SquadFormFields";
-import { ModalType } from "../../common/types/enums/ModalType";
+import { ModalType } from "../../managers/enum/ModalType";
 import FormField from "../FormField";
 import { Field, FormSectionProps } from "../FormSection";
 import FormSegmentedControl from "../FormSegmentedControl";
@@ -8,7 +8,7 @@ import FormSelect from "../FormSelect";
 
 type RendererProps = FieldRendererProps & {
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
 };
 
@@ -89,7 +89,7 @@ const FieldRenderer = (props: FieldRendererProps) => {
   const value = formValues?.[field.id] ?? "";
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     onInputChange?.(e, field);
   };

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import ContainerButton from "../ContainerButton";
 import Styles from "./TrophiesPanel.module.css";
 import { GiTrophiesShelf } from "react-icons/gi";
@@ -24,7 +24,7 @@ const TrophiesPanel = ({
   const country = selectedCareer.nation;
 
   const { clubColor, darkClubColor } = useClubColors(
-    ColorsService.getColorSaved(selectedCareer.id) || "#ffffff"
+    ColorsService.getColorSaved(selectedCareer.id) || "#ffffff",
   );
 
   const { view, setView, sortedTrophies } = useSlideUpModal(selectedCareer);

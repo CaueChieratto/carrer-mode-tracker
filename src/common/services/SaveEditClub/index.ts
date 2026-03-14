@@ -1,4 +1,4 @@
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { ServiceCareer } from "../ServiceCareer";
 
 export async function SaveEditClub(
@@ -7,7 +7,7 @@ export async function SaveEditClub(
   secondaryColor: string,
   fileDataUrl?: string,
   clubName?: string,
-  managerName?: string
+  managerName?: string,
 ) {
   const colorsTeams = [primaryColor, secondaryColor];
 
@@ -16,7 +16,7 @@ export async function SaveEditClub(
     colorsTeams,
     fileDataUrl,
     clubName,
-    managerName
+    managerName,
   );
 
   const updatedCareer = {

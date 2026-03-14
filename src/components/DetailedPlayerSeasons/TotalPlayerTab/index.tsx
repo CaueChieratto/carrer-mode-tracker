@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import Card from "../../../ui/Card";
 import SeasonRow from "../components/SeasonRow";
@@ -39,7 +39,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
         <SeasonRow seasonString="Total por Liga" player={player} />
         {aggregatedLeagueStats.map((league) => {
           const trophy = allTrophiesWon.find(
-            (t) => t.leagueName === league.leagueName
+            (t) => t.leagueName === league.leagueName,
           );
 
           return (

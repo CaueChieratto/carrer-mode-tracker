@@ -5,7 +5,7 @@ import {
   onSnapshot,
   Timestamp,
 } from "firebase/firestore";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { db } from "../../services/Firebase";
 import { mapDocToCareer } from "../Mappers";
 import { ClubData } from "../../interfaces/club/clubData";
@@ -14,7 +14,7 @@ import { Players } from "../../interfaces/playersInfo/players";
 
 export const getAllCareers = (
   userId: string,
-  callback: (careers: Career[]) => void
+  callback: (careers: Career[]) => void,
 ) => {
   const careersRef = collection(db, `users/${userId}/careers`);
   return onSnapshot(careersRef, (snapshot) => {
@@ -25,7 +25,7 @@ export const getAllCareers = (
 
 export const getCareerById = async (
   userId: string,
-  careerId: string
+  careerId: string,
 ): Promise<Career> => {
   const careerRef = doc(db, `users/${userId}/careers/${careerId}`);
   const careerSnap = await getDoc(careerRef);

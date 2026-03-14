@@ -3,7 +3,7 @@ import Styles from "./StatsTab_Club.module.css";
 import NoStatsMessage from "../NoStatsMessage";
 import { useSortedPlayersWithStats } from "../../common/hooks/Players/UseSortedPlayersWithStats";
 import PlayerStatsList from "../../ui/PlayerStatsList";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 
 type StatsTab_ClubProps = {
   season: ClubData;

@@ -6,7 +6,7 @@ import { Players } from "../../common/interfaces/playersInfo/players";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import CalculatedStatistics from "../CalculatedStatistics";
 import { usePlayerSeasonStats } from "../../common/hooks/Players/UsePlayerSeasonStats";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { sortLeaguesByLevel } from "../../common/utils/Sorts";
 
@@ -36,7 +36,7 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
 
   const sortedLeagues = useMemo(
     () => sortLeaguesByLevel(player.statsLeagues),
-    [player.statsLeagues]
+    [player.statsLeagues],
   );
 
   const navigatePlayer = () => {
@@ -44,7 +44,7 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
       navigate(`/Career/${careerId}/Geral/Player/${player.id}`);
     } else {
       navigate(
-        `/Career/${careerId}/Season/${seasonId}/EditPlayer/${player.id}?from=stats`
+        `/Career/${careerId}/Season/${seasonId}/EditPlayer/${player.id}?from=stats`,
       );
     }
   };

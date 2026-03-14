@@ -4,7 +4,7 @@ import {
   validateMonetaryInput,
   validateRequiredFields,
 } from "../../../helpers/Validators";
-import { Career } from "../../../interfaces/Career";
+import { Career } from "../../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { ServicePlayers } from "../../../services/ServicePlayers";
@@ -31,11 +31,11 @@ export const useEditSquadPlayer = ({
   const editPlayer = async (formData: FormData) => {
     validateMonetaryInput(
       formData.get("playerValue") as string,
-      "Valor do Jogador"
+      "Valor do Jogador",
     );
     validateMonetaryInput(
       formData.get("salary") as string,
-      "Salário (Semanal)"
+      "Salário (Semanal)",
     );
     validateRequiredFields(formData);
 
@@ -53,7 +53,7 @@ export const useEditSquadPlayer = ({
         careerId,
         seasonId,
         playerId,
-        updatedPlayerData
+        updatedPlayerData,
       );
       onPlayerEdited();
     } catch (error) {
@@ -65,7 +65,7 @@ export const useEditSquadPlayer = ({
   const sellPlayer = async (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ) => {
     try {
       await ServicePlayers.sellPlayerFromSeason(
@@ -74,7 +74,7 @@ export const useEditSquadPlayer = ({
         playerId,
         sellValue,
         toClub,
-        dateExit
+        dateExit,
       );
       onPlayerEdited();
     } catch (error) {

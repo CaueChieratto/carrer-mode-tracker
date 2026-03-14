@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
-import { ModalType } from "../../common/types/enums/ModalType";
+import { ModalType } from "../../managers/enum/ModalType";
 import ContainerIcon from "../ContainerIcon";
 import FieldRenderer from "../FieldRenderer";
 import Label from "../Label";
@@ -33,7 +33,7 @@ export type FormSectionProps = {
   isEditing?: boolean;
   onInputChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    field: Field
+    field: Field,
   ) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onKeyUp?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -45,7 +45,7 @@ const filterRowsByState = (
   rows: readonly (readonly Field[])[],
   isEditing?: boolean,
   formValues?: Record<string, string>,
-  isGoalkeeper?: boolean
+  isGoalkeeper?: boolean,
 ) => {
   const isSigning = formValues?.["isSigning"] === "true";
 
@@ -61,7 +61,7 @@ const filterRowsByState = (
           if (field.id === "cleanSheets") return false;
         }
         return true;
-      })
+      }),
     )
     .filter((fields) => fields.length > 0);
 };
@@ -87,7 +87,7 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
       rows,
       isEditing,
       formValues,
-      isGoalkeeper
+      isGoalkeeper,
     );
 
     if (visibleRows.length === 0) {
@@ -132,7 +132,7 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
         </div>
       </>
     );
-  }
+  },
 );
 
 export default FormSection;

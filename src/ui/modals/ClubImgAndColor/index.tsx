@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
-import { Career } from "../../../common/interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import Button from "../../../components/Button";
 import Form from "../../../components/Form";
-import Load from "../../../components/Load";
+import Load from "../../Load";
 import AddClubColors from "./components/AddClubColors";
 import AddClubImg from "./components/AddClubImg";
 import EditInfoClub from "./components/EditInfoClub";

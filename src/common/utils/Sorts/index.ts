@@ -2,7 +2,7 @@ import {
   LeagueLevels,
   leagueLevelsInSelect,
 } from "../../constants/LeagueLevels";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { ClubData } from "../../interfaces/club/clubData";
 import { Trophy } from "../../interfaces/club/trophy";
 import { Players } from "../../interfaces/playersInfo/players";
@@ -78,7 +78,7 @@ export const sortPlayersByContributions = (players: Players[]) => {
 
 export const sortPlayersByPosition = (players: Players[]) => {
   const positionSortOrder = POSITION_DATA.slice().flatMap(
-    (group) => group.sortOrder
+    (group) => group.sortOrder,
   );
 
   return [...players].sort((a, b) => {
@@ -134,7 +134,7 @@ export const sortSeasonsByNumber = (seasons: ClubData[]) => {
 
 export const sortPlayersByPositionWithinGroup = (
   players: Players[],
-  sortOrder: string[]
+  sortOrder: string[],
 ) => {
   return [...players].sort((a, b) => {
     const indexA = sortOrder.indexOf(a.position as string);
@@ -145,7 +145,7 @@ export const sortPlayersByPositionWithinGroup = (
 
 export const sortTransfersByValue = (
   players: Players[],
-  type: "arrivals" | "exit"
+  type: "arrivals" | "exit",
 ) => {
   const isArrival = type === "arrivals";
 

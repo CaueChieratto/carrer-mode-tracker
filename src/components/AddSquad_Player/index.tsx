@@ -5,8 +5,8 @@ import { forwardRef, useEffect } from "react";
 import { squadFormFields } from "../../common/constants/SquadFormFields";
 import { useForm } from "../../common/hooks/UseForm";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import { Career } from "../../common/interfaces/Career";
-import { ModalType } from "../../common/types/enums/ModalType";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
+import { ModalType } from "../../managers/enum/ModalType";
 import { mapPlayerToFormValues } from "../../common/helpers/Mappers";
 import { ClubData } from "../../common/interfaces/club/clubData";
 
@@ -45,7 +45,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
         {squadFormFields
           .filter(
             (section) =>
-              !("editOnly" in section && section.editOnly) || isEditing
+              !("editOnly" in section && section.editOnly) || isEditing,
           )
           .map((item, index) => (
             <FormSection
@@ -56,7 +56,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
               formValues={{
                 ...formValues,
                 ...Object.fromEntries(
-                  Object.entries(booleanValues).map(([k, v]) => [k, String(v)])
+                  Object.entries(booleanValues).map(([k, v]) => [k, String(v)]),
                 ),
               }}
               isEditing={isEditing}
@@ -68,7 +68,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
           ))}
       </Form>
     );
-  }
+  },
 );
 
 AddSquad_Player.displayName = "AddSquad_Player";

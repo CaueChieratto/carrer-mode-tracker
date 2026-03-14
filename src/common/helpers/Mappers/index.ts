@@ -3,7 +3,7 @@ import {
   DocumentData,
   Timestamp,
 } from "firebase/firestore";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../interfaces/playersInfo/players";
 import { formatDisplayValue, parseValue } from "../../utils/FormatValue";
 import { Contract } from "../../interfaces/playersInfo/contract";
@@ -13,7 +13,7 @@ import { ClubData } from "../../interfaces/club/clubData";
 import { getSeasonDateRange } from "../../utils/GetSeasonDateRange";
 
 export const mapDocToCareer = (
-  doc: QueryDocumentSnapshot<DocumentData>
+  doc: QueryDocumentSnapshot<DocumentData>,
 ): Career => {
   const data = doc.data();
 
@@ -76,7 +76,7 @@ export const mapPlayerToFormValues = (player: Players) => {
 export const mapFormDataToPlayerData = (
   formData: FormData,
   career: Career,
-  season: ClubData
+  season: ClubData,
 ): Partial<Players> => {
   const isSigning = (formData.get("isSigning") as string) === "true";
   const buyValueRaw = formData.get("buyValue") as string;
@@ -86,7 +86,7 @@ export const mapFormDataToPlayerData = (
   const { startDate, endDate } = getSeasonDateRange(
     season.seasonNumber,
     career.createdAt,
-    career.nation
+    career.nation,
   );
 
   const newContract: Contract[] = [];

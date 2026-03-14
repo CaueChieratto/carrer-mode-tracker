@@ -1,5 +1,5 @@
 import { collection, doc, setDoc } from "firebase/firestore";
-import { Career } from "../../interfaces/Career";
+import { Career } from "../../../pages/CareersPage/interfaces/Career";
 import { auth, db } from "../Firebase";
 import { Trophy } from "../../interfaces/club/trophy";
 import {
@@ -48,7 +48,7 @@ export const ServiceCareer = {
     colorsTeams?: string[],
     fileDataUrl?: string,
     clubName?: string,
-    managerName?: string
+    managerName?: string,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -71,7 +71,7 @@ export const ServiceCareer = {
   saveClubTrophie: async (
     careerId: string,
     leagueName: string,
-    seasons: string[]
+    seasons: string[],
   ): Promise<Trophy[]> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -86,7 +86,7 @@ export const ServiceCareer = {
   removeSeason: async (
     careerId: string,
     leagueName: string,
-    seasonToRemove: string
+    seasonToRemove: string,
   ): Promise<Trophy[]> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -95,7 +95,7 @@ export const ServiceCareer = {
     const updatedTrophies = deleteSeasonFromTrophies(
       career,
       leagueName,
-      seasonToRemove
+      seasonToRemove,
     );
 
     await updateCareerTrophies(user.uid, careerId, updatedTrophies);

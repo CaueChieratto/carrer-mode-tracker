@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Welcome from "./pages/Welcome";
 import CareersPage from "./pages/CareersPage";
-import { Career } from "./common/interfaces/Career";
+import { Career } from "./pages/CareersPage/interfaces/Career";
 import { createElement } from "react";
 import AddSeasons from "./pages/AddSeasons";
 import Season from "./pages/Season";

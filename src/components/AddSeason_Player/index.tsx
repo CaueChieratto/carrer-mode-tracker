@@ -1,16 +1,16 @@
 import Form from "../Form";
 import FormSection from "../FormSection";
 import Styles from "./AddSeason_Player.module.css";
-import { Career } from "../../common/interfaces/Career";
+import { Career } from "../../pages/CareersPage/interfaces/Career";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import { ModalType } from "../../common/types/enums/ModalType";
+import { ModalType } from "../../managers/enum/ModalType";
 import { forwardRef, useRef } from "react";
 import StatsLeagues_Form from "../StatsLeagues_Form";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import AddOrEditLeagueButton from "../../common/elements/Buttons/AddOrEditLeagueButton";
 import { usePlayerSeasonStats } from "../../common/hooks/Players/UsePlayerSeasonStats";
-import Load from "../Load";
+import Load from "../../ui/Load";
 
 type AddSeason_PlayerProps = {
   player?: Players;
@@ -53,7 +53,7 @@ const AddSeason_Player = forwardRef<HTMLFormElement, AddSeason_PlayerProps>(
                     Object.entries(booleanValues).map(([k, v]) => [
                       k,
                       String(v),
-                    ])
+                    ]),
                   ),
                 }}
                 onInputChange={handleInputChange}
@@ -78,7 +78,7 @@ const AddSeason_Player = forwardRef<HTMLFormElement, AddSeason_PlayerProps>(
         {isLoading && <Load />}
       </>
     );
-  }
+  },
 );
 
 AddSeason_Player.displayName = "AddSeason_Player";
