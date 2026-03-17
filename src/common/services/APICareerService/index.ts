@@ -1,7 +1,5 @@
 export async function fetchTeamByClubName(club: string) {
-  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-    `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${club}`,
-  )}`;
+  const url = `https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t=${club}`;
 
   try {
     const res = await fetch(url);
