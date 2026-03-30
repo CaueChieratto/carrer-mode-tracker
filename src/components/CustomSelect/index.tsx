@@ -9,6 +9,7 @@ type CustomSelectProps = {
   placeholder?: string;
   onChange: (event: { target: { name: string; value: string } }) => void;
   disabled?: boolean;
+  className?: string;
 };
 
 const CustomSelect = ({
@@ -17,6 +18,7 @@ const CustomSelect = ({
   value,
   placeholder,
   onChange,
+  className,
   disabled = false,
 }: CustomSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -123,7 +125,7 @@ const CustomSelect = ({
       ref={selectRef}
     >
       <div
-        className={Styles.select_trigger}
+        className={className ? className : Styles.select_trigger}
         onMouseDown={handleTriggerMouseDown}
         onFocus={handleFocus}
         tabIndex={disabled ? -1 : 0}

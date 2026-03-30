@@ -76,7 +76,7 @@ export const leagueLevelsInSelect: Record<string, number> = {
   "Playoff Lg Two": 12,
 
   // Espanha
-  "La Liga": 3,
+  "La Liga": 1,
   "Copa do Rey": 5,
   Supercopa: 6,
   "La Liga 2": 7,
