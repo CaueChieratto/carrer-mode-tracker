@@ -4,12 +4,10 @@ type AddTrophiesProps = {
   className: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   season: string;
-  clubColor: string;
 };
 
 export const AddTrophies = ({
   className,
-  clubColor,
   onChange,
   season,
 }: AddTrophiesProps) => (
@@ -20,6 +18,6 @@ export const AddTrophies = ({
     onChange={onChange}
     placeholder="Temporada"
     className={className}
-    style={{ color: clubColor }}
+    style={{ color: "var(--color-add-player)" }}
   />
 );

@@ -1,6 +1,7 @@
 import { getCareerById } from "../../helpers/Getters";
 import { updateCareerFirestore } from "../../helpers/Setters";
 import { ClubData } from "../../interfaces/club/clubData";
+import { League } from "../../utils/Leagues";
 import { auth } from "../Firebase";
 import { v4 as uuidv4 } from "uuid";
 
@@ -18,12 +19,14 @@ export const ServiceSeasons = {
     }
 
     const previousSeason = career.clubData.find(
-      (season) => season.seasonNumber === seasonNumber - 1
+      (season) => season.seasonNumber === seasonNumber - 1,
     );
 
     const playersFromPreviousSeason = previousSeason
       ? previousSeason.players
       : [];
+
+    const leaguesFromPreviousSeason = previousSeason?.leagues || [];
 
     const playersForNewSeason = playersFromPreviousSeason
       .filter((player) => !player.sell)
@@ -45,6 +48,7 @@ export const ServiceSeasons = {
       players: playersForNewSeason,
       seasonNumber,
       id: uuidv4(),
+      leagues: leaguesFromPreviousSeason,
     };
 
     const updatedClubData = [...career.clubData, newSeason];
@@ -61,7 +65,26 @@ export const ServiceSeasons = {
     const career = await getCareerById(user.uid, careerId);
 
     const updatedClubData = career.clubData.filter(
-      (season) => season.id !== seasonId
+      (season) => season.id !== seasonId,
+    );
+
+    await updateCareerFirestore(user.uid, careerId, {
+      clubData: updatedClubData,
+    });
+  },
+
+  updateSeasonLeagues: async (
+    careerId: string,
+    seasonId: string,
+    leagues: League[],
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const career = await getCareerById(user.uid, careerId);
+
+    const updatedClubData = career.clubData.map((season) =>
+      season.id === seasonId ? { ...season, leagues } : season,
     );
 
     await updateCareerFirestore(user.uid, careerId, {

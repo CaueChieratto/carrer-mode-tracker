@@ -1,30 +1,28 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Career } from "../../../interfaces/Career";
 import { useSave } from "../UseSave";
-import { formatSeason } from "../../../utils/FormatSeason";
-import { getContinentByCountry } from "../../../services/GetContinentByCountry";
-import { useLeagueOptions } from "../../UseLeagueOptions";
+import { ClubData } from "../../../interfaces/club/clubData";
 
 type useAddTrophiesProps = {
-  setView: React.Dispatch<React.SetStateAction<"titles" | "add">>;
+  setView: React.Dispatch<React.SetStateAction<"titles" | "add" | "menu">>;
   careerId: string;
-  country: string;
   selectedCareer: Career;
   setSelectedCareer: React.Dispatch<React.SetStateAction<Career>>;
+  season: ClubData;
 };
 
 export const useAddTrophies = ({
   setView,
   careerId,
-  country,
   selectedCareer,
   setSelectedCareer,
+  season,
 }: useAddTrophiesProps) => {
   const [selectedLeague, setSelectedLeague] = useState<string>("");
-  const [season, setSeason] = useState("");
 
-  const continent = getContinentByCountry(country);
-  const leaguesOptions = useLeagueOptions(country);
+  const leaguesOptions = useMemo(() => {
+    return season?.leagues?.map((l) => l.name) || [];
+  }, [season]);
 
   const { saveTrophies } = useSave({
     setView,
@@ -32,15 +30,9 @@ export const useAddTrophies = ({
     setSelectedCareer,
   });
 
-  const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSeason(formatSeason(e.target.value, continent));
-  };
-
   return {
     selectedLeague,
     setSelectedLeague,
-    season,
-    handleSeasonChange,
     leaguesOptions,
     saveTrophies,
     careerId,

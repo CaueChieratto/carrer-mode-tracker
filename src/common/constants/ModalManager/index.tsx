@@ -10,6 +10,9 @@ import { UseCloseModal } from "../../hooks/Modal/UseCloseModal";
 import { Players } from "../../interfaces/playersInfo/players";
 import SellPlayerModal from "../../../ui/modals/SellPlayerModal";
 import TrophiesPanel from "../../../components/TrophiesPanel";
+import { ClubData } from "../../interfaces/club/clubData";
+import { SeasonConfigs } from "../../../ui/modals/SeasonConfigs";
+import { getSeasonName } from "../../utils/GetSeasonName";
 
 type ModalManagerProps = {
   activeModal: ModalType;
@@ -26,6 +29,9 @@ type ModalManagerProps = {
   player?: Players;
   clubColor?: string;
   darkClubColor?: string;
+  selectedSeason?: ClubData | null;
+  onNavigateSeason?: (seasonId: string) => void;
+  career?: Career;
 };
 
 const ModalManager = ({
@@ -39,6 +45,9 @@ const ModalManager = ({
   player,
   clubColor,
   darkClubColor,
+  onNavigateSeason,
+  selectedSeason,
+  career,
 }: ModalManagerProps) => {
   const closeModal = () => {
     UseCloseModal(saveClick!, onClose);
@@ -148,6 +157,38 @@ const ModalManager = ({
           />
         </Modal>
       );
+    case ModalType.SEASON_CONFIGS: {
+      const formattedSeasonName =
+        selectedSeason && career
+          ? getSeasonName(
+              selectedSeason.seasonNumber,
+              career.createdAt,
+              career.nation,
+            )
+          : "1";
+
+      return (
+        <Modal
+          isOpen
+          closeModal={closeModal}
+          animationContainer="grow"
+          text={`Temporada ${selectedSeason?.seasonNumber}`}
+        >
+          {selectedSeason && career && (
+            <SeasonConfigs
+              season={selectedSeason}
+              career={career}
+              setSelectedCareer={setSelectedCareer}
+              seasonName={formattedSeasonName}
+              onNavigate={() => {
+                closeModal();
+                if (onNavigateSeason) onNavigateSeason(selectedSeason.id);
+              }}
+            />
+          )}
+        </Modal>
+      );
+    }
 
     default:
       return null;

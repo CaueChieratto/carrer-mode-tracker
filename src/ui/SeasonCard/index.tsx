@@ -6,18 +6,18 @@ import Card from "../Card";
 
 type SeasonCardProps = {
   season: ClubData;
-  onNavigate: () => void;
+  onClick: () => void;
   onDelete: () => void;
 };
 
-const SeasonCard = ({ season, onNavigate, onDelete }: SeasonCardProps) => {
+const SeasonCard = ({ season, onClick, onDelete }: SeasonCardProps) => {
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete();
   };
 
   return (
-    <Card className={Styles.card} onClick={onNavigate}>
+    <Card className={Styles.card} onClick={onClick}>
       <div className={Styles.icon} onClick={handleDeleteClick}>
         <IoMdCloseCircle size={25} color="red" />
       </div>

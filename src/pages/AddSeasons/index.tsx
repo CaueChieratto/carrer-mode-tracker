@@ -35,7 +35,11 @@ const AddSeasons = () => {
           />
         </PrimaryHeader>
         {clubData && clubData.length > 0 ? (
-          <SeasonList clubData={clubData} careerId={career!.id} />
+          <SeasonList
+            clubData={clubData}
+            careerId={career!.id}
+            career={career}
+          />
         ) : (
           <EmptySeason />
         )}

@@ -59,7 +59,11 @@ export const useLeagueStatsManager = ({
     const allLeagues = Object.values(leaguesByContinent)
       .flatMap((continent) => Object.values(continent))
       .flat();
-    const leagueData = allLeagues.find((l) => l.name === leagueName);
+
+    const leagueData =
+      season.leagues?.find((l) => l.name === leagueName) ||
+      allLeagues.find((l) => l.name === leagueName);
+
     if (!leagueData) {
       alert("Liga não encontrada.");
       setIsLoading(false);
@@ -85,7 +89,7 @@ export const useLeagueStatsManager = ({
               leagueImage: leagueData.logo,
               stats: newStats,
             }
-          : l
+          : l,
       );
     } else {
       const newLeague: LeagueStats = {
@@ -101,7 +105,7 @@ export const useLeagueStatsManager = ({
         career,
         season.id,
         selectedPlayer.id,
-        updatedLeagues
+        updatedLeagues,
       );
       setLeagues(updatedLeagues);
     } catch (error) {

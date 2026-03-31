@@ -1,0 +1,113 @@
+.input_placeholder {
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  height: 100%;
+  width: 95%;
+  color: var(--club-color);
+  font-weight: bold;
+  font-size: 18px;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: var(--card-background) !important;
+}
+
+.input_placeholder::placeholder {
+  color: var(--club-color);
+  opacity: 1;
+}
+
+.input_placeholder:-webkit-autofill {
+  font-family: inherit !important;
+  font-weight: bold !important;
+  color: var(--club-color) !important;
+  -webkit-text-fill-color: var(--club-color) !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--card-background) inset !important;
+}
+
+.input_placeholder:focus {
+  background-color: var(--card-background) !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-add-player);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border-radius: 12px;
+  padding-left: 44px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.2s;
+}
+
+.field:focus-within {
+  border: 1px solid var(--club-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--club-color) 20%, transparent);
+}
+
+.icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blackColor);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.back {
+  margin-top: 4px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--color-add-player);
+}
