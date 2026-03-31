@@ -48,7 +48,7 @@ export const usePlayerSeasonStats = ({
     const selectedPlayerName = formValues.playerName;
     if (selectedPlayerName) {
       const currentPlayer = season.players.find(
-        (p) => p.name === selectedPlayerName
+        (p) => p.name === selectedPlayerName,
       );
       setIsGoalkeeper(currentPlayer?.position === "GOL");
     } else {
@@ -71,7 +71,6 @@ export const usePlayerSeasonStats = ({
   });
 
   const { finalFormItems } = useSeasonStatsFormData({
-    career,
     season,
     player,
     leagues,
@@ -105,7 +104,7 @@ export const usePlayerSeasonStats = ({
           career.id,
           season.id,
           player.id,
-          leagueName
+          leagueName,
         );
       } catch (error) {
         console.error("Erro ao deletar a liga:", error);

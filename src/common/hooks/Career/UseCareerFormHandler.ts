@@ -2,7 +2,7 @@ import { useInputStateCareer } from "./UseInputStateCareer";
 import { useSave } from "./UseSave";
 
 type useCareerFormHandlerProps = {
-  setView?: (view: "titles" | "add") => void;
+  setView?: (view: "titles" | "add" | "menu") => void;
 };
 
 export function useCareerFormHandler({ setView }: useCareerFormHandlerProps) {
