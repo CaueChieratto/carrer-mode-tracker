@@ -29,7 +29,10 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
 
   if (aggregatedLeagueStats.length === 0) {
     return (
-      <NoStatsMessage text="Este jogador não possui nenhuma estatística registrada ou temporada válida para ser exibida." />
+      <NoStatsMessage
+        textOne="Nenhuma estatística encontrada"
+        textTwo="Este jogador não possui nenhuma estatística registrada ou temporada válida para ser exibida."
+      />
     );
   }
 
@@ -39,7 +42,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
         <SeasonRow seasonString="Total por Liga" player={player} />
         {aggregatedLeagueStats.map((league) => {
           const trophy = allTrophiesWon.find(
-            (t) => t.leagueName === league.leagueName
+            (t) => t.leagueName === league.leagueName,
           );
 
           return (

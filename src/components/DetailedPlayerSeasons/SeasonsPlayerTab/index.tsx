@@ -21,12 +21,15 @@ const SeasonsPlayerTab = ({ player, career }: SeasonsPlayerTabProps) => {
 
   const renderableSeasons = useRenderableSeasons(
     seasonsPlayerPlayed,
-    player?.id
+    player?.id,
   );
 
   if (renderableSeasons.length === 0) {
     return (
-      <NoStatsMessage text="Este jogador não possui nenhuma estatística registrada ou temporada válida para ser exibida." />
+      <NoStatsMessage
+        textOne="Nenhuma estatística encontrada"
+        textTwo="Este jogador não possui nenhuma estatística registrada ou temporada válida para ser exibida."
+      />
     );
   }
 
