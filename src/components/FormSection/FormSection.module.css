@@ -59,7 +59,7 @@
 .icon {
   position: static;
   height: auto;
-  color: #333;
+  color: var(--border-input);
 }
 
 .input {

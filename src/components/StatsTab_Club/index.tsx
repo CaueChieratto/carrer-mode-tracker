@@ -1,9 +1,9 @@
 import { ClubData } from "../../common/interfaces/club/clubData";
-import Styles from "./StatsTab_Club.module.css";
 import NoStatsMessage from "../NoStatsMessage";
 import { useSortedPlayersWithStats } from "../../common/hooks/Players/UseSortedPlayersWithStats";
 import PlayerStatsList from "../../ui/PlayerStatsList";
 import { Career } from "../../common/interfaces/Career";
+import { ContainerClubContent } from "../ContainerClubContent";
 
 type StatsTab_ClubProps = {
   season: ClubData;
@@ -14,7 +14,7 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
   const playersWithStats = useSortedPlayersWithStats(season.players);
 
   return (
-    <div className={Styles.container_stats}>
+    <ContainerClubContent>
       {playersWithStats.length > 0 ? (
         <PlayerStatsList
           players={playersWithStats}
@@ -22,8 +22,12 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
           season={season}
         />
       ) : (
-        <NoStatsMessage text="Primeiro, adicione jogadores ao elenco para poder registrar suas estatísticas." />
+        <NoStatsMessage
+          isStats
+          textOne="Nenhuma estatística encontrada"
+          textTwo="Primeiro, adicione jogadores ao elenco para poder registrar suas estatísticas."
+        />
       )}
-    </div>
+    </ContainerClubContent>
   );
 };

@@ -15,7 +15,7 @@ export const useForm = () => {
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       setIsShiftPressed(e.shiftKey);
     },
-    []
+    [],
   );
 
   const handleKeyUp = useCallback(() => {
@@ -25,7 +25,7 @@ export const useForm = () => {
   const handleInputChange = useCallback(
     (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-      field: Field
+      field: Field,
     ) => {
       const { name, value } = e.target;
       const oldValue = formValues[name] || "";
@@ -33,7 +33,7 @@ export const useForm = () => {
 
       if (["playerValue", "buyValue", "salary"].includes(field.id)) {
         processedValue = value.replace(",", ".");
-      } else if (field.id === "dateArrival") {
+      } else if (field.id === "dateArrival" || field.id === "date") {
         processedValue = formatDateInputShort(value);
       } else if (field.transform === "uppercase") {
         processedValue = processedValue.toUpperCase();
@@ -41,7 +41,7 @@ export const useForm = () => {
         processedValue = capitalizeWords(
           processedValue,
           isShiftPressed,
-          oldValue
+          oldValue,
         );
       }
 
@@ -65,7 +65,7 @@ export const useForm = () => {
         [name]: processedValue,
       }));
     },
-    [formValues, isShiftPressed]
+    [formValues, isShiftPressed],
   );
 
   const handleBooleanChange = (name: string, value: boolean) => {
@@ -73,6 +73,12 @@ export const useForm = () => {
       ...prev,
       [name]: value,
     }));
+
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value ? "true" : "false",
+    }));
+
     if (name === "isSigning" && !value) {
       setFormValues((prev) => {
         const newValues = { ...prev };

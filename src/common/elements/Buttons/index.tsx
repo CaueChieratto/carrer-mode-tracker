@@ -7,6 +7,8 @@ import { AddPlayerSeason } from "./AddPlayerSeason";
 import { AddSquadPlayer } from "./AddSquadPlayer";
 import { ChangeClubColors } from "./ChangeClubColors";
 import AddOrEditLeagueButton from "./AddOrEditLeagueButton";
+import { AddMatches } from "./AddMatches";
+import { AddTeamsToTable } from "./AddTeamsToTable";
 
 export const Buttons = {
   AddSeasonButton,
@@ -16,6 +18,8 @@ export const Buttons = {
   AddTrophies,
   AddNewCareer,
   AddSquadPlayer,
+  AddTeamsToTable,
+  AddMatches,
   ChangeClubColors,
   AddOrEditLeagueButton,
 };

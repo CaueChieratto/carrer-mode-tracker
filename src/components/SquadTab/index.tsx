@@ -6,6 +6,7 @@ import Card from "../../ui/Card";
 import Styles from "./SquadTab.module.css";
 import { groupAndSortPlayersByPosition } from "../../common/helpers";
 import { Career } from "../../common/interfaces/Career";
+import { ContainerClubContent } from "../ContainerClubContent";
 
 type SquadTabProps = {
   season: ClubData;
@@ -15,11 +16,11 @@ type SquadTabProps = {
 const SquadTab = ({ season }: SquadTabProps) => {
   const playersByGroupKey = useMemo(
     () => groupAndSortPlayersByPosition(season.players),
-    [season.players]
+    [season.players],
   );
 
   return (
-    <div className={Styles.container}>
+    <ContainerClubContent>
       {POSITION_DATA.map((group) => {
         const filteredPlayers = playersByGroupKey.get(group.key) || [];
 
@@ -36,7 +37,7 @@ const SquadTab = ({ season }: SquadTabProps) => {
           </Card>
         );
       })}
-    </div>
+    </ContainerClubContent>
   );
 };
 export default SquadTab;

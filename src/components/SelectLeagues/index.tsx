@@ -47,8 +47,6 @@ export const SelectLeagues = ({
     onClose,
   });
 
-  console.log(career);
-
   return (
     <div
       className={Styles.container}
