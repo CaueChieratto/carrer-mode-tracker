@@ -40,23 +40,27 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [player]);
 
+    const actionClick = (modal: ModalType | string) => {
+      openModal(modal as ModalType);
+    };
+
     return (
       <Form className={Styles.form} ref={ref}>
         {squadFormFields
           .filter(
             (section) =>
-              !("editOnly" in section && section.editOnly) || isEditing
+              !("editOnly" in section && section.editOnly) || isEditing,
           )
           .map((item, index) => (
             <FormSection
               key={index}
-              onActionClick={openModal}
+              onActionClick={actionClick}
               title={item.title}
               rows={item.fields}
               formValues={{
                 ...formValues,
                 ...Object.fromEntries(
-                  Object.entries(booleanValues).map(([k, v]) => [k, String(v)])
+                  Object.entries(booleanValues).map(([k, v]) => [k, String(v)]),
                 ),
               }}
               isEditing={isEditing}
@@ -68,7 +72,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
           ))}
       </Form>
     );
-  }
+  },
 );
 
 AddSquad_Player.displayName = "AddSquad_Player";
