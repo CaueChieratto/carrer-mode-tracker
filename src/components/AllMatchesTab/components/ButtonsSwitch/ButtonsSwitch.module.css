@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  min-width: 120px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

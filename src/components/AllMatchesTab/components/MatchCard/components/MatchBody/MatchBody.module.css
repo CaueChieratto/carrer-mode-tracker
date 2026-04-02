@@ -1,0 +1,67 @@
+.section {
+  border-right: 1px solid var(--border-input);
+  border-left: 1px solid var(--border-input);
+  padding: 0 12px;
+}
+
+.match_row {
+  display: flex;
+  align-items: center;
+  padding: 10px 8px;
+  gap: 8px;
+}
+
+.aside_date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.date {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--colorSpan);
+}
+
+.section {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.teams {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.team_name {
+  font-size: 14px;
+  color: var(--blackColor);
+}
+
+.scores {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.score {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blackColor);
+}
+
+.aside_result {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}

@@ -33,8 +33,8 @@ const SectionView = ({
   const storageKey = isPlayer
     ? `player-tab-${career.id}-${player?.id}`
     : notSeason
-    ? `geral-tab-${career.id}`
-    : `season-tab-${career.id}-${season.id}`;
+      ? `geral-tab-${career.id}`
+      : `season-tab-${career.id}-${season.id}`;
 
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
@@ -58,6 +58,7 @@ const SectionView = ({
         activeOption={activeIndex}
         onOptionClick={handleTabClick}
       />
+
       {ActionButton && (
         <>
           {!notSeason && (

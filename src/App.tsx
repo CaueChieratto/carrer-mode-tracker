@@ -9,6 +9,7 @@ import AddPlayers from "./pages/AddPlayers";
 import Geral from "./pages/Geral";
 import Players from "./pages/Players";
 import Tutorial from "./pages/Tutorial";
+import { AddMatches } from "./pages/AddMatches";
 
 type AppProps = {
   career?: Career;
@@ -32,6 +33,14 @@ export default function App({ career }: AppProps) {
     {
       path: "/Career/:careerId/Season/:seasonId/EditPlayer/:playerId",
       element: <AddPlayers />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/AddMatches",
+      element: <AddMatches />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/AddMatches/:matchesId",
+      element: <AddMatches />,
     },
     { path: "/tutorial", element: <Tutorial /> },
   ]);

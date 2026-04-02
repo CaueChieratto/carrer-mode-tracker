@@ -1,0 +1,38 @@
+.header {
+  padding: 6px 12px 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.background_image {
+  background-color: #fff;
+  width: fit-content;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.league_image {
+  width: 30px;
+  object-fit: contain;
+}
+
+.league_name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-add-player);
+}
+
+.container_icon {
+  display: flex;
+}

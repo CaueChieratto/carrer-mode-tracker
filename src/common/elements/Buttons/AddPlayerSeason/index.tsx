@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Button from "../../../../components/Button";
-import { IoMdPersonAdd } from "react-icons/io";
 import { SeasonThemeContext } from "../../../../contexts/SeasonThemeContext";
+import { BsGraphUp } from "react-icons/bs";
 
 type AddPlayerSeasonProps = {
   onClick?: () => void;
@@ -18,12 +18,13 @@ export const AddPlayerSeason = ({ onClick }: AddPlayerSeasonProps) => {
       fontSize="large"
       onClick={onClick}
       style={{
-        color: activeStyle.clubColor,
+        backgroundColor: activeStyle.darkClubColor,
+        color: activeStyle.color,
         fontWeight: activeStyle.fontWeight,
         border: activeStyle.border,
       }}
     >
-      Adicionar Jogador <IoMdPersonAdd />
+      Adicionar estatísticas <BsGraphUp />
     </Button>
   );
 };

@@ -69,9 +69,7 @@ const CareersPage = () => {
       ) : (
         <EmptyCareers onOpenModal={onOpenModal} />
       )}
-
       {activeModal === ModalType.NONE && <BottomMenu />}
-
       <ModalManager
         saveClick={saveClick}
         setSelectedCareer={setSelectedCareer}

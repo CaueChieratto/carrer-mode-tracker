@@ -1,16 +1,21 @@
 import { BsBarChart } from "react-icons/bs";
 import Card from "../../ui/Card";
 import Styles from "./NoStatsMessage.module.css";
+import { GiSoccerField } from "react-icons/gi";
 
 type NoStatsMessageProps = {
-  text: string;
+  isStats?: boolean;
+  textTwo: string;
+  textOne: string;
 };
 
-const NoStatsMessage = ({ text }: NoStatsMessageProps) => (
+const NoStatsMessage = ({ isStats, textOne, textTwo }: NoStatsMessageProps) => (
   <Card className={Styles.card}>
-    <BsBarChart className={Styles.icon} />
-    <h2 className={Styles.title}>Nenhuma estatística encontrada</h2>
-    <p className={Styles.text}>{text}</p>
+    {isStats && <BsBarChart className={Styles.icon} />}
+    {!isStats && <GiSoccerField className={Styles.icon} />}
+
+    <h2 className={Styles.title}>{textOne}</h2>
+    <p className={Styles.text}>{textTwo}</p>
   </Card>
 );
 

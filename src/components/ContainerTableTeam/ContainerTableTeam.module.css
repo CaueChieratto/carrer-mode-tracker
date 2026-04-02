@@ -1,0 +1,6 @@
+.container_tabela {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  height: 50px;
+}
