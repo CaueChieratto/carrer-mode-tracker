@@ -1,4 +1,4 @@
-import { LineupSlot } from "../../hooks/useLineup";
+import { LineupSlot } from "../../../../hooks/useLineup";
 import Styles from "./SlotButton.module.css";
 
 type SlotButtonProps = {
