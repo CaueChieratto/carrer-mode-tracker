@@ -1,0 +1,81 @@
+.picker_container {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px #0003;
+  overflow: hidden;
+}
+
+.picker_search {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 1px solid var(--border-input);
+  background-color: var(--card-background);
+  color: var(--blackColor);
+  font-size: 15px;
+  outline: none;
+}
+
+.picker_search::placeholder {
+  color: var(--color-add-player);
+}
+
+.picker_list {
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.picker_list::-webkit-scrollbar {
+  display: none;
+}
+
+.picker_empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--color-add-player);
+  font-size: 14px;
+}
+
+.picker_item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 1px solid var(--border-input);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.picker_item:last-child {
+  border-bottom: none;
+}
+
+.picker_name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blackColor);
+}
+
+.picker_meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.picker_pos {
+  font-size: 12px;
+  color: var(--color-add-player);
+  background: var(--background-color);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.picker_overall {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-quaternary);
+}

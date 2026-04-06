@@ -20,6 +20,10 @@ export const MatchCard = ({ match, season }: MatchCardProps) => {
     window.location.href = `/Career/${careerId}/Season/${seasonId}/AddMatches/${match.matchesId}`;
   };
 
+  const openMatch = () => {
+    window.location.href = `/Career/${careerId}/Season/${seasonId}/Match/${match.matchesId}`;
+  };
+
   return (
     <Card className={Styles.card}>
       <MatchHeader
@@ -27,7 +31,7 @@ export const MatchCard = ({ match, season }: MatchCardProps) => {
         leagueData={leagueData}
         onEdit={editMatch}
       />
-      <MatchBody match={match} onClick={() => console.log("aaa")} />
+      <MatchBody match={match} onClick={openMatch} />
     </Card>
   );
 };

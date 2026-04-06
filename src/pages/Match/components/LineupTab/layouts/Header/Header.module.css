@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--card-background);
+  border-radius: 12px 12px 0 0;
+  padding: 14px 16px;
+  box-shadow: 0 2px 8px #0002;
+  position: relative;
+  z-index: 10;
+}
+
+.club_info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.club_name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.formation_select {
+  min-width: 130px;
+}
