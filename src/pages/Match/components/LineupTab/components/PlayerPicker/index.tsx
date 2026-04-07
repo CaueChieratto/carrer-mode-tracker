@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import Styles from "./PlayerPicker.module.css";
 import { POSITION_ORDER } from "./constants/POSITION_ORDER";
@@ -15,12 +15,28 @@ export const PlayerPicker = ({
   onSelect,
 }: PlayerPickerProps) => {
   const [search, setSearch] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchRef.current) {
+        searchRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 150);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const available = players
     .filter(
       (p) =>
         !p.sell &&
         !assignedIds.has(p.id) &&
+        p.shirtNumber != null &&
+        p.shirtNumber !== "" &&
         p.name.toLowerCase().includes(search.toLowerCase()),
     )
     .sort((a, b) => {
@@ -37,11 +53,11 @@ export const PlayerPicker = ({
   return (
     <div className={Styles.picker_container}>
       <input
+        ref={searchRef}
         className={Styles.picker_search}
         placeholder="Buscar jogador..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        autoFocus
       />
       <div className={Styles.picker_list}>
         {available.length === 0 && (
@@ -57,7 +73,9 @@ export const PlayerPicker = ({
             <span className={Styles.picker_name}>{player.name}</span>
             <div className={Styles.picker_meta}>
               <span className={Styles.picker_pos}>{player.position}</span>
-              <span className={Styles.picker_overall}>{player.overall}</span>
+              <span className={Styles.picker_shirt_number}>
+                {player.shirtNumber}
+              </span>
             </div>
           </button>
         ))}

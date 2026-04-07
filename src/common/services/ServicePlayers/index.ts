@@ -10,21 +10,78 @@ import { auth } from "../Firebase";
 import { v4 as uuidv4 } from "uuid";
 
 export const ServicePlayers = {
+  fixDuplicatePlayerIds: async (careerId: string): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const career = await getCareerById(user.uid, careerId);
+
+    // Mapa para guardar os IDs originais. Chave: "nome-nacionalidade"
+    const idMap = new Map<string, string>();
+    let hasChanges = false; // Flag para saber se precisamos salvar no banco
+
+    const updatedClubData = career.clubData.map((season) => {
+      const updatedPlayers = season.players.map((player) => {
+        const uniqueKey = `${player.name.trim().toLowerCase()}-${player.nation.trim().toLowerCase()}`;
+
+        if (idMap.has(uniqueKey)) {
+          // Já vimos esse jogador! Vamos forçar o ID dele ser o mesmo do primeiro registro
+          const correctId = idMap.get(uniqueKey)!;
+          if (player.id !== correctId) {
+            hasChanges = true;
+            return { ...player, id: correctId };
+          }
+          return player;
+        } else {
+          // Primeira vez vendo o jogador, salva o ID dele no mapa
+          idMap.set(uniqueKey, player.id);
+          return player;
+        }
+      });
+      return { ...season, players: updatedPlayers };
+    });
+
+    // Só faz a requisição pro Firebase se realmente consertou alguém
+    if (hasChanges) {
+      await updateCareerFirestore(user.uid, careerId, {
+        clubData: updatedClubData,
+      });
+      alert(`Carreira corrigida com sucesso! Os IDs foram unificados.`);
+    } else {
+      alert(`Nenhuma duplicação encontrada nesta carreira.`);
+    }
+  },
+
   addPlayerToSeason: async (
     careerId: string,
     seasonId: string,
-    player: Omit<Players, "id">
+    player: Omit<Players, "id">,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
 
+    let existingPlayerId: string | null = null;
+
+    for (const season of career.clubData) {
+      const found = season.players.find(
+        (p) =>
+          p.name.trim().toLowerCase() === player.name.trim().toLowerCase() &&
+          p.nation.trim().toLowerCase() === player.nation.trim().toLowerCase(),
+      );
+
+      if (found) {
+        existingPlayerId = found.id;
+        break;
+      }
+    }
+
     const updatedClubData = career.clubData.map((season) => {
       if (season.id === seasonId) {
         const newPlayer: Players = {
           ...player,
-          id: uuidv4(),
+          id: existingPlayerId || uuidv4(),
         };
         return {
           ...season,
@@ -43,7 +100,7 @@ export const ServicePlayers = {
     careerId: string,
     seasonId: string,
     playerId: string,
-    updatedPlayer: Partial<Players>
+    updatedPlayer: Partial<Players>,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -92,7 +149,7 @@ export const ServicePlayers = {
     playerId: string,
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -104,7 +161,7 @@ export const ServicePlayers = {
     const { startDate, endDate } = getSeasonDateRange(
       seasonToUpdate.seasonNumber,
       career.createdAt,
-      career.nation
+      career.nation,
     );
 
     const updatedClubData = career.clubData.map((season) => {
@@ -160,7 +217,7 @@ export const ServicePlayers = {
   deletePlayerFromSeason: async (
     careerId: string,
     seasonId: string,
-    playerId: string
+    playerId: string,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -170,7 +227,7 @@ export const ServicePlayers = {
     const updatedClubData = career.clubData.map((season) => {
       if (season.id === seasonId) {
         const updatedPlayers = season.players.filter(
-          (player) => player.id !== playerId
+          (player) => player.id !== playerId,
         );
         return { ...season, players: updatedPlayers };
       }
@@ -186,7 +243,7 @@ export const ServicePlayers = {
     careerId: string,
     seasonId: string,
     playerId: string,
-    leagueStats: LeagueStats[]
+    leagueStats: LeagueStats[],
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -219,7 +276,7 @@ export const ServicePlayers = {
     career: Career,
     seasonId: string,
     playerId: string,
-    allLeagueStats: LeagueStats[]
+    allLeagueStats: LeagueStats[],
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -249,7 +306,7 @@ export const ServicePlayers = {
     careerId: string,
     seasonId: string,
     playerId: string,
-    ballonDor: number
+    ballonDor: number,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -281,7 +338,7 @@ export const ServicePlayers = {
     careerId: string,
     seasonId: string,
     playerId: string,
-    leagueName: string
+    leagueName: string,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -293,7 +350,7 @@ export const ServicePlayers = {
         const updatedPlayers = season.players.map((player) => {
           if (player.id === playerId) {
             const updatedStatsLeagues = player.statsLeagues.filter(
-              (league) => league.leagueName !== leagueName
+              (league) => league.leagueName !== leagueName,
             );
             return {
               ...player,

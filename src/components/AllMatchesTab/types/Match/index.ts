@@ -1,3 +1,4 @@
+import { SavedLineup } from "../../../../pages/Match/types/Lineup";
 import { MatchResult } from "../MatchResult";
 import { MatchStatus } from "../MatchStatus";
 import { PlayerMatchStat } from "../PlayerMatchStat";
@@ -13,4 +14,5 @@ export type Match = {
   result: MatchResult;
   status: MatchStatus;
   playerStats?: PlayerMatchStat[];
+  lineup?: SavedLineup;
 };

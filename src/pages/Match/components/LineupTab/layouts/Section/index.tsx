@@ -8,6 +8,7 @@ type SectionProps = {
   selectingSlotId: string | null;
   openPlayerPicker: (slotId: string) => void;
   removePlayer: (slotId: string) => void;
+  swapPlayers: (idA: string, idB: string) => void;
 };
 
 export const Section = ({
@@ -15,9 +16,10 @@ export const Section = ({
   selectingSlotId,
   openPlayerPicker,
   removePlayer,
+  swapPlayers,
 }: SectionProps) => {
   const getGapSize = (playersCount: number) => {
-    if (playersCount >= 5) return "18px";
+    if (playersCount >= 5) return "14px";
     if (playersCount === 4) return "40px";
     if (playersCount === 3) return "65px";
     return "60px";
@@ -43,6 +45,7 @@ export const Section = ({
                     isSelecting={selectingSlotId === slot.slotId}
                     onOpen={() => openPlayerPicker(slot.slotId)}
                     onRemove={() => removePlayer(slot.slotId)}
+                    onSwap={(targetId) => swapPlayers(slot.slotId, targetId)}
                   />
                 </div>
               ))}
@@ -57,6 +60,7 @@ export const Section = ({
               isSelecting={selectingSlotId === "gk-0"}
               onOpen={() => openPlayerPicker("gk-0")}
               onRemove={() => removePlayer("gk-0")}
+              onSwap={(targetId) => swapPlayers("gk-0", targetId)}
             />
           </div>
         </div>

@@ -11,6 +11,7 @@ export type MatchTabConfig = {
     match: Match;
     season: ClubData;
     career: Career;
+    onRegisterSave?: (fn: () => Promise<void> | void) => void;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;
   action?: () => void;
@@ -20,15 +21,19 @@ export const getMatchTabsConfig = (): MatchTabConfig[] => [
   {
     title: "Resultado",
     component: MatchStatsTab,
+    // actionButton: Buttons.AddResult,
+    // action: navigate para pag
   },
   {
     title: "Formações",
     component: LineupTab,
     actionButton: Buttons.SaveFormation,
-    action: () => console.log("teste"),
+    // action: n vai ter
   },
   {
     title: "Estatísticas",
     component: MatchStatsTab,
+    // actionButton: Buttons.AddStatsMatch,
+    // action: navigate para pag
   },
 ];

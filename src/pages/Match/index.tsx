@@ -14,6 +14,7 @@ import ContainerButton from "../../components/ContainerButton";
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import { ModalType } from "../../common/types/enums/ModalType";
 import BottomMenu from "../../ui/BottomMenu";
+import { useRef, useState } from "react";
 
 export const Match = () => {
   const { careerId, seasonId, matchesId } = useParams<{
@@ -25,6 +26,10 @@ export const Match = () => {
   const navigate = useNavigate();
   const { activeModal } = useModalManager();
 
+  const saveLineupRef = useRef<(() => Promise<void> | void) | null>(null);
+
+  const [isActionLoading, setIsActionLoading] = useState(false);
+
   const { career, season, loading } = useSeasonData(careerId, seasonId);
   const match = season?.matches?.find((m) => m.matchesId === matchesId);
 
@@ -34,23 +39,31 @@ export const Match = () => {
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
 
-  const handleBack = () => {
+  const back = () => {
     navigate(`/Career/${careerId}/Season/${seasonId}`);
   };
 
-  if (loading) return <Load />;
+  if (loading || isActionLoading) return <Load />;
   if (!career || !season || !match) return <NotFoundDisplay />;
 
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
-  const handleActionClick = tabsConfig[activeIndex]?.action;
+
+  const actionClick = async () => {
+    if (saveLineupRef.current) {
+      setIsActionLoading(true);
+      try {
+        await saveLineupRef.current();
+      } finally {
+        setIsActionLoading(false);
+      }
+    }
+  };
+
+  console.log(career);
 
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
-      <HeaderSeason
-        careerId={career.id}
-        career={career}
-        backSeasons={handleBack}
-      />
+      <HeaderSeason careerId={career.id} career={career} backSeasons={back} />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
         activeOption={activeIndex}
@@ -59,7 +72,7 @@ export const Match = () => {
 
       {ActionButton && (
         <ContainerButton className={Styles.container_button}>
-          <ActionButton onClick={handleActionClick} />
+          <ActionButton onClick={actionClick} />
         </ContainerButton>
       )}
 
@@ -73,7 +86,14 @@ export const Match = () => {
         {tabsConfig.map(({ title, component: TabComponent }) => (
           <SwiperSlide key={title}>
             <div className={Styles.container}>
-              <TabComponent match={match} season={season} career={career} />
+              <TabComponent
+                match={match}
+                season={season}
+                career={career}
+                onRegisterSave={(fn) => {
+                  saveLineupRef.current = fn;
+                }}
+              />
             </div>
           </SwiperSlide>
         ))}

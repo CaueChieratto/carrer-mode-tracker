@@ -1,6 +1,7 @@
 .picker_container {
   background-color: var(--card-background);
-  border-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
   box-shadow: 0 4px 16px #0003;
   overflow: hidden;
 }
@@ -55,8 +56,8 @@
 }
 
 .picker_name {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--blackColor);
 }
 
@@ -67,15 +68,15 @@
 }
 
 .picker_pos {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-add-player);
   background: var(--background-color);
   border-radius: 6px;
   padding: 2px 6px;
 }
 
-.picker_overall {
-  font-size: 13px;
-  font-weight: 700;
+.picker_shirt_number {
+  font-size: 14px;
+  font-weight: 200;
   color: var(--color-quaternary);
 }

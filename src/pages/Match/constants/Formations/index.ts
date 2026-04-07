@@ -9,6 +9,10 @@ export const FORMATIONS: Formation[] = [
     lines: [[4], [4], [2]],
   },
   {
+    name: "4-2-4",
+    lines: [[4], [2], [4]],
+  },
+  {
     name: "4-3-3",
     lines: [[4], [3], [3]],
   },
@@ -31,6 +35,10 @@ export const FORMATIONS: Formation[] = [
   {
     name: "5-3-2",
     lines: [[5], [3], [2]],
+  },
+  {
+    name: "5-2-3",
+    lines: [[5], [2], [3]],
   },
   {
     name: "5-4-1",
