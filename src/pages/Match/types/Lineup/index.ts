@@ -8,4 +8,5 @@ export type SavedLineup = {
   formation: string;
   goalkeeper: SavedLineupSlot;
   lines: SavedLineupSlot[];
+  bench?: SavedLineupSlot[];
 };

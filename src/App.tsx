@@ -11,6 +11,7 @@ import Players from "./pages/Players";
 import Tutorial from "./pages/Tutorial";
 import { AddMatches } from "./pages/AddMatches";
 import { Match } from "./pages/Match";
+import { AddStatsMatch } from "./pages/AddStatsMatch";
 
 type AppProps = {
   career?: Career;
@@ -46,6 +47,10 @@ export default function App({ career }: AppProps) {
     {
       path: "/Career/:careerId/Season/:seasonId/Match/:matchesId",
       element: <Match />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/Match/:matchesId/AddStatsMatch",
+      element: <AddStatsMatch />,
     },
     { path: "/tutorial", element: <Tutorial /> },
   ]);

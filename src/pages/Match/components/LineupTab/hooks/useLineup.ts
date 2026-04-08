@@ -3,6 +3,11 @@ import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { FORMATIONS, Formation } from "../../../constants/Formations";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { SavedLineup } from "../../../types/Lineup";
+import {
+  buildEmptyLineup,
+  resolveInitialFormation,
+  resolveInitialState,
+} from "../helpers/lineupInitializers";
 
 export type LineupSlot = {
   slotId: string;
@@ -12,61 +17,21 @@ export type LineupSlot = {
 export type LineupState = {
   goalkeeper: LineupSlot;
   lines: LineupSlot[][];
-};
-
-const buildEmptyLineup = (formation: Formation): LineupState => {
-  return {
-    goalkeeper: { slotId: "gk-0", player: null },
-    lines: formation.lines.map((line, lineIndex) =>
-      line[0] !== undefined
-        ? Array.from({ length: line[0] }, (_, slotIndex) => ({
-            slotId: `line-${lineIndex}-${slotIndex}`,
-            player: null,
-          }))
-        : [],
-    ),
-  };
+  bench: LineupSlot[];
 };
 
 export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
-  const resolveInitialFormation = (): Formation => {
-    if (initialLineup) {
-      const found = FORMATIONS.find((f) => f.name === initialLineup.formation);
-      if (found) return found;
-    }
-    return FORMATIONS[2];
-  };
+  const initialFormation = useMemo(
+    () => resolveInitialFormation(initialLineup),
+    [initialLineup],
+  );
 
-  const resolveInitialState = (formation: Formation): LineupState => {
-    const base = buildEmptyLineup(formation);
-
-    if (!initialLineup) return base;
-
-    const activePlayers = season.players;
-
-    const findPlayer = (playerId: string | null): Players | null => {
-      if (!playerId) return null;
-      return activePlayers.find((p) => p.id === playerId) ?? null;
-    };
-
-    return {
-      goalkeeper: {
-        ...base.goalkeeper,
-        player: findPlayer(initialLineup.goalkeeper.playerId),
-      },
-      lines: base.lines.map((line) =>
-        line.map((slot) => {
-          const savedSlot = initialLineup.lines.find(
-            (p) => p.slotId === slot.slotId,
-          );
-          return {
-            ...slot,
-            player: findPlayer(savedSlot?.playerId ?? null),
-          };
-        }),
-      ),
-    };
-  };
+  const [selectedFormation, setSelectedFormation] =
+    useState<Formation>(initialFormation);
+  const [lineup, setLineup] = useState<LineupState>(() =>
+    resolveInitialState(initialFormation, season, initialLineup),
+  );
+  const [selectingSlotId, setSelectingSlotId] = useState<string | null>(null);
 
   const swapPlayers = useCallback((slotIdA: string, slotIdB: string) => {
     setLineup((prev) => {
@@ -76,6 +41,9 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
           for (const slot of line) {
             if (slot.slotId === id) return slot.player;
           }
+        }
+        for (const slot of prev.bench) {
+          if (slot.slotId === id) return slot.player;
         }
         return null;
       };
@@ -94,32 +62,22 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
       return {
         goalkeeper: updateSlot(prev.goalkeeper),
         lines: prev.lines.map((line) => line.map(updateSlot)),
+        bench: prev.bench.map(updateSlot),
       };
     });
   }, []);
-
-  const initialFormation = resolveInitialFormation();
-
-  const [selectedFormation, setSelectedFormation] =
-    useState<Formation>(initialFormation);
-  const [lineup, setLineup] = useState<LineupState>(() =>
-    resolveInitialState(initialFormation),
-  );
-  const [selectingSlotId, setSelectingSlotId] = useState<string | null>(null);
 
   const handleFormationChange = useCallback((formationName: string) => {
     const found = FORMATIONS.find((f) => f.name === formationName);
     if (!found) return;
 
     setSelectedFormation(found);
+    setSelectingSlotId(null);
 
     setLineup((prev) => {
       const newLineup = buildEmptyLineup(found);
-
-      newLineup.goalkeeper = {
-        ...newLineup.goalkeeper,
-        player: prev.goalkeeper.player,
-      };
+      newLineup.goalkeeper.player = prev.goalkeeper.player;
+      newLineup.bench = prev.bench;
 
       const currentFieldPlayers = prev.lines
         .flat()
@@ -127,21 +85,18 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
         .filter((player): player is Players => player !== null);
 
       let playerIndex = 0;
-      const newLines = newLineup.lines.map((line) =>
+      newLineup.lines = newLineup.lines.map((line) =>
         line.map((slot) => {
           if (playerIndex < currentFieldPlayers.length) {
-            const playerToAssign = currentFieldPlayers[playerIndex];
-            playerIndex++;
+            const playerToAssign = currentFieldPlayers[playerIndex++];
             return { ...slot, player: playerToAssign };
           }
           return slot;
         }),
       );
 
-      return { ...newLineup, lines: newLines };
+      return newLineup;
     });
-
-    setSelectingSlotId(null);
   }, []);
 
   const openPlayerPicker = useCallback((slotId: string) => {
@@ -153,32 +108,39 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
       if (!selectingSlotId) return;
 
       setLineup((prev) => {
-        const removeFromAll = (state: LineupState): LineupState => {
-          const newGK =
-            state.goalkeeper.player?.id === player.id
-              ? { ...state.goalkeeper, player: null }
-              : state.goalkeeper;
+        const isTargetGk = selectingSlotId === "gk-0";
+        const isTargetBench = selectingSlotId.startsWith("bench-");
 
-          const newLines = state.lines.map((line) =>
-            line.map((slot) =>
-              slot.player?.id === player.id ? { ...slot, player: null } : slot,
-            ),
-          );
-          return { goalkeeper: newGK, lines: newLines };
+        const cleanSlot = (slot: LineupSlot) =>
+          slot.player?.id === player.id ? { ...slot, player: null } : slot;
+
+        const cleaned = {
+          goalkeeper: cleanSlot(prev.goalkeeper),
+          lines: prev.lines.map((line) => line.map(cleanSlot)),
+          bench: prev.bench.map(cleanSlot),
         };
 
-        const cleaned = removeFromAll(prev);
-
-        if (selectingSlotId === "gk-0") {
+        if (isTargetGk) {
           return { ...cleaned, goalkeeper: { ...cleaned.goalkeeper, player } };
         }
 
-        const newLines = cleaned.lines.map((line) =>
-          line.map((slot) =>
-            slot.slotId === selectingSlotId ? { ...slot, player } : slot,
+        if (isTargetBench) {
+          return {
+            ...cleaned,
+            bench: cleaned.bench.map((slot) =>
+              slot.slotId === selectingSlotId ? { ...slot, player } : slot,
+            ),
+          };
+        }
+
+        return {
+          ...cleaned,
+          lines: cleaned.lines.map((line) =>
+            line.map((slot) =>
+              slot.slotId === selectingSlotId ? { ...slot, player } : slot,
+            ),
           ),
-        );
-        return { ...cleaned, lines: newLines };
+        };
       });
 
       setSelectingSlotId(null);
@@ -191,18 +153,34 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
       if (slotId === "gk-0") {
         return { ...prev, goalkeeper: { ...prev.goalkeeper, player: null } };
       }
-      const newLines = prev.lines.map((line) =>
-        line.map((slot) =>
-          slot.slotId === slotId ? { ...slot, player: null } : slot,
+      if (slotId.startsWith("bench-")) {
+        return {
+          ...prev,
+          bench: prev.bench.map((slot) =>
+            slot.slotId === slotId ? { ...slot, player: null } : slot,
+          ),
+        };
+      }
+      return {
+        ...prev,
+        lines: prev.lines.map((line) =>
+          line.map((slot) =>
+            slot.slotId === slotId ? { ...slot, player: null } : slot,
+          ),
         ),
-      );
-      return { ...prev, lines: newLines };
+      };
     });
     setSelectingSlotId(null);
   }, []);
 
   const buildSavedLineup = useCallback((): SavedLineup => {
     const flatPlayers = lineup.lines.flat().map((slot) => ({
+      slotId: slot.slotId,
+      playerId: slot.player?.id ?? null,
+      playerName: slot.player?.name ?? null,
+    }));
+
+    const benchPlayers = lineup.bench.map((slot) => ({
       slotId: slot.slotId,
       playerId: slot.player?.id ?? null,
       playerName: slot.player?.name ?? null,
@@ -216,17 +194,21 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
         playerName: lineup.goalkeeper.player?.name ?? null,
       },
       lines: flatPlayers,
+      bench: benchPlayers,
     };
   }, [lineup, selectedFormation]);
 
-  const assignedPlayerIds = new Set<string>();
-  if (lineup.goalkeeper.player)
-    assignedPlayerIds.add(lineup.goalkeeper.player.id);
-  lineup.lines.forEach((line) =>
-    line.forEach((slot) => {
-      if (slot.player) assignedPlayerIds.add(slot.player.id);
-    }),
-  );
+  const assignedPlayerIds = useMemo(() => {
+    const ids = new Set<string>();
+    if (lineup.goalkeeper.player) ids.add(lineup.goalkeeper.player.id);
+    lineup.lines.flat().forEach((slot) => {
+      if (slot.player) ids.add(slot.player.id);
+    });
+    lineup.bench.forEach((slot) => {
+      if (slot.player) ids.add(slot.player.id);
+    });
+    return ids;
+  }, [lineup]);
 
   const activePlayers = useMemo(
     () => season.players.filter((p) => !p.sell),

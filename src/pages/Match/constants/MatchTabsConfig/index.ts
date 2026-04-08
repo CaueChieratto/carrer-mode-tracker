@@ -1,3 +1,4 @@
+import { NavigateFunction } from "react-router-dom";
 import { Buttons } from "../../../../common/elements/Buttons";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
@@ -17,12 +18,17 @@ export type MatchTabConfig = {
   action?: () => void;
 };
 
-export const getMatchTabsConfig = (): MatchTabConfig[] => [
+export const getMatchTabsConfig = (
+  careerId: string,
+  seasonId: string,
+  matchesId: string,
+  navigate: NavigateFunction,
+): MatchTabConfig[] => [
   {
-    title: "Resultado",
+    title: "Detalhes",
     component: MatchStatsTab,
     // actionButton: Buttons.AddResult,
-    // action: navigate para pag
+    // action: navigate para page
   },
   {
     title: "Formações",
@@ -33,7 +39,10 @@ export const getMatchTabsConfig = (): MatchTabConfig[] => [
   {
     title: "Estatísticas",
     component: MatchStatsTab,
-    // actionButton: Buttons.AddStatsMatch,
-    // action: navigate para pag
+    actionButton: Buttons.AddStatsMatch,
+    action: () =>
+      navigate(
+        `/Career/${careerId}/Season/${seasonId}/Match/${matchesId}/AddStatsMatch`,
+      ),
   },
 ];

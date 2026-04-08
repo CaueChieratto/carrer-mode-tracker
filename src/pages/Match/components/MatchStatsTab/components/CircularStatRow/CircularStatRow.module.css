@@ -1,0 +1,40 @@
+.circular_stat_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.circular_value {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--blackColor, #000000);
+  min-width: 50px;
+}
+
+.circular_value:last-child {
+  text-align: right;
+}
+
+.circular_label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blackColor, #000000);
+  text-align: center;
+  padding: 0 8px;
+}
+
+.color_home {
+  color: #0bb32a;
+}
+.color_home_faded {
+  color: #0bb32a;
+  opacity: 0.4;
+}
+.color_away {
+  color: #374df5;
+}
+.color_away_faded {
+  color: #374df5;
+  opacity: 0.4;
+}

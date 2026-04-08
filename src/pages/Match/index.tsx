@@ -1,54 +1,63 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import Load from "../../components/Load";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
-import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
-import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import Navbar from "../../ui/Navbar";
 import HeaderSeason from "../../components/HeaderSeason";
-import { getMatchTabsConfig } from "./constants/MatchTabsConfig";
-import { useTabView } from "../../common/hooks/UseTabView";
-import Styles from "./Match.module.css";
 import ContainerButton from "../../components/ContainerButton";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
-import { ModalType } from "../../common/types/enums/ModalType";
 import BottomMenu from "../../ui/BottomMenu";
-import { useRef, useState } from "react";
+import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
+import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { useTabView } from "../../common/hooks/UseTabView";
+import { ModalType } from "../../common/types/enums/ModalType";
+import { getMatchTabsConfig } from "./constants/MatchTabsConfig";
+import { useMatchData } from "./hooks/useMatchData";
+import Styles from "./Match.module.css";
+import { useNavigate } from "react-router-dom";
 
 export const Match = () => {
-  const { careerId, seasonId, matchesId } = useParams<{
-    careerId: string;
-    seasonId: string;
-    matchesId: string;
-  }>();
-
+  const {
+    careerId,
+    seasonId,
+    matchesId,
+    career,
+    season,
+    match,
+    loading,
+    goBack,
+  } = useMatchData();
   const navigate = useNavigate();
+
   const { activeModal } = useModalManager();
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   const saveLineupRef = useRef<(() => Promise<void> | void) | null>(null);
 
-  const [isActionLoading, setIsActionLoading] = useState(false);
+  const storageKey = `match-tab-${careerId}-${match?.matchesId}`;
 
-  const { career, season, loading } = useSeasonData(careerId, seasonId);
-  const match = season?.matches?.find((m) => m.matchesId === matchesId);
-
-  const storageKey = `match-tab-${careerId}-${matchesId}`;
-  const tabsConfig = getMatchTabsConfig();
+  const tabsConfig = getMatchTabsConfig(
+    careerId as string,
+    seasonId as string,
+    matchesId as string,
+    navigate,
+  );
 
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
-
-  const back = () => {
-    navigate(`/Career/${careerId}/Season/${seasonId}`);
-  };
 
   if (loading || isActionLoading) return <Load />;
   if (!career || !season || !match) return <NotFoundDisplay />;
 
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
+  const tabAction = tabsConfig[activeIndex]?.action;
 
   const actionClick = async () => {
+    if (tabAction) {
+      tabAction();
+      return;
+    }
+
     if (saveLineupRef.current) {
       setIsActionLoading(true);
       try {
@@ -59,11 +68,9 @@ export const Match = () => {
     }
   };
 
-  console.log(career);
-
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
-      <HeaderSeason careerId={career.id} career={career} backSeasons={back} />
+      <HeaderSeason careerId={career.id} career={career} backSeasons={goBack} />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
         activeOption={activeIndex}

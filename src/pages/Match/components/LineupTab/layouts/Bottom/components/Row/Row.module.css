@@ -1,0 +1,12 @@
+.row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-input);
+  min-height: 64px;
+  gap: 12px;
+}
+
+.row:last-child {
+  border-bottom: none;
+}

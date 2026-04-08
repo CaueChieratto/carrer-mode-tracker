@@ -1,0 +1,20 @@
+.circular_wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+
+.circle_progress {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.circular_text {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blackColor, #000000);
+}

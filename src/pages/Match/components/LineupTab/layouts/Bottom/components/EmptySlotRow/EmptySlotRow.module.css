@@ -1,0 +1,30 @@
+.empty_avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.04);
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty_avatar_active {
+  border-color: var(--blackColor);
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.plus {
+  font-size: 20px;
+  color: var(--color-add-player);
+  font-weight: 300;
+}
+
+.empty_text {
+  font-size: 15px;
+  color: var(--color-add-player);
+  cursor: pointer;
+  flex: 1;
+}

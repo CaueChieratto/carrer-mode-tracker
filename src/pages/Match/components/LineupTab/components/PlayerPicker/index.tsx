@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { usePlayerSearch } from "./hooks/usePlayerSearch";
 import Styles from "./PlayerPicker.module.css";
-import { POSITION_ORDER } from "./constants/POSITION_ORDER";
 
 type PlayerPickerProps = {
   players: Players[];
@@ -14,41 +13,10 @@ export const PlayerPicker = ({
   assignedIds,
   onSelect,
 }: PlayerPickerProps) => {
-  const [search, setSearch] = useState("");
-  const searchRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (searchRef.current) {
-        searchRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    }, 150);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  const available = players
-    .filter(
-      (p) =>
-        !p.sell &&
-        !assignedIds.has(p.id) &&
-        p.shirtNumber != null &&
-        p.shirtNumber !== "" &&
-        p.name.toLowerCase().includes(search.toLowerCase()),
-    )
-    .sort((a, b) => {
-      const posA = POSITION_ORDER[a.position as string] || 99;
-      const posB = POSITION_ORDER[b.position as string] || 99;
-
-      if (posA !== posB) {
-        return posA - posB;
-      }
-
-      return b.overall - a.overall;
-    });
+  const { search, setSearch, searchRef, availablePlayers } = usePlayerSearch(
+    players,
+    assignedIds,
+  );
 
   return (
     <div className={Styles.picker_container}>
@@ -60,10 +28,10 @@ export const PlayerPicker = ({
         onChange={(e) => setSearch(e.target.value)}
       />
       <div className={Styles.picker_list}>
-        {available.length === 0 && (
+        {availablePlayers.length === 0 && (
           <p className={Styles.picker_empty}>Nenhum jogador disponível</p>
         )}
-        {available.map((player) => (
+        {availablePlayers.map((player) => (
           <button
             key={player.id}
             className={Styles.picker_item}

@@ -1,0 +1,103 @@
+.player_info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.player_name_row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shirt_number {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-quaternary);
+}
+
+.player_name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--blackColor);
+}
+
+.icon_wrapper {
+  background-color: #fff;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #010127;
+  padding: 2px;
+  width: 20px;
+  height: 20px;
+}
+
+.referee_card {
+  width: 12px;
+  height: 16px;
+}
+
+.player_sub_row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub_icon_wrapper {
+  background-color: #fff;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #010127;
+  padding: 2px;
+}
+
+.sub_icon {
+  width: 16px;
+  height: 16px;
+}
+
+.sub_minute {
+  font-size: 13px;
+  font-weight: 700;
+  color: #00b853;
+}
+
+.sub_out {
+  font-size: 13px;
+  color: var(--color-add-player);
+}
+
+.rating {
+  height: 26px;
+  width: 26px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+}
+
+.remove_button {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.9);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}

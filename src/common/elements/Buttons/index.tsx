@@ -10,6 +10,7 @@ import AddOrEditLeagueButton from "./AddOrEditLeagueButton";
 import { AddMatches } from "./AddMatches";
 import { AddTeamsToTable } from "./AddTeamsToTable";
 import { SaveFormation } from "./SaveFormation";
+import { AddStatsMatch } from "./AddStatsMatch";
 
 export const Buttons = {
   AddSeasonButton,
@@ -24,4 +25,5 @@ export const Buttons = {
   ChangeClubColors,
   AddOrEditLeagueButton,
   SaveFormation,
+  AddStatsMatch,
 };
