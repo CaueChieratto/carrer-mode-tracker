@@ -1,0 +1,59 @@
+.mvp_card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 12px #0003;
+}
+
+.mvp_header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mvp_icon_wrapper {
+  background-color: #00b4d8;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mvp_title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.mvp_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+}
+
+.mvp_info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mvp_name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.mvp_rating {
+  background-color: #00a8cc;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 8px;
+  border-radius: 6px;
+}

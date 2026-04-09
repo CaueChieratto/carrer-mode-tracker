@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { Match } from "../../../../components/AllMatchesTab/types/Match";
@@ -29,6 +29,8 @@ export const LineupTab = ({
     seasonId: string;
   }>();
 
+  const navigate = useNavigate();
+
   const {
     selectedFormation,
     lineup,
@@ -53,6 +55,12 @@ export const LineupTab = ({
     onRegisterSave?.(() => saveLineup(buildSavedLineup()));
   }, [onRegisterSave, saveLineup, buildSavedLineup]);
 
+  const playerClick = (playerId: string) => {
+    navigate(
+      `/Career/${careerId}/Season/${seasonId}/Match/${match.matchesId}/${playerId}`,
+    );
+  };
+
   return (
     <div className={Styles.wrapper}>
       <div>
@@ -68,6 +76,7 @@ export const LineupTab = ({
           openPlayerPicker={openPlayerPicker}
           removePlayer={removePlayer}
           swapPlayers={swapPlayers}
+          onPlayerClick={playerClick}
         />
 
         {selectingSlotId && (

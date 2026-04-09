@@ -1,0 +1,41 @@
+.timeline_container {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 20px 16px;
+  box-shadow: 0 4px 12px #0003;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.period_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.timeline_divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-input);
+  opacity: 0.5;
+}
+
+.timeline_title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.events_list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

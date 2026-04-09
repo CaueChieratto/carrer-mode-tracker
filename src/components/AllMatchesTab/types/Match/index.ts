@@ -11,6 +11,8 @@ export type Match = {
   awayTeam: string;
   homeScore?: number;
   awayScore?: number;
+  homePenScore?: number;
+  awayPenScore?: number;
   result: MatchResult;
   status: MatchStatus;
   playerStats?: PlayerMatchStat[];

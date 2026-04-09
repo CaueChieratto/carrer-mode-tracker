@@ -10,6 +10,7 @@ type SlotButtonProps = {
   onOpen: () => void;
   onRemove: () => void;
   onSwap: (targetId: string) => void;
+  onPlayerClick: (playerId: string) => void;
 };
 
 export const SlotButton = ({
@@ -18,8 +19,13 @@ export const SlotButton = ({
   onOpen,
   onRemove,
   onSwap,
+  onPlayerClick,
 }: SlotButtonProps) => {
   const backgroundColor = UseRatingColor(7.3);
+
+  const clickAction = slot.player
+    ? () => onPlayerClick(slot.player!.id)
+    : onOpen;
 
   const {
     isDragging,
@@ -28,7 +34,7 @@ export const SlotButton = ({
     handlePointerMove,
     clearTimer,
     handleClick,
-  } = useSlotDrag({ slotId: slot.slotId, onSwap, onOpen });
+  } = useSlotDrag({ slotId: slot.slotId, onSwap, onOpen: clickAction });
 
   if (slot.player) {
     return (

@@ -1,0 +1,86 @@
+.card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 4px 12px #0003;
+}
+
+.title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blackColor);
+  margin: 0;
+}
+
+.team_section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row_wrapper {
+  display: flex;
+  align-items: center;
+  background-color: var(--match);
+  padding: 8px 12px;
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.team_abbrev {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blackColor);
+  width: 32px;
+}
+
+.dots_container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot_hit {
+  background-color: #0bb32a; /* Verde */
+}
+
+.dot_miss {
+  background-color: #e53e3e; /* Vermelho */
+}
+
+.dot_empty {
+  background-color: var(--border-input); /* Cinza */
+}
+
+.total_score {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blackColor);
+  min-width: 16px;
+  text-align: right;
+}
+
+.players_list {
+  padding-left: 56px; /* Alinha com as bolinhas considerando o padding e a largura da sigla */
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.text_hit {
+  color: #0bb32a;
+}
+
+.text_miss {
+  color: #e53e3e;
+}

@@ -5,6 +5,7 @@ import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { Match } from "../../../../components/AllMatchesTab/types/Match";
 import { LineupTab } from "../../components/LineupTab";
 import { MatchStatsTab } from "../../components/MatchStatsTab";
+import { MatchDetailsTab } from "../../components/MatchDetailsTab";
 
 export type MatchTabConfig = {
   title: string;
@@ -26,15 +27,17 @@ export const getMatchTabsConfig = (
 ): MatchTabConfig[] => [
   {
     title: "Detalhes",
-    component: MatchStatsTab,
-    // actionButton: Buttons.AddResult,
-    // action: navigate para page
+    component: MatchDetailsTab,
+    actionButton: Buttons.AddDetails,
+    action: () =>
+      navigate(
+        `/Career/${careerId}/Season/${seasonId}/Match/${matchesId}/AddDetails`,
+      ),
   },
   {
     title: "Formações",
     component: LineupTab,
     actionButton: Buttons.SaveFormation,
-    // action: n vai ter
   },
   {
     title: "Estatísticas",

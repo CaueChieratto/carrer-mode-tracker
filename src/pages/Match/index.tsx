@@ -70,7 +70,12 @@ export const Match = () => {
 
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
-      <HeaderSeason careerId={career.id} career={career} backSeasons={goBack} />
+      <HeaderSeason
+        careerId={career.id}
+        career={career}
+        backSeasons={goBack}
+        titleText={match.date}
+      />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
         activeOption={activeIndex}

@@ -1,0 +1,44 @@
+.event_row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.event_left {
+  justify-content: flex-start;
+}
+
+.event_right {
+  justify-content: flex-end;
+}
+
+.event_time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blackColor);
+  min-width: 24px;
+}
+
+.event_icon {
+  background-color: #fff;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #010127;
+  padding: 2px;
+  width: 25px;
+  height: 25px;
+}
+
+.event_main {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blackColor);
+}
+
+.event_secondary {
+  font-size: 14px;
+  color: var(--color-add-player);
+}

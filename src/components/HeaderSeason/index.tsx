@@ -65,7 +65,7 @@ const HeaderSeason = ({
         onClick={() =>
           !backSeasons
             ? navigate(
-                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`
+                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`,
               )
             : backSeasons()
         }

@@ -1,0 +1,112 @@
+.card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 12px #0003;
+}
+
+.container_date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.date {
+  background-color: var(--match);
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: var(--blackColor);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.main_row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  justify-items: center;
+}
+
+.team_name_left {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blackColor);
+  text-align: right;
+}
+
+.team_name_right {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blackColor);
+  text-align: left;
+}
+
+.score_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score_row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score_number {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.score_separator {
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--border-input);
+}
+
+.match_status {
+  font-size: 14px;
+  color: var(--color-add-player);
+  font-weight: 400;
+}
+
+.scorers_container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.scorers_left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-add-player);
+}
+
+.scorers_right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-add-player);
+}
+
+.icon_center {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.goal_icon {
+  color: var(--color-add-player);
+}
