@@ -22,27 +22,27 @@ export const MatchDetailsTab = ({
 }: MatchDetailsTabProps) => {
   const isHome = match?.homeTeam === career.clubName;
 
-  const { mvpPlayerName, eventsByPeriod, periods } = buildMatchEvents(
-    match,
-    season,
-  );
+  const { mvpPlayerName, mvpRating, eventsByPeriod, periods, goalsList } =
+    buildMatchEvents(match, season);
 
   const hasPenalties =
     match?.homePenScore !== undefined && match?.awayPenScore !== undefined;
 
   return (
     <div className={Styles.container}>
-      <MatchHeaderCard match={match} isUserHome={isHome} />
+      <MatchHeaderCard match={match} isUserHome={isHome} goals={goalsList} />
 
       {hasPenalties && <PenaltyShootoutCard match={match} />}
 
-      <MVPCard playerName={mvpPlayerName} rating={8.6} />
+      {mvpRating && <MVPCard playerName={mvpPlayerName} rating={mvpRating} />}
 
-      <Timeline
-        isHome={isHome}
-        eventsByPeriod={eventsByPeriod}
-        periods={periods}
-      />
+      {periods.length > 0 && (
+        <Timeline
+          isHome={isHome}
+          eventsByPeriod={eventsByPeriod}
+          periods={periods}
+        />
+      )}
     </div>
   );
 };

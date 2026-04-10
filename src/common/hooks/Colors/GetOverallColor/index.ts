@@ -16,6 +16,15 @@ export const UseRatingColor = (rating: number): ColorAssessment => {
   if (rating <= 7) return ColorAssessment.Average;
   if (rating <= 8) return ColorAssessment.Good;
   if (rating <= 8.5) return ColorAssessment.Great;
-  if (rating > 9) return ColorAssessment.Legendary;
-  return ColorAssessment.Excellent;
+  if (rating > 9) return ColorAssessment.LegendaryMatch;
+  return ColorAssessment.ExcellentMatch;
+};
+
+export const UseMatchRatingColor = (rating: number): ColorAssessment => {
+  if (rating <= 6) return ColorAssessment.Terrible;
+  if (rating <= 6.5) return ColorAssessment.Bad;
+  if (rating <= 7) return ColorAssessment.Average;
+  if (rating <= 8) return ColorAssessment.Good;
+  if (rating > 9) return ColorAssessment.LegendaryMatch;
+  return ColorAssessment.ExcellentMatch;
 };

@@ -8,59 +8,121 @@ import { UI_TEXT } from "../../constants/uiText";
 import { BenchSlot } from "../../helpers/getBenchSlots";
 import Styles from "./PlayerRow.module.css";
 import { Row } from "../Row";
+import { PlayerMatchStat } from "../../../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { Players } from "../../../../../../../../common/interfaces/playersInfo/players";
+import { NumberStats } from "../../../../../../ui/NumberStats";
 
 type PlayerRowProps = {
   slot: BenchSlot;
   onRemove: (slotId: string) => void;
+  onPlayerClick: (playerId: string) => void;
+  stats?: PlayerMatchStat;
+  isMVP?: boolean;
+  allStats?: PlayerMatchStat[];
+  allPlayers?: Players[];
 };
 
-const STATIC_RATING = 8.2;
-
-export const PlayerRow = ({ slot, onRemove }: PlayerRowProps) => {
+export const PlayerRow = ({
+  slot,
+  onRemove,
+  onPlayerClick,
+  isMVP,
+  stats,
+  allPlayers,
+  allStats,
+}: PlayerRowProps) => {
   if (!slot.player) return null;
 
-  const backgroundColor = UseRatingColor(STATIC_RATING);
+  const ratingValue = stats?.rating || 0;
+  const backgroundColor = UseRatingColor(ratingValue);
 
   const handleRemove = () => onRemove(slot.slotId);
 
+  let subMinute = 0;
+  if (
+    stats?.substituteIn &&
+    stats.substituteIn !== "Nenhum" &&
+    allPlayers &&
+    allStats
+  ) {
+    const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
+    if (outPlayer) {
+      const outPlayerStats = allStats.find((s) => s.playerId === outPlayer.id);
+      if (outPlayerStats) {
+        subMinute = outPlayerStats.minutesPlayed;
+      }
+    }
+  }
+
   return (
     <Row>
-      <div className={Styles.player_info}>
+      <div
+        className={Styles.player_info}
+        onClick={() => onPlayerClick(slot.player!.id)}
+      >
         <div className={Styles.player_name_row}>
           <span className={Styles.shirt_number}>{slot.player.shirtNumber}</span>
 
           <span className={Styles.player_name}>{slot.player.name}</span>
 
-          <span className={Styles.icon_wrapper}>
-            <GiSoccerBall size={14} />
-          </span>
+          {stats && stats.goals > 0 && (
+            <div className={Styles.icons}>
+              <span className={Styles.icon_wrapper}>
+                <GiSoccerBall size={14} />
+              </span>
+              <NumberStats type="bench">{stats.goals}</NumberStats>
+            </div>
+          )}
 
-          <span className={Styles.icon_wrapper}>
-            <Boot />
-          </span>
+          {stats && stats.assists > 0 && (
+            <div className={Styles.icons}>
+              <span className={Styles.icon_wrapper}>
+                <Boot />
+              </span>
+              <NumberStats type="bench">{stats.assists}</NumberStats>
+            </div>
+          )}
 
-          <span className={Styles.icon_wrapper}>
-            <RefereeCard type="yellow" className={Styles.referee_card} />
-          </span>
+          {stats?.redCard && stats?.yellowCard ? (
+            <span className={Styles.icon_wrapper}>
+              <RefereeCard
+                type="second-yellow"
+                className={Styles.referee_card}
+              />
+            </span>
+          ) : stats?.redCard ? (
+            <span className={Styles.icon_wrapper}>
+              <RefereeCard type="red" className={Styles.referee_card} />
+            </span>
+          ) : stats?.yellowCard ? (
+            <span className={Styles.icon_wrapper}>
+              <RefereeCard type="yellow" className={Styles.referee_card} />
+            </span>
+          ) : null}
 
-          <span className={Styles.icon_wrapper}>
-            <MVP />
-          </span>
+          {isMVP && (
+            <span className={Styles.icon_wrapper}>
+              <MVP />
+            </span>
+          )}
         </div>
 
-        <div className={Styles.player_sub_row}>
-          <span className={Styles.sub_icon_wrapper}>
-            <Sub className={Styles.sub_icon} />
-          </span>
+        {stats?.substituteIn && stats.substituteIn !== "Nenhum" && (
+          <div className={Styles.player_sub_row}>
+            <span className={Styles.sub_icon_wrapper}>
+              <Sub className={Styles.sub_icon} />
+            </span>
+            <span className={Styles.sub_minute}>{subMinute}'</span>
+            <span className={Styles.sub_out}>Saiu: {stats.substituteIn}</span>
+          </div>
+        )}
+      </div>
 
-          <span className={Styles.sub_minute}>46'</span>
-          <span className={Styles.sub_out}>Saiu: L. Yamal</span>
+      {ratingValue > 0 && (
+        <div className={Styles.rating} style={{ backgroundColor }}>
+          {ratingValue.toFixed(1)}
         </div>
-      </div>
-
-      <div className={Styles.rating} style={{ backgroundColor }}>
-        {STATIC_RATING}
-      </div>
+      )}
 
       <button
         className={Styles.remove_button}

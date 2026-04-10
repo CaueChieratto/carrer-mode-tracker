@@ -2,6 +2,7 @@ import { FieldMarkings } from "./components/FieldMarkings";
 import { LineupState } from "../../hooks/useLineup";
 import { SlotButton } from "./components/SlotButton";
 import Styles from "./Section.module.css";
+import { PlayerMatchStat } from "../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
 
 type SectionProps = {
   lineup: LineupState;
@@ -10,6 +11,8 @@ type SectionProps = {
   removePlayer: (slotId: string) => void;
   swapPlayers: (idA: string, idB: string) => void;
   onPlayerClick: (playerId: string) => void;
+  playerStats: PlayerMatchStat[];
+  mvpId: string | null;
 };
 
 export const Section = ({
@@ -19,10 +22,12 @@ export const Section = ({
   removePlayer,
   swapPlayers,
   onPlayerClick,
+  mvpId,
+  playerStats,
 }: SectionProps) => {
   const getGapSize = (playersCount: number) => {
-    if (playersCount >= 5) return "14px";
-    if (playersCount === 4) return "40px";
+    if (playersCount >= 5) return "10px";
+    if (playersCount === 4) return "30px";
     if (playersCount === 3) return "65px";
     return "60px";
   };
@@ -49,6 +54,8 @@ export const Section = ({
                     onRemove={() => removePlayer(slot.slotId)}
                     onSwap={(targetId) => swapPlayers(slot.slotId, targetId)}
                     onPlayerClick={onPlayerClick}
+                    playerStats={playerStats}
+                    mvpId={mvpId}
                   />
                 </div>
               ))}
@@ -65,6 +72,8 @@ export const Section = ({
               onRemove={() => removePlayer("gk-0")}
               onSwap={(targetId) => swapPlayers("gk-0", targetId)}
               onPlayerClick={onPlayerClick}
+              playerStats={playerStats}
+              mvpId={mvpId}
             />
           </div>
         </div>

@@ -1,0 +1,34 @@
+.goals,
+.assist,
+.bench {
+  position: absolute;
+  background-color: #222226;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  width: 18px;
+  height: 18px;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid #fff;
+}
+
+.goals,
+.assist {
+  bottom: -8px;
+}
+
+.goals {
+  left: 2px;
+}
+
+.assist {
+  right: 2px;
+}
+
+.bench {
+  top: -6px;
+  right: -2px;
+}

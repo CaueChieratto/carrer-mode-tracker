@@ -5,5 +5,7 @@ export enum ColorAssessment {
   Good = "#66a80f",
   Great = "#2B8A3E",
   Excellent = "#1E88E5",
+  ExcellentMatch = "#00ADC4",
   Legendary = "#00e1ffff",
+  LegendaryMatch = "#374DF5",
 }

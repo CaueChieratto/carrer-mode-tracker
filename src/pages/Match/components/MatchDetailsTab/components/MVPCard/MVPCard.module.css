@@ -6,6 +6,21 @@
   flex-direction: column;
   gap: 12px;
   box-shadow: 0 4px 12px #0003;
+  position: relative;
+  overflow: hidden;
+  height: 125px;
+}
+
+.card_details_left {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.card_details_right {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .mvp_header {

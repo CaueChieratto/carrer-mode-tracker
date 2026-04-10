@@ -23,6 +23,11 @@
   color: var(--blackColor);
 }
 
+.icons {
+  position: relative;
+  min-width: 25px;
+}
+
 .icon_wrapper {
   background-color: #fff;
   border-radius: 100%;

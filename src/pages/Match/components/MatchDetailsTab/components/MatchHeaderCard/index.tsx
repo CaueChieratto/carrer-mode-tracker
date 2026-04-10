@@ -28,14 +28,6 @@ export const MatchHeaderCard = ({
 
   const statusDisplay = match.status === "FINISHED" ? "Finalizado" : "Agendado";
 
-  const displayGoals =
-    goals.length > 0
-      ? goals
-      : [
-          { playerName: "Alexander Sørloth", time: 70 },
-          { playerName: "Julián Alvarez", time: 45 },
-        ];
-
   return (
     <div className={Styles.card}>
       <div className={Styles.container_date}>
@@ -57,11 +49,11 @@ export const MatchHeaderCard = ({
         <div className={Styles.team_name_right}>{awayTeam}</div>
       </div>
 
-      {displayGoals.length > 0 && (
+      {goals.length > 0 && (
         <div className={Styles.scorers_container}>
           <div className={Styles.scorers_left}>
             {isUserHome &&
-              displayGoals.map((goal, idx) => (
+              goals.map((goal, idx) => (
                 <span key={idx}>
                   {goal.playerName} {goal.time}'
                 </span>
@@ -74,7 +66,7 @@ export const MatchHeaderCard = ({
 
           <div className={Styles.scorers_right}>
             {!isUserHome &&
-              displayGoals.map((goal, idx) => (
+              goals.map((goal, idx) => (
                 <span key={idx}>
                   {goal.playerName} {goal.time}'
                 </span>

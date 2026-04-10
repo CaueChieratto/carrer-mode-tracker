@@ -16,6 +16,10 @@ export const useMatchData = () => {
     navigate(`/Career/${careerId}/Season/${seasonId}`);
   };
 
+  const backMatch = () => {
+    navigate(`/Career/${careerId}/Season/${seasonId}/match/${matchesId}`);
+  };
+
   return {
     careerId,
     seasonId,
@@ -25,5 +29,6 @@ export const useMatchData = () => {
     match,
     loading,
     goBack,
+    backMatch,
   };
 };

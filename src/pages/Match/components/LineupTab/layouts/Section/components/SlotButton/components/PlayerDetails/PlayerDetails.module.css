@@ -72,16 +72,20 @@
 }
 
 .wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
+  position: relative;
 }
 
 .container_rating {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 16px;
+  min-width: 16px;
 }
 
 .rating {

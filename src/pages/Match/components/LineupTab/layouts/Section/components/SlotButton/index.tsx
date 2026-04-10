@@ -1,4 +1,5 @@
-import { UseRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
+import { UseMatchRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
+import { PlayerMatchStat } from "../../../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
 import { LineupSlot } from "../../../../hooks/useLineup";
 import { PlayerDetails } from "./components/PlayerDetails";
 import { useSlotDrag } from "./hooks/useSlotDrag";
@@ -11,6 +12,8 @@ type SlotButtonProps = {
   onRemove: () => void;
   onSwap: (targetId: string) => void;
   onPlayerClick: (playerId: string) => void;
+  playerStats: PlayerMatchStat[];
+  mvpId: string | null;
 };
 
 export const SlotButton = ({
@@ -20,8 +23,15 @@ export const SlotButton = ({
   onRemove,
   onSwap,
   onPlayerClick,
+  mvpId,
+  playerStats,
 }: SlotButtonProps) => {
-  const backgroundColor = UseRatingColor(7.3);
+  const stats = slot.player
+    ? playerStats.find((s) => s.playerId === slot.player!.id)
+    : undefined;
+  const ratingValue = stats?.rating;
+  const backgroundColor = UseMatchRatingColor(ratingValue!);
+  const isMVP = slot.player ? mvpId === slot.player!.id : false;
 
   const clickAction = slot.player
     ? () => onPlayerClick(slot.player!.id)
@@ -52,6 +62,8 @@ export const SlotButton = ({
           <PlayerDetails
             player={slot.player}
             backgroundColor={backgroundColor}
+            stats={stats}
+            isMVP={isMVP}
             onRemove={onRemove}
           />
         </div>
@@ -72,6 +84,8 @@ export const SlotButton = ({
             <PlayerDetails
               player={slot.player}
               backgroundColor={backgroundColor}
+              stats={stats}
+              isMVP={isMVP}
             />
           </div>
         )}

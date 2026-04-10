@@ -1,3 +1,5 @@
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { PlayerMatchStat } from "../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
 import { LineupState } from "../../hooks/useLineup";
 import Styles from "./Bottom.module.css";
 import { EmptySlotRow } from "./components/EmptySlotRow";
@@ -10,6 +12,10 @@ type BottomProps = {
   selectingSlotId: string | null;
   openPlayerPicker: (slotId: string) => void;
   removePlayer: (slotId: string) => void;
+  onPlayerClick: (playerId: string) => void;
+  playerStats: PlayerMatchStat[];
+  mvpId: string | null;
+  allPlayers: Players[];
 };
 
 export const Bottom = ({
@@ -17,6 +23,10 @@ export const Bottom = ({
   selectingSlotId,
   openPlayerPicker,
   removePlayer,
+  onPlayerClick,
+  mvpId,
+  playerStats,
+  allPlayers,
 }: BottomProps) => {
   const { filledSlots, firstEmptySlot } = getBenchSlots(lineup);
 
@@ -25,9 +35,25 @@ export const Bottom = ({
       <h3 className={Styles.title}>{UI_TEXT.title}</h3>
 
       <div className={Styles.list}>
-        {filledSlots.map((slot) => (
-          <PlayerRow key={slot.slotId} slot={slot} onRemove={removePlayer} />
-        ))}
+        {filledSlots.map((slot) => {
+          const stats = slot.player
+            ? playerStats.find((s) => s.playerId === slot.player!.id)
+            : undefined;
+          const isMVP = slot.player ? mvpId === slot.player!.id : false;
+
+          return (
+            <PlayerRow
+              key={slot.slotId}
+              slot={slot}
+              onRemove={removePlayer}
+              onPlayerClick={onPlayerClick}
+              stats={stats}
+              isMVP={isMVP}
+              allPlayers={allPlayers}
+              allStats={playerStats}
+            />
+          );
+        })}
 
         {firstEmptySlot && (
           <EmptySlotRow

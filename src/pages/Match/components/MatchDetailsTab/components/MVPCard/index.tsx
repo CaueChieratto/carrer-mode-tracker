@@ -1,5 +1,6 @@
 import { FaStar } from "react-icons/fa";
 import Styles from "./MVPCard.module.css";
+import { CardDetails } from "../../../../../../ui/IconsSVG/CardDetails";
 
 type MVPCardProps = {
   playerName: string;
@@ -9,6 +10,7 @@ type MVPCardProps = {
 export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
   return (
     <div className={Styles.mvp_card}>
+      <CardDetails className={Styles.card_details_left} type="left" />
       <div className={Styles.mvp_header}>
         <div className={Styles.mvp_icon_wrapper}>
           <FaStar color="#fff" size={12} />
@@ -22,6 +24,7 @@ export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
         </div>
         <div className={Styles.mvp_rating}>{rating}</div>
       </div>
+      <CardDetails className={Styles.card_details_right} type="right" />
     </div>
   );
 };

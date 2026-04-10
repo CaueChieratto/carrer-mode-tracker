@@ -74,7 +74,7 @@ export const Match = () => {
         careerId={career.id}
         career={career}
         backSeasons={goBack}
-        titleText={match.date}
+        titleText={`Jogo do dia ${match.date}`}
       />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
