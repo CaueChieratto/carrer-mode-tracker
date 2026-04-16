@@ -49,7 +49,10 @@ export const useLeagueStatsManager = ({
       return;
     }
 
-    const selectedPlayer = season.players.find((p) => p.name === playerName);
+    const selectedPlayer = season.players.find(
+      (p) => p.name === playerName && !p.sell,
+    );
+
     if (!selectedPlayer) {
       alert("Jogador não encontrado.");
       setIsLoading(false);

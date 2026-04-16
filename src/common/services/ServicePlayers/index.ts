@@ -63,10 +63,10 @@ export const ServicePlayers = {
     for (const season of career.clubData) {
       const found = season.players.find(
         (p) =>
+          !p.sell &&
           p.name.trim().toLowerCase() === player.name.trim().toLowerCase() &&
           p.nation.trim().toLowerCase() === player.nation.trim().toLowerCase(),
       );
-
       if (found) {
         existingPlayerId = found.id;
         break;
