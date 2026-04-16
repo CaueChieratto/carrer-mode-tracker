@@ -24,9 +24,9 @@ const PlayerStatsList = ({ players, career, season }: PlayerStatsListProps) => {
 
   return (
     <>
-      {sortedPlayerList.map((player) => (
+      {sortedPlayerList.map((player, i) => (
         <PlayerStats
-          key={player.id}
+          key={`${player.id}-${i}`}
           player={player}
           career={career}
           season={season}

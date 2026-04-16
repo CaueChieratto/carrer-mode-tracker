@@ -13,8 +13,8 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
 
     career.clubData.forEach((season) => {
       season.players.forEach((player) => {
-        const history = playerHistoryMap.get(player.name) || [];
-        playerHistoryMap.set(player.name, [...history, player]);
+        const history = playerHistoryMap.get(player.id) || [];
+        playerHistoryMap.set(player.id, [...history, player]);
       });
     });
 
@@ -31,7 +31,7 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
 
       history.forEach((seasonPlayer) => {
         totalBallonDor += seasonPlayer.ballonDor || 0;
-        seasonPlayer.statsLeagues.forEach((leagueStat) => {
+        seasonPlayer.statsLeagues?.forEach((leagueStat) => {
           const existingLeague = leagueStatsMap.get(leagueStat.leagueName);
 
           if (existingLeague) {
@@ -49,13 +49,13 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
             existingLeague.stats.rating =
               totalGames > 0
                 ? parseFloat(
-                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2)
+                    ((oldTotalRating + newTotalRating) / totalGames).toFixed(2),
                   )
                 : 0;
           } else {
             leagueStatsMap.set(
               leagueStat.leagueName,
-              JSON.parse(JSON.stringify(leagueStat))
+              JSON.parse(JSON.stringify(leagueStat)),
             );
           }
         });

@@ -16,16 +16,14 @@ export const ServicePlayers = {
 
     const career = await getCareerById(user.uid, careerId);
 
-    // Mapa para guardar os IDs originais. Chave: "nome-nacionalidade"
     const idMap = new Map<string, string>();
-    let hasChanges = false; // Flag para saber se precisamos salvar no banco
+    let hasChanges = false;
 
     const updatedClubData = career.clubData.map((season) => {
       const updatedPlayers = season.players.map((player) => {
         const uniqueKey = `${player.name.trim().toLowerCase()}-${player.nation.trim().toLowerCase()}`;
 
         if (idMap.has(uniqueKey)) {
-          // Já vimos esse jogador! Vamos forçar o ID dele ser o mesmo do primeiro registro
           const correctId = idMap.get(uniqueKey)!;
           if (player.id !== correctId) {
             hasChanges = true;
@@ -33,7 +31,6 @@ export const ServicePlayers = {
           }
           return player;
         } else {
-          // Primeira vez vendo o jogador, salva o ID dele no mapa
           idMap.set(uniqueKey, player.id);
           return player;
         }
@@ -41,7 +38,6 @@ export const ServicePlayers = {
       return { ...season, players: updatedPlayers };
     });
 
-    // Só faz a requisição pro Firebase se realmente consertou alguém
     if (hasChanges) {
       await updateCareerFirestore(user.uid, careerId, {
         clubData: updatedClubData,

@@ -1,7 +1,9 @@
 import { Players } from "../interfaces/playersInfo/players";
 
 export const calculateTotalStats = (player: Players) => {
-  const stats = player.statsLeagues.reduce(
+  const leagues = player.statsLeagues || [];
+
+  const stats = leagues.reduce(
     (acc, league) => {
       acc.games += league.stats.games;
       acc.goals += league.stats.goals;
@@ -16,7 +18,7 @@ export const calculateTotalStats = (player: Players) => {
       assists: 0,
       cleanSheets: 0,
       ratingSum: 0,
-    }
+    },
   );
 
   const averageRating =
