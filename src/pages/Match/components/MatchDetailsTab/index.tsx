@@ -6,7 +6,6 @@ import { Timeline } from "./components/Timeline";
 import { buildMatchEvents } from "./helpers/buildMatchEvents";
 import { Match } from "../../../../components/AllMatchesTab/types/Match";
 import { MatchHeaderCard } from "./components/MatchHeaderCard";
-import { PenaltyShootoutCard } from "./components/PenaltyShootoutCard";
 
 type MatchDetailsTabProps = {
   match: Match;
@@ -30,12 +29,13 @@ export const MatchDetailsTab = ({
 
   return (
     <div className={Styles.container}>
-      <MatchHeaderCard match={match} isUserHome={isHome} goals={goalsList} />
-
-      {hasPenalties && <PenaltyShootoutCard match={match} />}
-
+      <MatchHeaderCard
+        match={match}
+        isUserHome={isHome}
+        goals={goalsList}
+        hasPenalties={hasPenalties}
+      />
       {mvpRating && <MVPCard playerName={mvpPlayerName} rating={mvpRating} />}
-
       {periods.length > 0 && (
         <Timeline
           isHome={isHome}

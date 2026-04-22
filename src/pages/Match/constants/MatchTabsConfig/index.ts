@@ -26,7 +26,7 @@ export const getMatchTabsConfig = (
   navigate: NavigateFunction,
 ): MatchTabConfig[] => [
   {
-    title: "Detalhes",
+    title: "Resultado",
     component: MatchDetailsTab,
     actionButton: Buttons.AddDetails,
     action: () =>

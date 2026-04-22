@@ -5,10 +5,12 @@ import { Match } from "../../../../../../components/AllMatchesTab/types/Match";
 type Goal = {
   playerName: string;
   time: number;
+  displayTime?: string;
 };
 
 type MatchHeaderCardProps = {
   match: Match;
+  hasPenalties: boolean;
   isUserHome: boolean;
   goals?: Goal[];
 };
@@ -16,6 +18,7 @@ type MatchHeaderCardProps = {
 export const MatchHeaderCard = ({
   match,
   isUserHome,
+  hasPenalties,
   goals = [],
 }: MatchHeaderCardProps) => {
   const date = match.date;
@@ -43,7 +46,13 @@ export const MatchHeaderCard = ({
             <span className={Styles.score_separator}>-</span>
             <span className={Styles.score_number}>{awayScore}</span>
           </div>
-          <span className={Styles.match_status}>{statusDisplay}</span>
+          {hasPenalties ? (
+            <span className={Styles.pen_score}>
+              PEN {match.homePenScore} - {match.awayPenScore}
+            </span>
+          ) : (
+            <span className={Styles.match_status}>{statusDisplay}</span>
+          )}
         </div>
 
         <div className={Styles.team_name_right}>{awayTeam}</div>
@@ -55,7 +64,7 @@ export const MatchHeaderCard = ({
             {isUserHome &&
               goals.map((goal, idx) => (
                 <span key={idx}>
-                  {goal.playerName} {goal.time}'
+                  {goal.playerName} {goal.displayTime || `${goal.time}'`}
                 </span>
               ))}
           </div>
@@ -68,7 +77,7 @@ export const MatchHeaderCard = ({
             {!isUserHome &&
               goals.map((goal, idx) => (
                 <span key={idx}>
-                  {goal.playerName} {goal.time}'
+                  {goal.playerName} {goal.displayTime || `${goal.time}'`}
                 </span>
               ))}
           </div>

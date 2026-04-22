@@ -23,7 +23,7 @@ export const AddDetails = ({ onClick }: AddDetailsProps) => {
         border: activeStyle.border,
       }}
     >
-      Adicionar detalhes
+      Adicionar resultado
     </Button>
   );
 };

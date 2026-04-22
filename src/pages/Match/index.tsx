@@ -34,7 +34,7 @@ export const Match = () => {
 
   const saveLineupRef = useRef<(() => Promise<void> | void) | null>(null);
 
-  const storageKey = `match-tab-${careerId}-${match?.matchesId}`;
+  const storageKey = `match-tab-${careerId}-${matchesId}`;
 
   const tabsConfig = getMatchTabsConfig(
     careerId as string,
@@ -71,10 +71,10 @@ export const Match = () => {
   return (
     <SeasonThemeProvider careerId={career.id} career={career}>
       <HeaderSeason
+        match={match}
         careerId={career.id}
         career={career}
         backSeasons={goBack}
-        titleText={`Jogo do dia ${match.date}`}
       />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}

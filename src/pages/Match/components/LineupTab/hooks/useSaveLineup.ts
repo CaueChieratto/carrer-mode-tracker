@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { ServiceLineup } from "../../../services/ServiceLineup";
 import { SavedLineup } from "../../../types/Lineup";
+import { PlayerMatchStat } from "../../../../../components/AllMatchesTab/types/PlayerMatchStat";
 
 type UseSaveLineupParams = {
   careerId?: string;
@@ -14,7 +15,7 @@ export const useSaveLineup = ({
   matchId,
 }: UseSaveLineupParams) => {
   return useCallback(
-    async (savedLineup: SavedLineup) => {
+    async (savedLineup: SavedLineup, playerStats: PlayerMatchStat[]) => {
       if (!careerId || !seasonId) return;
 
       try {
@@ -23,8 +24,8 @@ export const useSaveLineup = ({
           seasonId,
           matchId,
           savedLineup,
+          playerStats,
         );
-        alert("Formação salva com sucesso!");
       } catch {
         alert("Erro ao salvar a formação. Tente novamente.");
       }

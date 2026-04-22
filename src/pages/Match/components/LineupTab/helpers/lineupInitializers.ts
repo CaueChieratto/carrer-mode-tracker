@@ -15,7 +15,7 @@ export const buildEmptyLineup = (formation: Formation): LineupState => {
           }))
         : [],
     ),
-    bench: Array.from({ length: 10 }, (_, slotIndex) => ({
+    bench: Array.from({ length: 9 }, (_, slotIndex) => ({
       slotId: `bench-${slotIndex}`,
       player: null,
     })),

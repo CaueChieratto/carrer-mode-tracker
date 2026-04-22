@@ -39,3 +39,19 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.stoppage_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.stoppage_badge {
+  background-color: var(--match);
+  color: var(--blackColor);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+}

@@ -8,10 +8,12 @@ type Props = {
 };
 
 export const EventRow = ({ event, isHome }: Props) => {
+  const timeDisplay = event.displayTime || `${event.time}'`;
+
   if (isHome) {
     return (
       <div className={`${Styles.event_row} ${Styles.event_left}`}>
-        <span className={Styles.event_time}>{event.time}'</span>
+        <span className={Styles.event_time}>{timeDisplay}</span>
         <span className={Styles.event_icon}>
           <EventIcon type={event.type} />
         </span>
@@ -34,7 +36,7 @@ export const EventRow = ({ event, isHome }: Props) => {
       <span className={Styles.event_icon}>
         <EventIcon type={event.type} />
       </span>
-      <span className={Styles.event_time}>{event.time}'</span>
+      <span className={Styles.event_time}>{timeDisplay}</span>
     </div>
   );
 };

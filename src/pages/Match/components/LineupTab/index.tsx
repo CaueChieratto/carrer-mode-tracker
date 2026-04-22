@@ -52,8 +52,27 @@ export const LineupTab = ({
   });
 
   useEffect(() => {
-    onRegisterSave?.(() => saveLineup(buildSavedLineup()));
-  }, [onRegisterSave, saveLineup, buildSavedLineup]);
+    onRegisterSave?.(() => {
+      const currentSavedLineup = buildSavedLineup();
+
+      const activePlayerIds = new Set<string>();
+      if (currentSavedLineup.goalkeeper.playerId) {
+        activePlayerIds.add(currentSavedLineup.goalkeeper.playerId);
+      }
+      currentSavedLineup.lines.forEach((slot) => {
+        if (slot.playerId) activePlayerIds.add(slot.playerId);
+      });
+      currentSavedLineup.bench?.forEach((slot) => {
+        if (slot.playerId) activePlayerIds.add(slot.playerId);
+      });
+
+      const updatedPlayerStats = (match.playerStats || []).filter((stat) =>
+        activePlayerIds.has(stat.playerId),
+      );
+
+      return saveLineup(currentSavedLineup, updatedPlayerStats);
+    });
+  }, [onRegisterSave, saveLineup, buildSavedLineup, match.playerStats]);
 
   const playerClick = (playerId: string) => {
     const isPlayerSaved = [

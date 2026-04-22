@@ -1,4 +1,4 @@
-export type PeriodKey = "1T" | "2T" | "ET" | "PEN";
+export type PeriodKey = "1T" | "2T" | "1ET" | "2ET" | "PEN";
 
 export type MatchEvent = {
   id: string;
@@ -11,6 +11,8 @@ export type MatchEvent = {
     | "penalty_goal"
     | "penalty_miss";
   time: number;
+  displayTime?: string;
+  sortTime: number;
   mainPlayer: string;
   secondaryPlayer?: string;
   period: PeriodKey;

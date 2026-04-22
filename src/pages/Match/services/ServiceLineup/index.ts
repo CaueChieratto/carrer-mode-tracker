@@ -1,6 +1,7 @@
 import { getCareerById } from "../../../../common/helpers/Getters";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { auth } from "../../../../common/services/Firebase";
+import { PlayerMatchStat } from "../../../../components/AllMatchesTab/types/PlayerMatchStat";
 import { SavedLineup } from "../../types/Lineup";
 
 export const ServiceLineup = {
@@ -9,6 +10,7 @@ export const ServiceLineup = {
     seasonId: string,
     matchesId: string,
     lineup: SavedLineup,
+    playerStats: PlayerMatchStat[],
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -21,7 +23,9 @@ export const ServiceLineup = {
       return {
         ...season,
         matches: season.matches?.map((match) =>
-          match.matchesId === matchesId ? { ...match, lineup } : match,
+          match.matchesId === matchesId
+            ? { ...match, lineup, playerStats }
+            : match,
         ),
       };
     });

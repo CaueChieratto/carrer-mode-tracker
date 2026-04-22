@@ -30,7 +30,7 @@ export const PlayerDetails = ({
           <Sub className={Styles.subs} />
         )}
 
-        {stats?.redCard && stats?.yellowCard ? (
+        {stats?.secondYellowCard ? (
           <RefereeCard className={Styles.referee_card} type="second-yellow" />
         ) : stats?.redCard ? (
           <RefereeCard className={Styles.referee_card} type="red" />
@@ -70,7 +70,7 @@ export const PlayerDetails = ({
       <div className={Styles.container_rating}>
         {stats?.rating != null && stats.rating > 0 && (
           <span className={Styles.rating} style={{ backgroundColor }}>
-            {stats.rating.toFixed(1)}
+            {stats.rating === 10 ? "10" : stats.rating.toFixed(1)}
           </span>
         )}
 

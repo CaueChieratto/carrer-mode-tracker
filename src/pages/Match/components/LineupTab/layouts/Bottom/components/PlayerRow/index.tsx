@@ -83,7 +83,7 @@ export const PlayerRow = ({
             </div>
           )}
 
-          {stats?.redCard && stats?.yellowCard ? (
+          {stats?.secondYellowCard ? (
             <span className={Styles.icon_wrapper}>
               <RefereeCard
                 type="second-yellow"
@@ -120,7 +120,7 @@ export const PlayerRow = ({
 
       {ratingValue > 0 && (
         <div className={Styles.rating} style={{ backgroundColor }}>
-          {ratingValue.toFixed(1)}
+          {ratingValue === 10 ? "10" : ratingValue.toFixed(1)}
         </div>
       )}
 

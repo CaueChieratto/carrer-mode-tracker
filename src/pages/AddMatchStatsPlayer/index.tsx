@@ -19,7 +19,8 @@ export const AddMatchStatsPlayer = () => {
     isGoalkeeper,
     formFields,
     formValues,
-    handleBooleanChange,
+
+    handleLocalBooleanChange,
     handleKeyDown,
     handleKeyUp,
     handleLocalInputChange,
@@ -58,7 +59,7 @@ export const AddMatchStatsPlayer = () => {
               formValues={formValues}
               isEditing={true}
               isGoalkeeper={isGoalkeeper}
-              onBooleanChange={handleBooleanChange}
+              onBooleanChange={handleLocalBooleanChange}
               onKeyDown={handleKeyDown}
               onKeyUp={handleKeyUp}
               onInputChange={handleLocalInputChange}

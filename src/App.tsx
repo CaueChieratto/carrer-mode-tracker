@@ -14,12 +14,33 @@ import { Match } from "./pages/Match";
 import { AddStatsMatch } from "./pages/AddStatsMatch";
 import { AddDetails } from "./pages/AddDetails";
 import { AddMatchStatsPlayer } from "./pages/AddMatchStatsPlayer";
+import { useIsMobile } from "./common/hooks/useIsMobile";
 
 type AppProps = {
   career?: Career;
 };
 
 export default function App({ career }: AppProps) {
+  const isMobile = useIsMobile();
+
+  if (!isMobile) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h2>Acesso Restrito</h2>
+        <p>Este aplicativo foi desenvolvido apenas para dispositivos móveis.</p>
+        <p>Por favor, acesse pelo seu celular.</p>
+      </div>
+    );
+  }
+
   const router = createBrowserRouter([
     { path: "/", element: <Welcome /> },
     { path: "/Career/:careerId/Geral", element: <Geral /> },

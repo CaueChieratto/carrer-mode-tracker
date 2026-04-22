@@ -70,6 +70,14 @@
   color: var(--border-input);
 }
 
+.pen_score {
+  font-size: 14px;
+  color: var(--color-add-player);
+  font-weight: 500;
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
 .match_status {
   font-size: 14px;
   color: var(--color-add-player);

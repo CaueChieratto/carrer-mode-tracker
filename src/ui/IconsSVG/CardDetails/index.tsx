@@ -22,56 +22,56 @@ export const CardDetails = ({ className, type }: CardDetailsProps) => {
                   id="Path"
                   d="M56.9883 114H75.9883V133H56.9883V114Z"
                   fill="#374df5"
-                  fill-opacity="0.15"
+                  fillOpacity="0.15"
                 ></path>
                 <g id="Group" opacity="0.8">
                   <path
                     id="Path_2"
                     d="M38 114H57V133H38V114Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_3"
                     d="M76 95.0001H95V114H76V95.0001Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_4"
                     d="M95 95.0001H114V114H95V95.0001Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_5"
                     d="M57 56.9998H76V76H57V56.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_6"
                     d="M95 56.9998H114V76H95V56.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_7"
                     d="M114 56.9998H133V76H114V56.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_8"
                     d="M0 0H19V19H0V0Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_9"
                     d="M57 0H76V19H57V0Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                 </g>
                 <g id="Group_2" opacity="0.5">
@@ -79,61 +79,61 @@ export const CardDetails = ({ className, type }: CardDetailsProps) => {
                     id="Path_10"
                     d="M76 114H95V133H76V114Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_11"
                     d="M0 95H19V114H0V95Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_12"
                     d="M57 95H76V114H57V95Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_13"
                     d="M76 75.9999H95V94.9996H76V75.9999Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_14"
                     d="M95 75.9999H114V94.9996H95V75.9999Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_15"
                     d="M38 56.9998H57V75.9999H38V56.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_16"
                     d="M76 56.9998H95V75.9999H76V56.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_17"
                     d="M38 37.9998H57V56.9998H38V37.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_18"
                     d="M76 37.9998H95V56.9998H76V37.9998Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                   <path
                     id="Path_19"
                     d="M0 18.9999H19V37.9999H0V18.9999Z"
                     fill="#374df5"
-                    fill-opacity="0.15"
+                    fillOpacity="0.15"
                   ></path>
                 </g>
               </g>

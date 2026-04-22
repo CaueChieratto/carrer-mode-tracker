@@ -27,6 +27,19 @@
   width: 50px;
 }
 
+.img_card {
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+.img_league {
+  width: 40px;
+}
+
 .h1 {
   color: #eaeaea;
   font-size: 28px;

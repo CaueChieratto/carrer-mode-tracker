@@ -1,4 +1,4 @@
-type RefereeCardType = "yellow" | "red" | "second-yellow";
+export type RefereeCardType = "yellow" | "red" | "second-yellow";
 
 type RefereeCardProps = {
   className?: string;

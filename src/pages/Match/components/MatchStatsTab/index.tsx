@@ -4,82 +4,88 @@ import {
   CircularStatRow,
   CircularStatRowProps,
 } from "./components/CircularStatRow";
+import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Career } from "../../../../common/interfaces/Career";
 
 type MixedStat =
   | ({ type: "standard" } & StatRowProps)
   | ({ type: "circular" } & CircularStatRowProps);
 
-const STATS_DATA: MixedStat[] = [
-  {
-    type: "standard",
-    label: "Gols esperados (xG)",
-    home: 2.8,
-    away: 1.8,
-    info: true,
-  },
-  {
-    type: "standard",
-    label: "Recuperação de bola (segundos)",
-    home: 12,
-    away: 15,
-    suffix: "s",
-    reverseWinner: true,
-  },
-  { type: "standard", label: "Finalizações", home: 20, away: 9 },
+type MatchStatsTabProps = {
+  match: Match;
+  season?: ClubData;
+  career?: Career;
+  onRegisterSave?: (fn: () => Promise<void> | void) => void;
+};
 
-  {
-    type: "circular",
-    label: "Precisão nas finalizações",
-    homeSuccess: 9,
-    homeTotal: 20,
-    awaySuccess: 3,
-    awayTotal: 9,
-  },
+export const MatchStatsTab = ({ match }: MatchStatsTabProps) => {
+  const homePossession = match.homePossession || 0;
+  const awayPossession = match.awayPossession || 0;
 
-  { type: "standard", label: "Passes", home: 628, away: 317 },
-
-  {
-    type: "circular",
-    label: "Precisão nos passes",
-    homeSuccess: 552,
-    homeTotal: 628,
-    awaySuccess: 237,
-    awayTotal: 317,
-  },
-
-  { type: "standard", label: "Divididas", home: 15, away: 12 },
-  { type: "standard", label: "Divididas ganhas", home: 10, away: 8 },
-  { type: "standard", label: "Interceptações", home: 5, away: 3 },
-  { type: "standard", label: "Defesas", home: 4, away: 2 },
-  {
-    type: "standard",
-    label: "Faltas cometidas",
-    home: 10,
-    away: 9,
-    reverseWinner: true,
-  },
-  {
-    type: "standard",
-    label: "Impedimentos",
-    home: 2,
-    away: 1,
-    reverseWinner: true,
-  },
-  { type: "standard", label: "Escanteios", home: 9, away: 3 },
-  { type: "standard", label: "Pênaltis", home: 1, away: 0 },
-  {
-    type: "standard",
-    label: "Cartões amarelos",
-    home: 2,
-    away: 3,
-    reverseWinner: true,
-  },
-  { type: "standard", label: "Cartões vermelhos", home: 1, away: 1 },
-];
-
-export const MatchStatsTab = () => {
-  const homePossession = 64;
-  const awayPossession = 100 - homePossession;
+  const STATS_DATA: MixedStat[] = [
+    {
+      type: "standard",
+      label: "Gols esperados (xG)",
+      home: match.homeXG || 0,
+      away: match.awayXG || 0,
+      info: true,
+    },
+    {
+      type: "standard",
+      label: "Recuperação de bola",
+      home: match.homeBallRecovery || 0,
+      away: match.awayBallRecovery || 0,
+    },
+    {
+      type: "standard",
+      label: "Finalizações",
+      home: match.homeFinishings || 0,
+      away: match.awayFinishings || 0,
+    },
+    {
+      type: "standard",
+      label: "Passes",
+      home: match.homePasses || 0,
+      away: match.awayPasses || 0,
+    },
+    {
+      type: "circular",
+      label: "Precisão nas finalizações",
+      homeSuccess: match.homeFinishingsOnTarget || 0,
+      homeTotal: match.homeFinishings || 0,
+      awaySuccess: match.awayFinishingsOnTarget || 0,
+      awayTotal: match.awayFinishings || 0,
+    },
+    {
+      type: "circular",
+      label: "Precisão nos passes",
+      homeSuccess: match.homePassesCompleted || 0,
+      homeTotal: match.homePasses || 0,
+      awaySuccess: match.awayPassesCompleted || 0,
+      awayTotal: match.awayPasses || 0,
+    },
+    {
+      type: "standard",
+      label: "Defesas",
+      home: match.homeDefenses || 0,
+      away: match.awayDefenses || 0,
+    },
+    {
+      type: "standard",
+      label: "Cartões amarelos",
+      home: match.homeYellowCards || 0,
+      away: match.awayYellowCards || 0,
+      reverseWinner: true,
+    },
+    {
+      type: "standard",
+      label: "Cartões vermelhos",
+      home: match.homeRedCards || 0,
+      away: match.awayRedCards || 0,
+      reverseWinner: true,
+    },
+  ];
 
   return (
     <div className={Styles.container}>

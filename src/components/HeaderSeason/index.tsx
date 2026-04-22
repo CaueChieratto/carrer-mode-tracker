@@ -4,6 +4,7 @@ import Styles from "./HeaderSeason.module.css";
 import Button from "../Button";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
+import { Match } from "../AllMatchesTab/types/Match";
 
 type HeaderSeasonProps = {
   career: Career;
@@ -12,6 +13,7 @@ type HeaderSeasonProps = {
   titleText?: string;
   backSeasons?: () => void;
   isPlayer?: boolean;
+  match?: Match;
   player?: Players;
 };
 
@@ -23,10 +25,15 @@ const HeaderSeason = ({
   backSeasons,
   player,
   isPlayer,
+  match,
 }: HeaderSeasonProps) => {
   const navigate = useNavigate();
 
   const { clubColor, darkClubColor } = useSeasonTheme();
+
+  const leagueLogo = career.clubData
+    ?.flatMap((club) => club.leagues)
+    ?.find((league) => league?.name === match?.league)?.logo;
 
   return (
     <header
@@ -48,9 +55,20 @@ const HeaderSeason = ({
               </div>
             ) : (
               <>
-                <img src={career.teamBadge} className={Styles.img} />
+                {match ? (
+                  <div className={Styles.img_card}>
+                    <img src={leagueLogo} className={Styles.img_league} />
+                  </div>
+                ) : (
+                  <img src={career.teamBadge} className={Styles.img} />
+                )}
+
                 <div className={Styles.container}>
-                  <h1 className={Styles.h1}>{career.clubName}</h1>
+                  {match ? (
+                    <h1 className={Styles.h1}>{match.league}</h1>
+                  ) : (
+                    <h1 className={Styles.h1}>{career.clubName}</h1>
+                  )}
                   {season && (
                     <p className={Styles.season}>Temporada {season}</p>
                   )}

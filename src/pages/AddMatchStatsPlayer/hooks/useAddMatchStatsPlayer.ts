@@ -58,6 +58,24 @@ export const useAddMatchStatsPlayer = () => {
     return getSubstitutionData(match, season, player);
   }, [match, season, player]);
 
+  const availableGoalsForAssist = useMemo(() => {
+    if (!match?.playerStats || !season?.players || !player) return [];
+
+    const options: string[] = [];
+    match.playerStats.forEach((stat) => {
+      if (stat.playerId === player.id) return;
+
+      const statPlayer = season.players.find((p) => p.id === stat.playerId);
+      if (statPlayer && stat.goals > 0 && stat.goalMinutes) {
+        stat.goalMinutes.forEach((min) => {
+          options.push(`${statPlayer.name} - ${min}'`);
+        });
+      }
+    });
+
+    return options.length > 0 ? options : ["Nenhum gol disponível"];
+  }, [match, season, player]);
+
   useEffect(() => {
     if (!match || !playerId || isInitialized.current || !isPlayerInLineup)
       return;
@@ -71,6 +89,10 @@ export const useAddMatchStatsPlayer = () => {
 
     setFormValues(initialValues.values);
     handleBooleanChange("yellowCard", initialValues.booleans.yellowCard);
+    handleBooleanChange(
+      "secondYellowCard",
+      initialValues.booleans.secondYellowCard,
+    );
     handleBooleanChange("redCard", initialValues.booleans.redCard);
 
     isInitialized.current = true;
@@ -135,9 +157,54 @@ export const useAddMatchStatsPlayer = () => {
     [handleInputChange, setFormValues, match, season],
   );
 
+  const matchGoalsCount = Number(formValues.matchGoals) || 0;
+  const assistsCount = Number(formValues.assists) || 0;
+  const hasYellowCard = booleanValues.yellowCard || false;
+  const hasSecondYellowCard = booleanValues.secondYellowCard || false;
+  const hasRedCard = booleanValues.redCard || false;
+
   const formFields = useMemo(
-    () => FormFields(subData.options, subData.isStarter),
-    [subData],
+    () =>
+      FormFields(
+        subData.options,
+        subData.isStarter,
+        matchGoalsCount,
+        assistsCount,
+        availableGoalsForAssist,
+        hasYellowCard,
+        hasSecondYellowCard,
+        hasRedCard,
+        formValues,
+      ),
+    [
+      subData,
+      matchGoalsCount,
+      assistsCount,
+      availableGoalsForAssist,
+      hasYellowCard,
+      hasSecondYellowCard,
+      hasRedCard,
+      formValues,
+    ],
+  );
+
+  const handleLocalBooleanChange = useCallback(
+    (fieldId: string, value: boolean) => {
+      if (fieldId === "secondYellowCard" && value) {
+        handleBooleanChange("redCard", false);
+      }
+
+      if (fieldId === "redCard" && value) {
+        handleBooleanChange("secondYellowCard", false);
+      }
+
+      if (fieldId === "yellowCard" && !value) {
+        handleBooleanChange("secondYellowCard", false);
+      }
+
+      handleBooleanChange(fieldId, value);
+    },
+    [handleBooleanChange],
   );
 
   const savePlayerStats = useCallback(async () => {
@@ -241,6 +308,7 @@ export const useAddMatchStatsPlayer = () => {
     formValues,
     isPlayerInLineup,
     handleBooleanChange,
+    handleLocalBooleanChange,
     handleKeyDown,
     handleKeyUp,
     handleLocalInputChange,
