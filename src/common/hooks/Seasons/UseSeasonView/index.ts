@@ -16,7 +16,7 @@ export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
 
   const career = useMemo(
     () => careers.find((c) => c.id === careerId),
-    [careers, careerId]
+    [careers, careerId],
   );
 
   const aggregatedPlayers = useAggregatedPlayers(career);
@@ -48,7 +48,7 @@ export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
         careerId!,
         latestSeason.id,
         navigate,
-        !!isPlayer
+        !!isPlayer,
       );
     }
     if (!seasonId) return [];
@@ -63,7 +63,7 @@ export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
     handleCloseModal,
   } = useOpenTransfersModal(
     career,
-    isGeralPage ? latestSeason ?? undefined : seasonData
+    isGeralPage ? (latestSeason ?? undefined) : seasonData,
   );
 
   return {

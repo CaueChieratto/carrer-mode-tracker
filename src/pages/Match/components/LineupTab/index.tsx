@@ -10,12 +10,21 @@ import { Section } from "./layouts/Section";
 import { PlayerPicker } from "./components/PlayerPicker";
 import { Bottom } from "./layouts/Bottom";
 import Styles from "./LineupTab.module.css";
+import { SavedLineup } from "../../types/Lineup";
 
 type LineupTabProps = {
   season: ClubData;
   career: Career;
   match: Match;
   onRegisterSave?: (fn: () => Promise<void> | void) => void;
+};
+
+const isLineupEmpty = (lineup?: SavedLineup) => {
+  if (!lineup) return true;
+  if (lineup.goalkeeper?.playerId) return false;
+  if (lineup.lines?.some((slot) => slot && slot.playerId)) return false;
+  if (lineup.bench?.some((slot) => slot && slot.playerId)) return false;
+  return true;
 };
 
 export const LineupTab = ({
@@ -31,6 +40,25 @@ export const LineupTab = ({
 
   const navigate = useNavigate();
 
+  const effectiveLineup = useMemo(() => {
+    if (!isLineupEmpty(match.lineup)) return match.lineup;
+
+    const matches = season.matches || [];
+    const currentIndex = matches.findIndex(
+      (m) => m.matchesId === match.matchesId,
+    );
+
+    if (currentIndex > 0) {
+      for (let i = currentIndex - 1; i >= 0; i--) {
+        if (!isLineupEmpty(matches[i].lineup)) {
+          return matches[i].lineup;
+        }
+      }
+    }
+
+    return match.lineup;
+  }, [match.lineup, match.matchesId, season.matches]);
+
   const {
     selectedFormation,
     lineup,
@@ -43,7 +71,7 @@ export const LineupTab = ({
     removePlayer,
     buildSavedLineup,
     swapPlayers,
-  } = useLineup(season, match.lineup);
+  } = useLineup(season, effectiveLineup);
 
   const saveLineup = useSaveLineup({
     careerId,
@@ -60,10 +88,10 @@ export const LineupTab = ({
         activePlayerIds.add(currentSavedLineup.goalkeeper.playerId);
       }
       currentSavedLineup.lines.forEach((slot) => {
-        if (slot.playerId) activePlayerIds.add(slot.playerId);
+        if (slot && slot.playerId) activePlayerIds.add(slot.playerId);
       });
       currentSavedLineup.bench?.forEach((slot) => {
-        if (slot.playerId) activePlayerIds.add(slot.playerId);
+        if (slot && slot.playerId) activePlayerIds.add(slot.playerId);
       });
 
       const updatedPlayerStats = (match.playerStats || []).filter((stat) =>

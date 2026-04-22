@@ -36,14 +36,14 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--blackColor);
-  text-align: right;
+  text-align: center;
 }
 
 .team_name_right {
   font-size: 20px;
   font-weight: 700;
   color: var(--blackColor);
-  text-align: left;
+  text-align: center;
 }
 
 .score_container {

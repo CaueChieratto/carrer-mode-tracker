@@ -1,5 +1,4 @@
 import { AddSeasonButton } from "./AddSeasonButton";
-import { AddTrophies } from "./AddTrophies";
 import { BackCareerPage } from "./BackCareerPage";
 import { CareerCardButtons } from "./CareerCardButtons";
 import { AddNewCareer } from "./AddNewCareer";
@@ -18,7 +17,6 @@ export const Buttons = {
   BackCareerPage,
   AddPlayerSeason,
   CareerCardButtons,
-  AddTrophies,
   AddNewCareer,
   AddSquadPlayer,
   AddTeamsToTable,

@@ -19,6 +19,7 @@ const Geral = () => {
     handleOpenTransfers,
     handleCloseModal,
   } = useSeasonView(true);
+
   const { activeModal } = useModalManager();
 
   if (loading) return <Load />;

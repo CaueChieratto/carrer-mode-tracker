@@ -1,4 +1,4 @@
-import { Dispatch, FormEvent, SetStateAction } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { UseCreateCareer } from "../UseCreateCareer";
 import { Career } from "../../../interfaces/Career";
 import { ServiceCareer } from "../../../services/ServiceCareer";
@@ -14,6 +14,8 @@ export function useSave({
   selectedCareer,
   setSelectedCareer,
 }: useSaveProps) {
+  const [isSaving, setIsSaving] = useState(false);
+
   const saveCareer = async (
     event: React.FormEvent<HTMLFormElement>,
     createdAtInput: string,
@@ -47,13 +49,13 @@ export function useSave({
   const saveTrophies = async (
     event: FormEvent<HTMLFormElement>,
     careerId: string,
-    selectedLeague: string,
+    selectedTrophies: string[],
     seasonName: string,
   ) => {
     event.preventDefault();
 
-    if (!selectedLeague) {
-      alert("Selecione uma liga!");
+    if (!selectedTrophies || selectedTrophies.length === 0) {
+      alert("Selecione pelo menos um título!");
       return;
     }
 
@@ -62,23 +64,35 @@ export function useSave({
       return;
     }
 
+    setIsSaving(true);
+
     const seasons = [seasonName];
+    let updatedTrophies = selectedCareer?.trophies || [];
 
-    const updatedTrophies = await ServiceCareer.saveClubTrophie(
-      careerId,
-      selectedLeague,
-      seasons,
-    );
+    try {
+      for (const trophy of selectedTrophies) {
+        updatedTrophies = await ServiceCareer.saveClubTrophie(
+          careerId,
+          trophy,
+          seasons,
+        );
+      }
 
-    if (selectedCareer && setSelectedCareer) {
-      setSelectedCareer({
-        ...selectedCareer,
-        trophies: updatedTrophies,
-      });
+      if (selectedCareer && setSelectedCareer) {
+        setSelectedCareer({
+          ...selectedCareer,
+          trophies: updatedTrophies,
+        });
+      }
+
+      setView?.("menu");
+    } catch (error) {
+      console.error("Erro ao salvar troféus:", error);
+      alert("Ocorreu um erro ao salvar os títulos selecionados.");
+    } finally {
+      setIsSaving(false);
     }
-
-    setView?.("menu");
   };
 
-  return { saveCareer, saveTrophies };
+  return { saveCareer, saveTrophies, isSaving };
 }

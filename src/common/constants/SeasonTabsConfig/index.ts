@@ -10,7 +10,6 @@ import TotalPlayerTab from "../../../components/DetailedPlayerSeasons/TotalPlaye
 import SeasonsPlayerTab from "../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
 import InfoPlayerTab from "../../../components/DetailedPlayerSeasons/InfoPlayerTab";
 import { AllMatchesTab } from "../../../components/AllMatchesTab";
-import { LeagueTable } from "../../../components/LeagueTable";
 
 export type TabConfig = {
   title: string;
@@ -40,16 +39,9 @@ export const getSeasonTabsConfig = (
   },
   {
     title: isPlayer ? "Partidas" : "Partidas",
-    component: isPlayer ? InfoPlayerTab : AllMatchesTab,
+    component: isPlayer ? AllMatchesTab : AllMatchesTab,
     actionButton: Buttons.AddMatches,
     action: () => navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`),
-  },
-  {
-    title: isPlayer ? "Temporada" : "Classificação",
-    component: isPlayer ? InfoPlayerTab : LeagueTable,
-    actionButton: Buttons.AddTeamsToTable,
-    action: () =>
-      navigate(`/Career/${careerId}/Season/${seasonId}/AddTeamsToTable`),
   },
   {
     title: isPlayer ? "Temporadas" : "Estatísticas",

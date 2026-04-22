@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Career } from "../../../interfaces/Career";
 import { useSave } from "../UseSave";
 import { ClubData } from "../../../interfaces/club/clubData";
@@ -9,6 +9,7 @@ type useAddTrophiesProps = {
   selectedCareer: Career;
   setSelectedCareer: React.Dispatch<React.SetStateAction<Career>>;
   season: ClubData;
+  seasonName: string;
 };
 
 export const useAddTrophies = ({
@@ -17,24 +18,50 @@ export const useAddTrophies = ({
   selectedCareer,
   setSelectedCareer,
   season,
+  seasonName,
 }: useAddTrophiesProps) => {
-  const [selectedLeague, setSelectedLeague] = useState<string>("");
+  const [selectedTrophies, setSelectedTrophies] = useState<string[]>([]);
+  const [selectValue, setSelectValue] = useState<string>("");
+
+  useEffect(() => {
+    const alreadySaved =
+      selectedCareer.trophies
+        ?.filter((t) => t.seasons?.includes(seasonName))
+        .map((t) => t.leagueName) || [];
+
+    setSelectedTrophies(alreadySaved);
+  }, [selectedCareer.trophies, seasonName]);
 
   const leaguesOptions = useMemo(() => {
-    return season?.leagues?.map((l) => l.name) || [];
-  }, [season]);
+    const allLeagues = season?.leagues?.map((l) => l.name) || [];
+    return allLeagues.filter((name) => !selectedTrophies.includes(name));
+  }, [season, selectedTrophies]);
 
-  const { saveTrophies } = useSave({
+  const addTrophy = (trophyName: string) => {
+    if (trophyName && !selectedTrophies.includes(trophyName)) {
+      setSelectedTrophies([...selectedTrophies, trophyName]);
+    }
+    setSelectValue("");
+  };
+
+  const removeTrophy = (trophyName: string) => {
+    setSelectedTrophies(selectedTrophies.filter((t) => t !== trophyName));
+  };
+
+  const { saveTrophies, isSaving } = useSave({
     setView,
     selectedCareer,
     setSelectedCareer,
   });
 
   return {
-    selectedLeague,
-    setSelectedLeague,
+    selectedTrophies,
+    selectValue,
+    addTrophy,
+    removeTrophy,
     leaguesOptions,
     saveTrophies,
     careerId,
+    isSaving,
   };
 };

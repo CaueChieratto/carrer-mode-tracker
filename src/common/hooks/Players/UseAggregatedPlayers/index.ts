@@ -13,7 +13,7 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
 
     career.clubData.forEach((season) => {
       season.players.forEach((player) => {
-        const key = `${player.id}-${player.sell ? "sold" : "active"}`;
+        const key = player.id;
         const history = playerHistoryMap.get(key) || [];
         playerHistoryMap.set(key, [...history, player]);
       });
