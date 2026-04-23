@@ -12,7 +12,7 @@ export const AddDetailsFormFields = (
   events: {
     id: string;
     name: string;
-    type: "card" | "sub";
+    type: "card" | "sub" | "goal" | "assist";
     color?: string;
   }[],
 ): { title: string; fields: Field[][] }[] => {
