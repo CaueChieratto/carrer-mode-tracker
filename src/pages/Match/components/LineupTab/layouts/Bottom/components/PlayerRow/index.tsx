@@ -20,6 +20,7 @@ type PlayerRowProps = {
   isMVP?: boolean;
   allStats?: PlayerMatchStat[];
   allPlayers?: Players[];
+  isFromGeral?: boolean;
 };
 
 export const PlayerRow = ({
@@ -30,6 +31,7 @@ export const PlayerRow = ({
   stats,
   allPlayers,
   allStats,
+  isFromGeral,
 }: PlayerRowProps) => {
   if (!slot.player) return null;
 
@@ -58,7 +60,9 @@ export const PlayerRow = ({
     <Row>
       <div
         className={Styles.player_info}
-        onClick={() => onPlayerClick(slot.player!.id)}
+        onClick={() => {
+          if (!isFromGeral) onPlayerClick(slot.player!.id);
+        }}
       >
         <div className={Styles.player_name_row}>
           <span className={Styles.shirt_number}>{slot.player.shirtNumber}</span>
@@ -70,7 +74,10 @@ export const PlayerRow = ({
               <span className={Styles.icon_wrapper}>
                 <GiSoccerBall size={14} />
               </span>
-              <NumberStats type="bench">{stats.goals}</NumberStats>
+
+              {stats.goals > 1 && (
+                <NumberStats type="bench">{stats.goals}</NumberStats>
+              )}
             </div>
           )}
 
@@ -79,7 +86,10 @@ export const PlayerRow = ({
               <span className={Styles.icon_wrapper}>
                 <Boot />
               </span>
-              <NumberStats type="bench">{stats.assists}</NumberStats>
+
+              {stats.assists > 1 && (
+                <NumberStats type="bench">{stats.assists}</NumberStats>
+              )}
             </div>
           )}
 
@@ -124,14 +134,16 @@ export const PlayerRow = ({
         </div>
       )}
 
-      <button
-        className={Styles.remove_button}
-        onClick={handleRemove}
-        type="button"
-        title={UI_TEXT.removePlayer}
-      >
-        ✕
-      </button>
+      {!isFromGeral && (
+        <button
+          className={Styles.remove_button}
+          onClick={handleRemove}
+          type="button"
+          title={UI_TEXT.removePlayer}
+        >
+          ✕
+        </button>
+      )}
     </Row>
   );
 };

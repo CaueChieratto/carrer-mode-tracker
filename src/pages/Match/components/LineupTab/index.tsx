@@ -16,6 +16,7 @@ type LineupTabProps = {
   season: ClubData;
   career: Career;
   match: Match;
+  isFromGeral?: boolean;
   onRegisterSave?: (fn: () => Promise<void> | void) => void;
 };
 
@@ -31,6 +32,7 @@ export const LineupTab = ({
   season,
   career,
   match,
+  isFromGeral,
   onRegisterSave,
 }: LineupTabProps) => {
   const { careerId, seasonId } = useParams<{
@@ -137,15 +139,20 @@ export const LineupTab = ({
   const playerStats = match.playerStats || [];
 
   return (
-    <div className={Styles.wrapper}>
+    <div
+      className={Styles.wrapper}
+      style={isFromGeral ? { gap: "0" } : undefined}
+    >
       <div>
         <Header
+          isFromGeral={isFromGeral}
           career={career}
           selectedFormation={selectedFormation}
           handleFormationChange={handleFormationChange}
         />
 
         <Section
+          isFromGeral={isFromGeral}
           lineup={lineup}
           selectingSlotId={selectingSlotId}
           openPlayerPicker={openPlayerPicker}
@@ -156,7 +163,7 @@ export const LineupTab = ({
           mvpId={mvpId}
         />
 
-        {selectingSlotId && (
+        {selectingSlotId && !isFromGeral && (
           <PlayerPicker
             players={activePlayers}
             assignedIds={assignedPlayerIds}
@@ -166,6 +173,7 @@ export const LineupTab = ({
       </div>
 
       <Bottom
+        isFromGeral={isFromGeral}
         lineup={lineup}
         selectingSlotId={selectingSlotId}
         openPlayerPicker={openPlayerPicker}

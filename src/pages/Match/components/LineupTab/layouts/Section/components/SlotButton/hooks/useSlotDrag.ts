@@ -4,9 +4,15 @@ type UseSlotDragProps = {
   slotId: string;
   onSwap: (targetId: string) => void;
   onOpen: () => void;
+  disabled?: boolean;
 };
 
-export const useSlotDrag = ({ slotId, onSwap, onOpen }: UseSlotDragProps) => {
+export const useSlotDrag = ({
+  slotId,
+  onSwap,
+  onOpen,
+  disabled,
+}: UseSlotDragProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
@@ -23,6 +29,8 @@ export const useSlotDrag = ({ slotId, onSwap, onOpen }: UseSlotDragProps) => {
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement | HTMLButtonElement>) => {
+      if (disabled) return;
+
       const target = e.target as HTMLElement;
       if (
         target.tagName === "BUTTON" &&
@@ -40,7 +48,7 @@ export const useSlotDrag = ({ slotId, onSwap, onOpen }: UseSlotDragProps) => {
         document.body.style.overflow = "hidden";
       }, 100);
     },
-    [],
+    [disabled],
   );
 
   const handlePointerMove = useCallback(
@@ -92,13 +100,15 @@ export const useSlotDrag = ({ slotId, onSwap, onOpen }: UseSlotDragProps) => {
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
+      if (disabled) return;
+
       if (wasDraggedRef.current) {
         e.preventDefault();
         return;
       }
       onOpen();
     },
-    [onOpen],
+    [onOpen, disabled],
   );
 
   return {

@@ -1,10 +1,10 @@
-import Card from "../Card";
-import Titles from "../../components/GeneralTab/GeneralTab.module.css";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import Load from "../../components/Load";
-import { Career } from "../../common/interfaces/Career";
-import TransferInfo from "../../components/TransferInfo";
-import { useTransferData } from "../../common/hooks/Transfers/UseTransferData";
+import Card from "../../../../ui/Card";
+import Titles from "../../GeneralTab.module.css";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import Load from "../../../Load";
+import { Career } from "../../../../common/interfaces/Career";
+import TransferInfo from "./components/TransferInfo";
+import { useTransferData } from "./hooks/UseTransferData";
 
 type TransfersCardSummaryProps = {
   season: ClubData;

@@ -14,6 +14,7 @@ type SlotButtonProps = {
   onPlayerClick: (playerId: string) => void;
   playerStats: PlayerMatchStat[];
   mvpId: string | null;
+  isFromGeral?: boolean;
 };
 
 export const SlotButton = ({
@@ -25,6 +26,7 @@ export const SlotButton = ({
   onPlayerClick,
   mvpId,
   playerStats,
+  isFromGeral,
 }: SlotButtonProps) => {
   const stats = slot.player
     ? playerStats.find((s) => s.playerId === slot.player!.id)
@@ -44,7 +46,12 @@ export const SlotButton = ({
     handlePointerMove,
     clearTimer,
     handleClick,
-  } = useSlotDrag({ slotId: slot.slotId, onSwap, onOpen: clickAction });
+  } = useSlotDrag({
+    slotId: slot.slotId,
+    onSwap,
+    onOpen: clickAction,
+    disabled: isFromGeral,
+  });
 
   if (slot.player) {
     return (
@@ -60,6 +67,7 @@ export const SlotButton = ({
           onClick={handleClick}
         >
           <PlayerDetails
+            isFromGeral={isFromGeral}
             player={slot.player}
             backgroundColor={backgroundColor}
             stats={stats}
@@ -82,6 +90,7 @@ export const SlotButton = ({
             }}
           >
             <PlayerDetails
+              isFromGeral={isFromGeral}
               player={slot.player}
               backgroundColor={backgroundColor}
               stats={stats}
@@ -91,6 +100,10 @@ export const SlotButton = ({
         )}
       </>
     );
+  }
+
+  if (isFromGeral && !slot.player) {
+    return null;
   }
 
   return (

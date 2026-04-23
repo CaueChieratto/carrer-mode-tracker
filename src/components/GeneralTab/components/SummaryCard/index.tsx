@@ -1,12 +1,12 @@
-import Card from "../Card";
-import Titles from "../../components/GeneralTab/GeneralTab.module.css";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import SummaryItem from "../../components/SummaryItem";
+import Card from "../../../../ui/Card";
+import Titles from "../../GeneralTab.module.css";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import SummaryItem from "./components/SummaryItem";
 import React from "react";
 import { BsCalendar4 } from "react-icons/bs";
 import { FaMoneyBillWave, FaHandHoldingUsd } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
-import { useSummaryData } from "../../common/hooks/Transfers/UseSummaryData";
+import { useSummaryData } from "./hooks/UseSummaryData";
 
 type SummaryCardProps = {
   season: ClubData;

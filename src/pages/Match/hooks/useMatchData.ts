@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSeasonData } from "../../../common/hooks/Seasons/UseSeasonData";
 
 export const useMatchData = () => {
@@ -7,13 +7,21 @@ export const useMatchData = () => {
     seasonId: string;
     matchesId: string;
   }>();
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isFromGeral = location.search.includes("fromGeral=true");
 
   const { career, season, loading } = useSeasonData(careerId, seasonId);
   const match = season?.matches?.find((m) => m.matchesId === matchesId);
 
   const goBack = () => {
-    navigate(`/Career/${careerId}/Season/${seasonId}`);
+    if (isFromGeral) {
+      navigate(`/Career/${careerId}/Geral`);
+    } else {
+      navigate(`/Career/${careerId}/Season/${seasonId}`);
+    }
   };
 
   const backMatch = () => {
@@ -30,5 +38,6 @@ export const useMatchData = () => {
     loading,
     goBack,
     backMatch,
+    isFromGeral,
   };
 };

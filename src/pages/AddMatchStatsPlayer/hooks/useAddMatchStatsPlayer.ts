@@ -61,6 +61,13 @@ export const useAddMatchStatsPlayer = () => {
   const availableGoalsForAssist = useMemo(() => {
     if (!match?.playerStats || !season?.players || !player) return [];
 
+    const claimedAssists = new Set<string>();
+    match.playerStats.forEach((stat) => {
+      if (stat.playerId !== player.id && stat.assistTargets) {
+        stat.assistTargets.forEach((target) => claimedAssists.add(target));
+      }
+    });
+
     const options: string[] = [];
     match.playerStats.forEach((stat) => {
       if (stat.playerId === player.id) return;
@@ -68,7 +75,11 @@ export const useAddMatchStatsPlayer = () => {
       const statPlayer = season.players.find((p) => p.id === stat.playerId);
       if (statPlayer && stat.goals > 0 && stat.goalMinutes) {
         stat.goalMinutes.forEach((min) => {
-          options.push(`${statPlayer.name} - ${min}'`);
+          const goalLabel = `${statPlayer.name} - ${min}'`;
+
+          if (!claimedAssists.has(goalLabel)) {
+            options.push(goalLabel);
+          }
         });
       }
     });
@@ -287,9 +298,11 @@ export const useAddMatchStatsPlayer = () => {
         }
       }
 
-      await ServiceMatches.updateMatchInSeason(career.id, season.id, {
+      ServiceMatches.updateMatchInSeason(career.id, season.id, {
         ...match,
         playerStats: updatedStats,
+      }).catch((error) => {
+        console.error("Erro ao salvar as estatísticas no background:", error);
       });
 
       backMatch();

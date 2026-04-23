@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { ClubData } from "../../../interfaces/club/clubData";
-import { formatDisplayValue } from "../../../utils/FormatValue";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import { formatDisplayValue } from "../../../../../../common/utils/FormatValue";
 
 export const useSummaryData = (season: ClubData) => {
   const activePlayers = useMemo(
     () => season.players.filter((player) => !player.sell),
-    [season.players]
+    [season.players],
   );
 
   const totalPlayers = activePlayers.length;
@@ -18,17 +18,17 @@ export const useSummaryData = (season: ClubData) => {
             totalPlayers
           ).toFixed(1)
         : "0.0",
-    [activePlayers, totalPlayers]
+    [activePlayers, totalPlayers],
   );
 
   const weeklySalaries = useMemo(
     () => activePlayers.reduce((acc, player) => acc + player.salary, 0),
-    [activePlayers]
+    [activePlayers],
   );
 
   const squadValue = useMemo(
     () => activePlayers.reduce((acc, player) => acc + player.playerValue, 0),
-    [activePlayers]
+    [activePlayers],
   );
 
   const content = useMemo(
@@ -44,7 +44,7 @@ export const useSummaryData = (season: ClubData) => {
         number: formatDisplayValue(squadValue),
       },
     ],
-    [totalPlayers, averageAge, weeklySalaries, squadValue]
+    [totalPlayers, averageAge, weeklySalaries, squadValue],
   );
 
   return { content };

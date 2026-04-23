@@ -26,6 +26,7 @@ export const Match = () => {
     match,
     loading,
     goBack,
+    isFromGeral,
   } = useMatchData();
   const navigate = useNavigate();
 
@@ -83,7 +84,7 @@ export const Match = () => {
         onOptionClick={handleTabClick}
       />
 
-      {ActionButton && (
+      {ActionButton && !isFromGeral && (
         <ContainerButton className={Styles.container_button}>
           <ActionButton onClick={actionClick} />
         </ContainerButton>
@@ -103,6 +104,7 @@ export const Match = () => {
                 match={match}
                 season={season}
                 career={career}
+                isFromGeral={isFromGeral}
                 onRegisterSave={(fn) => {
                   saveLineupRef.current = fn;
                 }}

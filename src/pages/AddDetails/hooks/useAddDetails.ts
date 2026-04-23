@@ -272,11 +272,16 @@ export const useAddDetails = () => {
         delete updatedMatch.awayPenScore;
       }
 
-      await ServiceMatches.updateMatchInSeason(
+      ServiceMatches.updateMatchInSeason(
         career.id,
         season.id,
         updatedMatch,
-      );
+      ).catch((error) => {
+        console.error(
+          "Erro ao salvar os detalhes da partida no background:",
+          error,
+        );
+      });
 
       backMatch();
     } finally {

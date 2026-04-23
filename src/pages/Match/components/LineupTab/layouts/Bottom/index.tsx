@@ -16,6 +16,7 @@ type BottomProps = {
   playerStats: PlayerMatchStat[];
   mvpId: string | null;
   allPlayers: Players[];
+  isFromGeral?: boolean;
 };
 
 export const Bottom = ({
@@ -27,11 +28,24 @@ export const Bottom = ({
   mvpId,
   playerStats,
   allPlayers,
+  isFromGeral,
 }: BottomProps) => {
   const { filledSlots, firstEmptySlot } = getBenchSlots(lineup);
 
   return (
-    <div className={Styles.container}>
+    <div
+      className={Styles.container}
+      style={
+        isFromGeral
+          ? {
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              borderBottomLeftRadius: "12px",
+              borderBottomRightRadius: "12px",
+            }
+          : undefined
+      }
+    >
       <h3 className={Styles.title}>{UI_TEXT.title}</h3>
 
       <div className={Styles.list}>
@@ -51,11 +65,12 @@ export const Bottom = ({
               isMVP={isMVP}
               allPlayers={allPlayers}
               allStats={playerStats}
+              isFromGeral={isFromGeral}
             />
           );
         })}
 
-        {firstEmptySlot && (
+        {firstEmptySlot && !isFromGeral && (
           <EmptySlotRow
             slotId={firstEmptySlot.slotId}
             isActive={selectingSlotId === firstEmptySlot.slotId}

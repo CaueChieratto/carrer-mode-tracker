@@ -1,0 +1,47 @@
+.categories_container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.category_section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category_title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--blackColor);
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.list_stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.stat_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.stat_name {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color);
+}
+
+.stat_value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--blackColor);
+}

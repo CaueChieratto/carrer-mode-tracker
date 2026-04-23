@@ -6,12 +6,14 @@ type MatchHeaderProps = {
   leagueName: string;
   leagueData?: League;
   onEdit: () => void;
+  isGeralPage: boolean;
 };
 
 export const MatchHeader = ({
   leagueName,
   leagueData,
   onEdit,
+  isGeralPage,
 }: MatchHeaderProps) => (
   <header className={Styles.header}>
     <div className={Styles.container}>
@@ -23,8 +25,10 @@ export const MatchHeader = ({
       <span className={Styles.league_name}>{leagueName}</span>
     </div>
 
-    <div className={Styles.container_icon} onClick={onEdit}>
-      <LuPencilLine size={20} />
-    </div>
+    {!isGeralPage && (
+      <div className={Styles.container_icon} onClick={onEdit}>
+        <LuPencilLine size={20} />
+      </div>
+    )}
   </header>
 );

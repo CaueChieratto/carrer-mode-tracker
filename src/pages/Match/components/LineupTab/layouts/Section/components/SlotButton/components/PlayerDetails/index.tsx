@@ -14,6 +14,7 @@ type PlayerDetailsProps = {
   stats?: PlayerMatchStat;
   isMVP?: boolean;
   onRemove?: () => void;
+  isFromGeral?: boolean;
 };
 
 export const PlayerDetails = ({
@@ -22,6 +23,7 @@ export const PlayerDetails = ({
   onRemove,
   isMVP,
   stats,
+  isFromGeral,
 }: PlayerDetailsProps) => (
   <>
     <div className={Styles.container}>
@@ -38,16 +40,19 @@ export const PlayerDetails = ({
           <RefereeCard className={Styles.referee_card} type="yellow" />
         ) : null}
       </div>
-      <button
-        className={Styles.slot_remove}
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove!();
-        }}
-        type="button"
-      >
-        ×
-      </button>
+
+      {!isFromGeral && (
+        <button
+          className={Styles.slot_remove}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove!();
+          }}
+          type="button"
+        >
+          ×
+        </button>
+      )}
     </div>
     <div className={Styles.slot_label}>
       <span className={Styles.slot_shirt_number}>{player.shirtNumber}</span>

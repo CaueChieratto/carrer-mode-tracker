@@ -14,6 +14,7 @@ export type MatchTabConfig = {
     season: ClubData;
     career: Career;
     onRegisterSave?: (fn: () => Promise<void> | void) => void;
+    isFromGeral?: boolean;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;
   action?: () => void;

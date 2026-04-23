@@ -3,6 +3,7 @@ import { useForm } from "../../../common/hooks/UseForm";
 import { useMatchData } from "../../Match/hooks/useMatchData";
 import { ServiceMatches } from "../../AddMatches/services/ServiceMatches";
 import { AddStatsMatchFormFields } from "../constants/FormFields";
+import { Match } from "../../../components/AllMatchesTab/types/Match";
 
 export const useAddStatsMatch = () => {
   const { career, season, match, loading, backMatch } = useMatchData();
@@ -35,38 +36,30 @@ export const useAddStatsMatch = () => {
           : "";
       };
 
+      const safeStr = (val: number | undefined | null) =>
+        val !== undefined && val !== null && !Number.isNaN(val)
+          ? String(val)
+          : "";
+
       const initialUserPoss = isUserHome
         ? match.homePossession
         : match.awayPossession;
 
       const initial: Record<string, string> = {
-        userPossession:
-          initialUserPoss !== undefined ? String(initialUserPoss) : "",
+        userPossession: safeStr(initialUserPoss),
 
-        homeXG: match.homeXG !== undefined ? String(match.homeXG) : "",
-        awayXG: match.awayXG !== undefined ? String(match.awayXG) : "",
+        homeXG: safeStr(match.homeXG),
+        awayXG: safeStr(match.awayXG),
 
-        homeBallRecovery:
-          match.homeBallRecovery !== undefined
-            ? String(match.homeBallRecovery)
-            : "",
-        awayBallRecovery:
-          match.awayBallRecovery !== undefined
-            ? String(match.awayBallRecovery)
-            : "",
+        homeBallRecovery: safeStr(match.homeBallRecovery),
+        awayBallRecovery: safeStr(match.awayBallRecovery),
 
         homeFinishings:
-          match.homeFinishings !== undefined
-            ? String(match.homeFinishings)
-            : isUserHome
-              ? String(userFinishings)
-              : "",
+          safeStr(match.homeFinishings) ||
+          (isUserHome ? safeStr(userFinishings) : ""),
         awayFinishings:
-          match.awayFinishings !== undefined
-            ? String(match.awayFinishings)
-            : !isUserHome
-              ? String(userFinishings)
-              : "",
+          safeStr(match.awayFinishings) ||
+          (!isUserHome ? safeStr(userFinishings) : ""),
 
         homeShotAccuracy: calcAcc(
           match.homeFinishingsOnTarget,
@@ -77,52 +70,30 @@ export const useAddStatsMatch = () => {
           match.awayFinishings,
         ),
 
-        homePasses:
-          match.homePasses !== undefined ? String(match.homePasses) : "",
-        awayPasses:
-          match.awayPasses !== undefined ? String(match.awayPasses) : "",
+        homePasses: safeStr(match.homePasses),
+        awayPasses: safeStr(match.awayPasses),
 
         homePassAccuracy: calcAcc(match.homePassesCompleted, match.homePasses),
         awayPassAccuracy: calcAcc(match.awayPassesCompleted, match.awayPasses),
 
         homeDefenses:
-          match.homeDefenses !== undefined
-            ? String(match.homeDefenses)
-            : isUserHome
-              ? String(userDefenses)
-              : "",
+          safeStr(match.homeDefenses) ||
+          (isUserHome ? safeStr(userDefenses) : ""),
         awayDefenses:
-          match.awayDefenses !== undefined
-            ? String(match.awayDefenses)
-            : !isUserHome
-              ? String(userDefenses)
-              : "",
+          safeStr(match.awayDefenses) ||
+          (!isUserHome ? safeStr(userDefenses) : ""),
 
         homeYellowCards:
-          match.homeYellowCards !== undefined
-            ? String(match.homeYellowCards)
-            : isUserHome
-              ? String(userYellows)
-              : "",
+          safeStr(match.homeYellowCards) ||
+          (isUserHome ? safeStr(userYellows) : ""),
         awayYellowCards:
-          match.awayYellowCards !== undefined
-            ? String(match.awayYellowCards)
-            : !isUserHome
-              ? String(userYellows)
-              : "",
+          safeStr(match.awayYellowCards) ||
+          (!isUserHome ? safeStr(userYellows) : ""),
 
         homeRedCards:
-          match.homeRedCards !== undefined
-            ? String(match.homeRedCards)
-            : isUserHome
-              ? String(userReds)
-              : "",
+          safeStr(match.homeRedCards) || (isUserHome ? safeStr(userReds) : ""),
         awayRedCards:
-          match.awayRedCards !== undefined
-            ? String(match.awayRedCards)
-            : !isUserHome
-              ? String(userReds)
-              : "",
+          safeStr(match.awayRedCards) || (!isUserHome ? safeStr(userReds) : ""),
       };
 
       setFormValues(initial);
@@ -198,11 +169,24 @@ export const useAddStatsMatch = () => {
         awayRedCards: parseNum(formValues.awayRedCards),
       };
 
-      await ServiceMatches.updateMatchInSeason(
+      const matchToSave = Object.fromEntries(
+        Object.entries(updatedMatch).map(([key, value]) => [
+          key,
+          value === undefined ? null : value,
+        ]),
+      );
+
+      ServiceMatches.updateMatchInSeason(
         career.id,
         season.id,
-        updatedMatch,
-      );
+        matchToSave as Match,
+      ).catch((error) => {
+        console.error(
+          "Erro ao salvar as estatísticas da equipe no background:",
+          error,
+        );
+      });
+
       backMatch();
     } finally {
       setIsSaving(false);

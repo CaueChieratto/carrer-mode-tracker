@@ -1,5 +1,5 @@
 import Styles from "./SummaryItem.module.css";
-import Titles from "../GeneralTab/GeneralTab.module.css";
+import Titles from "../../../../GeneralTab.module.css";
 import React from "react";
 
 type SummaryItemProps = {

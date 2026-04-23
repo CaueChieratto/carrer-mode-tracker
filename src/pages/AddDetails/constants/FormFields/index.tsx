@@ -1,4 +1,4 @@
-import { IoMdTime, IoMdSwap, IoMdArrowForward } from "react-icons/io";
+import { IoMdTime, IoMdSwap } from "react-icons/io";
 import { GiSoccerBall } from "react-icons/gi";
 import { Field } from "../../../../components/FormSection";
 import {
@@ -12,7 +12,7 @@ export const AddDetailsFormFields = (
   events: {
     id: string;
     name: string;
-    type: "goal" | "assist" | "card" | "sub";
+    type: "card" | "sub";
     color?: string;
   }[],
 ): { title: string; fields: Field[][] }[] => {
@@ -46,14 +46,14 @@ export const AddDetailsFormFields = (
     ? [
         {
           id: "stoppageET1",
-          name: "Acrés. 1T",
+          name: "Acrés. 1T (Prorrogação)",
           inputType: "number",
           placeholder: "0",
           icon: <IoMdTime />,
         },
         {
           id: "stoppageET2",
-          name: "Acrés. 2T",
+          name: "Acrés. 2T (Prorrogação)",
           inputType: "number",
           placeholder: "0",
           icon: <IoMdTime />,
@@ -64,7 +64,7 @@ export const AddDetailsFormFields = (
   const hasPenaltiesField: Field[] = [
     {
       id: "hasPenalties",
-      name: "Teve Pênaltis?",
+      name: "Teve Disputa de Pênaltis?",
       checkbox: true,
       icon: <GiSoccerBall />,
     },
@@ -90,23 +90,13 @@ export const AddDetailsFormFields = (
   const createEventField = (event: (typeof events)[0]): Field => ({
     id: `eventMinute_${event.id}`,
     name: `${event.name}`,
-    inputType: event.type === "assist" ? "text" : "number",
-    placeholder: event.type === "assist" ? "Alvo - Min'" : "Min.",
     icon:
-      event.type === "goal" ? (
-        <GiSoccerBall />
-      ) : event.type === "assist" ? (
-        <IoMdArrowForward />
-      ) : event.type === "sub" ? (
+      event.type === "sub" ? (
         <IoMdSwap />
       ) : (
         <RefereeCard type={event.color as RefereeCardType} />
       ),
   });
-
-  const goalAndAssistFields = events
-    .filter((e) => e.type === "goal" || e.type === "assist")
-    .map(createEventField);
 
   const disciplineFields = events
     .filter((e) => e.type === "card")
@@ -118,7 +108,7 @@ export const AddDetailsFormFields = (
 
   const formSections: { title: string; fields: Field[][] }[] = [
     {
-      title: "Placar Final",
+      title: "Resultado e Tempo de Jogo",
       fields: [
         [
           {
@@ -134,27 +124,20 @@ export const AddDetailsFormFields = (
             icon: <GiSoccerBall />,
           },
         ],
+        stoppageFields,
+      ],
+    },
+    {
+      title: "Tempo Extra",
+      fields: [
+        hasExtraTimeField,
+        ...(hasExtraTime ? [extraTimeFields] : []),
+
         hasPenaltiesField,
         ...(hasPenalties ? [penaltiesFields] : []),
       ],
     },
-    {
-      title: "Acréscimos e Tempo",
-      fields: [stoppageFields, hasExtraTimeField, extraTimeFields].filter(
-        (f) => f.length > 0,
-      ),
-    },
   ];
-
-  if (goalAndAssistFields.length > 0) {
-    formSections.push({
-      title: "Gols e Assistências",
-      fields: Array.from(
-        { length: Math.ceil(goalAndAssistFields.length / 2) },
-        (_, i) => goalAndAssistFields.slice(i * 2, i * 2 + 2),
-      ),
-    });
-  }
 
   if (disciplineFields.length > 0) {
     formSections.push({

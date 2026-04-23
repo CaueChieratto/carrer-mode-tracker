@@ -13,6 +13,7 @@ type SectionProps = {
   onPlayerClick: (playerId: string) => void;
   playerStats: PlayerMatchStat[];
   mvpId: string | null;
+  isFromGeral?: boolean;
 };
 
 export const Section = ({
@@ -24,6 +25,7 @@ export const Section = ({
   onPlayerClick,
   mvpId,
   playerStats,
+  isFromGeral,
 }: SectionProps) => {
   const getGapSize = (playersCount: number) => {
     if (playersCount >= 5) return "10px";
@@ -48,6 +50,7 @@ export const Section = ({
               {line.map((slot) => (
                 <div key={slot.slotId} className={Styles.field_slot}>
                   <SlotButton
+                    isFromGeral={isFromGeral}
                     slot={slot}
                     isSelecting={selectingSlotId === slot.slotId}
                     onOpen={() => openPlayerPicker(slot.slotId)}
@@ -66,6 +69,7 @@ export const Section = ({
         <div className={Styles.field_line}>
           <div className={Styles.field_slot}>
             <SlotButton
+              isFromGeral={isFromGeral}
               slot={lineup.goalkeeper}
               isSelecting={selectingSlotId === "gk-0"}
               onOpen={() => openPlayerPicker("gk-0")}
