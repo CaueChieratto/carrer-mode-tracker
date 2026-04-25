@@ -38,6 +38,9 @@
   display: flex;
   gap: 16px;
   width: 100%;
+}
+
+.isMatch {
   align-items: flex-end;
 }
 

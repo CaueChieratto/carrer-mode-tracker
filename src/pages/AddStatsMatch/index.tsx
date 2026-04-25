@@ -43,6 +43,7 @@ export const AddStatsMatch = () => {
         <Form className={Styles.form}>
           {fields.map((section, index) => (
             <FormSection
+              isMatch
               key={index}
               title={section.title}
               rows={section.fields}

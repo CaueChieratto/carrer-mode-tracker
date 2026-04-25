@@ -31,6 +31,7 @@ export type FormSectionProps = {
   rows: readonly (readonly Field[])[];
   formValues?: Record<string, string>;
   isGoalkeeper?: boolean;
+  isMatch?: boolean;
   isEditing?: boolean;
   onInputChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -80,6 +81,7 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
       onKeyDown,
       onKeyUp,
       onBooleanChange,
+      isMatch,
     } = props;
 
     const { clubColor } = useSeasonTheme();
@@ -104,7 +106,7 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
           {visibleRows.map((fields, rowIndex) => (
             <div
               key={rowIndex}
-              className={fields.length > 1 ? Styles.form_row : ""}
+              className={`${fields.length > 1 ? Styles.form_row : ""} ${isMatch ? Styles.isMatch : ""}`}
             >
               {fields.map((field) => (
                 <div key={field.id} className={Styles.form_group}>
