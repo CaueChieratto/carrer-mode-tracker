@@ -10,12 +10,22 @@ export interface PlayerMatchStat {
   secondYellowCardMinute?: number;
   redCardMinute?: number;
   distanceKm: number;
-  passes: number;
-  finishings: number;
   rating: number;
   yellowCard: boolean;
   secondYellowCard?: boolean;
   redCard: boolean;
   cleanSheet?: boolean;
   substituteIn?: string | undefined;
+  totalPasses?: number;
+  passPrecision?: number;
+  passesMissed?: number;
+  totalFinishings?: number;
+  finishingPrecision?: number;
+  finishingsMissed?: number;
+  totalDribbles?: number;
+  dribblePrecision?: number;
+  dribblesMissed?: number;
+  keyPasses?: number;
+  ballsRecovered?: number;
+  ballsLost?: number;
 }

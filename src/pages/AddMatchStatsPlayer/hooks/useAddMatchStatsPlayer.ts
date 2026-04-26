@@ -128,6 +128,42 @@ export const useAddMatchStatsPlayer = () => {
         return;
       }
 
+      const precisionFields = [
+        "totalPasses",
+        "passPrecision",
+        "totalFinishings",
+        "finishingPrecision",
+        "totalDribbles",
+        "dribblePrecision",
+      ];
+
+      if (precisionFields.includes(field.id)) {
+        setFormValues((prev) => {
+          const updated = { ...prev, [field.id]: value };
+
+          const tPasses = Number(updated.totalPasses) || 0;
+          const pPrec = Number(updated.passPrecision) || 0;
+          updated.passesMissed = String(
+            Math.max(0, Math.round(tPasses - (tPasses * pPrec) / 100)),
+          );
+
+          const tFin = Number(updated.totalFinishings) || 0;
+          const fPrec = Number(updated.finishingPrecision) || 0;
+          updated.finishingsMissed = String(
+            Math.max(0, Math.round(tFin - (tFin * fPrec) / 100)),
+          );
+
+          const tDrib = Number(updated.totalDribbles) || 0;
+          const dPrec = Number(updated.dribblePrecision) || 0;
+          updated.dribblesMissed = String(
+            Math.max(0, Math.round(tDrib - (tDrib * dPrec) / 100)),
+          );
+
+          return updated;
+        });
+        return;
+      }
+
       if (field.id === "substituteIn") {
         let calculatedMinutes: string | undefined;
 
@@ -286,8 +322,6 @@ export const useAddMatchStatsPlayer = () => {
               goals: 0,
               assists: 0,
               distanceKm: 0,
-              passes: 0,
-              finishings: 0,
               rating: 0,
               yellowCard: false,
               redCard: false,

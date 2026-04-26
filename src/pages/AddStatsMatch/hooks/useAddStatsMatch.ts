@@ -17,8 +17,10 @@ export const useAddStatsMatch = () => {
   useEffect(() => {
     if (match && career && initializedMatchId.current !== match.matchesId) {
       const userFinishings =
-        match.playerStats?.reduce((acc, s) => acc + (s.finishings || 0), 0) ||
-        0;
+        match.playerStats?.reduce(
+          (acc, s) => acc + (s.totalFinishings || 0),
+          0,
+        ) || 0;
       const userDefenses =
         match.playerStats?.reduce((acc, s) => acc + (s.defenses || 0), 0) || 0;
       const userYellows =

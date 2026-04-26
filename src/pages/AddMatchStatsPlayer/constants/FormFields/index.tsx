@@ -142,6 +142,7 @@ export const FormFields = (
           {
             id: "rating",
             name: "Nota (Rating)",
+            inputType: "number",
             placeholder: "Ex: 8.5",
             icon: <FaStar />,
           },
@@ -174,19 +175,92 @@ export const FormFields = (
       ],
     },
     {
-      title: "Estatísticas Avançadas",
+      title: "Estatísticas Avançadas - Finalizações",
       fields: [
         [
           {
-            id: "passes",
-            name: "Passes Completos",
+            id: "totalFinishings",
+            name: "Finalizações Totais",
             inputType: "number",
-            placeholder: "Ex: 45",
+            placeholder: "Ex: 5",
             icon: <IoIosStats />,
           },
           {
-            id: "finishings",
-            name: "Finalizações",
+            id: "finishingPrecision",
+            name: "Precisão Finaliz. (%)",
+            inputType: "number",
+            placeholder: "Ex: 40",
+            icon: <IoIosStats />,
+          },
+        ],
+      ],
+    },
+    {
+      title: "Estatísticas Avançadas - Passes",
+      fields: [
+        [
+          {
+            id: "totalPasses",
+            name: "Passes",
+            inputType: "number",
+            placeholder: "Ex: 50",
+            icon: <IoIosStats />,
+          },
+          {
+            id: "passPrecision",
+            name: "Precisão de Passes (%)",
+            inputType: "number",
+            placeholder: "Ex: 85",
+            icon: <IoIosStats />,
+          },
+        ],
+        [
+          {
+            id: "keyPasses",
+            name: "Passes Decisivos",
+            inputType: "number",
+            placeholder: "Ex: 2",
+            icon: <IoIosStats />,
+          },
+        ],
+      ],
+    },
+
+    {
+      title: "Estatísticas Avançadas - Conduções",
+      fields: [
+        [
+          {
+            id: "totalDribbles",
+            name: "Conduções (Dribles)",
+            inputType: "number",
+            placeholder: "Ex: 4",
+            icon: <IoIosStats />,
+          },
+          {
+            id: "dribblePrecision",
+            name: "Precisão Condu. (%)",
+            inputType: "number",
+            placeholder: "Ex: 50",
+            icon: <IoIosStats />,
+          },
+        ],
+      ],
+    },
+    {
+      title: "Outras Estatísticas",
+      fields: [
+        [
+          {
+            id: "ballsRecovered",
+            name: "Bolas Recuperadas",
+            inputType: "number",
+            placeholder: "Ex: 6",
+            icon: <IoIosStats />,
+          },
+          {
+            id: "ballsLost",
+            name: "Bolas Perdidas",
             inputType: "number",
             placeholder: "Ex: 3",
             icon: <IoIosStats />,

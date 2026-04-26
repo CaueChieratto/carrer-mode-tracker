@@ -53,7 +53,6 @@ export const getMatchFormFields = (
           inputType: "text",
           placeholder: "Nome da equipe",
           icon: <GiPoliceBadge />,
-          transform: "capitalize",
         },
       ],
       [
