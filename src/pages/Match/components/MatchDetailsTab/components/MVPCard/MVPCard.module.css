@@ -30,7 +30,6 @@
 }
 
 .mvp_icon_wrapper {
-  background-color: #00b4d8;
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -65,7 +64,6 @@
 }
 
 .mvp_rating {
-  background-color: #00a8cc;
   color: #fff;
   font-weight: 700;
   font-size: 14px;

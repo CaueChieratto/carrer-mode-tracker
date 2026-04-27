@@ -32,6 +32,28 @@ export const Bottom = ({
 }: BottomProps) => {
   const { filledSlots, firstEmptySlot } = getBenchSlots(lineup);
 
+  const sortedFilledSlots = [...filledSlots].sort((a, b) => {
+    const getSubMinute = (slot: typeof a) => {
+      if (!slot.player) return Infinity;
+
+      const stats = playerStats.find((s) => s.playerId === slot.player!.id);
+
+      if (stats?.substituteIn && stats.substituteIn !== "Nenhum") {
+        const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
+
+        if (outPlayer) {
+          const outStats = playerStats.find((s) => s.playerId === outPlayer.id);
+
+          if (outStats) return outStats.minutesPlayed;
+        }
+      }
+
+      return Infinity;
+    };
+
+    return getSubMinute(a) - getSubMinute(b);
+  });
+
   return (
     <div
       className={Styles.container}
@@ -49,7 +71,7 @@ export const Bottom = ({
       <h3 className={Styles.title}>{UI_TEXT.title}</h3>
 
       <div className={Styles.list}>
-        {filledSlots.map((slot) => {
+        {sortedFilledSlots.map((slot) => {
           const stats = slot.player
             ? playerStats.find((s) => s.playerId === slot.player!.id)
             : undefined;

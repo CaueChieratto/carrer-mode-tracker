@@ -38,11 +38,10 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
   );
 
   return (
-    <ContainerClubContent>
+    <ContainerClubContent isMatch>
       {!isGeralPage && (
         <ButtonsSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
       )}
-
       {!filteredMatches?.length ? (
         <NoStatsMessage
           textOne="Nenhuma partida encontrada"
@@ -63,6 +62,7 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
               match={match}
               season={matchSeason}
               isGeralPage={isGeralPage}
+              career={career}
             />
           );
         })

@@ -11,11 +11,21 @@ export const usePlayerSearch = (
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      searchRef.current?.scrollIntoView({
+      const el = searchRef.current;
+      if (!el) return;
+
+      const rect = el.getBoundingClientRect();
+      const absoluteTop = rect.top + window.scrollY;
+
+      const offset = 110;
+      const centerOffset = window.innerHeight / 2;
+
+      window.scrollTo({
+        top: absoluteTop - centerOffset + offset,
         behavior: "smooth",
-        block: "center",
       });
     }, 150);
+
     return () => clearTimeout(timeoutId);
   }, []);
 
