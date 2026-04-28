@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSeasonTabsConfig } from "../../../constants/SeasonTabsConfig";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { useCareers } from "../../Career/UseCareer";
 import { useOpenTransfersModal } from "../../Modal/UseOpenTransfersModal";
 import { useAggregatedPlayers } from "../../Players/UseAggregatedPlayers";
+import { getSeasonTabsConfig } from "../../../../layout/SectionView/constants/SeasonTabsConfig";
 
 export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
   const { careerId, seasonId } = useParams<{

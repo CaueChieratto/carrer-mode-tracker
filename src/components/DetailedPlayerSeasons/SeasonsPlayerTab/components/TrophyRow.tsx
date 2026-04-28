@@ -1,11 +1,11 @@
 import { Trophy } from "../../../../common/interfaces/club/trophy";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
-import CalculatedStatistics from "../../../CalculatedStatistics";
-import StatisticsTable_Title from "../../../StatisticsTable_Title";
+import StatisticsTable_Title from "../../../Statistics/StatisticsTable_Title";
 import Styles from "../SeasonsPlayerTab.module.css";
 import LeagueStatsRow from "./LeagueStatsRow";
 import NoTitleSeason from "../../components/NoTitleSeason";
+import CalculatedStatistics from "../../../Statistics/CalculatedStatistics";
 
 type TrophyRowProps = {
   trophy?: Trophy;
@@ -28,7 +28,7 @@ const TrophyRow = ({
     trophy?.leagueName ?? leagueStats.leagueName
   }`;
   const detailedLeagueStats = playerInSeason?.statsLeagues.find(
-    (stats) => stats.leagueName === leagueStats.leagueName
+    (stats) => stats.leagueName === leagueStats.leagueName,
   );
 
   const isGoalkeeper = playerInSeason?.position === "GOL";

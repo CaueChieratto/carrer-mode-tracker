@@ -8,7 +8,6 @@ import { Trophy } from "../../interfaces/club/trophy";
 import { Players } from "../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../interfaces/playersStats/leagueStats";
 import { POSITION_DATA } from "../../types/Positions";
-import { calculateTotalStats } from "../PlayerStatsCalculator";
 
 export const sortTrophies = (trophies: Career["trophies"]) => {
   return [...trophies].sort((a, b) => {
@@ -22,63 +21,9 @@ export const sortTrophies = (trophies: Career["trophies"]) => {
   });
 };
 
-export const sortedPlayers = (players: Players[]) => {
-  return [...players].sort((a, b) => {
-    if (b.ballonDor !== a.ballonDor) {
-      return b.ballonDor - a.ballonDor;
-    }
-
-    const statsA = calculateTotalStats(a);
-    const statsB = calculateTotalStats(b);
-
-    if (statsB.goals !== statsA.goals) {
-      return statsB.goals - statsA.goals;
-    }
-    if (statsB.assists !== statsA.assists) {
-      return statsB.assists - statsA.assists;
-    }
-    if (statsB.cleanSheets !== statsA.cleanSheets) {
-      return statsB.cleanSheets - statsA.cleanSheets;
-    }
-
-    return statsB.games - statsA.games;
-  });
-};
-
-export const sortPlayersByContributions = (players: Players[]) => {
-  return [...players].sort((a, b) => {
-    if (b.ballonDor !== a.ballonDor) {
-      return b.ballonDor - a.ballonDor;
-    }
-
-    const statsA = calculateTotalStats(a);
-    const statsB = calculateTotalStats(b);
-
-    let scoreA = 0;
-    let scoreB = 0;
-
-    if (a.position === "GOL") {
-      scoreA = (statsA.cleanSheets || 0) * 0.8 + (statsA.assists || 0);
-    } else {
-      scoreA = (statsA.goals || 0) + (statsA.assists || 0);
-    }
-
-    if (b.position === "GOL") {
-      scoreB = (statsB.cleanSheets || 0) * 0.8 + (statsB.assists || 0);
-    } else {
-      scoreB = (statsB.goals || 0) + (statsB.assists || 0);
-    }
-
-    if (scoreB !== scoreA) {
-      return scoreB - scoreA;
-    }
-    return (statsB.games || 0) - (statsA.games || 0);
-  });
-};
-
 export const sortPlayersByPosition = (players: Players[]) => {
   const positionSortOrder = POSITION_DATA.slice().flatMap(
-    (group) => group.sortOrder
+    (group) => group.sortOrder,
   );
 
   return [...players].sort((a, b) => {
@@ -87,36 +32,6 @@ export const sortPlayersByPosition = (players: Players[]) => {
     if (positionA === -1) return 1;
     if (positionB === -1) return -1;
     return positionA - positionB;
-  });
-};
-
-export const sortPlayersWithStatsByPosition = (players: Players[]) => {
-  return [...players].sort((a, b) => {
-    const getIndices = (position: string) => {
-      for (
-        let groupIndex = 0;
-        groupIndex < POSITION_DATA.length;
-        groupIndex++
-      ) {
-        const group = POSITION_DATA[groupIndex];
-        const positionIndex =
-          group.sortOrder?.indexOf(position) ??
-          (group.positions.includes(position) ? 0 : -1);
-        if (positionIndex !== -1) {
-          return { groupIndex, positionIndex };
-        }
-      }
-      return { groupIndex: 99, positionIndex: 99 };
-    };
-
-    const aInfo = getIndices(a.position as string);
-    const bInfo = getIndices(b.position as string);
-
-    if (aInfo.groupIndex !== bInfo.groupIndex) {
-      return aInfo.groupIndex - bInfo.groupIndex;
-    }
-
-    return aInfo.positionIndex - bInfo.positionIndex;
   });
 };
 
@@ -134,7 +49,7 @@ export const sortSeasonsByNumber = (seasons: ClubData[]) => {
 
 export const sortPlayersByPositionWithinGroup = (
   players: Players[],
-  sortOrder: string[]
+  sortOrder: string[],
 ) => {
   return [...players].sort((a, b) => {
     const indexA = sortOrder.indexOf(a.position as string);
@@ -145,7 +60,7 @@ export const sortPlayersByPositionWithinGroup = (
 
 export const sortTransfersByValue = (
   players: Players[],
-  type: "arrivals" | "exit"
+  type: "arrivals" | "exit",
 ) => {
   const isArrival = type === "arrivals";
 

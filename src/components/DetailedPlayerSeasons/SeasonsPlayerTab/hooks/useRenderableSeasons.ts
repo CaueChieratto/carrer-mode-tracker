@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
-import { calculateTotalStats } from "../../../../common/utils/PlayerStatsCalculator";
+import { calculateTotalStats } from "../../../StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
 
 export const useRenderableSeasons = (
   seasonsPlayerPlayed: ClubData[],
-  playerId?: string
+  playerId?: string,
 ): ClubData[] => {
   const renderableSeasons = useMemo(() => {
     return seasonsPlayerPlayed.filter((season) => {

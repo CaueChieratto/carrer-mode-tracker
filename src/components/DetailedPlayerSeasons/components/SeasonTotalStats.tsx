@@ -4,8 +4,8 @@ import { useState } from "react";
 import TrophyList from "../SeasonsPlayerTab/components/TrophyList";
 import { Trophy } from "../../../common/interfaces/club/trophy";
 import { Players } from "../../../common/interfaces/playersInfo/players";
-import CalculatedStatistics from "../../CalculatedStatistics";
-import StatisticsTable_Title from "../../StatisticsTable_Title";
+import StatisticsTable_Title from "../../Statistics/StatisticsTable_Title";
+import CalculatedStatistics from "../../Statistics/CalculatedStatistics";
 
 type SeasonTotalStatsProps = {
   playerInSeason?: Players;

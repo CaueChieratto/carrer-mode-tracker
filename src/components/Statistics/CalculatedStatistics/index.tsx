@@ -1,8 +1,9 @@
-import { LeagueStats } from "../../common/interfaces/playersStats/leagueStats";
-import { Players } from "../../common/interfaces/playersInfo/players";
-import Statistic from "../../ui/Statistic";
-import { useStatistics } from "../../common/hooks/Stats/UseStatistics";
-import { iconMap } from "../../common/constants/StatsIconMap";
+import { iconMap } from "../../../common/constants/StatsIconMap";
+import { Players } from "../../../common/interfaces/playersInfo/players";
+import { LeagueStats } from "../../../common/interfaces/playersStats/leagueStats";
+import { Match } from "../../AllMatchesTab/types/Match";
+import Statistic from "./components/Statistic";
+import { useStatistics } from "./hooks/UseStatistics";
 
 type CalculatedStatisticsProps = {
   info?: boolean;
@@ -13,6 +14,7 @@ type CalculatedStatisticsProps = {
   player?: Players;
   leagueStats?: LeagueStats;
   handleDeleteLeague?: (leagueName: string) => void;
+  matches?: Match[];
 };
 
 const CalculatedStatistics = (props: CalculatedStatisticsProps) => {

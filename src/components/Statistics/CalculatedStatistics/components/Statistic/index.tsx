@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Styles from "./CalculatedStatistics.module.css";
-import { UseRatingColor } from "../../common/hooks/Colors/GetOverallColor";
+import { UseRatingColor } from "../../../../../common/hooks/Colors/GetOverallColor";
 
 type StatisticProps = {
   label: string;

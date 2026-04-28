@@ -36,6 +36,7 @@ export const MatchStatsTab = ({ match }: MatchStatsTabProps) => {
       label: "Recuperação de bola",
       home: match.homeBallRecovery || 0,
       away: match.awayBallRecovery || 0,
+      reverseWinner: true,
     },
     {
       type: "standard",

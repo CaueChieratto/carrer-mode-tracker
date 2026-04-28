@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import Styles from "../../../../ui/Statistic/CalculatedStatistics.module.css";
-import { Players } from "../../../interfaces/playersInfo/players";
-import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
-import { calculateTotalStats } from "../../../utils/PlayerStatsCalculator";
+import Styles from "../../components/Statistic/CalculatedStatistics.module.css";
+import { Players } from "../../../../../common/interfaces/playersInfo/players";
+import { LeagueStats } from "../../../../../common/interfaces/playersStats/leagueStats";
+import { calculateTotalStats } from "../../../../StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
+import { Match } from "../../../../AllMatchesTab/types/Match";
 
 type UseStatisticsProps = {
   total?: boolean;
@@ -13,6 +14,7 @@ type UseStatisticsProps = {
   leagueStats?: LeagueStats;
   handleDeleteLeague?: (leagueName: string) => void;
   isPlayer?: boolean;
+  matches?: Match[];
 };
 
 export const useStatistics = ({
@@ -23,14 +25,15 @@ export const useStatistics = ({
   leagueStats,
   handleDeleteLeague,
   isPlayer,
+  matches,
 }: UseStatisticsProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
   const totalStats = useMemo(() => {
     if (!total || !player) return null;
-    return calculateTotalStats(player);
-  }, [player, total]);
+    return calculateTotalStats(player, matches);
+  }, [player, total, matches]);
 
   const statsData = useMemo(
     () => [
@@ -81,7 +84,7 @@ export const useStatistics = ({
           if (leagueStats) {
             if (
               window.confirm(
-                `Deseja excluir permanentemente a ${leagueStats.leagueName}?`
+                `Deseja excluir permanentemente a ${leagueStats.leagueName}?`,
               )
             ) {
               handleDeleteLeague?.(leagueStats.leagueName);
@@ -90,7 +93,7 @@ export const useStatistics = ({
         },
       },
     ],
-    [totalStats, leagueStats, total, league, player, handleDeleteLeague]
+    [totalStats, leagueStats, total, league, player, handleDeleteLeague],
   );
 
   const filteredStats = useMemo(
@@ -106,7 +109,7 @@ export const useStatistics = ({
           return !stat.showForGoalkeeper;
         }
       }),
-    [statsData, isGeralPage, league, total, isGoalkeeper, isPlayer]
+    [statsData, isGeralPage, league, total, isGoalkeeper, isPlayer],
   );
 
   return { filteredStats };

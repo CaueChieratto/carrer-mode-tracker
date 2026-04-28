@@ -1,8 +1,8 @@
 import { Trophy } from "../../../../common/interfaces/club/trophy";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../common/interfaces/playersStats/leagueStats";
-import CalculatedStatistics from "../../../CalculatedStatistics";
-import StatisticsTable_Title from "../../../StatisticsTable_Title";
+import CalculatedStatistics from "../../../Statistics/CalculatedStatistics";
+import StatisticsTable_Title from "../../../Statistics/StatisticsTable_Title";
 import NoTitleSeason from "../../components/NoTitleSeason";
 import LeagueStatsRow from "../../SeasonsPlayerTab/components/LeagueStatsRow";
 import Styles from "../../SeasonsPlayerTab/SeasonsPlayerTab.module.css";

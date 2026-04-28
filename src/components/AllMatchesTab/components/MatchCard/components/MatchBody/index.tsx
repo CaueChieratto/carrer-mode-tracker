@@ -19,8 +19,15 @@ export const MatchBody = ({ match, onClick }: MatchBodyProps) => (
         <span className={Styles.team_name}>{match.awayTeam}</span>
       </div>
       <div className={Styles.scores}>
-        <span className={Styles.score}>{match.homeScore}</span>
-        <span className={Styles.score}>{match.awayScore}</span>
+        <span className={Styles.score}>
+          {match.homeScore}
+          {match.homePenScore != null && ` (${match.homePenScore})`}
+        </span>
+
+        <span className={Styles.score}>
+          {match.awayScore}
+          {match.awayPenScore != null && ` (${match.awayPenScore})`}
+        </span>
       </div>
     </section>
 

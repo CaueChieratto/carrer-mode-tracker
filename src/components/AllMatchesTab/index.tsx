@@ -29,9 +29,13 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
     return new Date(2000 + year, month - 1, day).getTime();
   };
 
-  const sortedMatches = allMatches
-    ?.slice()
-    .sort((a, b) => parseDate(a.date) - parseDate(b.date));
+  const sortedMatches = allMatches?.slice().sort((a, b) => {
+    const diff = parseDate(a.date) - parseDate(b.date);
+
+    const isFinished = (isGeralPage ? "FINISHED" : activeTab) === "FINISHED";
+
+    return isFinished ? -diff : diff;
+  });
 
   const filteredMatches = sortedMatches?.filter(
     (match) => match.status === (isGeralPage ? "FINISHED" : activeTab),

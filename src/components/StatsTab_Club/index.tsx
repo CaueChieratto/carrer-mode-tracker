@@ -1,7 +1,7 @@
 import { ClubData } from "../../common/interfaces/club/clubData";
 import NoStatsMessage from "../NoStatsMessage";
-import { useSortedPlayersWithStats } from "../../common/hooks/Players/UseSortedPlayersWithStats";
-import PlayerStatsList from "../../ui/PlayerStatsList";
+import { useSortedPlayersWithStats } from "./hooks/UseSortedPlayersWithStats";
+import PlayerStatsList from "./components/PlayerStatsList";
 import { Career } from "../../common/interfaces/Career";
 import { ContainerClubContent } from "../ContainerClubContent";
 

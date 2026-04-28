@@ -17,10 +17,6 @@ const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
     <>
       <SummaryCard season={season} />
 
-      {season.matches && season.matches?.length > 0 && (
-        <MatchStatsCard season={season} career={career} />
-      )}
-
       <TransfersCardSummary
         season={season}
         career={career}
@@ -28,6 +24,10 @@ const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
       />
 
       <TransferCardBalance season={season} career={career} />
+
+      {season.matches && season.matches?.length > 0 && (
+        <MatchStatsCard season={season} career={career} />
+      )}
 
       {season.leagues && season.leagues?.length > 0 && (
         <CompetitionsCard season={season} />

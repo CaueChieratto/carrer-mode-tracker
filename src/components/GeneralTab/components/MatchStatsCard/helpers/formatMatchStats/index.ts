@@ -28,7 +28,7 @@ export const formatMatchStats = (
     {
       title: "Geral",
       stats: [
-        { name: "Total de jogos", value: totalMatches },
+        { name: "Partidas", value: totalMatches },
         { name: "Posse de bola média", value: `${avgPossession}%` },
         { name: "Nota média do time", value: avgRating },
       ],
@@ -80,10 +80,6 @@ export const formatMatchStats = (
     {
       title: "Outros",
       stats: [
-        {
-          name: "Distância média (km)",
-          value: avg(stats.totalDistance),
-        },
         {
           name: "Cartões amarelos",
           value: `${stats.totalYellowCards} (${avg(stats.totalYellowCards)})`,

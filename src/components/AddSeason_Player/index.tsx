@@ -53,7 +53,7 @@ const AddSeason_Player = forwardRef<HTMLFormElement, AddSeason_PlayerProps>(
                     Object.entries(booleanValues).map(([k, v]) => [
                       k,
                       String(v),
-                    ])
+                    ]),
                   ),
                 }}
                 onInputChange={handleInputChange}
@@ -78,7 +78,7 @@ const AddSeason_Player = forwardRef<HTMLFormElement, AddSeason_PlayerProps>(
         {isLoading && <Load />}
       </>
     );
-  }
+  },
 );
 
 AddSeason_Player.displayName = "AddSeason_Player";

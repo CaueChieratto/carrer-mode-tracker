@@ -1,12 +1,10 @@
 import { useLocation } from "react-router-dom";
-import { Career } from "../../common/interfaces/Career";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import { Players } from "../../common/interfaces/playersInfo/players";
-import {
-  sortedPlayers,
-  sortPlayersByContributions,
-} from "../../common/utils/Sorts";
-import PlayerStats from "../../components/PlayerStats";
+import { Career } from "../../../../common/interfaces/Career";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import PlayerStats from "./components/PlayerStats";
+import { sortedPlayers } from "./utils/sortedPlayers";
+import { sortPlayersByContributions } from "./utils/sortPlayersByContributions";
 
 type PlayerStatsListProps = {
   players: Players[];

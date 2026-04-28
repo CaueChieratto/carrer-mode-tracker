@@ -1,15 +1,15 @@
 import { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { TabConfig } from "../../common/constants/SeasonTabsConfig";
 import { useTabView } from "../../common/hooks/UseTabView";
 import { Career } from "../../common/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import Navbar from "../../ui/Navbar";
-import ContainerButton from "../ContainerButton";
-import HeaderSeason from "../HeaderSeason";
 import Styles from "./SectionView.module.css";
 import { Players } from "../../common/interfaces/playersInfo/players";
+import ContainerButton from "../../components/ContainerButton";
+import HeaderSeason from "../../components/HeaderSeason";
+import { TabConfig } from "./constants/SeasonTabsConfig";
 
 const SectionView = ({
   career,

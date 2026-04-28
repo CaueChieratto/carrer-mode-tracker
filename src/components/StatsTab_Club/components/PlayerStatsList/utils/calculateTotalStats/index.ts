@@ -1,4 +1,4 @@
-import { Players } from "../interfaces/playersInfo/players";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 
 export const calculateTotalStats = (player: Players) => {
   const leagues = player.statsLeagues || [];
@@ -10,6 +10,7 @@ export const calculateTotalStats = (player: Players) => {
       acc.assists += league.stats.assists;
       acc.cleanSheets += league.stats.cleanSheets;
       acc.ratingSum += league.stats.rating * league.stats.games;
+
       return acc;
     },
     {

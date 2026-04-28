@@ -19,7 +19,6 @@ export interface AggregatedStats {
   totalYellowCards: number;
   totalRedCards: number;
   totalBallRecovery: number;
-  totalDistance: number;
 }
 
 const getValue = (isHome: boolean, home?: number, away?: number): number =>
@@ -46,7 +45,6 @@ export const calculateMatchStats = (
     totalYellowCards: 0,
     totalRedCards: 0,
     totalBallRecovery: 0,
-    totalDistance: 0,
   };
 
   matches.forEach((match) => {
@@ -115,7 +113,6 @@ export const calculateMatchStats = (
     if (match.playerStats) {
       match.playerStats.forEach((p) => {
         stats.totalAssists += p.assists ?? 0;
-        stats.totalDistance += p.distanceKm ?? 0;
 
         if (p.rating) {
           stats.totalRating += p.rating;

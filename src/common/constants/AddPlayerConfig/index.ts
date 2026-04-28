@@ -31,7 +31,7 @@ type ConfigMap = {
 export const getAddPlayerConfig = (
   player: Players | undefined,
   squadSaveAction: SaveAction,
-  statsSaveAction: SaveAction
+  statsSaveAction: SaveAction,
 ): ConfigMap => ({
   squad: {
     label: player ? "Editar Jogador" : "Adicionar Jogador",

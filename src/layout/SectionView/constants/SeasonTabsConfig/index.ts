@@ -1,15 +1,15 @@
 import { NavigateFunction } from "react-router-dom";
-import GeneralTab from "../../../components/GeneralTab";
-import SquadTab from "../../../components/SquadTab";
-import { StatsTab_Club } from "../../../components/StatsTab_Club";
-import { Buttons } from "../../elements/Buttons";
-import { ClubData } from "../../interfaces/club/clubData";
-import { Career } from "../../interfaces/Career";
-import { Players } from "../../interfaces/playersInfo/players";
-import TotalPlayerTab from "../../../components/DetailedPlayerSeasons/TotalPlayerTab";
-import SeasonsPlayerTab from "../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
-import InfoPlayerTab from "../../../components/DetailedPlayerSeasons/InfoPlayerTab";
-import { AllMatchesTab } from "../../../components/AllMatchesTab";
+import { Buttons } from "../../../../common/elements/Buttons";
+import { Career } from "../../../../common/interfaces/Career";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import { AllMatchesTab } from "../../../../components/AllMatchesTab";
+import InfoPlayerTab from "../../../../components/DetailedPlayerSeasons/InfoPlayerTab";
+import SeasonsPlayerTab from "../../../../components/DetailedPlayerSeasons/SeasonsPlayerTab";
+import TotalPlayerTab from "../../../../components/DetailedPlayerSeasons/TotalPlayerTab";
+import GeneralTab from "../../../../components/GeneralTab";
+import SquadTab from "../../../../components/SquadTab";
+import { StatsTab_Club } from "../../../../components/StatsTab_Club";
 
 export type TabConfig = {
   title: string;

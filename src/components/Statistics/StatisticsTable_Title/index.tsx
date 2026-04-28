@@ -1,6 +1,6 @@
 import Styles from "./StatisticsTable_Title.module.css";
 import { RiCloseCircleLine } from "react-icons/ri";
-import { UseOverallColor } from "../../common/hooks/Colors/GetOverallColor";
+import { UseOverallColor } from "../../../common/hooks/Colors/GetOverallColor";
 import { GrExpand } from "react-icons/gr";
 import { GrContract } from "react-icons/gr";
 import { Dispatch, ReactNode, SetStateAction } from "react";
