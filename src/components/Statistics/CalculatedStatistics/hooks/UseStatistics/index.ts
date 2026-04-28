@@ -4,7 +4,6 @@ import Styles from "../../components/Statistic/CalculatedStatistics.module.css";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../../common/interfaces/playersStats/leagueStats";
 import { calculateTotalStats } from "../../../../StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
-import { Match } from "../../../../AllMatchesTab/types/Match";
 
 type UseStatisticsProps = {
   total?: boolean;
@@ -14,7 +13,6 @@ type UseStatisticsProps = {
   leagueStats?: LeagueStats;
   handleDeleteLeague?: (leagueName: string) => void;
   isPlayer?: boolean;
-  matches?: Match[];
 };
 
 export const useStatistics = ({
@@ -25,15 +23,14 @@ export const useStatistics = ({
   leagueStats,
   handleDeleteLeague,
   isPlayer,
-  matches,
 }: UseStatisticsProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
   const totalStats = useMemo(() => {
     if (!total || !player) return null;
-    return calculateTotalStats(player, matches);
-  }, [player, total, matches]);
+    return calculateTotalStats(player);
+  }, [player, total]);
 
   const statsData = useMemo(
     () => [
