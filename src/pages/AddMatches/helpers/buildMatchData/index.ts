@@ -49,6 +49,7 @@ export function buildMatchData({
     : null;
 
   return {
+    ...existingMatch,
     matchesId: existingMatch?.matchesId ?? uuidv4(),
     date: formattedDate,
     league,
