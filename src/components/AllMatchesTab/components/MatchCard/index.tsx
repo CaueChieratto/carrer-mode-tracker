@@ -4,10 +4,10 @@ import { Match } from "../../types/Match";
 import Styles from "./MatchCard.module.css";
 import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";
-import { FaRegCopy } from "react-icons/fa6";
 import { Career } from "../../../../common/interfaces/Career";
 import { useMatchNavigation } from "./hooks/useMatchNavigation";
 import { buildMatchCopyText } from "../../../../common/helpers/buildCopyText";
+import { CgCopy } from "react-icons/cg";
 
 type MatchCardProps = {
   career: Career;
@@ -40,7 +40,7 @@ export const MatchCard = ({
     <Card className={Styles.card}>
       {match.status === "FINISHED" && (
         <div className={Styles.icon} onClick={copyText}>
-          <FaRegCopy />
+          <CgCopy />
         </div>
       )}
 
