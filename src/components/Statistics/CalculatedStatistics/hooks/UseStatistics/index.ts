@@ -38,6 +38,13 @@ export const useStatistics = ({
         label: "Jogos",
         getValue: () => (total ? totalStats?.games : leagueStats?.stats.games),
       },
+
+      {
+        label: "Minutos",
+        getValue: () =>
+          total ? totalStats?.minutesPlayed : leagueStats?.stats.minutesPlayed,
+      },
+
       {
         label: "Gols + Assistências",
         getValue: () =>
@@ -45,23 +52,35 @@ export const useStatistics = ({
             ? (totalStats?.goals ?? 0) + (totalStats?.assists ?? 0)
             : (leagueStats?.stats.goals ?? 0) +
               (leagueStats?.stats.assists ?? 0),
-      },
-      {
-        label: "Gols",
-        getValue: () => (total ? totalStats?.goals : leagueStats?.stats.goals),
         hideForGoalkeeper: true,
       },
+
       {
         label: "Jogos Sem Sofrer Gols",
         getValue: () =>
           total ? totalStats?.cleanSheets : leagueStats?.stats.cleanSheets,
         showForGoalkeeper: true,
       },
+
+      {
+        label: "Gols",
+        getValue: () => (total ? totalStats?.goals : leagueStats?.stats.goals),
+        hideForGoalkeeper: true,
+      },
+
+      {
+        label: "Defesas",
+        getValue: () =>
+          total ? totalStats?.defenses : leagueStats?.stats.defenses,
+        showForGoalkeeper: true,
+      },
+
       {
         label: "Assistências",
         getValue: () =>
           total ? totalStats?.assists : leagueStats?.stats.assists,
       },
+
       {
         label: "Média",
         getValue: () =>
@@ -69,10 +88,12 @@ export const useStatistics = ({
         className: !league ? Styles.rating : Styles.ratingLeague,
         getColor: true,
       },
+
       {
         label: "Bola de Ouro",
         getValue: () => player?.ballonDor,
         showOnlyForTotal: true,
+        hideInGeralPage: true,
       },
       {
         label: "Deletar",
@@ -98,6 +119,7 @@ export const useStatistics = ({
       statsData.filter((stat) => {
         if (isPlayer && stat.label === "Bola de Ouro") return false;
         if (isGeralPage && stat.label === "Deletar") return false;
+        if (isGeralPage && stat.hideInGeralPage) return false;
         if (stat.showOnlyForLeague && !league) return false;
         if (stat.showOnlyForTotal && !total) return false;
         if (isGoalkeeper) {

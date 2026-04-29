@@ -13,8 +13,40 @@ type AllMatchesTabProps = {
   career: Career;
 };
 
+const MONTH_OPTIONS = [
+  "Tudo",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+];
+
+const MONTH_TO_NUM: Record<string, number> = {
+  Janeiro: 1,
+  Fevereiro: 2,
+  Março: 3,
+  Abril: 4,
+  Maio: 5,
+  Junho: 6,
+  Julho: 7,
+  Agosto: 8,
+  Setembro: 9,
+  Outubro: 10,
+  Novembro: 11,
+  Dezembro: 12,
+};
+
 export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
   const [activeTab, setActiveTab] = useState<MatchStatus | string>("SCHEDULED");
+  const [selectedMonth, setSelectedMonth] = useState<string>("Tudo");
 
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
@@ -37,14 +69,27 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
     return isFinished ? -diff : diff;
   });
 
-  const filteredMatches = sortedMatches?.filter(
-    (match) => match.status === (isGeralPage ? "FINISHED" : activeTab),
-  );
+  const filteredMatches = sortedMatches?.filter((match) => {
+    const statusMatch = match.status === (isGeralPage ? "FINISHED" : activeTab);
 
+    let monthMatch = true;
+    if (selectedMonth !== "Tudo") {
+      const matchMonthNum = Number(match.date.split("/")[1]);
+      monthMatch = matchMonthNum === MONTH_TO_NUM[selectedMonth];
+    }
+
+    return statusMatch && monthMatch;
+  });
   return (
     <ContainerClubContent isMatch>
       {!isGeralPage && (
-        <ButtonsSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+        <ButtonsSwitch
+          months={MONTH_OPTIONS}
+          selectedMonth={selectedMonth}
+          setSelectedMonth={setSelectedMonth}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       )}
       {!filteredMatches?.length ? (
         <NoStatsMessage

@@ -176,10 +176,13 @@ export const useAddMatchStatsPlayer = () => {
             );
             const outPlayerMinutes = outPlayerStats?.minutesPlayed || 0;
 
-            const maxMatchMinutes = Math.max(
-              90,
-              ...match.playerStats.map((s) => s.minutesPlayed || 0),
-            );
+            const maxMatchMinutes = match.hasExtraTime
+              ? 120 +
+                (match.stoppage1T || 0) +
+                (match.stoppage2T || 0) +
+                (match.stoppageET1 || 0) +
+                (match.stoppageET2 || 0)
+              : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
 
             if (outPlayerMinutes > 0) {
               calculatedMinutes = String(

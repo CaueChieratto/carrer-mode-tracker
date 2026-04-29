@@ -164,10 +164,14 @@ export const useAddDetails = () => {
     setIsSaving(true);
 
     try {
-      const maxMatchMinutes = Math.max(
-        90,
-        ...(match.playerStats || []).map((s) => s.minutesPlayed || 0),
-      );
+      const stoppage1T = Number(formValues.stoppage1T) || 0;
+      const stoppage2T = Number(formValues.stoppage2T) || 0;
+      const stoppageET1 = Number(formValues.stoppageET1) || 0;
+      const stoppageET2 = Number(formValues.stoppageET2) || 0;
+
+      const maxMatchMinutes = booleanValues.hasExtraTime
+        ? 120 + stoppage1T + stoppage2T + stoppageET1 + stoppageET2
+        : 90 + stoppage1T + stoppage2T;
 
       const updatedStats = (match.playerStats || []).map((stat) => {
         const isStarter = [
@@ -188,22 +192,21 @@ export const useAddDetails = () => {
           stat.substituteIn !== "Nenhum"
         ) {
           const starterName = stat.substituteIn;
-
           const starterStat = match.playerStats?.find((s) => {
             const sp = season.players.find(
               (player) => player.id === s.playerId,
             );
             return sp?.name === starterName;
           });
-
           if (starterStat) {
             const starterSubMinute =
               Number(formValues[`eventMinute_sub_${starterStat.playerId}`]) ||
               starterStat.minutesPlayed ||
               0;
-
             newMinutesPlayed = Math.max(0, maxMatchMinutes - starterSubMinute);
           }
+        } else if (isStarter) {
+          newMinutesPlayed = maxMatchMinutes;
         }
 
         const goalMinutes = Array.from({ length: stat.goals }).map(

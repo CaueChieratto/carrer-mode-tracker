@@ -31,9 +31,10 @@ const PlayerSeason = ({
   return (
     <Card className={Styles.card} key={season.id}>
       <SeasonRow seasonString={seasonString} player={player} />
+
       {sortedLeagues.map((leagueStats) => {
         const trophy = trophiesWonInSeason.find(
-          (t) => t.leagueName === leagueStats.leagueName
+          (t) => t.leagueName === leagueStats.leagueName,
         );
         const leagueKey = `${season.id}-${leagueStats.leagueName}`;
 
@@ -50,6 +51,7 @@ const PlayerSeason = ({
           </div>
         );
       })}
+
       <SeasonTotalStats
         playerInSeason={playerInSeason}
         trophiesWonInSeason={trophiesWonInSeason}

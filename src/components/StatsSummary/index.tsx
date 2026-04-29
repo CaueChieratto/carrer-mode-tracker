@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Career } from "../../common/interfaces/Career";
 import Styles from "./StatsSummary.module.css";
 import { formatDisplayValue } from "../../common/utils/FormatValue";
+import { augmentCareerWithMatchStats } from "../../layout/SectionView/helpers/mergeMatchStats";
 
 type StatsSummaryProps = {
   career: Career;
@@ -30,6 +31,11 @@ const StatDisplay = ({
 };
 
 const StatsSummary = ({ career }: StatsSummaryProps) => {
+  const augmentedCareer = useMemo(
+    () => augmentCareerWithMatchStats(career),
+    [career],
+  );
+
   const stats = useMemo(() => {
     const playerStats: {
       [id: string]: {
@@ -43,7 +49,7 @@ const StatsSummary = ({ career }: StatsSummaryProps) => {
     let biggestSigning = { name: "", value: 0 };
     let biggestSale = { name: "", value: 0 };
 
-    (career.clubData || []).forEach((season) => {
+    (augmentedCareer.clubData || []).forEach((season) => {
       (season.players || []).forEach((player) => {
         if (!playerStats[player.id]) {
           playerStats[player.id] = {
@@ -82,7 +88,6 @@ const StatsSummary = ({ career }: StatsSummaryProps) => {
     });
 
     const allPlayersWithStats = Object.values(playerStats);
-
     const initialPlayerStats = {
       name: "",
       games: 0,
@@ -93,19 +98,19 @@ const StatsSummary = ({ career }: StatsSummaryProps) => {
 
     const mostGames = allPlayersWithStats.reduce(
       (max, p) => (p.games > max.games ? p : max),
-      initialPlayerStats
+      initialPlayerStats,
     );
     const mostGoals = allPlayersWithStats.reduce(
       (max, p) => (p.goals > max.goals ? p : max),
-      initialPlayerStats
+      initialPlayerStats,
     );
     const mostAssists = allPlayersWithStats.reduce(
       (max, p) => (p.assists > max.assists ? p : max),
-      initialPlayerStats
+      initialPlayerStats,
     );
     const mostGoalContributions = allPlayersWithStats.reduce(
       (max, p) => (p.goalContributions > max.goalContributions ? p : max),
-      initialPlayerStats
+      initialPlayerStats,
     );
 
     return {
@@ -116,7 +121,7 @@ const StatsSummary = ({ career }: StatsSummaryProps) => {
       biggestSigning,
       biggestSale,
     };
-  }, [career]);
+  }, [augmentedCareer]);
 
   return (
     <>

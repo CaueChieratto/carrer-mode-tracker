@@ -9,6 +9,8 @@ export const calculateTotalStats = (player: Players) => {
       acc.goals += league.stats.goals;
       acc.assists += league.stats.assists;
       acc.cleanSheets += league.stats.cleanSheets;
+      acc.minutesPlayed += league.stats.minutesPlayed || 0; // <-- ADICIONADO AQUI
+      acc.defenses += league.stats.defenses || 0;
       acc.ratingSum += league.stats.rating * league.stats.games;
 
       return acc;
@@ -18,6 +20,8 @@ export const calculateTotalStats = (player: Players) => {
       goals: 0,
       assists: 0,
       cleanSheets: 0,
+      minutesPlayed: 0, // <-- ADICIONADO AQUI
+      defenses: 0,
       ratingSum: 0,
     },
   );
@@ -32,6 +36,8 @@ export const calculateTotalStats = (player: Players) => {
     goals: stats.goals,
     assists: stats.assists,
     cleanSheets: stats.cleanSheets,
+    minutesPlayed: stats.minutesPlayed, // <-- ADICIONADO AQUI
+    defenses: stats.defenses,
     averageRating: averageRating,
   };
 };

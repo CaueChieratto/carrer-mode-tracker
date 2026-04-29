@@ -1,7 +1,7 @@
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 import Card from "../../../../ui/Card";
 import { Match } from "../../types/Match";
-import styles from "./MatchCard.module.css";
+import Styles from "./MatchCard.module.css";
 import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";
 import { FaRegCopy } from "react-icons/fa6";
@@ -37,9 +37,9 @@ export const MatchCard = ({
   };
 
   return (
-    <Card className={styles.card}>
+    <Card className={Styles.card}>
       {match.status === "FINISHED" && (
-        <div className={styles.icon} onClick={copyText}>
+        <div className={Styles.icon} onClick={copyText}>
           <FaRegCopy />
         </div>
       )}

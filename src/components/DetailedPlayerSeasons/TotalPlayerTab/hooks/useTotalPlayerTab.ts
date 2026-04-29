@@ -32,6 +32,8 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
           totalStats.games > 0 ||
           totalStats.goals > 0 ||
           totalStats.assists > 0 ||
+          totalStats.defenses > 0 ||
+          totalStats.minutesPlayed > 0 ||
           totalStats.cleanSheets > 0
         );
       })

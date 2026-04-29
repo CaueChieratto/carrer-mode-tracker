@@ -4,4 +4,6 @@ export interface Stats {
   assists: number;
   cleanSheets: number;
   rating: number;
+  minutesPlayed?: number;
+  defenses?: number;
 }

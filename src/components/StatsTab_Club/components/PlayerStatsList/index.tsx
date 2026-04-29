@@ -28,6 +28,7 @@ const PlayerStatsList = ({ players, career, season }: PlayerStatsListProps) => {
           player={player}
           career={career}
           season={season}
+          isGeralPage={isGeralPage}
         />
       ))}
     </>

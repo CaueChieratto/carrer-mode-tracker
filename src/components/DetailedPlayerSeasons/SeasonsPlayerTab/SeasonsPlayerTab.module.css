@@ -9,7 +9,7 @@
 
 .section {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
   padding: 12px 0;
   justify-items: center;
   align-items: center;

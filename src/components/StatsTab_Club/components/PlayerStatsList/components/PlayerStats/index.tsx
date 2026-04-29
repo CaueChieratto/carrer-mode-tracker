@@ -14,9 +14,15 @@ type PlayerStatsProps = {
   player: Players;
   career: Career;
   season: ClubData;
+  isGeralPage: boolean;
 };
 
-const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
+const PlayerStats = ({
+  career,
+  season,
+  player,
+  isGeralPage,
+}: PlayerStatsProps) => {
   const [expand, setExpand] = useState(false);
   const isGoalkeeper = player.position === "GOL";
   const navigate = useNavigate();
@@ -51,7 +57,10 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
 
   return (
     <Card className={Styles.card}>
-      <section className={Styles.section} onClick={navigatePlayer}>
+      <section
+        className={isGeralPage ? Styles.section_geral : Styles.section}
+        onClick={navigatePlayer}
+      >
         <StatisticsTable_Title
           type="info"
           playerName={player.name}
@@ -64,7 +73,10 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
           player={player}
         />
       </section>
-      <section className={Styles.section} onClick={() => setExpand(!expand)}>
+      <section
+        className={isGeralPage ? Styles.section_geral : Styles.section}
+        onClick={() => setExpand(!expand)}
+      >
         <StatisticsTable_Title
           setExpand={setExpand}
           expand={expand}
@@ -79,7 +91,14 @@ const PlayerStats = ({ career, season, player }: PlayerStatsProps) => {
       {expand && (
         <>
           {sortedLeagues.map((league) => (
-            <section className={Styles.section_leagues} key={league.leagueName}>
+            <section
+              className={
+                isGeralPage
+                  ? Styles.section_leagues_geral
+                  : Styles.section_leagues
+              }
+              key={league.leagueName}
+            >
               <StatisticsTable_Title
                 type="league"
                 leagueName={league.leagueName}

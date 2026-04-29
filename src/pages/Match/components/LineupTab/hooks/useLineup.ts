@@ -28,9 +28,11 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
 
   const [selectedFormation, setSelectedFormation] =
     useState<Formation>(initialFormation);
+
   const [lineup, setLineup] = useState<LineupState>(() =>
     resolveInitialState(initialFormation, season, initialLineup),
   );
+
   const [selectingSlotId, setSelectingSlotId] = useState<string | null>(null);
 
   const swapPlayers = useCallback((slotIdA: string, slotIdB: string) => {
@@ -107,6 +109,8 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
     (player: Players) => {
       if (!selectingSlotId) return;
 
+      const targetSlotId = selectingSlotId;
+
       setLineup((prev) => {
         const isTargetGk = selectingSlotId === "gk-0";
         const isTargetBench = selectingSlotId.startsWith("bench-");
@@ -144,6 +148,15 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
       });
 
       setSelectingSlotId(null);
+
+      setTimeout(() => {
+        const slotElement = document.querySelector(
+          `[data-slot-id="${targetSlotId}"]`,
+        );
+        if (slotElement) {
+          slotElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 150);
     },
     [selectingSlotId],
   );
@@ -200,15 +213,23 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
 
   const assignedPlayerIds = useMemo(() => {
     const ids = new Set<string>();
+
+    const isTargetTitular =
+      selectingSlotId && !selectingSlotId.startsWith("bench-");
+
     if (lineup.goalkeeper.player) ids.add(lineup.goalkeeper.player.id);
     lineup.lines.flat().forEach((slot) => {
       if (slot.player) ids.add(slot.player.id);
     });
-    lineup.bench.forEach((slot) => {
-      if (slot.player) ids.add(slot.player.id);
-    });
+
+    if (!isTargetTitular) {
+      lineup.bench.forEach((slot) => {
+        if (slot.player) ids.add(slot.player.id);
+      });
+    }
+
     return ids;
-  }, [lineup]);
+  }, [lineup, selectingSlotId]);
 
   const activePlayers = useMemo(
     () => season.players.filter((p) => !p.sell),

@@ -5,7 +5,6 @@ import Card from "../../../ui/Card";
 import SeasonRow from "../components/SeasonRow";
 import SeasonTotalStats from "../components/SeasonTotalStats";
 import LeagueStatsRowTotal from "./components/LeagueStatsRowTotal";
-import { useAggregatedLeagueStats } from "./hooks/useAggregatedLeagueStats";
 import { useTotalPlayerTab } from "./hooks/useTotalPlayerTab";
 import Styles from "./TotalPlayerTab.module.css";
 import NoStatsMessage from "../../NoStatsMessage";
@@ -17,7 +16,6 @@ type TotalPlayerTabProps = {
 
 const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
   const { allTrophiesWon } = useTotalPlayerTab(career, player);
-  const { aggregatedLeagueStats } = useAggregatedLeagueStats(career, player);
   const [expand, setExpand] = useState<Record<string, boolean>>({});
 
   const toggleExpand = (leagueName: string) => {
@@ -27,7 +25,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
     }));
   };
 
-  if (aggregatedLeagueStats.length === 0) {
+  if (player?.statsLeagues.length === 0) {
     return (
       <NoStatsMessage
         textOne="Nenhuma estatística encontrada"
@@ -40,7 +38,7 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
     <>
       <Card className={Styles.card}>
         <SeasonRow seasonString="Total por Liga" player={player} />
-        {aggregatedLeagueStats.map((league) => {
+        {player?.statsLeagues.map((league) => {
           const trophy = allTrophiesWon.find(
             (t) => t.leagueName === league.leagueName,
           );

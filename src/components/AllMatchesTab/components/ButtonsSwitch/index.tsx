@@ -2,10 +2,14 @@ import { useSeasonTheme } from "../../../../common/hooks/Seasons/UseSeasonTheme"
 import Button from "../../../Button";
 import Styles from "./ButtonsSwitch.module.css";
 import { MatchStatus } from "../../types/MatchStatus";
+import CustomSelect from "../../../CustomSelect";
 
 interface ButtonsSwitchProps {
   activeTab: MatchStatus | string;
   setActiveTab: (tab: MatchStatus | string) => void;
+  months: string[];
+  selectedMonth: string;
+  setSelectedMonth: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const TABS = [
@@ -15,7 +19,10 @@ const TABS = [
 
 export const ButtonsSwitch = ({
   activeTab,
+  months,
+  selectedMonth,
   setActiveTab,
+  setSelectedMonth,
 }: ButtonsSwitchProps) => {
   const { clubColor } = useSeasonTheme();
 
@@ -41,6 +48,15 @@ export const ButtonsSwitch = ({
           </Button>
         );
       })}
+      <div className="swiper-no-swiping" style={{ width: "100%" }}>
+        <CustomSelect
+          name="monthFilter"
+          options={months}
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          placeholder="Filtrar por mês"
+        />
+      </div>
     </div>
   );
 };

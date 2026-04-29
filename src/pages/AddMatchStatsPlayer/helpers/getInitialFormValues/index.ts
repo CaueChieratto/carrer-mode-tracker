@@ -5,8 +5,29 @@ export const getInitialFormValues = (match: Match, playerId: string) => {
 
   if (!stats) return null;
 
+  const maxMatchMinutes = match.hasExtraTime
+    ? 120 +
+      (match.stoppage1T || 0) +
+      (match.stoppage2T || 0) +
+      (match.stoppageET1 || 0) +
+      (match.stoppageET2 || 0)
+    : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
+
+  let initialMinutes = stats.minutesPlayed || 0;
+
+  if (initialMinutes === 0) {
+    const isStarter = [
+      match.lineup?.goalkeeper?.playerId,
+      ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
+    ].includes(playerId);
+
+    if (isStarter && (!stats.substituteIn || stats.substituteIn === "Nenhum")) {
+      initialMinutes = maxMatchMinutes;
+    }
+  }
+
   const values: Record<string, string> = {
-    minutesPlayed: String(stats.minutesPlayed ?? 0),
+    minutesPlayed: String(initialMinutes),
     rating: String(stats.rating ?? 0),
     matchGoals: String(stats.goals ?? 0),
     cleanSheets: String(stats.defenses ?? 0),

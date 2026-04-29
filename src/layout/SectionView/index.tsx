@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useTabView } from "../../common/hooks/UseTabView";
@@ -10,6 +11,10 @@ import { Players } from "../../common/interfaces/playersInfo/players";
 import ContainerButton from "../../components/ContainerButton";
 import HeaderSeason from "../../components/HeaderSeason";
 import { TabConfig } from "./constants/SeasonTabsConfig";
+import {
+  augmentCareerWithMatchStats,
+  getAggregatedPlayersForCareer,
+} from "./helpers/mergeMatchStats";
 
 const SectionView = ({
   career,
@@ -30,35 +35,52 @@ const SectionView = ({
   isPlayer?: boolean;
   player?: Players;
 }) => {
+  const augmentedCareer = useMemo(
+    () => augmentCareerWithMatchStats(career),
+    [career],
+  );
+  const augmentedSeason = useMemo(
+    () => augmentedCareer.clubData.find((s) => s.id === season.id) || season,
+    [augmentedCareer, season],
+  );
+  const augmentedPlayer = useMemo(() => {
+    if (!player) return undefined;
+
+    if (notSeason) {
+      const aggregatedPlayers = getAggregatedPlayersForCareer(augmentedCareer);
+      return aggregatedPlayers.find((p) => p.id === player.id);
+    }
+
+    return augmentedSeason.players.find((p) => p.id === player.id);
+  }, [player, notSeason, augmentedCareer, augmentedSeason]);
+
   const storageKey = isPlayer
-    ? `player-tab-${career.id}-${player?.id}`
+    ? `player-tab-${augmentedCareer.id}-${augmentedPlayer?.id}`
     : notSeason
-      ? `geral-tab-${career.id}`
-      : `season-tab-${career.id}-${season.id}`;
+      ? `geral-tab-${augmentedCareer.id}`
+      : `season-tab-${augmentedCareer.id}-${augmentedSeason.id}`;
 
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
 
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
-
   const handleActionClick = tabsConfig[activeIndex]?.action;
 
   return (
-    <SeasonThemeProvider careerId={career.id} career={career}>
+    <SeasonThemeProvider careerId={augmentedCareer.id} career={augmentedCareer}>
       <HeaderSeason
-        careerId={career.id}
+        careerId={augmentedCareer.id}
         isPlayer={isPlayer}
-        career={career}
-        season={!title ? season.seasonNumber : undefined}
+        career={augmentedCareer}
+        season={!title ? augmentedSeason.seasonNumber : undefined}
         titleText={title}
-        player={player}
+        player={augmentedPlayer}
       />
       <Navbar
         options={tabsConfig.map((tab) => tab.title)}
         activeOption={activeIndex}
         onOptionClick={handleTabClick}
       />
-
       {ActionButton && (
         <>
           {!notSeason && (
@@ -83,11 +105,11 @@ const SectionView = ({
               }
             >
               <TabComponent
-                season={season}
-                career={career}
+                season={augmentedSeason}
+                career={augmentedCareer}
                 onOpenTransfers={onOpenTransfers}
                 isPlayer={isPlayer}
-                player={player}
+                player={augmentedPlayer}
               />
             </div>
           </SwiperSlide>
