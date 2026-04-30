@@ -1,6 +1,6 @@
 import Styles from "./FooterSection_Player.module.css";
-import Data from "../../common/elements/SquadElements/Section/Section.module.css";
-import { formatDisplayValue } from "../../common/utils/FormatValue";
+import Data from "../../Section.module.css";
+import { formatDisplayValue } from "../../../../../../../common/utils/FormatValue";
 
 type FooterSection_PlayerProps = {
   playerValue: number;

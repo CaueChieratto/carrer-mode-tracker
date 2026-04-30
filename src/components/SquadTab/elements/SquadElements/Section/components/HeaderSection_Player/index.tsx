@@ -1,6 +1,6 @@
 import Styles from "./HeaderSection_Player.module.css";
-import Data from "../../common/elements/SquadElements/Section/Section.module.css";
-import CaptainArmbandIcon from "../../ui/CaptainArmbandIcon";
+import Data from "../../Section.module.css";
+import CaptainArmbandIcon from "../../../../../../../ui/CaptainArmbandIcon";
 
 type HeaderSection_PlayerProps = {
   name: string;

@@ -173,11 +173,46 @@ export const useAddDetails = () => {
         ? 120 + stoppage1T + stoppage2T + stoppageET1 + stoppageET2
         : 90 + stoppage1T + stoppage2T;
 
-      const updatedStats = (match.playerStats || []).map((stat) => {
-        const isStarter = [
-          match.lineup?.goalkeeper?.playerId,
-          ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
-        ].includes(stat.playerId);
+      const startersIds = [
+        match.lineup?.goalkeeper?.playerId,
+        ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
+      ].filter(Boolean) as string[];
+
+      const currentStats = [...(match.playerStats || [])];
+
+      startersIds.forEach((starterId) => {
+        if (!currentStats.some((stat) => stat.playerId === starterId)) {
+          currentStats.push({
+            playerId: starterId,
+            minutesPlayed: 0,
+            goals: 0,
+            defenses: 0,
+            assists: 0,
+            distanceKm: 0,
+            rating: 0,
+            totalPasses: 0,
+            passPrecision: 0,
+            passesMissed: 0,
+            keyPasses: 0,
+            totalFinishings: 0,
+            finishingPrecision: 0,
+            finishingsMissed: 0,
+            totalDribbles: 0,
+            dribblePrecision: 0,
+            dribblesMissed: 0,
+            ballsRecovered: 0,
+            ballsLost: 0,
+            yellowCard: false,
+            secondYellowCard: false,
+            redCard: false,
+            cleanSheet: false,
+            substituteIn: "Nenhum",
+          });
+        }
+      });
+
+      const updatedStats = currentStats.map((stat) => {
+        const isStarter = startersIds.includes(stat.playerId);
 
         let newMinutesPlayed = stat.minutesPlayed || 0;
 
@@ -192,24 +227,26 @@ export const useAddDetails = () => {
           stat.substituteIn !== "Nenhum"
         ) {
           const starterName = stat.substituteIn;
-          const starterStat = match.playerStats?.find((s) => {
+          const starterStat = currentStats.find((s) => {
             const sp = season.players.find(
               (player) => player.id === s.playerId,
             );
             return sp?.name === starterName;
           });
+
           if (starterStat) {
             const starterSubMinute =
               Number(formValues[`eventMinute_sub_${starterStat.playerId}`]) ||
               starterStat.minutesPlayed ||
               0;
+
             newMinutesPlayed = Math.max(0, maxMatchMinutes - starterSubMinute);
           }
         } else if (isStarter) {
           newMinutesPlayed = maxMatchMinutes;
         }
 
-        const goalMinutes = Array.from({ length: stat.goals }).map(
+        const goalMinutes = Array.from({ length: stat.goals || 0 }).map(
           (_, i) =>
             Number(formValues[`eventMinute_goal_${stat.playerId}_${i}`]) || 0,
         );
@@ -233,13 +270,12 @@ export const useAddDetails = () => {
 
       const homeScoreNum = Number(formValues.homeScore) || 0;
       const awayScoreNum = Number(formValues.awayScore) || 0;
-      const isUserHome = match.homeTeam === career.clubName;
 
+      const isUserHome = match.homeTeam === career.clubName;
       let result: "V" | "E" | "D" | "?" = "?";
 
       if (homeScoreNum === awayScoreNum) {
         result = "E";
-
         if (booleanValues.hasPenalties) {
           const homePen = Number(formValues.homePenScore) || 0;
           const awayPen = Number(formValues.awayPenScore) || 0;

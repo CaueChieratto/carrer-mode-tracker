@@ -7,6 +7,11 @@ import PlayerStatsList from "./components/PlayerStatsList";
 import { Career } from "../../common/interfaces/Career";
 import { ContainerClubContent } from "../ContainerClubContent";
 import { getAggregatedPlayersForCareer } from "../../layout/SectionView/helpers/mergeMatchStats";
+import { ButtonsSwitch } from "../AllMatchesTab/components/ButtonsSwitch";
+import { buildPlayersCopyText } from "./helpers/buildPlayersCopyText";
+import { sortPlayersList } from "./helpers/sortPlayersList";
+import { usePersistedSortOption } from "./hooks/usePersistedSortOption";
+import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 
 type StatsTab_ClubProps = {
   season: ClubData;
@@ -17,20 +22,44 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
+  const { sortOption, setSortOption, isReversed } = usePersistedSortOption();
+
   const playersToDisplay = useMemo(() => {
-    if (isGeralPage) {
-      return getAggregatedPlayersForCareer(career);
-    }
-    return season.players;
+    return isGeralPage ? getAggregatedPlayersForCareer(career) : season.players;
   }, [isGeralPage, career, season.players]);
 
   const playersWithStats = useSortedPlayersWithStats(playersToDisplay);
 
+  const sortedPlayerList = useMemo(() => {
+    return sortPlayersList(
+      playersWithStats,
+      sortOption,
+      isGeralPage,
+      isReversed,
+    );
+  }, [playersWithStats, sortOption, isGeralPage, isReversed]);
+
+  const copyList = async () => {
+    if (!sortedPlayerList.length) return;
+
+    const text = buildPlayersCopyText(sortedPlayerList);
+
+    navigator.clipboard.writeText(text);
+    alert("Lista copiada com sucesso!");
+  };
+
   return (
     <ContainerClubContent>
+      <ButtonsSwitch
+        selectOptions={SORTS_OPTIONS}
+        selectValue={sortOption}
+        onSelectChange={setSortOption}
+        onClickCopy={copyList}
+      />
+
       {playersWithStats.length > 0 ? (
         <PlayerStatsList
-          players={playersWithStats}
+          players={sortedPlayerList}
           career={career}
           season={season}
         />

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import FooterSection_Player from "../../../../components/FooterSection_Player";
-import HeaderSection_Player from "../../../../components/HeaderSection_Player";
+import FooterSection_Player from "./components/FooterSection_Player";
+import HeaderSection_Player from "./components/HeaderSection_Player";
 import Data from "./Section.module.css";
 
 type SectionProps = {

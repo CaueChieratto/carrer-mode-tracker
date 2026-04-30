@@ -7,41 +7,12 @@ import NoStatsMessage from "../NoStatsMessage";
 import { ButtonsSwitch } from "./components/ButtonsSwitch";
 import { MatchCard } from "./components/MatchCard";
 import { MatchStatus } from "./types/MatchStatus";
+import { MONTH_OPTIONS } from "./constants/MONTH_OPTIONS";
+import { getMatchSeason, processMatches } from "./helpers/processMatches";
 
 type AllMatchesTabProps = {
   season: ClubData;
   career: Career;
-};
-
-const MONTH_OPTIONS = [
-  "Tudo",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-];
-
-const MONTH_TO_NUM: Record<string, number> = {
-  Janeiro: 1,
-  Fevereiro: 2,
-  Março: 3,
-  Abril: 4,
-  Maio: 5,
-  Junho: 6,
-  Julho: 7,
-  Agosto: 8,
-  Setembro: 9,
-  Outubro: 10,
-  Novembro: 11,
-  Dezembro: 12,
 };
 
 export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
@@ -51,59 +22,39 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
-  const allMatches =
-    isGeralPage && career.clubData
-      ? career.clubData.flatMap((s) => s.matches || [])
-      : season.matches || [];
-
-  const parseDate = (date: string) => {
-    const [day, month, year] = date.split("/").map(Number);
-    return new Date(2000 + year, month - 1, day).getTime();
-  };
-
-  const sortedMatches = allMatches?.slice().sort((a, b) => {
-    const diff = parseDate(a.date) - parseDate(b.date);
-
-    const isFinished = (isGeralPage ? "FINISHED" : activeTab) === "FINISHED";
-
-    return isFinished ? -diff : diff;
+  const matches = processMatches({
+    season,
+    career,
+    isGeralPage,
+    activeTab,
+    selectedMonth,
   });
 
-  const filteredMatches = sortedMatches?.filter((match) => {
-    const statusMatch = match.status === (isGeralPage ? "FINISHED" : activeTab);
-
-    let monthMatch = true;
-    if (selectedMonth !== "Tudo") {
-      const matchMonthNum = Number(match.date.split("/")[1]);
-      monthMatch = matchMonthNum === MONTH_TO_NUM[selectedMonth];
-    }
-
-    return statusMatch && monthMatch;
-  });
   return (
     <ContainerClubContent isMatch>
       {!isGeralPage && (
         <ButtonsSwitch
-          months={MONTH_OPTIONS}
-          selectedMonth={selectedMonth}
-          setSelectedMonth={setSelectedMonth}
+          isMatches
+          selectOptions={MONTH_OPTIONS}
+          selectValue={selectedMonth}
+          onSelectChange={setSelectedMonth}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
       )}
-      {!filteredMatches?.length ? (
+      {!matches.length ? (
         <NoStatsMessage
           textOne="Nenhuma partida encontrada"
           textTwo="Primeiro, adicione as partidas do time."
         />
       ) : (
-        filteredMatches?.map((match) => {
-          const matchSeason =
-            isGeralPage && career.clubData
-              ? career.clubData.find((s) =>
-                  s.matches?.some((m) => m.matchesId === match.matchesId),
-                ) || season
-              : season;
+        matches.map((match) => {
+          const matchSeason = getMatchSeason(
+            match.matchesId,
+            career,
+            season,
+            isGeralPage,
+          );
 
           return (
             <MatchCard

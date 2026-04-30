@@ -21,6 +21,7 @@
   --image-trophy-league: #f0f0f0;
   --logo-image: transparent;
   --match: #f5f5f5;
+  --text_shadow: null;
 }
 
 :root[data-theme="dark"] {
@@ -44,6 +45,7 @@
   --image-trophy-league: #323232;
   --logo-image: #ffffff;
   --match: #4b4b4b;
+  --text_shadow: #000000f2;
 }
 
 * {

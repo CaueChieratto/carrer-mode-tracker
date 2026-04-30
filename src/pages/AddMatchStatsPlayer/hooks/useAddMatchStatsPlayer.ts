@@ -141,23 +141,47 @@ export const useAddMatchStatsPlayer = () => {
         setFormValues((prev) => {
           const updated = { ...prev, [field.id]: value };
 
-          const tPasses = Number(updated.totalPasses) || 0;
-          const pPrec = Number(updated.passPrecision) || 0;
-          updated.passesMissed = String(
-            Math.max(0, Math.round(tPasses - (tPasses * pPrec) / 100)),
-          );
+          const tPasses = updated.totalPasses;
+          const pPrec = updated.passPrecision;
+          updated.passesMissed =
+            tPasses && pPrec
+              ? String(
+                  Math.max(
+                    0,
+                    Math.round(
+                      Number(tPasses) - (Number(tPasses) * Number(pPrec)) / 100,
+                    ),
+                  ),
+                )
+              : "";
 
-          const tFin = Number(updated.totalFinishings) || 0;
-          const fPrec = Number(updated.finishingPrecision) || 0;
-          updated.finishingsMissed = String(
-            Math.max(0, Math.round(tFin - (tFin * fPrec) / 100)),
-          );
+          const tFin = updated.totalFinishings;
+          const fPrec = updated.finishingPrecision;
+          updated.finishingsMissed =
+            tFin && fPrec
+              ? String(
+                  Math.max(
+                    0,
+                    Math.round(
+                      Number(tFin) - (Number(tFin) * Number(fPrec)) / 100,
+                    ),
+                  ),
+                )
+              : "";
 
-          const tDrib = Number(updated.totalDribbles) || 0;
-          const dPrec = Number(updated.dribblePrecision) || 0;
-          updated.dribblesMissed = String(
-            Math.max(0, Math.round(tDrib - (tDrib * dPrec) / 100)),
-          );
+          const tDrib = updated.totalDribbles;
+          const dPrec = updated.dribblePrecision;
+          updated.dribblesMissed =
+            tDrib && dPrec
+              ? String(
+                  Math.max(
+                    0,
+                    Math.round(
+                      Number(tDrib) - (Number(tDrib) * Number(dPrec)) / 100,
+                    ),
+                  ),
+                )
+              : "";
 
           return updated;
         });

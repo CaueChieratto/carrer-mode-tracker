@@ -31,14 +31,12 @@ export const AddStatsMatch = () => {
         backSeasons={backMatch}
         titleText="Estatísticas da Partida"
       />
-
       <Navbar
         save={saveStats}
         options={["", "Salvar", ""]}
         activeOption={1}
         onOptionClick={() => {}}
       />
-
       <div className={Styles.container}>
         <Form className={Styles.form}>
           {fields.map((section, index) => (

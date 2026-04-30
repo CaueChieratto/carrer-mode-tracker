@@ -26,25 +26,28 @@ export const getInitialFormValues = (match: Match, playerId: string) => {
     }
   }
 
+  const formatValue = (value: number | undefined | null) =>
+    value ? String(value) : "";
+
   const values: Record<string, string> = {
-    minutesPlayed: String(initialMinutes),
-    rating: String(stats.rating ?? 0),
-    matchGoals: String(stats.goals ?? 0),
-    cleanSheets: String(stats.defenses ?? 0),
-    assists: String(stats.assists ?? 0),
-    totalPasses: String(stats.totalPasses ?? 0),
-    passPrecision: String(stats.passPrecision ?? 0),
-    passesMissed: String(stats.passesMissed ?? 0),
-    keyPasses: String(stats.keyPasses ?? 0),
-    totalFinishings: String(stats.totalFinishings ?? 0),
-    finishingPrecision: String(stats.finishingPrecision ?? 0),
-    finishingsMissed: String(stats.finishingsMissed ?? 0),
-    totalDribbles: String(stats.totalDribbles ?? 0),
-    dribblePrecision: String(stats.dribblePrecision ?? 0),
-    dribblesMissed: String(stats.dribblesMissed ?? 0),
-    ballsRecovered: String(stats.ballsRecovered ?? 0),
-    ballsLost: String(stats.ballsLost ?? 0),
-    distanceKm: String(stats.distanceKm ?? 0),
+    minutesPlayed: initialMinutes ? String(initialMinutes) : "",
+    rating: formatValue(stats.rating),
+    matchGoals: formatValue(stats.goals),
+    cleanSheets: formatValue(stats.defenses),
+    assists: formatValue(stats.assists),
+    totalPasses: formatValue(stats.totalPasses),
+    passPrecision: formatValue(stats.passPrecision),
+    passesMissed: formatValue(stats.passesMissed),
+    keyPasses: formatValue(stats.keyPasses),
+    totalFinishings: formatValue(stats.totalFinishings),
+    finishingPrecision: formatValue(stats.finishingPrecision),
+    finishingsMissed: formatValue(stats.finishingsMissed),
+    totalDribbles: formatValue(stats.totalDribbles),
+    dribblePrecision: formatValue(stats.dribblePrecision),
+    dribblesMissed: formatValue(stats.dribblesMissed),
+    ballsRecovered: formatValue(stats.ballsRecovered),
+    ballsLost: formatValue(stats.ballsLost),
+    distanceKm: formatValue(stats.distanceKm),
     yellowCard: stats.yellowCard ? "true" : "false",
     yellowCardMinute: stats.yellowCardMinute
       ? String(stats.yellowCardMinute)

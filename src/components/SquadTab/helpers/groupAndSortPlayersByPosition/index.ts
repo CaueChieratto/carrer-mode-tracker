@@ -1,14 +1,17 @@
-import { Players } from "../interfaces/playersInfo/players";
-import { POSITION_DATA, getGroupForPosition } from "../types/Positions";
-import { sortPlayersByPositionWithinGroup } from "../utils/Sorts";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import {
+  POSITION_DATA,
+  getGroupForPosition,
+} from "../../../../common/types/Positions";
+import { sortPlayersByPositionWithinGroup } from "../../../../common/utils/Sorts";
 
 export const groupAndSortPlayersByPosition = (
-  players: Players[]
+  players: Players[],
 ): Map<string, Players[]> => {
   const activePlayers = (players || []).filter((player) => !player.sell);
 
   const grouped = new Map<string, Players[]>(
-    POSITION_DATA.map((group) => [group.key, []])
+    POSITION_DATA.map((group) => [group.key, []]),
   );
 
   for (const player of activePlayers) {
@@ -24,7 +27,7 @@ export const groupAndSortPlayersByPosition = (
       if (groupConfig?.sortOrder) {
         const sortedPlayers = sortPlayersByPositionWithinGroup(
           playersInGroup,
-          groupConfig.sortOrder
+          groupConfig.sortOrder,
         );
         grouped.set(groupKey, sortedPlayers);
       }

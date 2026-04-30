@@ -3,7 +3,7 @@ import Styles from "./Header.module.css";
 type HeaderProps = {
   name: string;
   color: string;
-  quantity: number;
+  quantity?: number;
 };
 
 export const Header = ({ name, color, quantity }: HeaderProps) => (
