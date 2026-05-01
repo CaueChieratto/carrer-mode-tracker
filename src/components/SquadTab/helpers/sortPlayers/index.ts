@@ -1,40 +1,57 @@
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 
+const POSITION_ORDER = [
+  "ATA",
+  "PD",
+  "PE",
+  "MD",
+  "MEI",
+  "MC",
+  "ME",
+  "VOL",
+  "LD",
+  "ZAG",
+  "LE",
+  "GOL",
+];
+
 export const sortPlayers = (
   players: Players[],
   criteria: string,
   isAsc: boolean,
 ): Players[] => {
-  if (criteria === "Padrão") return players;
+  if (criteria === "Ordenar por padrão" || criteria === "Padrão")
+    return players;
 
   return [...players].sort((a, b) => {
     let result = 0;
 
     switch (criteria) {
-      case "Posição":
-        result = String(a.position).localeCompare(String(b.position));
-        break;
+      case "Ordenar por posição": {
+        const indexA = POSITION_ORDER.indexOf(String(a.position));
+        const indexB = POSITION_ORDER.indexOf(String(b.position));
 
-      case "Número da Camisa":
+        const weightA = indexA !== -1 ? indexA : 999;
+        const weightB = indexB !== -1 ? indexB : 999;
+
+        result = weightA - weightB;
+        break;
+      }
+      case "Ordenar por número da camisa":
         result = Number(a.shirtNumber) - Number(b.shirtNumber);
         break;
-
-      case "Idade":
+      case "Ordenar por idade":
         result = a.age - b.age;
         break;
-
-      case "Salário":
+      case "Ordenar por salário":
         result = a.salary - b.salary;
         break;
-
-      case "Valor de Mercado":
+      case "Ordenar por valor de mercado":
         result = a.playerValue - b.playerValue;
         break;
-
-      case "Tempo de Contrato":
+      case "Ordenar por tempo de contrato":
         result = a.contractTime - b.contractTime;
         break;
-
       default:
         return 0;
     }
