@@ -6,7 +6,7 @@ import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";
 import { Career } from "../../../../common/interfaces/Career";
 import { useMatchNavigation } from "./hooks/useMatchNavigation";
-import { buildMatchCopyText } from "../../../../common/helpers/buildCopyText";
+import { buildMatchCopyText } from "./helpers/buildCopyText";
 import { CgCopy } from "react-icons/cg";
 
 type MatchCardProps = {

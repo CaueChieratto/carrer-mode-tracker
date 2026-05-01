@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Career } from "../../common/interfaces/Career";
 import { ClubData } from "../../common/interfaces/club/clubData";
@@ -16,11 +16,23 @@ type AllMatchesTabProps = {
 };
 
 export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
-  const [activeTab, setActiveTab] = useState<MatchStatus | string>("SCHEDULED");
-  const [selectedMonth, setSelectedMonth] = useState<string>("Tudo");
+  const [activeTab, setActiveTab] = useState<MatchStatus | string>(() => {
+    return localStorage.getItem("matchActiveTab") || "SCHEDULED";
+  });
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    return localStorage.getItem("matchSelectedMonth") || "Tudo";
+  });
 
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
+
+  useEffect(() => {
+    localStorage.setItem("matchActiveTab", activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
+    localStorage.setItem("matchSelectedMonth", selectedMonth);
+  }, [selectedMonth]);
 
   const matches = processMatches({
     season,

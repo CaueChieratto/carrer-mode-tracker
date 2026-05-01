@@ -1,5 +1,5 @@
-import { Match } from "../../../components/AllMatchesTab/types/Match";
-import { Career } from "../../interfaces/Career";
+import { Match } from "../../../../types/Match";
+import { Career } from "../../../../../../common/interfaces/Career";
 
 type BuildMatchCopyTextParams = {
   match: Match;
@@ -61,7 +61,7 @@ export const buildMatchCopyText = ({
     }
   });
 
-  const goalsText = goals.length > 0 ? goals.join(", e ") : "sem gols";
+  const goalsText = goals.length > 0 ? goals.join(", e ") : "";
 
   return `Dia ${day}, ${opponent} ${location}, ${resultText} por ${score}, posse de ${possession} ${shots} em chutes com ${xg} de xG, ${goalsText}.`;
 };
