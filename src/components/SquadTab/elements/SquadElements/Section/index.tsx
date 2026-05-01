@@ -2,6 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FooterSection_Player from "./components/FooterSection_Player";
 import HeaderSection_Player from "./components/HeaderSection_Player";
 import Data from "./Section.module.css";
+import { Match } from "../../../../AllMatchesTab/types/Match";
 
 type SectionProps = {
   id: string;
@@ -14,6 +15,7 @@ type SectionProps = {
   salary: number;
   captain: boolean;
   contractTime: number;
+  matches: Match[];
 };
 
 export const Section = ({
@@ -27,6 +29,7 @@ export const Section = ({
   playerValue,
   captain,
   contractTime,
+  matches,
 }: SectionProps) => {
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
@@ -54,6 +57,7 @@ export const Section = ({
         contractTime={contractTime}
         salary={salary}
         playerValue={playerValue}
+        matches={matches}
       />
     </section>
   );

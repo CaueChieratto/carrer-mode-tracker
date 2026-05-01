@@ -66,7 +66,11 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
               />
 
               {players.map((player) => (
-                <SquadElements.Section {...player} key={player.id} />
+                <SquadElements.Section
+                  {...player}
+                  matches={season.matches || []}
+                  key={player.id}
+                />
               ))}
             </Card>
           );
@@ -76,7 +80,11 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
           <SquadElements.Header name={sortOption} color={clubColor} />
 
           {flatData.map((player) => (
-            <SquadElements.Section {...player} key={player.id} />
+            <SquadElements.Section
+              {...player}
+              matches={season.matches || []}
+              key={player.id}
+            />
           ))}
         </Card>
       )}
