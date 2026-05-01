@@ -1,6 +1,6 @@
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 
-const POSITION_ORDER = [
+export const POSITION_ORDER = [
   "ATA",
   "PD",
   "PE",

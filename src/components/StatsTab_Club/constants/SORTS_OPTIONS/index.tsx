@@ -1,5 +1,6 @@
 export const SORTS_OPTIONS = [
   "Ordenar por padrão",
+  "Ordenar por posições",
   "Ordenar por jogos",
   "Ordenar por minutos",
   "Ordenar por participações em gols",

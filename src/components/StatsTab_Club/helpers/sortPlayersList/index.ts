@@ -1,3 +1,4 @@
+import { POSITION_ORDER } from "../../../SquadTab/helpers/sortPlayers";
 import { calculateTotalStats } from "../../components/PlayerStatsList/utils/calculateTotalStats";
 import { sortedPlayers } from "../../components/PlayerStatsList/utils/sortedPlayers";
 import { sortPlayersByContributions } from "../../components/PlayerStatsList/utils/sortPlayersByContributions";
@@ -22,6 +23,12 @@ export const sortPlayersList = (
       const statsB = calculateTotalStats(b);
 
       switch (sortOption) {
+        case "Ordenar por posições": {
+          const indexA = POSITION_ORDER.indexOf(a.position);
+          const indexB = POSITION_ORDER.indexOf(b.position);
+
+          return (indexB === -1 ? 99 : indexB) - (indexA === -1 ? 99 : indexA);
+        }
         case "Ordenar por jogos":
           return statsB.games - statsA.games;
         case "Ordenar por minutos":
