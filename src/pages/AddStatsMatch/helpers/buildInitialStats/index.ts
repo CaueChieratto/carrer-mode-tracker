@@ -37,10 +37,6 @@ export const buildInitialStats = (
   );
   const userPassesCompleted = Math.max(0, userPasses - userPassesMissed);
 
-  const userBallRecovery = stats.reduce(
-    (acc, s) => acc + (s.ballsRecovered || 0),
-    0,
-  );
   const userDefenses = stats.reduce((acc, s) => acc + (s.defenses || 0), 0);
   const userYellows = stats.reduce((acc, s) => acc + (s.yellowCard ? 1 : 0), 0);
   const userReds = stats.reduce((acc, s) => acc + (s.redCard ? 1 : 0), 0);
@@ -55,12 +51,6 @@ export const buildInitialStats = (
     userPossession: safeStr(initialUserPoss),
     homeXG: safeStr(match.homeXG),
     awayXG: safeStr(match.awayXG),
-    homeBallRecovery:
-      safeStr(match.homeBallRecovery) ||
-      (isUserHome ? formatSum(userBallRecovery) : ""),
-    awayBallRecovery:
-      safeStr(match.awayBallRecovery) ||
-      (!isUserHome ? formatSum(userBallRecovery) : ""),
     homeFinishings:
       safeStr(match.homeFinishings) ||
       (isUserHome ? formatSum(userFinishings) : ""),
