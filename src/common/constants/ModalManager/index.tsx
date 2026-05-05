@@ -28,7 +28,7 @@ type ModalManagerProps = {
     loanDuration?: string,
     wagePercentage?: string,
   ) => void | Promise<void>;
-  onReturnLoanConfirm?: () => void | Promise<void>;
+  onReturnLoanConfirm?: (returnDate: string) => void | Promise<void>;
   saveClick?: number;
   player?: Players;
   clubColor?: string;
