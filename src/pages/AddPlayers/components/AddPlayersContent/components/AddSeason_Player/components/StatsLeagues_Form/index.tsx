@@ -1,7 +1,7 @@
 import { HiPencilSquare } from "react-icons/hi2";
-import { LeagueStats } from "../../common/interfaces/playersStats/leagueStats";
+import { LeagueStats } from "../../../../../../../../common/interfaces/playersStats/leagueStats";
 import Styles from "./StatsLeagues_Form.module.css";
-import ContainerIcon from "../ContainerIcon";
+import ContainerIcon from "../../../../../../../../components/ContainerIcon";
 import classNames from "classnames";
 
 type StatsLeagues_FormProps = {

@@ -1,16 +1,16 @@
-import Form from "../Form";
-import FormSection from "../FormSection";
+import Form from "../../../../../../components/Form";
+import FormSection from "../../../../../../components/FormSection";
 import Styles from "./AddSeason_Player.module.css";
-import { Career } from "../../common/interfaces/Career";
-import { Players } from "../../common/interfaces/playersInfo/players";
-import { ModalType } from "../../common/types/enums/ModalType";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { ModalType } from "../../../../../../common/types/enums/ModalType";
 import { forwardRef, useRef } from "react";
-import StatsLeagues_Form from "../StatsLeagues_Form";
-import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import AddOrEditLeagueButton from "../../common/elements/Buttons/AddOrEditLeagueButton";
-import { usePlayerSeasonStats } from "../../common/hooks/Players/UsePlayerSeasonStats";
-import Load from "../Load";
+import StatsLeagues_Form from "./components/StatsLeagues_Form";
+import { useSeasonTheme } from "../../../../../../common/hooks/Seasons/UseSeasonTheme";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import AddOrEditLeagueButton from "../../../../../../common/elements/Buttons/AddOrEditLeagueButton";
+import { usePlayerSeasonStats } from "../../../../../../common/hooks/Players/UsePlayerSeasonStats";
+import Load from "../../../../../../components/Load";
 
 type AddSeason_PlayerProps = {
   player?: Players;

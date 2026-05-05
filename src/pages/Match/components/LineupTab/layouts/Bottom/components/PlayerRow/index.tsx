@@ -1,5 +1,5 @@
 import { GiSoccerBall } from "react-icons/gi";
-import { UseRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
+import { UseMatchRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
 import { Boot } from "../../../../../../../../ui/IconsSVG/Boot";
 import { MVP } from "../../../../../../../../ui/IconsSVG/MVP";
 import { RefereeCard } from "../../../../../../../../ui/IconsSVG/RefereeCard";
@@ -36,7 +36,7 @@ export const PlayerRow = ({
   if (!slot.player) return null;
 
   const ratingValue = stats?.rating || 0;
-  const backgroundColor = UseRatingColor(ratingValue);
+  const backgroundColor = UseMatchRatingColor(ratingValue);
 
   const handleRemove = () => onRemove(slot.slotId);
 

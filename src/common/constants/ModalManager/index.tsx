@@ -13,6 +13,7 @@ import TrophiesPanel from "../../../components/TrophiesPanel";
 import { ClubData } from "../../interfaces/club/clubData";
 import { SeasonConfigs } from "../../../ui/modals/SeasonConfigs";
 import { getSeasonName } from "../../utils/GetSeasonName";
+import ReturnLoanConfirmModal from "../../../ui/modals/ReturnLoanConfirmModal";
 
 type ModalManagerProps = {
   activeModal: ModalType;
@@ -24,7 +25,10 @@ type ModalManagerProps = {
     sellValue: string,
     toClub: string,
     dateExit: string,
+    loanDuration?: string,
+    wagePercentage?: string,
   ) => void | Promise<void>;
+  onReturnLoanConfirm?: () => void | Promise<void>;
   saveClick?: number;
   player?: Players;
   clubColor?: string;
@@ -41,6 +45,7 @@ const ModalManager = ({
   setSelectedCareer,
   onConfirm,
   onSellConfirm,
+  onReturnLoanConfirm,
   saveClick,
   player,
   clubColor,
@@ -140,13 +145,17 @@ const ModalManager = ({
         </Modal>
       );
     case ModalType.SELL_PLAYER:
+    case ModalType.LOAN_PLAYER: {
+      const isLoan = activeModal === ModalType.LOAN_PLAYER;
       return (
         <Modal
           isOpen
-          sellPlayer="sell"
+          sellPlayer={isLoan ? "loan" : "sell"}
           closeModal={closeModal}
           animationContainer="left"
-          text={`Vender ${player?.name}?`}
+          text={
+            isLoan ? `Emprestar ${player?.name}?` : `Vender ${player?.name}?`
+          }
         >
           <SellPlayerModal
             player={player!}
@@ -154,6 +163,22 @@ const ModalManager = ({
             onConfirm={onSellConfirm!}
             clubColor={clubColor!}
             darkClubColor={darkClubColor!}
+            isLoan={isLoan}
+          />
+        </Modal>
+      );
+    }
+    case ModalType.RETURN_LOAN_CONFIRM:
+      return (
+        <Modal
+          isOpen
+          closeModal={closeModal}
+          animationContainer="grow"
+          text="Retornar Jogador?"
+        >
+          <ReturnLoanConfirmModal
+            onConfirm={onReturnLoanConfirm!}
+            closeModal={closeModal}
           />
         </Modal>
       );

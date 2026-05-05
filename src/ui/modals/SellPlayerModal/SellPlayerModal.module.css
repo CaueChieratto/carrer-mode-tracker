@@ -11,5 +11,4 @@
 .container {
   display: grid;
   gap: 8px 12px;
-  grid-template-columns: 1fr 1fr;
 }

@@ -41,6 +41,12 @@ export const POSITION_DATA: PositionGroupInfo[] = [
     color: "#e59c03",
     positions: ["GOL"],
   },
+  {
+    key: "loaned",
+    name: "Emprestados",
+    color: "#60a5fa",
+    positions: [],
+  },
 ];
 
 const positionToGroupMap = new Map<string, PositionGroupInfo>();

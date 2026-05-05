@@ -1,9 +1,9 @@
-import AddSeason_Player from "../../../components/AddSeason_Player";
-import AddSquad_Player from "../../../components/AddSquad_Player";
-import { Career } from "../../interfaces/Career";
-import { ClubData } from "../../interfaces/club/clubData";
-import { Players } from "../../interfaces/playersInfo/players";
-import { ModalType } from "../../types/enums/ModalType";
+import AddSeason_Player from "../../components/AddSeason_Player";
+import AddSquad_Player from "../../components/AddSquad_Player";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { ModalType } from "../../../../../../common/types/enums/ModalType";
 
 type SaveAction = (formData: FormData) => void;
 

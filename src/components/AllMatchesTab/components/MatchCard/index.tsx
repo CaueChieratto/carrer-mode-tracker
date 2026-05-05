@@ -30,10 +30,33 @@ export const MatchCard = ({
     isGeralPage,
   });
 
-  const copyText = () => {
+  const copyText = async () => {
     const text = buildMatchCopyText({ match, career });
-    navigator.clipboard.writeText(text);
-    alert("Copiado!");
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        alert("Copiado!");
+      } else {
+        throw new Error("Clipboard indisponível");
+      }
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        alert("Copiado!");
+      } catch (err) {
+        console.error("Erro ao copiar texto no fallback:", err);
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   return (

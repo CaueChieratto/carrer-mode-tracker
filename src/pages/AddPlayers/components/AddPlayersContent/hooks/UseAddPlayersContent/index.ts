@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { getAddPlayerConfig } from "../../../constants/AddPlayerConfig";
-import { Players } from "../../../interfaces/playersInfo/players";
-import { useModalManager } from "../../Modal/UseModalManager";
-import { usePlayerActions } from "../UsePlayerActions";
-import { usePlayerStats } from "../UsePlayerStats";
-import { Career } from "../../../interfaces/Career";
-import { ClubData } from "../../../interfaces/club/clubData";
+import { getAddPlayerConfig } from "../../constants/AddPlayerConfig";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { useModalManager } from "../../../../../../common/hooks/Modal/UseModalManager";
+import { usePlayerActions } from "../../../../../../common/hooks/Players/UsePlayerActions";
+import { usePlayerStats } from "../../../../../../common/hooks/Players/UsePlayerStats";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
 
 type UseAddPlayersContentProps = {
   origin: string | null;
@@ -37,6 +37,7 @@ export const useAddPlayersContent = ({
     handleAddOrEditPlayer,
     handleDeletePlayer,
     handleSellPlayer,
+    handleReturnLoanPlayer,
   } = usePlayerActions({
     careerId,
     seasonId,
@@ -56,7 +57,7 @@ export const useAddPlayersContent = ({
   const componentConfig = getAddPlayerConfig(
     player,
     handleAddOrEditPlayer,
-    handleStatsSave
+    handleStatsSave,
   );
 
   const activeKey = origin && componentConfig[origin] ? origin : "squad";
@@ -82,6 +83,7 @@ export const useAddPlayersContent = ({
     isLoading,
     handleDeletePlayer,
     handleSellPlayer,
+    handleReturnLoanPlayer,
     activeLabel,
     ActiveComponent,
     handleSave,

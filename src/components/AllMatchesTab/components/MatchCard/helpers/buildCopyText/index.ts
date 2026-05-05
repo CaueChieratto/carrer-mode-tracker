@@ -61,7 +61,24 @@ export const buildMatchCopyText = ({
     }
   });
 
+  const starters: string[] = [];
+
+  if (match.lineup?.goalkeeper?.playerName) {
+    starters.push(match.lineup.goalkeeper.playerName);
+  }
+
+  (match.lineup?.lines || []).forEach((p) => {
+    if (p?.playerName) {
+      starters.push(p.playerName);
+    }
+  });
+
+  const startersText =
+    starters.length > 0 ? `vamos com ${starters.join(", ")}, ` : "";
+
   const goalsText = goals.length > 0 ? goals.join(", e ") : "";
 
-  return `Dia ${day}, ${opponent} ${location}, ${resultText} por ${score}, posse de ${possession} ${shots} em chutes com ${xg} de xG, ${goalsText}.`;
+  return `Dia ${day}, ${opponent} ${location}, ${startersText}${resultText} por ${score}, posse de ${possession}, ${shots} em chutes com ${xg} de xG${
+    goalsText ? `, ${goalsText}` : ""
+  }.`;
 };

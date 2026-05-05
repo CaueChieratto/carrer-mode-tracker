@@ -3,6 +3,7 @@ import FooterSection_Player from "./components/FooterSection_Player";
 import HeaderSection_Player from "./components/HeaderSection_Player";
 import Data from "./Section.module.css";
 import { Match } from "../../../../AllMatchesTab/types/Match";
+import { Contract } from "../../../../../common/interfaces/playersInfo/contract";
 
 type SectionProps = {
   id: string;
@@ -16,6 +17,8 @@ type SectionProps = {
   captain: boolean;
   contractTime: number;
   matches: Match[];
+  loan?: boolean;
+  contract?: Contract[];
 };
 
 export const Section = ({
@@ -30,6 +33,8 @@ export const Section = ({
   captain,
   contractTime,
   matches,
+  loan,
+  contract,
 }: SectionProps) => {
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
@@ -43,6 +48,14 @@ export const Section = ({
     }
   };
 
+  let displaySalary = salary;
+  if (loan && contract && contract.length > 0) {
+    const lastContract = contract[contract.length - 1];
+    if (lastContract.isLoan && lastContract.wagePercentage !== undefined) {
+      displaySalary = salary * ((100 - lastContract.wagePercentage) / 100);
+    }
+  }
+
   return (
     <section className={Data.player} onClick={handleNavigate}>
       <HeaderSection_Player
@@ -55,7 +68,7 @@ export const Section = ({
       />
       <FooterSection_Player
         contractTime={contractTime}
-        salary={salary}
+        salary={displaySalary}
         playerValue={playerValue}
         matches={matches}
       />

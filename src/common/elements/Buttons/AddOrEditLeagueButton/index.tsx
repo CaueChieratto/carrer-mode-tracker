@@ -1,7 +1,7 @@
 import Button from "../../../../components/Button";
 import ContainerButton from "../../../../components/ContainerButton";
 import { useSeasonTheme } from "../../../hooks/Seasons/UseSeasonTheme";
-import Styles from "../../../../components/AddSeason_Player/AddSeason_Player.module.css";
+import Styles from "../../../../pages/AddPlayers/components/AddPlayersContent/components/AddSeason_Player/AddSeason_Player.module.css";
 
 type AddOrEditLeagueButtonProps = {
   isEditing: boolean;

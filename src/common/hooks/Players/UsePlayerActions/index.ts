@@ -35,15 +35,16 @@ export const usePlayerActions = ({
     season,
   });
 
-  const { editPlayer, deletePlayer, sellPlayer } = useEditSquadPlayer({
-    careerId,
-    seasonId,
-    playerId: player?.id ?? "",
-    onPlayerEdited: onSuccess,
-    currentPlayers,
-    career,
-    season,
-  });
+  const { editPlayer, deletePlayer, sellPlayer, loanPlayer, returnLoanPlayer } =
+    useEditSquadPlayer({
+      careerId,
+      seasonId,
+      playerId: player?.id ?? "",
+      onPlayerEdited: onSuccess,
+      currentPlayers,
+      career,
+      season,
+    });
 
   const handleAddOrEditPlayer = async (formData: FormData) => {
     setIsLoading(true);
@@ -55,7 +56,7 @@ export const usePlayerActions = ({
       }
     } catch (error: unknown) {
       alert(
-        error instanceof Error ? error.message : "Ocorreu um erro inesperado."
+        error instanceof Error ? error.message : "Ocorreu um erro inesperado.",
       );
     } finally {
       setIsLoading(false);
@@ -76,13 +77,36 @@ export const usePlayerActions = ({
   const handleSellPlayer = async (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
+    loanDuration?: string,
+    wagePercentage?: string,
   ) => {
     setIsLoading(true);
     try {
-      await sellPlayer(sellValue, toClub, dateExit);
+      if (loanDuration && wagePercentage) {
+        await loanPlayer(
+          sellValue,
+          toClub,
+          dateExit,
+          loanDuration,
+          wagePercentage,
+        );
+      } else {
+        await sellPlayer(sellValue, toClub, dateExit);
+      }
     } catch (error) {
-      console.error("Falha ao vender o jogador:", error);
+      console.error("Falha ao registrar saída do jogador:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReturnLoanPlayer = async (returnDate: string) => {
+    setIsLoading(true);
+    try {
+      await returnLoanPlayer(returnDate);
+    } catch (error) {
+      console.error("Falha ao retornar o jogador:", error);
     } finally {
       setIsLoading(false);
     }
@@ -93,5 +117,6 @@ export const usePlayerActions = ({
     handleAddOrEditPlayer,
     handleDeletePlayer,
     handleSellPlayer,
+    handleReturnLoanPlayer,
   };
 };

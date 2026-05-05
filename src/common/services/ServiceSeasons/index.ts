@@ -29,13 +29,40 @@ export const ServiceSeasons = {
     const leaguesFromPreviousSeason = previousSeason?.leagues || [];
 
     const playersForNewSeason = playersFromPreviousSeason
-      .filter((player) => !player.sell)
+      .filter((player) => {
+        if (player.sell) return false;
+        if (player.incomingLoan && (player.contractTime || 0) <= 1)
+          return false;
+        return true;
+      })
       .map((player) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { statsLeagues, ballonDor, ...playerData } = player;
 
+        let isLoaned = playerData.loan ?? false;
+        const updatedContract = playerData.contract
+          ? [...playerData.contract]
+          : [];
+
+        if (isLoaned && updatedContract.length > 0) {
+          const lastContractIndex = updatedContract.length - 1;
+          const lastContract = { ...updatedContract[lastContractIndex] };
+
+          if (lastContract.isLoan && lastContract.loanDuration !== undefined) {
+            if (lastContract.loanDuration <= 1) {
+              isLoaned = false;
+              lastContract.loanDuration = 0;
+            } else {
+              lastContract.loanDuration -= 1;
+            }
+            updatedContract[lastContractIndex] = lastContract;
+          }
+        }
+
         return {
           ...playerData,
+          loan: isLoaned,
+          contract: updatedContract,
           age: (player.age || 0) + 1,
           contractTime: Math.max(0, (player.contractTime || 0) - 1),
           statsLeagues: [],

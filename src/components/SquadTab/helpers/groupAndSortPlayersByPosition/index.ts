@@ -15,9 +15,13 @@ export const groupAndSortPlayersByPosition = (
   );
 
   for (const player of activePlayers) {
-    const group = getGroupForPosition(player.position as string);
-    if (group) {
-      grouped.get(group.key)?.push(player);
+    if (player.loan) {
+      grouped.get("loaned")?.push(player);
+    } else {
+      const group = getGroupForPosition(player.position as string);
+      if (group) {
+        grouped.get(group.key)?.push(player);
+      }
     }
   }
 

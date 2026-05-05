@@ -15,6 +15,8 @@ export const AddDetailsFormFields = (
     type: "card" | "sub" | "goal" | "assist";
     color?: string;
   }[],
+  homeTeam: string = "Mandante",
+  awayTeam: string = "Visitante",
 ): { title: string; fields: Field[][] }[] => {
   const stoppageFields: Field[] = [
     {
@@ -74,13 +76,13 @@ export const AddDetailsFormFields = (
     ? [
         {
           id: "homePenScore",
-          name: "Pênaltis Mandante",
+          name: `Pênaltis ${homeTeam}`,
           inputType: "number",
           icon: <GiSoccerBall />,
         },
         {
           id: "awayPenScore",
-          name: "Pênaltis Visitante",
+          name: `Pênaltis ${awayTeam}`,
           inputType: "number",
           icon: <GiSoccerBall />,
         },
@@ -101,7 +103,6 @@ export const AddDetailsFormFields = (
   const disciplineFields = events
     .filter((e) => e.type === "card")
     .map(createEventField);
-
   const subFields = events
     .filter((e) => e.type === "sub")
     .map(createEventField);
@@ -113,13 +114,13 @@ export const AddDetailsFormFields = (
         [
           {
             id: "homeScore",
-            name: "Gols Mandante",
+            name: `Gols ${homeTeam}`,
             inputType: "number",
             icon: <GiSoccerBall />,
           },
           {
             id: "awayScore",
-            name: "Gols Visitante",
+            name: `Gols ${awayTeam}`,
             inputType: "number",
             icon: <GiSoccerBall />,
           },
@@ -132,7 +133,6 @@ export const AddDetailsFormFields = (
       fields: [
         hasExtraTimeField,
         ...(hasExtraTime ? [extraTimeFields] : []),
-
         hasPenaltiesField,
         ...(hasPenalties ? [penaltiesFields] : []),
       ],

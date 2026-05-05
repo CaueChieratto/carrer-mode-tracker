@@ -210,6 +210,179 @@ export const ServicePlayers = {
     });
   },
 
+  loanPlayerFromSeason: async (
+    careerId: string,
+    seasonId: string,
+    playerId: string,
+    buyOption: string,
+    toClub: string,
+    dateLoan: string,
+    loanDuration: string,
+    wagePercentage: string,
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const career = await getCareerById(user.uid, careerId);
+    const seasonToUpdate = career.clubData.find((s) => s.id === seasonId);
+    if (!seasonToUpdate) throw new Error("Temporada não encontrada");
+
+    const { startDate, endDate } = getSeasonDateRange(
+      seasonToUpdate.seasonNumber,
+      career.createdAt,
+      career.nation,
+    );
+
+    const updatedClubData = career.clubData.map((season) => {
+      if (season.id === seasonId) {
+        const updatedPlayers = season.players.map((player) => {
+          if (player.id === playerId) {
+            const contractHistory = player.contract || [];
+            let lastContract = contractHistory[contractHistory.length - 1];
+
+            if (!lastContract) {
+              lastContract = {
+                buyValue: 0,
+                fromClub: "",
+                sellValue: 0,
+                leftClub: "",
+                dataArrival: null,
+              };
+              contractHistory.push(lastContract);
+            }
+
+            const [, month] = dateLoan.split("/").map(Number);
+            const loanMonth = month - 1;
+            const loanYear =
+              loanMonth < startDate.getMonth()
+                ? endDate.getFullYear()
+                : startDate.getFullYear();
+
+            const parsedLoanDate = parseBrasilDate(dateLoan, loanYear);
+            if (!parsedLoanDate) throw new Error("Data de empréstimo inválida");
+
+            lastContract.buyOptionValue = parseValue(buyOption);
+            lastContract.leftClub = toClub;
+            lastContract.dataExit = parsedLoanDate;
+            lastContract.isLoan = true;
+            lastContract.loanDuration = Number(loanDuration);
+            lastContract.wagePercentage = Number(wagePercentage);
+
+            return {
+              ...player,
+              loan: true,
+              shirtNumber: "",
+              contract: contractHistory,
+            };
+          }
+          return player;
+        });
+        return { ...season, players: updatedPlayers };
+      }
+      return season;
+    });
+
+    await updateCareerFirestore(user.uid, careerId, {
+      clubData: updatedClubData,
+    });
+  },
+
+  returnPlayerFromLoan: async (
+    careerId: string,
+    seasonId: string,
+    playerId: string,
+    returnDate: string,
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const career = await getCareerById(user.uid, careerId);
+    const seasonToUpdate = career.clubData.find((s) => s.id === seasonId);
+    if (!seasonToUpdate) throw new Error("Temporada não encontrada");
+
+    const { startDate, endDate } = getSeasonDateRange(
+      seasonToUpdate.seasonNumber,
+      career.createdAt,
+      career.nation,
+    );
+
+    let parsedDate: Date = endDate;
+
+    if (returnDate && returnDate.includes("/")) {
+      const parts = returnDate.split("/");
+      const month = Number(parts[1]);
+
+      if (!isNaN(month)) {
+        const returnMonth = month - 1;
+        const returnYear =
+          returnMonth < startDate.getMonth()
+            ? endDate.getFullYear()
+            : startDate.getFullYear();
+
+        const tempDate = parseBrasilDate(returnDate, returnYear);
+        if (tempDate) {
+          parsedDate = tempDate;
+        } else {
+          console.warn(
+            `Data ${returnDate} não pôde ser convertida. Usando data final da temporada.`,
+          );
+        }
+      }
+    }
+
+    const updatedClubData = career.clubData.map((season) => {
+      if (season.id === seasonId) {
+        const updatedPlayers = season.players.map((player) => {
+          if (player.id === playerId) {
+            const contractHistory = player.contract ? [...player.contract] : [];
+            const lastContract =
+              contractHistory.length > 0
+                ? contractHistory[contractHistory.length - 1]
+                : null;
+
+            if (player.incomingLoan) {
+              if (lastContract) {
+                lastContract.dataExit = parsedDate;
+                lastContract.leftClub =
+                  lastContract.fromClub || "Fim de Empréstimo";
+              }
+              return {
+                ...player,
+                sell: true,
+                incomingLoan: false,
+                contract: contractHistory,
+              };
+            } else {
+              if (lastContract) {
+                contractHistory.push({
+                  buyValue: 0,
+                  fromClub: lastContract.leftClub || "Fim de Empréstimo",
+                  sellValue: 0,
+                  leftClub: "",
+                  dataArrival: parsedDate,
+                  dataExit: null,
+                });
+              }
+              return {
+                ...player,
+                loan: false,
+                sell: false,
+                contract: contractHistory,
+              };
+            }
+          }
+          return player;
+        });
+        return { ...season, players: updatedPlayers };
+      }
+      return season;
+    });
+
+    await updateCareerFirestore(user.uid, careerId, {
+      clubData: updatedClubData,
+    });
+  },
+
   deletePlayerFromSeason: async (
     careerId: string,
     seasonId: string,

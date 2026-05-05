@@ -169,6 +169,15 @@ export const useAddDetails = () => {
       const stoppageET1 = Number(formValues.stoppageET1) || 0;
       const stoppageET2 = Number(formValues.stoppageET2) || 0;
 
+      const getActualMinute = (nominalMinute: number) => {
+        if (!nominalMinute) return 0;
+        let actual = nominalMinute;
+        if (nominalMinute > 45) actual += stoppage1T;
+        if (nominalMinute > 90) actual += stoppage2T;
+        if (nominalMinute > 105) actual += stoppageET1;
+        return actual;
+      };
+
       const maxMatchMinutes = booleanValues.hasExtraTime
         ? 120 + stoppage1T + stoppage2T + stoppageET1 + stoppageET2
         : 90 + stoppage1T + stoppage2T;
@@ -213,19 +222,15 @@ export const useAddDetails = () => {
 
       const updatedStats = currentStats.map((stat) => {
         const isStarter = startersIds.includes(stat.playerId);
-
         let newMinutesPlayed = stat.minutesPlayed || 0;
 
-        if (isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
-          newMinutesPlayed =
-            Number(formValues[`eventMinute_sub_${stat.playerId}`]) ||
-            stat.minutesPlayed ||
-            0;
-        } else if (
-          !isStarter &&
-          stat.substituteIn &&
-          stat.substituteIn !== "Nenhum"
-        ) {
+        const subNominal =
+          Number(formValues[`eventMinute_sub_${stat.playerId}`]) || 0;
+        const redCardNominal =
+          Number(formValues[`eventMinute_red_${stat.playerId}`]) || 0;
+
+        let entryMinute = 0;
+        if (!isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
           const starterName = stat.substituteIn;
           const starterStat = currentStats.find((s) => {
             const sp = season.players.find(
@@ -233,15 +238,35 @@ export const useAddDetails = () => {
             );
             return sp?.name === starterName;
           });
-
           if (starterStat) {
-            const starterSubMinute =
+            const starterSubNominal =
               Number(formValues[`eventMinute_sub_${starterStat.playerId}`]) ||
-              starterStat.minutesPlayed ||
               0;
-
-            newMinutesPlayed = Math.max(0, maxMatchMinutes - starterSubMinute);
+            entryMinute =
+              starterSubNominal > 0
+                ? getActualMinute(starterSubNominal)
+                : starterStat.minutesPlayed || 0;
           }
+        }
+
+        if (redCardNominal > 0) {
+          const exitMinute = getActualMinute(redCardNominal);
+          newMinutesPlayed = Math.max(0, exitMinute - entryMinute);
+        } else if (
+          isStarter &&
+          stat.substituteIn &&
+          stat.substituteIn !== "Nenhum"
+        ) {
+          newMinutesPlayed =
+            subNominal > 0
+              ? getActualMinute(subNominal)
+              : stat.minutesPlayed || 0;
+        } else if (
+          !isStarter &&
+          stat.substituteIn &&
+          stat.substituteIn !== "Nenhum"
+        ) {
+          newMinutesPlayed = Math.max(0, maxMatchMinutes - entryMinute);
         } else if (isStarter) {
           newMinutesPlayed = maxMatchMinutes;
         }
@@ -262,8 +287,7 @@ export const useAddDetails = () => {
           assistTargets,
           yellowCardMinute:
             Number(formValues[`eventMinute_yellow_${stat.playerId}`]) || 0,
-          redCardMinute:
-            Number(formValues[`eventMinute_red_${stat.playerId}`]) || 0,
+          redCardMinute: redCardNominal,
           minutesPlayed: newMinutesPlayed,
         };
       });
@@ -334,8 +358,16 @@ export const useAddDetails = () => {
         !!booleanValues.hasExtraTime,
         !!booleanValues.hasPenalties,
         matchEvents,
+        match?.homeTeam,
+        match?.awayTeam,
       ),
-    [booleanValues.hasExtraTime, booleanValues.hasPenalties, matchEvents],
+    [
+      booleanValues.hasExtraTime,
+      booleanValues.hasPenalties,
+      matchEvents,
+      match?.homeTeam,
+      match?.awayTeam,
+    ],
   );
 
   return {

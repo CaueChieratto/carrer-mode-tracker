@@ -41,11 +41,32 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
 
   const copyList = async () => {
     if (!sortedPlayerList.length) return;
-
     const text = buildPlayersCopyText(sortedPlayerList);
 
-    navigator.clipboard.writeText(text);
-    alert("Lista copiada com sucesso!");
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        alert("Lista copiada com sucesso!");
+      } else {
+        throw new Error("Clipboard API indisponível");
+      }
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        alert("Lista copiada com sucesso!");
+      } catch (err) {
+        console.error("Erro ao copiar texto no fallback:", err);
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   return (

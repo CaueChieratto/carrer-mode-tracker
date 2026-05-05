@@ -17,6 +17,8 @@ export interface Players {
   buy: boolean;
   captain: boolean;
   sell: boolean;
+  loan?: boolean;
+  incomingLoan?: boolean;
   contractTime: number;
   contract: Contract[];
   statsLeagues: LeagueStats[];

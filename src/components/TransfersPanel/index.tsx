@@ -12,7 +12,6 @@ type TransfersPanelProps = {
 const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
   const isArrival = title === "Chegadas";
   const transferType = isArrival ? "arrivals" : "exit";
-
   const sortedPlayers = sortTransfersByValue(players, transferType);
 
   return (
@@ -24,17 +23,62 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
       ) : (
         <ul className={Styles.list}>
           {sortedPlayers.map((player) => {
-            const contract = player.contract[player.contract.length - 1];
-            const club = isArrival ? contract.fromClub : contract.leftClub;
-            const value = isArrival ? contract.buyValue : contract.sellValue;
-            const date = isArrival ? contract.dataArrival : contract.dataExit;
+            const playerContract = player.contract || [];
+
+            const relevantContract = isArrival
+              ? [...playerContract].reverse().find((c) => c.fromClub) ||
+                playerContract[playerContract.length - 1] ||
+                {}
+              : [...playerContract].reverse().find((c) => c.leftClub) ||
+                playerContract[playerContract.length - 1] ||
+                {};
+
+            const club = isArrival
+              ? relevantContract.fromClub
+              : relevantContract.leftClub;
+            const value = isArrival
+              ? relevantContract.buyValue
+              : relevantContract.sellValue;
+            const date = isArrival
+              ? relevantContract.dataArrival
+              : relevantContract.dataExit;
+
+            let displayValue = formatDisplayValue(value as number);
+
+            if (isArrival) {
+              if (relevantContract.isLoan && relevantContract.fromClub) {
+                displayValue = "Empréstimo";
+              } else if (
+                !relevantContract.isLoan &&
+                relevantContract.fromClub &&
+                !player.buy
+              ) {
+                displayValue = "Fim do Empréstimo";
+              }
+            } else {
+              if (
+                relevantContract.isLoan &&
+                relevantContract.fromClub &&
+                relevantContract.leftClub
+              ) {
+                displayValue = "Fim do Empréstimo";
+              } else if (relevantContract.isLoan && relevantContract.leftClub) {
+                displayValue = "Empréstimo";
+              } else if (
+                !relevantContract.isLoan &&
+                relevantContract.leftClub &&
+                !player.sell
+              ) {
+                displayValue = "Fim do Empréstimo";
+              }
+            }
 
             return (
               <li key={player.id} className={Styles.item}>
                 <div className={Styles.playerInfo}>
                   <span className={Styles.playerName}>{player.name}</span>
                   <span className={Styles.club}>
-                    {isArrival ? "De:" : "Para:"} {club}
+                    {isArrival ? "De:" : "Para:"} {club || "-"}
                   </span>
                 </div>
 
@@ -45,7 +89,7 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
                       isArrival ? { color: "#c81419" } : { color: "#0bb32a" }
                     }
                   >
-                    {formatDisplayValue(value as number)}
+                    {displayValue}
                   </span>
                   {date && (
                     <span className={Styles.date}>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { seasonsFormFields } from "../../../constants/SeasonsFormFields";
+import { seasonsFormFields } from "../../../../pages/AddPlayers/components/AddPlayersContent/components/AddSeason_Player/constants/SeasonsFormFields";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";

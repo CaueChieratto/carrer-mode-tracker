@@ -71,22 +71,39 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
   };
 
   const getEventDetails = (t: number) => {
-    const displayTime = `${t}'`;
     let period: PeriodKey = "1T";
+
+    if (match.hasExtraTime) {
+      if (t > 105 + stoppageET1) {
+        period = "2ET";
+      } else if (t > 90 + stoppage2) {
+        period = "1ET";
+      } else if (t > 45 + stoppage1) {
+        period = "2T";
+      }
+    } else {
+      if (t > 45 + stoppage1) {
+        period = "2T";
+      }
+    }
+
+    let displayTime = `${t}'`;
     let sortTime = t;
 
-    if (t > 120) {
-      period = "PEN";
-      sortTime = 400 + t;
-    } else if (t > 105) {
-      period = "2ET";
-      sortTime = 300 + t;
-    } else if (t > 90) {
-      period = "1ET";
-      sortTime = 200 + t;
-    } else if (t > 45) {
-      period = "2T";
+    if (period === "1T") {
+      if (t > 45) displayTime = `45' +${t - 45}`;
+      sortTime = t;
+    } else if (period === "2T") {
+      if (t > 90) displayTime = `90' +${t - 90}`;
       sortTime = 100 + t;
+    } else if (period === "1ET") {
+      if (t > 105) displayTime = `105' +${t - 105}`;
+      sortTime = 200 + t;
+    } else if (period === "2ET") {
+      if (t > 120) displayTime = `120' +${t - 120}`;
+      sortTime = 300 + t;
+    } else if (period === "PEN") {
+      sortTime = 400 + t;
     }
 
     return { period, displayTime, sortTime };
@@ -102,7 +119,6 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
         mvpPlayerName = player.name;
       }
 
-      // Adicionando Gols
       if (stat.goals > 0) {
         let goalMins = stat.goalMinutes || [];
 
@@ -156,7 +172,6 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
         });
       }
 
-      // 1. Adicionando Cartão Amarelo (Primeiro Amarelo)
       if (stat.yellowCard) {
         const yMinute =
           stat.yellowCardMinute && stat.yellowCardMinute > 0
@@ -176,7 +191,6 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
         });
       }
 
-      // 2. Adicionando Segundo Cartão Amarelo (Expulsão)
       if (stat.secondYellowCard) {
         const syMinute =
           stat.secondYellowCardMinute && stat.secondYellowCardMinute > 0
@@ -196,7 +210,6 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
         });
       }
 
-      // 3. Adicionando Cartão Vermelho Direto (Apenas se não for 2º Amarelo)
       if (stat.redCard && !stat.secondYellowCard) {
         const rMinute =
           stat.redCardMinute && stat.redCardMinute > 0
@@ -216,7 +229,6 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
         });
       }
 
-      // Adicionando Substituições
       if (stat.substituteIn && stat.substituteIn !== "Nenhum") {
         const isStarter = [
           match.lineup?.goalkeeper?.playerId,

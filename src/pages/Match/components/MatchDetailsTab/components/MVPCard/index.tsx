@@ -1,7 +1,7 @@
 import { FaStar } from "react-icons/fa";
 import Styles from "./MVPCard.module.css";
 import { CardDetails } from "../../../../../../ui/IconsSVG/CardDetails";
-import { UseRatingColor } from "../../../../../../common/hooks/Colors/GetOverallColor";
+import { UseMatchRatingColor } from "../../../../../../common/hooks/Colors/GetOverallColor";
 
 type MVPCardProps = {
   playerName: string;
@@ -9,7 +9,7 @@ type MVPCardProps = {
 };
 
 export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
-  const colors = UseRatingColor(rating);
+  const colors = UseMatchRatingColor(rating);
 
   return (
     <div className={Styles.mvp_card}>

@@ -31,11 +31,11 @@ export const useEditSquadPlayer = ({
   const editPlayer = async (formData: FormData) => {
     validateMonetaryInput(
       formData.get("playerValue") as string,
-      "Valor do Jogador"
+      "Valor do Jogador",
     );
     validateMonetaryInput(
       formData.get("salary") as string,
-      "Salário (Semanal)"
+      "Salário (Semanal)",
     );
     validateRequiredFields(formData);
 
@@ -43,7 +43,13 @@ export const useEditSquadPlayer = ({
     const playerBeingEdited = currentPlayers?.find((p) => p.id === playerId);
     validateCaptainLimit(isBecomingCaptain, playerBeingEdited, currentPlayers);
 
-    const updatedPlayerData = mapFormDataToPlayerData(formData, career, season);
+    const updatedPlayerData = mapFormDataToPlayerData(
+      formData,
+      career,
+      season,
+      playerBeingEdited,
+    );
+
     delete updatedPlayerData.buy;
     delete updatedPlayerData.statsLeagues;
     delete updatedPlayerData.ballonDor;
@@ -53,7 +59,7 @@ export const useEditSquadPlayer = ({
         careerId,
         seasonId,
         playerId,
-        updatedPlayerData
+        updatedPlayerData,
       );
       onPlayerEdited();
     } catch (error) {
@@ -65,7 +71,7 @@ export const useEditSquadPlayer = ({
   const sellPlayer = async (
     sellValue: string,
     toClub: string,
-    dateExit: string
+    dateExit: string,
   ) => {
     try {
       await ServicePlayers.sellPlayerFromSeason(
@@ -74,12 +80,52 @@ export const useEditSquadPlayer = ({
         playerId,
         sellValue,
         toClub,
-        dateExit
+        dateExit,
       );
       onPlayerEdited();
     } catch (error) {
       console.error("Erro ao vender jogador:", error);
       throw new Error("Falha ao vender jogador.");
+    }
+  };
+
+  const loanPlayer = async (
+    buyOption: string,
+    toClub: string,
+    dateLoan: string,
+    loanDuration: string,
+    wagePercentage: string,
+  ) => {
+    try {
+      await ServicePlayers.loanPlayerFromSeason(
+        careerId,
+        seasonId,
+        playerId,
+        buyOption,
+        toClub,
+        dateLoan,
+        loanDuration,
+        wagePercentage,
+      );
+      onPlayerEdited();
+    } catch (error) {
+      console.error("Erro ao emprestar jogador:", error);
+      throw new Error("Falha ao emprestar jogador.");
+    }
+  };
+
+  const returnLoanPlayer = async (returnDate: string) => {
+    try {
+      await ServicePlayers.returnPlayerFromLoan(
+        careerId,
+        seasonId,
+        playerId,
+        returnDate,
+      );
+      onPlayerEdited();
+    } catch (error) {
+      console.error("Erro ao retornar jogador:", error);
+      throw new Error("Falha ao retornar jogador do empréstimo.");
     }
   };
 
@@ -93,5 +139,5 @@ export const useEditSquadPlayer = ({
     }
   };
 
-  return { editPlayer, deletePlayer, sellPlayer };
+  return { editPlayer, deletePlayer, sellPlayer, loanPlayer, returnLoanPlayer };
 };

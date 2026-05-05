@@ -4,7 +4,7 @@ import Button from "../../components/Button";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";
 import Load from "../../components/Load";
-import AddPlayersContent from "../../components/AddPlayersContent";
+import AddPlayersContent from "./components/AddPlayersContent";
 
 const AddPlayers = () => {
   const [searchParams] = useSearchParams();

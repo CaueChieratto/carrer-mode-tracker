@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { Career } from "../../common/interfaces/Career";
-import Navbar from "../../ui/Navbar";
-import HeaderSeason from "../HeaderSeason";
+import { Career } from "../../../../common/interfaces/Career";
+import Navbar from "../../../../ui/Navbar";
+import HeaderSeason from "../../../../components/HeaderSeason";
 import Styles from "./AddPlayersContent.module.css";
-import { Players } from "../../common/interfaces/playersInfo/players";
-import Load from "../Load";
-import ModalManager from "../../common/constants/ModalManager";
-import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import { useAddPlayersContent } from "../../common/hooks/Players/UseAddPlayersContent";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
+import Load from "../../../../components/Load";
+import ModalManager from "../../../../common/constants/ModalManager";
+import { useSeasonTheme } from "../../../../common/hooks/Seasons/UseSeasonTheme";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { useAddPlayersContent } from "./hooks/UseAddPlayersContent";
 
 type AddPlayersContentProps = {
   origin: string | null;
@@ -39,6 +39,7 @@ const AddPlayersContent = ({
     isLoading,
     handleDeletePlayer,
     handleSellPlayer,
+    handleReturnLoanPlayer,
     activeLabel,
     ActiveComponent,
     handleSave,
@@ -92,6 +93,7 @@ const AddPlayersContent = ({
         onClose={closeModal}
         onConfirm={handleDeletePlayer}
         onSellConfirm={handleSellPlayer}
+        onReturnLoanConfirm={handleReturnLoanPlayer}
         selectedCareer={selectedCareer!}
         setSelectedCareer={setSelectedCareer}
         player={player}

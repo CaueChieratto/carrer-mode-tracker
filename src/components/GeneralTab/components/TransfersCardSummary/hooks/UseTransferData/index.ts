@@ -7,13 +7,30 @@ import { getSeasonDateRange } from "../../../../../../common/utils/GetSeasonDate
 
 const sortPlayersByDate = (
   players: Players[],
-  dateField: "dataArrival" | "dataExit",
+  isArrival: boolean,
+  fallbackDate: Date,
 ) => {
   return players
     .sort((a, b) => {
-      const dateA = a.contract?.[a.contract.length - 1]?.[dateField];
-      const dateB = b.contract?.[b.contract.length - 1]?.[dateField];
-      if (!dateA || !dateB) return 0;
+      const contractA = a.contract || [];
+      const contractB = b.contract || [];
+
+      const cA =
+        [...contractA]
+          .reverse()
+          .find((c) => (isArrival ? c.fromClub : c.leftClub)) ||
+        contractA[contractA.length - 1] ||
+        {};
+      const cB =
+        [...contractB]
+          .reverse()
+          .find((c) => (isArrival ? c.fromClub : c.leftClub)) ||
+        contractB[contractB.length - 1] ||
+        {};
+
+      const dateA = (isArrival ? cA.dataArrival : cA.dataExit) || fallbackDate;
+      const dateB = (isArrival ? cB.dataArrival : cB.dataExit) || fallbackDate;
+
       return new Date(dateB).getTime() - new Date(dateA).getTime();
     })
     .slice(0, 3);
@@ -25,57 +42,52 @@ export const useTransferData = (career: Career, season: ClubData) => {
 
   const arrivals = useMemo(() => {
     if (isGeralPage) {
-      const allPlayers = career.clubData.flatMap((s) => s.players);
+      const allPlayers = career.clubData.flatMap((s) => s.players || []);
       return sortPlayersByDate(
-        allPlayers.filter((p) => p.buy),
-        "dataArrival",
+        allPlayers.filter((p) => p.contract?.some((c) => c.fromClub)),
+        true,
+        career.createdAt,
       );
     }
-
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
       career.nation,
     );
-
-    const seasonArrivals = season.players.filter((p) => {
-      const arrivalDate = p.contract?.[p.contract.length - 1]?.dataArrival;
-      return (
-        p.buy &&
-        arrivalDate &&
-        new Date(arrivalDate) >= startDate &&
-        new Date(arrivalDate) <= endDate
-      );
+    const seasonArrivals = (season.players || []).filter((p) => {
+      return p.contract?.some((c) => {
+        if (!c.fromClub) return false;
+        const arrivalDate = c.dataArrival || career.createdAt;
+        return (
+          new Date(arrivalDate) >= startDate && new Date(arrivalDate) <= endDate
+        );
+      });
     });
-    return sortPlayersByDate(seasonArrivals, "dataArrival");
+    return sortPlayersByDate(seasonArrivals, true, career.createdAt);
   }, [career, season, isGeralPage]);
 
   const departures = useMemo(() => {
     if (isGeralPage) {
-      const allPlayers = career.clubData.flatMap((s) => s.players);
+      const allPlayers = career.clubData.flatMap((s) => s.players || []);
       return sortPlayersByDate(
-        allPlayers.filter((p) => p.sell),
-        "dataExit",
+        allPlayers.filter((p) => p.contract?.some((c) => c.leftClub)),
+        false,
+        career.createdAt,
       );
     }
-
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
       career.nation,
     );
-
-    const seasonDepartures = season.players.filter((p) => {
-      const exitDate = p.contract?.[p.contract.length - 1]?.dataExit;
-      return (
-        p.sell &&
-        exitDate &&
-        new Date(exitDate) >= startDate &&
-        new Date(exitDate) <= endDate
-      );
+    const seasonDepartures = (season.players || []).filter((p) => {
+      return p.contract?.some((c) => {
+        if (!c.leftClub) return false;
+        const exitDate = c.dataExit || career.createdAt;
+        return new Date(exitDate) >= startDate && new Date(exitDate) <= endDate;
+      });
     });
-
-    return sortPlayersByDate(seasonDepartures, "dataExit");
+    return sortPlayersByDate(seasonDepartures, false, career.createdAt);
   }, [career, season, isGeralPage]);
 
   return { arrivals, departures };

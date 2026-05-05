@@ -28,7 +28,6 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
 
   const isGrouped =
     sortOption === "Ordenar por padrão" || sortOption.includes("(Agrupado)");
-
   const criteria = sortOption.split(" (")[0];
 
   const { groupedData, flatData } = useMemo(() => {
@@ -37,11 +36,32 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
 
   const copySquad = async () => {
     if (!flatData.length) return;
-
     const text = buildSquadCopyText(flatData);
 
-    navigator.clipboard.writeText(text);
-    alert("Elenco copiado com sucesso!");
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        alert("Elenco copiado com sucesso!");
+      } else {
+        throw new Error("Clipboard API indisponível");
+      }
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        alert("Elenco copiado com sucesso!");
+      } catch (err) {
+        console.error("Erro ao copiar texto no fallback:", err);
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   return (
@@ -57,6 +77,8 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
         POSITION_DATA.map((group) => {
           const players = groupedData.get(group.key) || [];
 
+          if (group.key === "loaned" && players.length === 0) return null;
+
           return (
             <Card key={group.name} className={Styles.card}>
               <SquadElements.Header
@@ -64,7 +86,6 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
                 color={group.color}
                 quantity={players.length}
               />
-
               {players.map((player) => (
                 <SquadElements.Section
                   {...player}
@@ -78,7 +99,6 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
       ) : (
         <Card className={Styles.card}>
           <SquadElements.Header name={sortOption} color={clubColor} />
-
           {flatData.map((player) => (
             <SquadElements.Section
               {...player}

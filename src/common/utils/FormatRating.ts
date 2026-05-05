@@ -6,7 +6,6 @@ export const formatRating = (value: string): string => {
 
   if (digits.startsWith("10")) {
     if (digits.length === 2) {
-      // "10"
       return "10";
     }
     return "10.0";
