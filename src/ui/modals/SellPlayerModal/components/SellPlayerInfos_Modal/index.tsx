@@ -1,6 +1,6 @@
-import { UseOverallColor } from "../../common/hooks/Colors/GetOverallColor";
-import { Players } from "../../common/interfaces/playersInfo/players";
-import { formatDisplayValue } from "../../common/utils/FormatValue";
+import { UseOverallColor } from "../../../../../common/hooks/Colors/GetOverallColor";
+import { Players } from "../../../../../common/interfaces/playersInfo/players";
+import { formatDisplayValue } from "../../../../../common/utils/FormatValue";
 import Styles from "./SellPlayerInfos_Modal.module.css";
 
 type SellPlayerInfos_ModalProps = {

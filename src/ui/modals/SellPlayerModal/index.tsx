@@ -1,11 +1,11 @@
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import Button from "../../../components/Button";
 import Form from "../../../components/Form";
-import { useSellPlayerForm } from "../../../common/hooks/Players/UseSellPlayerForm";
+import { useSellPlayerForm } from "./hooks/UseSellPlayerForm";
 import SellFormField from "../../../components/SellFormField";
-import SellPlayerInfos_Modal from "../../../components/SellPlayerInfos_Modal";
+import SellPlayerInfos_Modal from "./components/SellPlayerInfos_Modal";
 import Styles from "./SellPlayerModal.module.css";
-import { getSellOrLoanFormFields } from "../../../common/constants/SellPlayerFormFields";
+import { getSellOrLoanFormFields } from "./constants/SellPlayerFormFields";
 import { brasilDatePlaceholderShort } from "../../../common/utils/Date";
 import { formatDisplayValue } from "../../../common/utils/FormatValue";
 

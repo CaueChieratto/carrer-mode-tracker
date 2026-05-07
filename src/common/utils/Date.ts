@@ -76,26 +76,3 @@ export function brasilDatePlaceholderShort(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   return `${day}/${month}`;
 }
-
-export function formatDateToLongBrazilian(date: Date): string {
-  const monthNames = [
-    "janeiro",
-    "fevereiro",
-    "março",
-    "abril",
-    "maio",
-    "junho",
-    "julho",
-    "agosto",
-    "setembro",
-    "outubro",
-    "novembro",
-    "dezembro",
-  ];
-
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
-
-  return `${day} de ${month} de ${year}`;
-}

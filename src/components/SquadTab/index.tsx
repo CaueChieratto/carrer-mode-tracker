@@ -13,6 +13,7 @@ import { buildSquadCopyText } from "./helpers/buildSquadCopyText";
 import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 import { useClubColors } from "../../common/hooks/Colors/UseClubColors";
 import { ColorsService } from "../../common/services/ColorsService";
+import { copyToClipboard } from "../../common/utils/copyToClipboard";
 
 type SquadTabProps = {
   season: ClubData;
@@ -38,30 +39,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
     if (!flatData.length) return;
     const text = buildSquadCopyText(flatData);
 
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        alert("Elenco copiado com sucesso!");
-      } else {
-        throw new Error("Clipboard API indisponível");
-      }
-    } catch {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999999px";
-      textArea.style.top = "-999999px";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      try {
-        document.execCommand("copy");
-        alert("Elenco copiado com sucesso!");
-      } catch (err) {
-        console.error("Erro ao copiar texto no fallback:", err);
-      }
-      document.body.removeChild(textArea);
-    }
+    await copyToClipboard(text, "Elenco copiado com sucesso!");
   };
 
   return (

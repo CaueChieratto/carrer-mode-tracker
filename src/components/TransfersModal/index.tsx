@@ -1,6 +1,6 @@
 import Modal from "../Modal";
 import SlideUpModal from "../../ui/modals/SlideUpModal";
-import TransfersPanel from "../TransfersPanel";
+import TransfersPanel from "./components/TransfersPanel";
 import { Players } from "../../common/interfaces/playersInfo/players";
 
 type TransfersModalProps = {

@@ -49,18 +49,6 @@ export const buildMatchCopyText = ({
     return all.find((p) => p?.playerId === id)?.playerName || "Desconhecido";
   };
 
-  const goals: string[] = [];
-
-  (match.playerStats || []).forEach((stat) => {
-    if (stat.goals > 0 && stat.goalMinutes?.length) {
-      stat.goalMinutes.forEach((min) => {
-        goals.push(
-          `gol de ${getPlayerName(stat.playerId)} (${stat.rating}) aos ${min} minutos`,
-        );
-      });
-    }
-  });
-
   const starters: string[] = [];
 
   if (match.lineup?.goalkeeper?.playerName) {
@@ -76,9 +64,44 @@ export const buildMatchCopyText = ({
   const startersText =
     starters.length > 0 ? `vamos com ${starters.join(", ")}, ` : "";
 
-  const goalsText = goals.length > 0 ? goals.join(", e ") : "";
+  const playerHighlights: string[] = [];
+
+  (match.playerStats || []).forEach((stat) => {
+    const playerName = getPlayerName(stat.playerId);
+
+    const parts: string[] = [];
+
+    if (stat.goals > 0) {
+      parts.push(`${stat.goals} ${stat.goals === 1 ? "gol" : "gols"}`);
+    }
+
+    if (stat.assists > 0) {
+      parts.push(
+        `${stat.assists} ${
+          stat.assists === 1 ? "assistencia" : "assistencias"
+        }`,
+      );
+    }
+
+    if (parts.length > 0) {
+      playerHighlights.push(
+        `${playerName} (${stat.rating}) ${parts.join(" e ")}`,
+      );
+    }
+  });
+
+  const mvp = [...(match.playerStats || [])].sort(
+    (a, b) => b.rating - a.rating,
+  )[0];
+
+  const mvpText =
+    mvp && mvp.rating > 0
+      ? `${getPlayerName(mvp.playerId)} (${mvp.rating}) foi eleito MVP`
+      : "";
+
+  const highlightsText = playerHighlights.join(", ");
 
   return `Dia ${day}, ${opponent} ${location}, ${startersText}${resultText} por ${score}, posse de ${possession}, ${shots} em chutes com ${xg} de xG${
-    goalsText ? `, ${goalsText}` : ""
-  }.`;
+    highlightsText ? `, ${highlightsText}` : ""
+  }${mvpText ? `${highlightsText ? "," : ""} ${mvpText}` : ""}.`;
 };
