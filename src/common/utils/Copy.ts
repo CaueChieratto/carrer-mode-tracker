@@ -1,4 +1,4 @@
-export const copyToClipboard = async (
+export const Copy = async (
   text: string,
   successMessage: string = "Copiado com sucesso!",
 ) => {

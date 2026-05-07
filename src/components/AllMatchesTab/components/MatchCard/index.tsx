@@ -8,7 +8,7 @@ import { Career } from "../../../../common/interfaces/Career";
 import { useMatchNavigation } from "./hooks/useMatchNavigation";
 import { buildMatchCopyText } from "./helpers/buildCopyText";
 import { CgCopy } from "react-icons/cg";
-import { copyToClipboard } from "../../../../common/utils/copyToClipboard";
+import { Copy } from "../../../../common/utils/Copy";
 
 type MatchCardProps = {
   career: Career;
@@ -34,7 +34,7 @@ export const MatchCard = ({
   const copyText = async () => {
     const text = buildMatchCopyText({ match, career });
 
-    await copyToClipboard(text, "Copiado!");
+    await Copy(text, "Copiado!");
   };
 
   return (

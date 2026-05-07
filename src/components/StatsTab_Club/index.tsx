@@ -12,7 +12,7 @@ import { buildPlayersCopyText } from "./helpers/buildPlayersCopyText";
 import { sortPlayersList } from "./helpers/sortPlayersList";
 import { usePersistedSortOption } from "./hooks/usePersistedSortOption";
 import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
-import { copyToClipboard } from "../../common/utils/copyToClipboard";
+import { Copy } from "../../common/utils/Copy";
 
 type StatsTab_ClubProps = {
   season: ClubData;
@@ -44,7 +44,7 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
     if (!sortedPlayerList.length) return;
     const text = buildPlayersCopyText(sortedPlayerList);
 
-    await copyToClipboard(text, "Lista copiada com sucesso!");
+    await Copy(text, "Lista copiada com sucesso!");
   };
 
   return (

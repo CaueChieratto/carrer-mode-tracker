@@ -13,7 +13,7 @@ import { buildSquadCopyText } from "./helpers/buildSquadCopyText";
 import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 import { useClubColors } from "../../common/hooks/Colors/UseClubColors";
 import { ColorsService } from "../../common/services/ColorsService";
-import { copyToClipboard } from "../../common/utils/copyToClipboard";
+import { Copy } from "../../common/utils/Copy";
 
 type SquadTabProps = {
   season: ClubData;
@@ -39,7 +39,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
     if (!flatData.length) return;
     const text = buildSquadCopyText(flatData);
 
-    await copyToClipboard(text, "Elenco copiado com sucesso!");
+    await Copy(text, "Elenco copiado com sucesso!");
   };
 
   return (
