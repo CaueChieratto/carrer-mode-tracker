@@ -23,8 +23,6 @@ export const AddDetails = () => {
 
   if (loading || isSaving || !career) return <Load />;
 
-  console.log(match);
-
   return (
     <SeasonThemeProvider career={career} careerId={career.id}>
       <HeaderSeason

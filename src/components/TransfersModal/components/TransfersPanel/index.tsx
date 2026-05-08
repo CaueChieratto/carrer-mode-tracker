@@ -60,7 +60,7 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
               if (player.sell && relevantContract.isLoan && value === 0) {
                 displayValue = "Fim do Empréstimo";
               } else if (!player.sell) {
-                if (player.loan) {
+                if (player.loan || relevantContract.isLoan) {
                   displayValue = "Empréstimo";
                 } else if (relevantContract.leftClub) {
                   displayValue = "Fim do Empréstimo";
