@@ -17,6 +17,12 @@ export const formatMatchStats = (
       ? Math.round((stats.totalPassesCompleted / stats.totalPasses) * 100)
       : 0;
 
+  const missedPasses = stats.totalPasses - stats.totalPassesCompleted;
+  const missedPassesPercentage =
+    stats.totalPasses > 0
+      ? Math.round((missedPasses / stats.totalPasses) * 100)
+      : 0;
+
   const avgPossession = Math.round(stats.totalPossession / totalMatches);
 
   const avgFinishingsOffTarget = (
@@ -59,21 +65,38 @@ export const formatMatchStats = (
           name: "Passes certos",
           value: `${stats.totalPassesCompleted} (${passesPercentage}%)`,
         },
+        {
+          name: "Passes errados",
+          value: `${missedPasses} (${missedPassesPercentage}%)`,
+        },
+        { name: "Passes decisivos", value: stats.totalKeyPasses },
+        {
+          name: "Passes decisivos por jogo",
+          value: avg(stats.totalKeyPasses),
+        },
       ],
     },
     {
       title: "Defendendo",
       stats: [
+        { name: "Jogos sem sofrer gol", value: stats.cleanSheets },
         { name: "Gols sofridos", value: stats.goalsConceded },
         {
           name: "Gols sofridos por jogo",
           value: avg(stats.goalsConceded),
         },
-        { name: "Jogos sem sofrer gol", value: stats.cleanSheets },
         { name: "Defesas por jogo", value: avg(stats.totalDefenses) },
         {
-          name: "Recuperações de bola por jogo",
-          value: avg(stats.totalBallRecovery),
+          name: "Tempo médio para recuperar a bola",
+          value: `${avg(stats.totalBallRecoveryTime)}s`,
+        },
+        {
+          name: "Bolas recuperadas por jogo",
+          value: avg(stats.totalBallsRecovered),
+        },
+        {
+          name: "Bolas perdidas por jogo",
+          value: avg(stats.totalBallsLost),
         },
       ],
     },

@@ -7,7 +7,6 @@ import { MatchHeader } from "./components/MatchHeader";
 import { Career } from "../../../../common/interfaces/Career";
 import { useMatchNavigation } from "./hooks/useMatchNavigation";
 import { buildMatchCopyText } from "./helpers/buildCopyText";
-import { CgCopy } from "react-icons/cg";
 import { Copy } from "../../../../common/utils/Copy";
 
 type MatchCardProps = {
@@ -39,17 +38,13 @@ export const MatchCard = ({
 
   return (
     <Card className={Styles.card}>
-      {match.status === "FINISHED" && (
-        <div className={Styles.icon} onClick={copyText}>
-          <CgCopy />
-        </div>
-      )}
-
       <MatchHeader
         leagueName={match.league}
         leagueData={leagueData}
         onEdit={goToEdit}
         isGeralPage={isGeralPage}
+        match={match}
+        onClick={copyText}
       />
 
       <MatchBody match={match} onClick={goToMatch} />

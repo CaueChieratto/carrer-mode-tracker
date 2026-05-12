@@ -10,6 +10,7 @@ type Params = {
   isGeralPage: boolean;
   activeTab: MatchStatus | string;
   selectedMonth: string;
+  selectedSeasonId?: string;
 };
 
 const parseDate = (date: string): number => {
@@ -21,9 +22,15 @@ const getAllMatches = (
   season: ClubData,
   career: Career,
   isGeralPage: boolean,
+  selectedSeasonId?: string,
 ): Match[] => {
   if (isGeralPage && career.clubData) {
-    return career.clubData.flatMap((s) => s.matches || []);
+    const seasonsToUse =
+      selectedSeasonId && selectedSeasonId !== "Todas"
+        ? career.clubData.filter((s) => s.id === selectedSeasonId)
+        : career.clubData;
+
+    return seasonsToUse.flatMap((s) => s.matches || []);
   }
 
   return season.matches || [];
@@ -61,8 +68,14 @@ export const processMatches = ({
   isGeralPage,
   activeTab,
   selectedMonth,
+  selectedSeasonId,
 }: Params): Match[] => {
-  const baseMatches = getAllMatches(season, career, isGeralPage);
+  const baseMatches = getAllMatches(
+    season,
+    career,
+    isGeralPage,
+    selectedSeasonId,
+  );
 
   const status = isGeralPage ? "FINISHED" : activeTab;
   const isFinished = status === "FINISHED";

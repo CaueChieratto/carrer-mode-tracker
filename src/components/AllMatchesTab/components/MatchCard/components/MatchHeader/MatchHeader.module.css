@@ -33,6 +33,20 @@
   color: var(--color-add-player);
 }
 
-.container_icon {
+.wrapper {
   display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.copy,
+.edit {
+  display: flex;
+}
+
+.copy {
+  height: 34px;
+  width: 36px;
+  justify-content: center;
+  align-items: center;
 }

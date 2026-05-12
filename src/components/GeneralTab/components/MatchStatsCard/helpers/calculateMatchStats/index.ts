@@ -18,7 +18,10 @@ export interface AggregatedStats {
   totalDefenses: number;
   totalYellowCards: number;
   totalRedCards: number;
-  totalBallRecovery: number;
+  totalBallRecoveryTime: number;
+  totalBallsRecovered: number;
+  totalBallsLost: number;
+  totalKeyPasses: number;
 }
 
 const getValue = (isHome: boolean, home?: number, away?: number): number =>
@@ -44,7 +47,10 @@ export const calculateMatchStats = (
     totalDefenses: 0,
     totalYellowCards: 0,
     totalRedCards: 0,
-    totalBallRecovery: 0,
+    totalBallRecoveryTime: 0,
+    totalBallsRecovered: 0,
+    totalBallsLost: 0,
+    totalKeyPasses: 0,
   };
 
   matches.forEach((match) => {
@@ -104,7 +110,7 @@ export const calculateMatchStats = (
       match.awayRedCards,
     );
 
-    stats.totalBallRecovery += getValue(
+    stats.totalBallRecoveryTime += getValue(
       isHome,
       match.homeBallRecovery,
       match.awayBallRecovery,
@@ -113,6 +119,9 @@ export const calculateMatchStats = (
     if (match.playerStats) {
       match.playerStats.forEach((p) => {
         stats.totalAssists += p.assists ?? 0;
+        stats.totalKeyPasses += p.keyPasses ?? 0;
+        stats.totalBallsRecovered += p.ballsRecovered ?? 0;
+        stats.totalBallsLost += p.ballsLost ?? 0;
 
         if (p.rating) {
           stats.totalRating += p.rating;

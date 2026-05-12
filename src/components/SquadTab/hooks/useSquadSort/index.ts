@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "squadSortOption";
+const STORAGE_KEY_ASC = "squadSortAsc";
 const DEFAULT_SORT = "Padrão";
 
 export const useSquadSort = () => {
@@ -8,11 +9,15 @@ export const useSquadSort = () => {
     return localStorage.getItem(STORAGE_KEY) || DEFAULT_SORT;
   });
 
-  const [isAsc, setIsAsc] = useState<boolean>(false);
+  const [isAsc, setIsAsc] = useState<boolean>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY_ASC);
+    return saved === "true";
+  });
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, sortOption);
-  }, [sortOption]);
+    localStorage.setItem(STORAGE_KEY_ASC, String(isAsc));
+  }, [sortOption, isAsc]);
 
   const handleSortChange = (value: string) => {
     if (value === sortOption) {

@@ -22,17 +22,32 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
   const [selectedMonth, setSelectedMonth] = useState<string>(() => {
     return localStorage.getItem("matchSelectedMonth") || "Tudo";
   });
+  const [selectedSeasonLabel, setSelectedSeasonLabel] = useState<string>(() => {
+    return localStorage.getItem("matchSelectedSeason") || "Todas";
+  });
 
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
   useEffect(() => {
     localStorage.setItem("matchActiveTab", activeTab);
-  }, [activeTab]);
 
-  useEffect(() => {
     localStorage.setItem("matchSelectedMonth", selectedMonth);
-  }, [selectedMonth]);
+
+    localStorage.setItem("matchSelectedSeason", selectedSeasonLabel);
+  }, [activeTab, selectedMonth, selectedSeasonLabel]);
+
+  const seasonOptions = [
+    "Todas",
+    ...(career.clubData?.map((s) => `Temporada ${s.seasonNumber}`) || []),
+  ];
+
+  const selectedSeasonId =
+    selectedSeasonLabel === "Todas"
+      ? undefined
+      : career.clubData?.find(
+          (s) => `Temporada ${s.seasonNumber}` === selectedSeasonLabel,
+        )?.id;
 
   const matches = processMatches({
     season,
@@ -40,20 +55,23 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
     isGeralPage,
     activeTab,
     selectedMonth,
+    selectedSeasonId,
   });
 
   return (
     <ContainerClubContent isMatch>
-      {!isGeralPage && (
-        <ButtonsSwitch
-          isMatches
-          selectOptions={MONTH_OPTIONS}
-          selectValue={selectedMonth}
-          onSelectChange={setSelectedMonth}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-      )}
+      <ButtonsSwitch
+        isMatches
+        isGeralPage={isGeralPage}
+        selectOptions={MONTH_OPTIONS}
+        selectValue={selectedMonth}
+        onSelectChange={setSelectedMonth}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        seasonOptions={seasonOptions}
+        seasonValue={selectedSeasonLabel}
+        onSeasonChange={setSelectedSeasonLabel}
+      />
       {!matches.length ? (
         <NoStatsMessage
           textOne="Nenhuma partida encontrada"

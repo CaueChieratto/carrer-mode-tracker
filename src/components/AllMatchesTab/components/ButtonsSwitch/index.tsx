@@ -11,9 +11,11 @@ type ButtonsSwitchProps = {
   selectOptions: string[];
   selectValue: string;
   onSelectChange: (value: string) => void;
+  seasonOptions?: string[];
+  seasonValue?: string;
+  onSeasonChange?: (value: string) => void;
   isMatches?: boolean;
-  sortOption?: string;
-  setSortOption?: (option: string) => void;
+  isGeralPage?: boolean;
   onClickCopy?: () => void;
 };
 
@@ -29,7 +31,11 @@ export const ButtonsSwitch = ({
   selectValue,
   onSelectChange,
   isMatches,
+  isGeralPage,
   onClickCopy,
+  seasonOptions,
+  seasonValue,
+  onSeasonChange,
 }: ButtonsSwitchProps) => {
   const { clubColor } = useSeasonTheme();
 
@@ -41,7 +47,7 @@ export const ButtonsSwitch = ({
 
   return (
     <div className={Styles.container}>
-      {isMatches && setActiveTab && (
+      {isMatches && setActiveTab && !isGeralPage && (
         <>
           {TABS.map((tab) => {
             const isActive = activeTab === tab.value;
@@ -58,6 +64,20 @@ export const ButtonsSwitch = ({
             );
           })}
         </>
+      )}
+
+      {isGeralPage && seasonOptions && onSeasonChange && (
+        <div
+          className="swiper-no-swiping"
+          style={{ width: "100%", maxHeight: "48px" }}
+        >
+          <CustomSelect
+            name="seasonFilter"
+            options={seasonOptions}
+            value={seasonValue || ""}
+            onChange={(e) => onSeasonChange(e.target.value)}
+          />
+        </div>
       )}
 
       <div

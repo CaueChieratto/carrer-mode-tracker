@@ -8,6 +8,7 @@ import Styles from "./SellPlayerModal.module.css";
 import { getSellOrLoanFormFields } from "./constants/SellPlayerFormFields";
 import { brasilDatePlaceholderShort } from "../../../common/utils/Date";
 import { formatDisplayValue } from "../../../common/utils/FormatValue";
+import Load from "../../../components/Load";
 
 type SellPlayerModalProps = {
   closeModal: () => void;
@@ -61,6 +62,7 @@ const SellPlayerModal = ({
     wagePercentage,
     handleConfirm,
     handleInputChange,
+    isLoading,
   } = useSellPlayerForm({ isLoan, onConfirm, closeModal, initialValues });
 
   const fieldValues: { [key: string]: string } = {
@@ -74,60 +76,66 @@ const SellPlayerModal = ({
   const formRows = getSellOrLoanFormFields(isLoan);
 
   return (
-    <Form onSubmit={handleConfirm} className={Styles.form}>
-      <SellPlayerInfos_Modal player={player} />
+    <>
+      {isLoading ? (
+        <Load isTransfers />
+      ) : (
+        <Form onSubmit={handleConfirm} className={Styles.form}>
+          <SellPlayerInfos_Modal player={player} />
 
-      <div className={Styles.container}>
-        {formRows.map((row, rowIndex) => (
-          <div
-            key={rowIndex}
-            style={{ display: "flex", gap: "10px", width: "100%" }}
-          >
-            {row.map((field) => (
-              <div key={field.id} style={{ flex: 1 }}>
-                <SellFormField
-                  id={field.id}
-                  name={field.name}
-                  icon={field.icon}
-                  placeholder={field.placeholder}
-                  value={fieldValues[field.id] || ""}
-                  onChange={handleInputChange}
-                />
+          <div className={Styles.container}>
+            {formRows.map((row, rowIndex) => (
+              <div
+                key={rowIndex}
+                style={{ display: "flex", gap: "10px", width: "100%" }}
+              >
+                {row.map((field) => (
+                  <div key={field.id} style={{ flex: 1 }}>
+                    <SellFormField
+                      id={field.id}
+                      name={field.name}
+                      icon={field.icon}
+                      placeholder={field.placeholder}
+                      value={fieldValues[field.id] || ""}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                ))}
               </div>
             ))}
           </div>
-        ))}
-      </div>
 
-      <Button
-        radius="rounded"
-        fontWeight="bold"
-        fontSize="large"
-        size="big"
-        type="submit"
-        isActive
-        style={{
-          backgroundColor: clubColor,
-          border: `1px solid ${darkClubColor}`,
-        }}
-      >
-        {isLoan ? "Confirmar Empréstimo" : "Confirmar Venda"}
-      </Button>
-      <Button
-        radius="rounded"
-        fontWeight="bold"
-        fontSize="large"
-        size="big"
-        type="button"
-        onClick={closeModal}
-        style={{
-          color: clubColor,
-          border: `1px solid ${darkClubColor}`,
-        }}
-      >
-        Cancelar
-      </Button>
-    </Form>
+          <Button
+            radius="rounded"
+            fontWeight="bold"
+            fontSize="large"
+            size="big"
+            type="submit"
+            isActive
+            style={{
+              backgroundColor: clubColor,
+              border: `1px solid ${darkClubColor}`,
+            }}
+          >
+            {isLoan ? "Confirmar Empréstimo" : "Confirmar Venda"}
+          </Button>
+          <Button
+            radius="rounded"
+            fontWeight="bold"
+            fontSize="large"
+            size="big"
+            type="button"
+            onClick={closeModal}
+            style={{
+              color: clubColor,
+              border: `1px solid ${darkClubColor}`,
+            }}
+          >
+            Cancelar
+          </Button>
+        </Form>
+      )}
+    </>
   );
 };
 

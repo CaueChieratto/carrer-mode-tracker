@@ -35,6 +35,7 @@ export const useSellPlayerForm = ({
   const [wagePercentage, setWagePercentage] = useState(
     initialValues?.wagePercentage || "",
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,8 +59,21 @@ export const useSellPlayerForm = ({
       return;
     }
 
-    await onConfirm(sellValue, toClub, dateExit, loanDuration, wagePercentage);
-    closeModal();
+    setIsLoading(true);
+    try {
+      await onConfirm(
+        sellValue,
+        toClub,
+        dateExit,
+        loanDuration,
+        wagePercentage,
+      );
+    } catch (error) {
+      console.error("Erro na operação de venda/empréstimo:", error);
+    } finally {
+      setIsLoading(false);
+      closeModal();
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +105,7 @@ export const useSellPlayerForm = ({
     dateExit,
     loanDuration,
     wagePercentage,
+    isLoading,
     handleConfirm,
     handleInputChange,
   };
