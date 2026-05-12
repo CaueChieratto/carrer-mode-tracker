@@ -36,22 +36,57 @@ export const buildMatchCopyText = ({
   const myXg = isHome ? match.homeXG : match.awayXG;
   const opponentXg = isHome ? match.awayXG : match.homeXG;
 
-  const getPlayerName = (id?: string | null): string => {
-    if (!id) return "Desconhecido";
-
-    const all = [
-      ...(match.lineup?.lines || []),
-      ...(match.lineup?.bench || []),
-      match.lineup?.goalkeeper,
-    ];
-
-    return all.find((p) => p?.playerId === id)?.playerName || "Desconhecido";
-  };
-
   const getPlayerStat = (id?: string | null) => {
     if (!id) return undefined;
 
     return match.playerStats?.find((p) => p.playerId === id);
+  };
+
+  const buildGoalsText = (goals: number, minutes: number[]): string => {
+    if (goals <= 0 || minutes.length === 0) return "";
+
+    const minutesText = minutes.map((minute) => `${minute} minutos`).join(", ");
+
+    return `${goals} ${goals === 1 ? "gol" : "gols"} aos ${minutesText}`;
+  };
+
+  const buildHighlightText = (
+    stat?: ReturnType<typeof getPlayerStat>,
+  ): string => {
+    if (!stat) return "";
+
+    const parts: string[] = [];
+
+    if (stat.goals > 0) {
+      parts.push(buildGoalsText(stat.goals, stat.goalMinutes || []));
+    }
+
+    if (stat.assists > 0) {
+      parts.push(
+        `${stat.assists} ${
+          stat.assists === 1 ? "assistencia" : "assistencias"
+        }`,
+      );
+    }
+
+    return parts.join(" e ");
+  };
+
+  const mvp = [...(match.playerStats || [])].sort(
+    (a, b) => b.rating - a.rating,
+  )[0];
+
+  const buildPlayerText = (
+    playerName: string,
+    rating: number,
+    stat?: ReturnType<typeof getPlayerStat>,
+    isMvp?: boolean,
+  ): string => {
+    const highlight = buildHighlightText(stat);
+
+    return `${playerName} (${rating})${
+      highlight ? ` ${highlight}` : ""
+    }${isMvp ? " e foi eleito o MVP" : ""}`;
   };
 
   const starters: string[] = [];
@@ -60,27 +95,63 @@ export const buildMatchCopyText = ({
     const stat = getPlayerStat(match.lineup.goalkeeper.playerId);
 
     starters.push(
-      `${match.lineup.goalkeeper.playerName} (${stat?.rating || 0})`,
+      buildPlayerText(
+        match.lineup.goalkeeper.playerName || "Desconhecido",
+        stat?.rating || 0,
+        stat,
+        mvp?.playerId === match.lineup.goalkeeper.playerId,
+      ),
     );
   }
 
   (match.lineup?.lines || []).forEach((player) => {
     const stat = getPlayerStat(player.playerId);
 
-    starters.push(`${player.playerName} (${stat?.rating || 0})`);
+    starters.push(
+      buildPlayerText(
+        player.playerName || "Desconhecido",
+        stat?.rating || 0,
+        stat,
+        mvp?.playerId === player.playerId,
+      ),
+    );
   });
 
   const startersText =
     starters.length > 0 ? `os titulares foram ${starters.join(", ")}` : "";
 
+  const starterIds = new Set<string>();
+
+  const gkId = match.lineup?.goalkeeper?.playerId;
+  if (gkId) {
+    starterIds.add(gkId);
+  }
+
+  (match.lineup?.lines || []).forEach((player) => {
+    if (player.playerId) {
+      starterIds.add(player.playerId);
+    }
+  });
+
   const benchPlayers: string[] = [];
 
-  (match.playerStats || []).forEach((stat) => {
-    if (!("substituteIn" in stat) || !stat.substituteIn) return;
+  (match.lineup?.bench || []).forEach((benchPlayer) => {
+    if (!benchPlayer.playerId) return;
 
-    const playerName = getPlayerName(stat.playerId);
+    if (starterIds.has(benchPlayer.playerId)) return;
 
-    benchPlayers.push(`${playerName} (${stat.rating})`);
+    const stat = getPlayerStat(benchPlayer.playerId);
+
+    if (!stat) return;
+
+    benchPlayers.push(
+      buildPlayerText(
+        benchPlayer.playerName || "Desconhecido",
+        stat.rating,
+        stat,
+        mvp?.playerId === benchPlayer.playerId,
+      ),
+    );
   });
 
   const benchText =
@@ -88,52 +159,7 @@ export const buildMatchCopyText = ({
       ? `quem entrou do banco foi ${benchPlayers.join(", ")}`
       : "";
 
-  const highlights: string[] = [];
-
-  (match.playerStats || []).forEach((stat) => {
-    const playerName = getPlayerName(stat.playerId);
-
-    const parts: string[] = [];
-
-    if (stat.goals > 0) {
-      (stat.goalMinutes || []).forEach((minute) => {
-        parts.push(
-          `${stat.goals} ${
-            stat.goals === 1 ? "gol" : "gols"
-          } aos ${minute} minutos`,
-        );
-      });
-    }
-
-    if (stat.assists > 0) {
-      (stat.assistTargets || []).forEach((target) => {
-        const targetName = target.split(" - ")[0];
-
-        parts.push(
-          `${stat.assists} ${
-            stat.assists === 1 ? "assistencia" : "assistencias"
-          } pro ${targetName}`,
-        );
-      });
-    }
-
-    if (parts.length > 0) {
-      highlights.push(`${playerName} ${parts.join(" e ")}`);
-    }
-  });
-
-  const mvp = [...(match.playerStats || [])].sort(
-    (a, b) => b.rating - a.rating,
-  )[0];
-
-  const mvpText =
-    mvp && mvp.rating > 0
-      ? `${getPlayerName(mvp.playerId)} (${mvp.rating}) foi eleito MVP`
-      : "";
-
   return `Dia ${day}, jogo contra o ${opponent} ${location}, ${resultText} por ${myScore} a ${opponentScore}, posse de ${possession}%, ${myShots} a ${opponentShots} em chutes com ${myXg} a ${opponentXg} de xG${
-    highlights.length > 0 ? `, ${highlights.join(", ")}` : ""
-  }${mvpText ? `, ${mvpText}` : ""}${startersText ? `, ${startersText}` : ""}${
-    benchText ? `, ${benchText}` : ""
-  }.`;
+    startersText ? `, ${startersText}` : ""
+  }${benchText ? `, ${benchText}` : ""}.`;
 };
