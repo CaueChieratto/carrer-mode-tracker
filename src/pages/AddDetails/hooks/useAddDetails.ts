@@ -95,16 +95,22 @@ export const useAddDetails = () => {
       const isUserHome = match.homeTeam === career.clubName;
 
       const initial: Record<string, string> = {
-        homeScore: isUserHome
-          ? String(totalUserTeamGoals)
-          : String(match.homeScore || 0),
-        awayScore: !isUserHome
-          ? String(totalUserTeamGoals)
-          : String(match.awayScore || 0),
-        stoppage1T: String(match.stoppage1T || 0),
-        stoppage2T: String(match.stoppage2T || 0),
-        stoppageET1: String(match.stoppageET1 || 0),
-        stoppageET2: String(match.stoppageET2 || 0),
+        homeScore:
+          match.homeScore !== undefined
+            ? String(match.homeScore)
+            : isUserHome && totalUserTeamGoals > 0
+              ? String(totalUserTeamGoals)
+              : "",
+        awayScore:
+          match.awayScore !== undefined
+            ? String(match.awayScore)
+            : !isUserHome && totalUserTeamGoals > 0
+              ? String(totalUserTeamGoals)
+              : "",
+        stoppage1T: match.stoppage1T ? String(match.stoppage1T) : "",
+        stoppage2T: match.stoppage2T ? String(match.stoppage2T) : "",
+        stoppageET1: match.stoppageET1 ? String(match.stoppageET1) : "",
+        stoppageET2: match.stoppageET2 ? String(match.stoppageET2) : "",
       };
 
       match.playerStats?.forEach((stat) => {
@@ -114,11 +120,14 @@ export const useAddDetails = () => {
         ].includes(stat.playerId);
 
         stat.goalMinutes?.forEach((m, i) => {
-          initial[`eventMinute_goal_${stat.playerId}_${i}`] = String(m);
+          initial[`eventMinute_goal_${stat.playerId}_${i}`] = m
+            ? String(m)
+            : "";
         });
 
         stat.assistTargets?.forEach((targetString, i) => {
-          initial[`eventMinute_assist_${stat.playerId}_${i}`] = targetString;
+          initial[`eventMinute_assist_${stat.playerId}_${i}`] =
+            targetString || "";
         });
 
         if (stat.yellowCardMinute) {
@@ -134,9 +143,9 @@ export const useAddDetails = () => {
         }
 
         if (isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
-          initial[`eventMinute_sub_${stat.playerId}`] = String(
-            stat.minutesPlayed || 0,
-          );
+          initial[`eventMinute_sub_${stat.playerId}`] = stat.minutesPlayed
+            ? String(stat.minutesPlayed)
+            : "";
         }
       });
 
