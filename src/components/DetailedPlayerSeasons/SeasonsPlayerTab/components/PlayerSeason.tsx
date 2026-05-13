@@ -25,7 +25,15 @@ const PlayerSeason = ({
   isExpanded,
   toggleExpand,
 }: PlayerSeasonProps) => {
-  const playerInSeason = season.players.find((p) => p.id === player?.id)!;
+  const normalizedName = player?.name.trim().toLowerCase();
+  const normalizedNation = player?.nation.trim().toLowerCase();
+
+  const playerInSeason = season.players.find(
+    (p) =>
+      p.name.trim().toLowerCase() === normalizedName &&
+      p.nation.trim().toLowerCase() === normalizedNation,
+  )!;
+
   const sortedLeagues = sortLeaguesByLevel(playerInSeason.statsLeagues);
 
   return (

@@ -131,21 +131,29 @@ export const getAggregatedPlayersForCareer = (career: Career): Players[] => {
 
   career.clubData.forEach((season) => {
     season.players.forEach((player) => {
-      if (!playerMap[player.id]) {
-        playerMap[player.id] = {
+      const normalizedName = player.name.trim().toLowerCase();
+      const normalizedNation = player.nation.trim().toLowerCase();
+      const key = `${normalizedName}-${normalizedNation}`;
+
+      if (!playerMap[key]) {
+        playerMap[key] = {
           ...player,
           statsLeagues: [],
           _leagueMap: {},
         };
+      } else {
+        const existingLeagueMap = playerMap[key]._leagueMap;
+        const existingBallonDor = playerMap[key].ballonDor;
+        playerMap[key] = {
+          ...player,
+          statsLeagues: [],
+          _leagueMap: existingLeagueMap,
+        };
+        playerMap[key].ballonDor = existingBallonDor;
       }
 
-      const targetPlayer = playerMap[player.id];
+      const targetPlayer = playerMap[key];
 
-      targetPlayer.overall = player.overall;
-      targetPlayer.playerValue = player.playerValue;
-      targetPlayer.salary = player.salary;
-      targetPlayer.shirtNumber = player.shirtNumber;
-      targetPlayer.contract = player.contract;
       targetPlayer.ballonDor =
         (targetPlayer.ballonDor || 0) + (player.ballonDor || 0);
 
@@ -153,7 +161,6 @@ export const getAggregatedPlayersForCareer = (career: Career): Players[] => {
         if (!targetPlayer._leagueMap[league.leagueName]) {
           targetPlayer._leagueMap[league.leagueName] = {
             ...league,
-            // 👇 5. Garantindo inicialização dos minutos na agregação total
             stats: {
               ...league.stats,
               minutesPlayed: league.stats.minutesPlayed || 0,
@@ -167,7 +174,6 @@ export const getAggregatedPlayersForCareer = (career: Career): Players[] => {
           existing.stats.goals += league.stats.goals || 0;
           existing.stats.assists += league.stats.assists || 0;
           existing.stats.cleanSheets += league.stats.cleanSheets || 0;
-          // 👇 6. Somando os minutos na agregação de todas as temporadas
           existing.stats.minutesPlayed =
             (existing.stats.minutesPlayed || 0) +
             (league.stats.minutesPlayed || 0);

@@ -22,9 +22,17 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
   const allTrophiesWon = useMemo((): Trophy[] => {
     if (!player) return [];
 
+    const normalizedName = player.name.trim().toLowerCase();
+    const normalizedNation = player.nation.trim().toLowerCase();
+
     const seasonsPlayerPlayedStrings = career.clubData
       .filter((season) => {
-        const playerInSeason = season.players.find((p) => p.id === player.id);
+        const playerInSeason = season.players.find(
+          (p) =>
+            p.name.trim().toLowerCase() === normalizedName &&
+            p.nation.trim().toLowerCase() === normalizedNation,
+        );
+
         if (!playerInSeason) return false;
 
         const totalStats = calculateTotalStats(playerInSeason);

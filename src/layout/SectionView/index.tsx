@@ -39,16 +39,26 @@ const SectionView = ({
     () => augmentCareerWithMatchStats(career),
     [career],
   );
+
   const augmentedSeason = useMemo(
     () => augmentedCareer.clubData.find((s) => s.id === season.id) || season,
     [augmentedCareer, season],
   );
+
   const augmentedPlayer = useMemo(() => {
     if (!player) return undefined;
 
     if (notSeason) {
       const aggregatedPlayers = getAggregatedPlayersForCareer(augmentedCareer);
-      return aggregatedPlayers.find((p) => p.id === player.id);
+
+      const normalizedName = player.name.trim().toLowerCase();
+      const normalizedNation = player.nation.trim().toLowerCase();
+
+      return aggregatedPlayers.find(
+        (p) =>
+          p.name.trim().toLowerCase() === normalizedName &&
+          p.nation.trim().toLowerCase() === normalizedNation,
+      );
     }
 
     return augmentedSeason.players.find((p) => p.id === player.id);

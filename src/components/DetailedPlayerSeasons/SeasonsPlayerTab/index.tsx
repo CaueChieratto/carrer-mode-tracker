@@ -19,10 +19,7 @@ const SeasonsPlayerTab = ({ player, career }: SeasonsPlayerTabProps) => {
     getTrophiesWonInSeason,
   } = useSeasonsPlayerTab(career, player);
 
-  const renderableSeasons = useRenderableSeasons(
-    seasonsPlayerPlayed,
-    player?.id,
-  );
+  const renderableSeasons = useRenderableSeasons(seasonsPlayerPlayed, player);
 
   if (renderableSeasons.length === 0) {
     return (

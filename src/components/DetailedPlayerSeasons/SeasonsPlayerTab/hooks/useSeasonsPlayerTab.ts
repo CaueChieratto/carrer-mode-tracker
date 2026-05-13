@@ -17,8 +17,15 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
 
   const playerId = player?.id;
 
+  const normalizedName = player?.name.trim().toLowerCase();
+  const normalizedNation = player?.nation.trim().toLowerCase();
+
   const seasonsPlayerPlayed = career.clubData.filter((s) =>
-    s.players.some((p) => p.id === playerId)
+    s.players.some(
+      (p) =>
+        p.name.trim().toLowerCase() === normalizedName &&
+        p.nation.trim().toLowerCase() === normalizedNation,
+    ),
   );
 
   const getSeasonString = (seasonNumber: number): string => {
@@ -44,7 +51,7 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
       .sort(
         (a, b) =>
           (LeagueLevels[a.leagueName] ?? 999) -
-          (LeagueLevels[b.leagueName] ?? 999)
+          (LeagueLevels[b.leagueName] ?? 999),
       );
   };
 

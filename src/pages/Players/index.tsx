@@ -26,7 +26,11 @@ const Player = () => {
   const player = season.players.find((p) => p.id === playerId);
 
   const seasonsPlayerPlayed = augmentedCareer?.clubData.filter((s) => {
-    const playerInSeason = s.players.find((p) => p.id === playerId);
+    const playerInSeason = s.players.find(
+      (p) =>
+        p.name.trim().toLowerCase() === player?.name.trim().toLowerCase() &&
+        p.nation.trim().toLowerCase() === player?.nation.trim().toLowerCase(),
+    );
 
     if (!playerInSeason) return false;
 
