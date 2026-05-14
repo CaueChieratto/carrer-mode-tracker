@@ -5,7 +5,7 @@ import { Boot } from "../../../../../../../../../../ui/IconsSVG/Boot";
 import { RefereeCard } from "../../../../../../../../../../ui/IconsSVG/RefereeCard";
 import { Sub } from "../../../../../../../../../../ui/IconsSVG/Sub";
 import { MVP } from "../../../../../../../../../../ui/IconsSVG/MVP";
-import { PlayerMatchStat } from "../../../../../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { NumberStats } from "../../../../../../../../ui/NumberStats";
 
 type PlayerDetailsProps = {

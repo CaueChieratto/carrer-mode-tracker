@@ -4,7 +4,7 @@ import { Career } from "../../../../common/interfaces/Career";
 import { MVPCard } from "./components/MVPCard";
 import { Timeline } from "./components/Timeline";
 import { buildMatchEvents } from "./helpers/buildMatchEvents";
-import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import { MatchHeaderCard } from "./components/MatchHeaderCard";
 
 type MatchDetailsTabProps = {

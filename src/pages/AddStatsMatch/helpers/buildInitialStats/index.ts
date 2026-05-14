@@ -1,4 +1,4 @@
-import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 const calcAcc = (success?: number, total?: number): string => {
   return success !== undefined && total !== undefined && total > 0

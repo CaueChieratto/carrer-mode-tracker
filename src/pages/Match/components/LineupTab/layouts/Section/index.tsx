@@ -2,7 +2,7 @@ import { FieldMarkings } from "./components/FieldMarkings";
 import { LineupState } from "../../hooks/useLineup";
 import { SlotButton } from "./components/SlotButton";
 import Styles from "./Section.module.css";
-import { PlayerMatchStat } from "../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 
 type SectionProps = {
   lineup: LineupState;

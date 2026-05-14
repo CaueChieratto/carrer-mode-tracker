@@ -4,7 +4,7 @@ import { ClubData } from "../../../interfaces/club/clubData";
 import { useCareers } from "../../Career/UseCareer";
 import { useOpenTransfersModal } from "../../Modal/UseOpenTransfersModal";
 import { useAggregatedPlayers } from "../../Players/UseAggregatedPlayers";
-import { getSeasonTabsConfig } from "../../../../layout/SectionView/constants/SeasonTabsConfig";
+import { getSeasonTabsConfig } from "../../../../layout/SectionView/config/seasonTabsConfig";
 
 export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
   const { careerId, seasonId } = useParams<{

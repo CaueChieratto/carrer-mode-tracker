@@ -8,7 +8,7 @@ import { UI_TEXT } from "../../constants/uiText";
 import { BenchSlot } from "../../helpers/getBenchSlots";
 import Styles from "./PlayerRow.module.css";
 import { Row } from "../Row";
-import { PlayerMatchStat } from "../../../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { Players } from "../../../../../../../../common/interfaces/playersInfo/players";
 import { NumberStats } from "../../../../../../ui/NumberStats";
 

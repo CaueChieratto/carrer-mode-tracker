@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Career } from "../../../../common/interfaces/Career";
 import { getSeasonDateRange } from "../../../../common/utils/GetSeasonDateRange";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
-import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 interface BuildMatchDataParams {
   date: string;

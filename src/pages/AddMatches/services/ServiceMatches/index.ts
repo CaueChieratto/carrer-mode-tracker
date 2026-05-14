@@ -1,7 +1,7 @@
 import { getCareerById } from "../../../../common/helpers/Getters";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { auth } from "../../../../common/services/Firebase";
-import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 export const ServiceMatches = {
   addMatchToSeason: async (

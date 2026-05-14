@@ -1,7 +1,7 @@
 import { getCareerById } from "../../../../common/helpers/Getters";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { auth } from "../../../../common/services/Firebase";
-import { PlayerMatchStat } from "../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { SavedLineup } from "../../types/Lineup";
 
 export const ServiceLineup = {

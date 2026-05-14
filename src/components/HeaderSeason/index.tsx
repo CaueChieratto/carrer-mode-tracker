@@ -4,7 +4,7 @@ import Styles from "./HeaderSeason.module.css";
 import Button from "../Button";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import { Match } from "../AllMatchesTab/types/Match";
+import { Match } from "../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 type HeaderSeasonProps = {
   career: Career;

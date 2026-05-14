@@ -3,7 +3,7 @@ import { useForm } from "../../../common/hooks/UseForm";
 import { useMatchData } from "../../Match/hooks/useMatchData";
 import { ServiceMatches } from "../../AddMatches/services/ServiceMatches";
 import { AddDetailsFormFields } from "../constants/FormFields";
-import { Match } from "../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 type MatchEventItem = {
   id: string;

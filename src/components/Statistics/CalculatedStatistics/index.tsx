@@ -1,7 +1,7 @@
 import { iconMap } from "../../../common/constants/StatsIconMap";
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../common/interfaces/playersStats/leagueStats";
-import { Match } from "../../AllMatchesTab/types/Match";
+import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import Statistic from "./components/Statistic";
 import { useStatistics } from "./hooks/UseStatistics";
 

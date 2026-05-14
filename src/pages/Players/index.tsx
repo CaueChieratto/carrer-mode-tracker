@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import { ModalType } from "../../common/types/enums/ModalType";
 import BottomMenu from "../../ui/BottomMenu";
-import { calculateTotalStats } from "../../components/StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
+import { calculateTotalStats } from "../../layout/SectionView/features/ClubTabs/StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
 import SectionView from "../../layout/SectionView";
 import { useMemo } from "react";
 import { augmentCareerWithMatchStats } from "../../layout/SectionView/helpers/mergeMatchStats";

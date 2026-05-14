@@ -1,5 +1,5 @@
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
-import { Match } from "../../../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import { MatchEvent, PeriodKey } from "../../types";
 
 export const buildMatchEvents = (match: Match, season: ClubData) => {

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import Styles from "../../components/Statistic/CalculatedStatistics.module.css";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../../../common/interfaces/playersStats/leagueStats";
-import { calculateTotalStats } from "../../../../StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
+import { calculateTotalStats } from "../../../../../layout/SectionView/features/ClubTabs/StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
 
 type UseStatisticsProps = {
   total?: boolean;

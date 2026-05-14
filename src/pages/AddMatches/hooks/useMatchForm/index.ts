@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useForm } from "../../../../common/hooks/UseForm";
 import { Career } from "../../../../common/interfaces/Career";
-import { getMatchFormFields } from "../../../../components/AllMatchesTab/constants/MatchFormFields";
+import { getMatchFormFields } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/constants/MatchFormFields";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 
 type UseFormReturn = ReturnType<typeof useForm>;

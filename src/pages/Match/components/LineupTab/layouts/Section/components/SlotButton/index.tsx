@@ -1,5 +1,5 @@
 import { UseMatchRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
-import { PlayerMatchStat } from "../../../../../../../../components/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { LineupSlot } from "../../../../hooks/useLineup";
 import { PlayerDetails } from "./components/PlayerDetails";
 import { useSlotDrag } from "./hooks/useSlotDrag";

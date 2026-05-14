@@ -10,7 +10,7 @@ import Styles from "./SectionView.module.css";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import ContainerButton from "../../components/ContainerButton";
 import HeaderSeason from "../../components/HeaderSeason";
-import { TabConfig } from "./constants/SeasonTabsConfig";
+import { TabConfig } from "./config/seasonTabsConfig";
 import {
   augmentCareerWithMatchStats,
   getAggregatedPlayersForCareer,

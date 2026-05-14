@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
-import { Match } from "../../../../components/AllMatchesTab/types/Match";
+import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import { useLineup } from "./hooks/useLineup";
 import { useSaveLineup } from "./hooks/useSaveLineup";
 import { Header } from "./layouts/Header";
