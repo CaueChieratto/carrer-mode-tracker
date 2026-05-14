@@ -1,0 +1,53 @@
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px #0003;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-input, #cdcdcd);
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.copy {
+  display: flex;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blackColor);
+  margin: 0;
+}
+
+.verTudo {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.verTudo:hover {
+  text-decoration: underline;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

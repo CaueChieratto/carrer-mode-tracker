@@ -10,6 +10,7 @@ import TotalPlayerTab from "../features/PlayerTabs/TotalPlayerTab";
 import GeneralTab from "../features/ClubTabs/GeneralTab";
 import SquadTab from "../features/ClubTabs/SquadTab";
 import { StatsTab_Club } from "../features/ClubTabs/StatsTab_Club";
+import { BestPlayersTab } from "../features/ClubTabs/BestPlayersTab";
 
 export type TabConfig = {
   title: string;
@@ -29,30 +30,41 @@ export const getSeasonTabsConfig = (
   seasonId: string,
   navigate: NavigateFunction,
   isPlayer: boolean,
-): TabConfig[] => [
-  {
-    title: isPlayer ? "Jogador" : "Elenco",
-    component: isPlayer ? InfoPlayerTab : SquadTab,
-    actionButton: Buttons.AddSquadPlayer,
-    action: () =>
-      navigate(`/Career/${careerId}/Season/${seasonId}/AddPlayer?from=squad`),
-  },
-  {
-    title: isPlayer ? "Partidas" : "Partidas",
-    component: isPlayer ? AllMatchesTab : AllMatchesTab,
-    actionButton: Buttons.AddMatches,
-    action: () => navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`),
-  },
-  {
-    title: isPlayer ? "Temporadas" : "Estatísticas",
-    component: isPlayer ? SeasonsPlayerTab : StatsTab_Club,
-    actionButton: Buttons.AddPlayerSeason,
-    action: () =>
-      navigate(`/Career/${careerId}/Season/${seasonId}/AddPlayer?from=stats`),
-  },
-  {
-    title: isPlayer ? "Total" : "Geral",
-    component: isPlayer ? TotalPlayerTab : GeneralTab,
-    actionButton: Buttons.ChangeClubColors,
-  },
-];
+): TabConfig[] =>
+  [
+    {
+      title: isPlayer ? "Jogador" : "Elenco",
+      component: isPlayer ? InfoPlayerTab : SquadTab,
+      actionButton: Buttons.AddSquadPlayer,
+      action: () =>
+        navigate(`/Career/${careerId}/Season/${seasonId}/AddPlayer?from=squad`),
+    },
+
+    !isPlayer && {
+      title: "Partidas",
+      component: AllMatchesTab,
+      actionButton: Buttons.AddMatches,
+      action: () =>
+        navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`),
+    },
+
+    {
+      title: isPlayer ? "Temporadas" : "Estatísticas",
+      component: isPlayer ? SeasonsPlayerTab : StatsTab_Club,
+      actionButton: Buttons.AddPlayerSeason,
+      action: () =>
+        navigate(`/Career/${careerId}/Season/${seasonId}/AddPlayer?from=stats`),
+    },
+
+    !isPlayer && {
+      title: "Melhores Jogadores",
+      component: BestPlayersTab,
+      actionButton: Buttons.ChangeClubColors,
+    },
+
+    {
+      title: isPlayer ? "Total" : "Geral",
+      component: isPlayer ? TotalPlayerTab : GeneralTab,
+      actionButton: Buttons.ChangeClubColors,
+    },
+  ].filter(Boolean) as TabConfig[];
