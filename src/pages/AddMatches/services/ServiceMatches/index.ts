@@ -1,7 +1,15 @@
-import { getCareerById } from "../../../../common/helpers/Getters";
-import { updateCareerFirestore } from "../../../../common/helpers/Setters";
-import { auth } from "../../../../common/services/Firebase";
+import {
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { auth, db } from "../../../../common/services/Firebase";
 import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { updateCareerFirestore } from "../../../../common/helpers/Setters";
+import { Career } from "../../../../common/interfaces/Career";
 
 export const ServiceMatches = {
   addMatchToSeason: async (
@@ -12,22 +20,15 @@ export const ServiceMatches = {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const career = await getCareerById(user.uid, careerId);
+    const matchRef = doc(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+      match.matchesId,
+    );
 
-    const updatedClubData = career.clubData.map((season) => {
-      if (season.id === seasonId) {
-        const existingMatches = season.matches || [];
-        return {
-          ...season,
-          matches: [...existingMatches, match],
-        };
-      }
-      return season;
-    });
+    await setDoc(matchRef, match);
 
-    await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
-    });
+    await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
   },
 
   updateMatchInSeason: async (
@@ -38,24 +39,15 @@ export const ServiceMatches = {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const career = await getCareerById(user.uid, careerId);
+    const matchRef = doc(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+      updatedMatch.matchesId,
+    );
 
-    const updatedClubData = career.clubData.map((season) => {
-      if (season.id === seasonId) {
-        const existingMatches = season.matches || [];
-        return {
-          ...season,
-          matches: existingMatches.map((m) =>
-            m.matchesId === updatedMatch.matchesId ? updatedMatch : m,
-          ),
-        };
-      }
-      return season;
-    });
+    await setDoc(matchRef, updatedMatch, { merge: true });
 
-    await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
-    });
+    await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
   },
 
   deleteMatchFromSeason: async (
@@ -66,20 +58,100 @@ export const ServiceMatches = {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const career = await getCareerById(user.uid, careerId);
+    const matchRef = doc(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+      matchId,
+    );
 
-    const updatedClubData = career.clubData.map((season) => {
-      if (season.id === seasonId) {
-        return {
-          ...season,
-          matches: season.matches?.filter((m) => m.matchesId !== matchId) || [],
-        };
+    await deleteDoc(matchRef);
+
+    await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
+  },
+
+  getMatchesBySeason: async (
+    careerId: string,
+    seasonId: string,
+  ): Promise<Match[]> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const matchesCollectionRef = collection(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+    );
+    const snapshot = await getDocs(matchesCollectionRef);
+
+    return snapshot.docs.map((doc) => doc.data() as Match);
+  },
+
+  migrateOldMatchesToSubcollections: async (): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    console.log("🔍 Iniciando verificação de partidas antigas...");
+
+    const careersRef = collection(db, `users/${user.uid}/careers`);
+    const snapshot = await getDocs(careersRef);
+
+    for (const careerDoc of snapshot.docs) {
+      const career = careerDoc.data() as Career;
+      let careerChanged = false;
+
+      if (!career.clubData) continue;
+
+      const newClubData = [...career.clubData];
+
+      for (let i = 0; i < newClubData.length; i++) {
+        const season = newClubData[i];
+
+        if (season.matches && season.matches.length > 0) {
+          console.log(
+            `⏳ Copiando ${season.matches.length} partidas da temporada ${season.id} (${career.clubName})...`,
+          );
+
+          let successCount = 0;
+
+          for (const match of season.matches) {
+            try {
+              const matchRef = doc(
+                db,
+                `users/${user.uid}/careers/${career.id}/seasons/${season.id}/matches`,
+                match.matchesId,
+              );
+              await setDoc(matchRef, match);
+              successCount++;
+            } catch (err) {
+              console.error(
+                `❌ Erro ao copiar a partida ${match.matchesId}:`,
+                err,
+              );
+            }
+          }
+
+          if (successCount === season.matches.length) {
+            newClubData[i] = { ...season, matches: [] };
+            careerChanged = true;
+            console.log(
+              `✅ Temporada migrada com sucesso! Array antigo limpo.`,
+            );
+          } else {
+            console.warn(
+              `⚠️ Migração parcial (${successCount}/${season.matches.length}). O array antigo NÃO foi apagado por segurança.`,
+            );
+          }
+        }
       }
-      return season;
-    });
 
-    await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
-    });
+      if (careerChanged) {
+        const careerRef = doc(db, `users/${user.uid}/careers/${career.id}`);
+        await updateDoc(careerRef, { clubData: newClubData });
+        console.log(
+          `✅ Carreira ${career.clubName} atualizada e leve novamente!`,
+        );
+      }
+    }
+
+    console.log("🎉 Processo de migração totalmente finalizado!");
   },
 };

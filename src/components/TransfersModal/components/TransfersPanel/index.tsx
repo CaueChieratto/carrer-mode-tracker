@@ -1,6 +1,10 @@
+import { useMemo } from "react";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { formatDisplayValue } from "../../../../common/utils/FormatValue";
-import { sortTransfersByValue } from "./utils/sortTransfersByValue";
+import {
+  sortTransfersByValue,
+  TransferEvent,
+} from "./utils/sortTransfersByValue";
 import { formatDateToLongBrazilian } from "./utils/formatDateToLongBrazilian";
 import Styles from "./TransfersPanel.module.css";
 import { OverflowText } from "../../../OverflowText";
@@ -13,63 +17,80 @@ type TransfersPanelProps = {
 const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
   const isArrival = title === "Chegadas";
   const transferType = isArrival ? "arrivals" : "exit";
-  const sortedPlayers = sortTransfersByValue(players, transferType);
+
+  const transferEvents = useMemo(() => {
+    const events: TransferEvent[] = [];
+
+    players.forEach((player) => {
+      if (!player.contract) return;
+
+      player.contract.forEach((contract) => {
+        const isValidForTab = isArrival
+          ? !!contract.dataArrival || !!contract.fromClub
+          : !!contract.dataExit || !!contract.leftClub;
+
+        if (isValidForTab) {
+          events.push({ player, contract });
+        }
+      });
+    });
+
+    return events;
+  }, [players, isArrival]);
+
+  const sortedEvents = sortTransfersByValue(transferEvents, transferType);
 
   return (
     <div className={Styles.container}>
-      {players.length === 0 ? (
+      {sortedEvents.length === 0 ? (
         <p className={Styles.noTransfers}>
           Nenhuma transferência nesta temporada.
         </p>
       ) : (
         <ul className={Styles.list}>
-          {sortedPlayers.map((player) => {
-            const playerContract = player.contract || [];
-
-            const relevantContract = isArrival
-              ? [...playerContract].reverse().find((c) => c.fromClub) ||
-                playerContract[playerContract.length - 1] ||
-                {}
-              : [...playerContract].reverse().find((c) => c.leftClub) ||
-                playerContract[playerContract.length - 1] ||
-                {};
-
-            const club = isArrival
-              ? relevantContract.fromClub
-              : relevantContract.leftClub;
-
-            const value = isArrival
-              ? relevantContract.buyValue
-              : relevantContract.sellValue;
-
-            const date = isArrival
-              ? relevantContract.dataArrival
-              : relevantContract.dataExit;
+          {sortedEvents.map(({ player, contract }, index) => {
+            const club = isArrival ? contract.fromClub : contract.leftClub;
+            const value = isArrival ? contract.buyValue : contract.sellValue;
+            const date = isArrival ? contract.dataArrival : contract.dataExit;
 
             let displayValue = formatDisplayValue(value as number);
 
             if (isArrival) {
-              if (!player.buy) {
-                if (player.incomingLoan) {
-                  displayValue = "Empréstimo";
-                } else if (relevantContract.fromClub) {
-                  displayValue = "Fim do Empréstimo";
-                }
+              if (value && (value as number) > 0) {
+                displayValue = formatDisplayValue(value as number);
+              } else if (contract.isLoan) {
+                displayValue = "Empréstimo";
+              } else if (contract.fromClub === "Passes Livres") {
+                displayValue = "Custo Zero";
+              } else if (contract.fromClub) {
+                displayValue = "Fim do Empréstimo";
               }
             } else {
-              if (player.sell && relevantContract.isLoan && value === 0) {
-                displayValue = "Fim do Empréstimo";
-              } else if (!player.sell) {
-                if (player.loan || relevantContract.isLoan) {
-                  displayValue = "Empréstimo";
-                } else if (relevantContract.leftClub) {
+              if (value && (value as number) > 0) {
+                displayValue = formatDisplayValue(value as number);
+              } else if (contract.isLoan) {
+                if (contract.fromClub && contract.leftClub) {
                   displayValue = "Fim do Empréstimo";
+                } else {
+                  displayValue = "Empréstimo";
                 }
+              } else if (
+                contract.leftClub === "Aposentou" ||
+                contract.leftClub === "Aposentadoria"
+              ) {
+                displayValue = "Aposentadoria";
+              } else if (
+                contract.leftClub === "Passes Livres" ||
+                contract.leftClub === "Fim de Contrato"
+              ) {
+                displayValue = "Fim de Contrato";
+              } else if (contract.leftClub) {
+                displayValue = "Custo Zero";
               }
             }
 
             return (
-              <li key={player.id} className={Styles.item}>
+              <li key={`${player.id}-${date}-${index}`} className={Styles.item}>
                 <div className={Styles.playerInfo}>
                   <OverflowText
                     text={player.name}

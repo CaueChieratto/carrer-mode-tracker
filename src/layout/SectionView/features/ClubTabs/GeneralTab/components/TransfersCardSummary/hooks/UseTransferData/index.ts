@@ -43,8 +43,12 @@ export const useTransferData = (career: Career, season: ClubData) => {
   const arrivals = useMemo(() => {
     if (isGeralPage) {
       const allPlayers = career.clubData.flatMap((s) => s.players || []);
+      const uniquePlayers = Array.from(
+        new Map(allPlayers.map((p) => [p.id, p])).values(),
+      );
+
       return sortPlayersByDate(
-        allPlayers.filter((p) => p.contract?.some((c) => c.fromClub)),
+        uniquePlayers.filter((p) => p.contract?.some((c) => c.fromClub)),
         true,
         career.createdAt,
       );
@@ -69,8 +73,12 @@ export const useTransferData = (career: Career, season: ClubData) => {
   const departures = useMemo(() => {
     if (isGeralPage) {
       const allPlayers = career.clubData.flatMap((s) => s.players || []);
+      const uniquePlayers = Array.from(
+        new Map(allPlayers.map((p) => [p.id, p])).values(),
+      );
+
       return sortPlayersByDate(
-        allPlayers.filter((p) => p.contract?.some((c) => c.leftClub)),
+        uniquePlayers.filter((p) => p.contract?.some((c) => c.leftClub)),
         false,
         career.createdAt,
       );

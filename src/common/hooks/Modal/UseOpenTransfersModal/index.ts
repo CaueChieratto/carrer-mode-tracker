@@ -22,12 +22,17 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
     if (isGeralPage) {
       const allPlayers = career.clubData.flatMap((s) => s.players || []);
 
+      // Remove duplicatas mantendo o ID único
+      const uniquePlayers = Array.from(
+        new Map(allPlayers.map((p) => [p.id, p])).values(),
+      );
+
       if (type === "arrivals") {
-        filteredPlayers = allPlayers.filter((p) =>
+        filteredPlayers = uniquePlayers.filter((p) =>
           p.contract?.some((c) => c.fromClub),
         );
       } else {
-        filteredPlayers = allPlayers.filter((p) =>
+        filteredPlayers = uniquePlayers.filter((p) =>
           p.contract?.some((c) => c.leftClub),
         );
       }

@@ -2,8 +2,20 @@ import { getCareerById } from "../../helpers/Getters";
 import { updateCareerFirestore } from "../../helpers/Setters";
 import { ClubData } from "../../interfaces/club/clubData";
 import { League } from "../../utils/Leagues";
-import { auth } from "../Firebase";
+import { auth, db } from "../Firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+
+const stripHeavyData = (clubData: ClubData[]): ClubData[] => {
+  return clubData.map((season) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { matches, players, ...cleanSeason } = season;
+    return {
+      ...cleanSeason,
+      players: [],
+    } as ClubData;
+  });
+};
 
 export const ServiceSeasons = {
   addSeason: async (careerId: string): Promise<void> => {
@@ -21,11 +33,9 @@ export const ServiceSeasons = {
     const previousSeason = career.clubData.find(
       (season) => season.seasonNumber === seasonNumber - 1,
     );
-
     const playersFromPreviousSeason = previousSeason
       ? previousSeason.players
       : [];
-
     const leaguesFromPreviousSeason = previousSeason?.leagues || [];
 
     const playersForNewSeason = playersFromPreviousSeason
@@ -44,18 +54,28 @@ export const ServiceSeasons = {
         };
       });
 
+    const newSeasonId = uuidv4();
     const newSeason: ClubData = {
-      players: playersForNewSeason,
+      players: [],
       seasonNumber,
-      id: uuidv4(),
+      id: newSeasonId,
       leagues: leaguesFromPreviousSeason,
     };
 
     const updatedClubData = [...career.clubData, newSeason];
 
     await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
+      clubData: stripHeavyData(updatedClubData),
     });
+
+    for (const player of playersForNewSeason) {
+      const playerRef = doc(
+        db,
+        `users/${user.uid}/careers/${careerId}/seasons/${newSeasonId}/players`,
+        player.id,
+      );
+      await setDoc(playerRef, player);
+    }
   },
 
   deleteSeason: async (careerId: string, seasonId: string): Promise<void> => {
@@ -63,13 +83,12 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
-
     const updatedClubData = career.clubData.filter(
       (season) => season.id !== seasonId,
     );
 
     await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
+      clubData: stripHeavyData(updatedClubData),
     });
   },
 
@@ -82,13 +101,12 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
-
     const updatedClubData = career.clubData.map((season) =>
       season.id === seasonId ? { ...season, leagues } : season,
     );
 
     await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
+      clubData: stripHeavyData(updatedClubData),
     });
   },
 };

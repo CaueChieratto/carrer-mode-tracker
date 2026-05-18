@@ -8,6 +8,7 @@ export interface Career {
   createdAt: Date;
   teamBadge: string;
   nation: string;
+  updatedAt?: number;
   colorsTeams: string[];
   trophies: Trophy[];
   clubData: ClubData[];
