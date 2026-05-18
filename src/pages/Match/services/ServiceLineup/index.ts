@@ -1,6 +1,7 @@
 import { getCareerById } from "../../../../common/helpers/Getters";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { auth } from "../../../../common/services/Firebase";
+import { stripHeavyData } from "../../../../common/utils/stripHeavyData";
 import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { SavedLineup } from "../../types/Lineup";
 
@@ -31,7 +32,7 @@ export const ServiceLineup = {
     });
 
     await updateCareerFirestore(user.uid, careerId, {
-      clubData: updatedClubData,
+      clubData: stripHeavyData(updatedClubData),
     });
   },
 };

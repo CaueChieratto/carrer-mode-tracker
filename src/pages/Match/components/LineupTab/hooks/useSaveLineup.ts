@@ -26,7 +26,8 @@ export const useSaveLineup = ({
           savedLineup,
           playerStats,
         );
-      } catch {
+      } catch (error) {
+        console.error("Erro: ", error);
         alert("Erro ao salvar a formação. Tente novamente.");
       }
     },

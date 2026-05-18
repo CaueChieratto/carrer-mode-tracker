@@ -5,17 +5,7 @@ import { League } from "../../utils/Leagues";
 import { auth, db } from "../Firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-
-const stripHeavyData = (clubData: ClubData[]): ClubData[] => {
-  return clubData.map((season) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { matches, players, ...cleanSeason } = season;
-    return {
-      ...cleanSeason,
-      players: [],
-    } as ClubData;
-  });
-};
+import { stripHeavyData } from "../../utils/stripHeavyData";
 
 export const ServiceSeasons = {
   addSeason: async (careerId: string): Promise<void> => {
