@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react"; // Adicionado useRef
+import { useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";

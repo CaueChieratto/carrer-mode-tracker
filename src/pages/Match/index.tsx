@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import Load from "../../components/Load";
@@ -47,7 +47,11 @@ export const Match = () => {
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
 
-  if (loading || isActionLoading) return <Load />;
+  const registerSave = useCallback((fn: () => Promise<void> | void) => {
+    saveLineupRef.current = fn;
+  }, []);
+
+  if (loading) return <Load />;
   if (!career || !season || !match) return <NotFoundDisplay />;
 
   const ActionButton = tabsConfig[activeIndex]?.actionButton;
@@ -70,51 +74,52 @@ export const Match = () => {
   };
 
   return (
-    <SeasonThemeProvider careerId={career.id} career={career}>
-      <HeaderSeason
-        match={match}
-        careerId={career.id}
-        career={career}
-        backSeasons={goBack}
-        titleText={`${match.homeTeam} x ${match.awayTeam}`}
-      />
-      <Navbar
-        options={tabsConfig.map((tab) => tab.title)}
-        activeOption={activeIndex}
-        onOptionClick={handleTabClick}
-      />
+    <>
+      {isActionLoading && <Load isTransfers />}
+      <SeasonThemeProvider careerId={career.id} career={career}>
+        <HeaderSeason
+          match={match}
+          careerId={career.id}
+          career={career}
+          backSeasons={goBack}
+          titleText={`${match.homeTeam} x ${match.awayTeam}`}
+        />
+        <Navbar
+          options={tabsConfig.map((tab) => tab.title)}
+          activeOption={activeIndex}
+          onOptionClick={handleTabClick}
+        />
 
-      {ActionButton && !isFromGeral && (
-        <ContainerButton className={Styles.container_button}>
-          <ActionButton onClick={actionClick} />
-        </ContainerButton>
-      )}
+        {ActionButton && !isFromGeral && (
+          <ContainerButton className={Styles.container_button}>
+            <ActionButton onClick={actionClick} />
+          </ContainerButton>
+        )}
 
-      <Swiper
-        initialSlide={activeIndex}
-        onSwiper={(swiper: SwiperInstance) => {
-          swiperRef.current = swiper;
-        }}
-        onSlideChange={handleSlideChange}
-      >
-        {tabsConfig.map(({ title, component: TabComponent }) => (
-          <SwiperSlide key={title}>
-            <div className={Styles.container}>
-              <TabComponent
-                match={match}
-                season={season}
-                career={career}
-                isFromGeral={isFromGeral}
-                onRegisterSave={(fn) => {
-                  saveLineupRef.current = fn;
-                }}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+        <Swiper
+          initialSlide={activeIndex}
+          onSwiper={(swiper: SwiperInstance) => {
+            swiperRef.current = swiper;
+          }}
+          onSlideChange={handleSlideChange}
+        >
+          {tabsConfig.map(({ title, component: TabComponent }) => (
+            <SwiperSlide key={title}>
+              <div className={Styles.container}>
+                <TabComponent
+                  match={match}
+                  season={season}
+                  career={career}
+                  isFromGeral={isFromGeral}
+                  onRegisterSave={registerSave}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-      {activeModal === ModalType.NONE && <BottomMenu />}
-    </SeasonThemeProvider>
+        {activeModal === ModalType.NONE && <BottomMenu />}
+      </SeasonThemeProvider>
+    </>
   );
 };
