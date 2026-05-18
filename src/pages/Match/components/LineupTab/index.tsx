@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react"; // Adicionado useRef
 import { useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
@@ -42,6 +42,14 @@ export const LineupTab = ({
 
   const navigate = useNavigate();
 
+  const savedLineupRef = useRef<SavedLineup | null>(match.lineup || null);
+
+  useEffect(() => {
+    if (match.lineup) {
+      savedLineupRef.current = match.lineup;
+    }
+  }, [match.lineup]);
+
   const effectiveLineup = useMemo(() => {
     if (!isLineupEmpty(match.lineup)) return match.lineup;
 
@@ -82,7 +90,7 @@ export const LineupTab = ({
   });
 
   useEffect(() => {
-    onRegisterSave?.(() => {
+    onRegisterSave?.(async () => {
       const currentSavedLineup = buildSavedLineup();
 
       const activePlayerIds = new Set<string>();
@@ -100,15 +108,19 @@ export const LineupTab = ({
         activePlayerIds.has(stat.playerId),
       );
 
-      return saveLineup(currentSavedLineup, updatedPlayerStats);
+      await saveLineup(currentSavedLineup, updatedPlayerStats);
+
+      savedLineupRef.current = currentSavedLineup;
     });
   }, [onRegisterSave, saveLineup, buildSavedLineup, match.playerStats]);
 
   const playerClick = (playerId: string) => {
+    const lineupToCheck = savedLineupRef.current || match.lineup;
+
     const isPlayerSaved = [
-      match.lineup?.goalkeeper?.playerId,
-      ...(match.lineup?.lines?.map((s) => s.playerId) || []),
-      ...(match.lineup?.bench?.map((s) => s.playerId) || []),
+      lineupToCheck?.goalkeeper?.playerId,
+      ...(lineupToCheck?.lines?.map((s) => s.playerId) || []),
+      ...(lineupToCheck?.bench?.map((s) => s.playerId) || []),
     ].includes(playerId);
 
     if (!isPlayerSaved) {

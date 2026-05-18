@@ -1,7 +1,6 @@
-import { getCareerById } from "../../../../common/helpers/Getters";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../../../common/services/Firebase";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
-import { auth } from "../../../../common/services/Firebase";
-import { stripHeavyData } from "../../../../common/utils/stripHeavyData";
 import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { SavedLineup } from "../../types/Lineup";
 
@@ -16,23 +15,21 @@ export const ServiceLineup = {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const career = await getCareerById(user.uid, careerId);
+    const matchRef = doc(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+      matchesId,
+    );
 
-    const updatedClubData = career.clubData.map((season) => {
-      if (season.id !== seasonId) return season;
+    await setDoc(
+      matchRef,
+      {
+        lineup,
+        playerStats,
+      },
+      { merge: true },
+    );
 
-      return {
-        ...season,
-        matches: season.matches?.map((match) =>
-          match.matchesId === matchesId
-            ? { ...match, lineup, playerStats }
-            : match,
-        ),
-      };
-    });
-
-    await updateCareerFirestore(user.uid, careerId, {
-      clubData: stripHeavyData(updatedClubData),
-    });
+    await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
   },
 };
