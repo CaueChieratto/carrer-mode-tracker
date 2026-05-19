@@ -20,6 +20,12 @@ type LineupTabProps = {
   onRegisterSave?: (fn: () => Promise<void> | void) => void;
 };
 
+const parseDate = (dateStr: string): number => {
+  if (!dateStr) return 0;
+  const [day, month, year] = dateStr.split("/").map(Number);
+  return new Date(2000 + year, month - 1, day).getTime();
+};
+
 const isLineupEmpty = (lineup?: SavedLineup) => {
   if (!lineup) return true;
   if (lineup.goalkeeper?.playerId) return false;
@@ -54,20 +60,36 @@ export const LineupTab = ({
     if (!isLineupEmpty(match.lineup)) return match.lineup;
 
     const matches = season.matches || [];
-    const currentIndex = matches.findIndex(
+
+    const sortedMatches = [...matches].sort(
+      (a, b) => parseDate(a.date) - parseDate(b.date),
+    );
+
+    const currentIndex = sortedMatches.findIndex(
       (m) => m.matchesId === match.matchesId,
     );
 
     if (currentIndex > 0) {
       for (let i = currentIndex - 1; i >= 0; i--) {
-        if (!isLineupEmpty(matches[i].lineup)) {
-          return matches[i].lineup;
+        const prevMatch = sortedMatches[i];
+        if (
+          prevMatch.league === match.league &&
+          !isLineupEmpty(prevMatch.lineup)
+        ) {
+          return prevMatch.lineup;
+        }
+      }
+
+      for (let i = currentIndex - 1; i >= 0; i--) {
+        const prevMatch = sortedMatches[i];
+        if (!isLineupEmpty(prevMatch.lineup)) {
+          return prevMatch.lineup;
         }
       }
     }
 
     return match.lineup;
-  }, [match.lineup, match.matchesId, season.matches]);
+  }, [match.lineup, match.matchesId, match.league, season.matches]);
 
   const {
     selectedFormation,
