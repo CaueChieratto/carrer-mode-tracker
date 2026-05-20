@@ -23,6 +23,11 @@ export function useMatchForm({
 }: UseMatchFormParams) {
   const initializedMatchId = useRef<string | null>(null);
 
+  const savedMonth = useMemo(
+    () => localStorage.getItem("matchSelectedMonth") || "Tudo",
+    [],
+  );
+
   useEffect(() => {
     if (!matchesId || !season || !career) return;
 
@@ -36,8 +41,13 @@ export function useMatchForm({
       ? matchToEdit.awayTeam
       : matchToEdit.homeTeam;
 
+    let initialDate = matchToEdit.date.substring(0, 5);
+    if (savedMonth !== "Tudo") {
+      initialDate = initialDate.substring(0, 2);
+    }
+
     setFormValues({
-      date: matchToEdit.date.substring(0, 5),
+      date: initialDate,
       league: matchToEdit.league,
       opponentTeam,
     });
@@ -45,7 +55,14 @@ export function useMatchForm({
     handleBooleanChange("isHomeMatch", isHomeMatch);
 
     initializedMatchId.current = matchesId;
-  }, [matchesId, season, career, setFormValues, handleBooleanChange]);
+  }, [
+    matchesId,
+    season,
+    career,
+    setFormValues,
+    handleBooleanChange,
+    savedMonth,
+  ]);
 
   const leagueOptions = useMemo(
     () => season?.leagues?.map((l) => l.name) ?? [],
@@ -53,8 +70,8 @@ export function useMatchForm({
   );
 
   const formFields = useMemo(
-    () => getMatchFormFields(leagueOptions),
-    [leagueOptions],
+    () => getMatchFormFields(leagueOptions, savedMonth),
+    [leagueOptions, savedMonth],
   );
 
   return { formFields };

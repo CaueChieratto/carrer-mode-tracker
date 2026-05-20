@@ -4,6 +4,7 @@ import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { buildMatchData } from "../../helpers/buildMatchData";
 import { ServiceMatches } from "../../services/ServiceMatches";
 import { validateMatchForm } from "../../validators/validateMatchForm";
+import { MONTH_TO_NUM } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/constants/MONTH_OPTIONS";
 
 interface UseMatchActionsParams {
   careerId: string;
@@ -29,7 +30,15 @@ export function useMatchActions({
   const [isSaving, setIsSaving] = useState(false);
 
   const saveMatch = useCallback(async () => {
-    const validation = validateMatchForm(formValues);
+    let finalDate = formValues.date;
+    const savedMonth = localStorage.getItem("matchSelectedMonth") || "Tudo";
+
+    if (savedMonth !== "Tudo" && finalDate && finalDate.length <= 2) {
+      const monthNum = MONTH_TO_NUM[savedMonth].toString().padStart(2, "0");
+      finalDate = `${finalDate}/${monthNum}`;
+    }
+
+    const validation = validateMatchForm({ ...formValues, date: finalDate });
     if (!validation.valid) {
       alert(validation.message);
       return;
@@ -39,6 +48,7 @@ export function useMatchActions({
 
     const matchData = buildMatchData({
       ...formValues,
+      date: finalDate,
       isHomeMatch,
       career,
       season,
