@@ -49,7 +49,7 @@ export const AddMatchStatsPlayer = () => {
         onOptionClick={() => {}}
       />
 
-      <div className={Styles.container}>
+      <div className={Styles.container} style={{ paddingBottom: "350px" }}>
         <Form className={Styles.form} ref={formRef}>
           {formFields.map((section, index) => (
             <FormSection

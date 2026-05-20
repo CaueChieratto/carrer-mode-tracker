@@ -57,7 +57,7 @@ export const PlayerRow = ({
   }
 
   return (
-    <Row>
+    <Row data-slot-id={slot.slotId}>
       <div
         className={Styles.player_info}
         onClick={() => {

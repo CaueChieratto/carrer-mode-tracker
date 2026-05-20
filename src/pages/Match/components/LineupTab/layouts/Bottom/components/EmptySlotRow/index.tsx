@@ -16,7 +16,7 @@ export const EmptySlotRow = ({
   const handleSelect = () => onSelect(slotId);
 
   return (
-    <Row>
+    <Row data-slot-id={slotId}>
       <button
         type="button"
         className={`${Styles.empty_avatar} ${
