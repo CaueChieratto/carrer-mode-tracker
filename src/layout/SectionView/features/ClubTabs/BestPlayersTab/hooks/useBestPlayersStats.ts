@@ -9,6 +9,7 @@ export const useBestPlayersStats = (
   season: ClubData,
   career: Career,
   isGeralPage: boolean,
+  minPercentage: number = 0.2,
 ): AggregatedPlayerStats[] => {
   return useMemo(() => {
     const playerStatsMap = new Map<string, PlayerStatsAccumulator>();
@@ -62,6 +63,11 @@ export const useBestPlayersStats = (
     });
 
     const seasonsToProcess = isGeralPage ? career.clubData : [season];
+    const totalTeamMatches = seasonsToProcess.reduce((total, s) => {
+      const finishedMatchesCount =
+        s.matches?.filter((m) => m.status === "FINISHED").length || 0;
+      return total + finishedMatchesCount;
+    }, 0);
 
     seasonsToProcess.forEach((s) => {
       s.matches?.forEach((match) => {
@@ -112,6 +118,11 @@ export const useBestPlayersStats = (
         assists: acc.assists,
         goalParticipations: acc.goals + acc.assists,
         goalFrequency: acc.goals > 0 ? acc.minutesPlayed / acc.goals : 0,
+        assistFrequency: acc.assists > 0 ? acc.minutesPlayed / acc.assists : 0,
+        participationFrequency:
+          acc.goals + acc.assists > 0
+            ? acc.minutesPlayed / (acc.goals + acc.assists)
+            : 0,
         totalFinishings: acc.totalFinishings,
         finishingsPerGame: acc.totalFinishings / games,
         finishingsOnTarget: acc.totalFinishings - acc.finishingsMissed,
@@ -148,7 +159,16 @@ export const useBestPlayersStats = (
         minutesPlayed: acc.minutesPlayed,
       } as AggregatedPlayerStats;
     });
+    const maxPlayerGames = aggregated.reduce(
+      (max, stat) => Math.max(max, stat.games),
+      0,
+    );
 
-    return aggregated.filter((stat) => stat.games >= 5);
-  }, [season, career, isGeralPage]);
+    const referenceGames =
+      totalTeamMatches > 0 ? totalTeamMatches : maxPlayerGames;
+
+    const minGamesRequired = Math.ceil(referenceGames * minPercentage);
+
+    return aggregated.filter((stat) => stat.games >= minGamesRequired);
+  }, [season, career, isGeralPage, minPercentage]);
 };

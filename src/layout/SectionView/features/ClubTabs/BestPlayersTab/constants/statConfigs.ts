@@ -16,18 +16,31 @@ export const statConfigs: StatConfig[] = [
     format: (v: number) => v.toFixed(2),
   },
   { title: "Gols", key: "goals" },
-  { title: "Assistências", key: "assists" },
-  { title: "Participação em gols", key: "goalParticipations" },
-  {
-    title: "Minutos jogados",
-    key: "minutesPlayed",
-    format: (v: number) => `${v}'`,
-  },
   {
     title: "Gols por minutos",
     key: "goalFrequency",
     isAscending: true,
     format: (v: number) => `${Math.round(v)}'`,
+  },
+  { title: "Assistências", key: "assists" },
+  {
+    title: "Assistências por minutos",
+    key: "assistFrequency",
+    isAscending: true,
+    format: (v: number) => `${Math.round(v)}'`,
+  },
+  { title: "Participação em gols (G/A)", key: "goalParticipations" },
+  {
+    title: "G/A por minutos",
+    key: "participationFrequency",
+    isAscending: true,
+    format: (v: number) => `${Math.round(v)}'`,
+  },
+  { title: "Jogos", key: "games" },
+  {
+    title: "Minutos jogados",
+    key: "minutesPlayed",
+    format: (v: number) => `${v}'`,
   },
   {
     title: "Maior distância em um jogo",

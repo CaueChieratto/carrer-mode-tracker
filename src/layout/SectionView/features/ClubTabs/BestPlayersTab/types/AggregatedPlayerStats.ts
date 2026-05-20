@@ -8,6 +8,8 @@ export type AggregatedPlayerStats = {
   assists: number;
   goalParticipations: number;
   goalFrequency: number;
+  assistFrequency: number;
+  participationFrequency: number;
   totalFinishings: number;
   finishingsPerGame: number;
   finishingsOnTarget: number;
