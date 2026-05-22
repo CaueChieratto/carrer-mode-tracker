@@ -63,6 +63,7 @@ export const useBestPlayersStats = (
     });
 
     const seasonsToProcess = isGeralPage ? career.clubData : [season];
+
     const totalTeamMatches = seasonsToProcess.reduce((total, s) => {
       const finishedMatchesCount =
         s.matches?.filter((m) => m.status === "FINISHED").length || 0;
@@ -159,6 +160,11 @@ export const useBestPlayersStats = (
         minutesPlayed: acc.minutesPlayed,
       } as AggregatedPlayerStats;
     });
+
+    if (isGeralPage) {
+      return aggregated;
+    }
+
     const maxPlayerGames = aggregated.reduce(
       (max, stat) => Math.max(max, stat.games),
       0,

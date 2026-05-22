@@ -45,12 +45,16 @@ export const BestPlayersTab = ({ season, career }: BestPlayersTabProps) => {
       )
     : season.matches?.some((m) => m.status === "FINISHED");
 
-  if (!hasAnyMatches) {
+  if (!hasAnyMatches || statsData.length === 0) {
     return (
       <ContainerClubContent>
         <NoStatsMessage
           textOne="Sem estatísticas"
-          textTwo="Adicione partidas nesta temporada para gerar o ranking de jogadores."
+          textTwo={
+            hasAnyMatches
+              ? "Nenhum jogador atingiu a porcentagem mínima de partidas."
+              : "Adicione partidas nesta temporada para gerar o ranking de jogadores."
+          }
         />
       </ContainerClubContent>
     );
