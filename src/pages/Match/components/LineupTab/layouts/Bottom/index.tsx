@@ -1,4 +1,5 @@
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { getGroupForPosition } from "../../../../../../common/types/Positions";
 import { PlayerMatchStat } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { LineupState } from "../../hooks/useLineup";
 import Styles from "./Bottom.module.css";
@@ -51,7 +52,26 @@ export const Bottom = ({
       return Infinity;
     };
 
-    return getSubMinute(a) - getSubMinute(b);
+    const aMinute = getSubMinute(a);
+    const bMinute = getSubMinute(b);
+
+    if (aMinute !== bMinute) {
+      return aMinute - bMinute;
+    }
+
+    const aPosition = a.player?.position;
+    const bPosition = b.player?.position;
+
+    if (!aPosition || !bPosition) return 0;
+
+    const group = getGroupForPosition(aPosition);
+
+    if (!group?.sortOrder) return 0;
+
+    const aIndex = group.sortOrder.indexOf(aPosition);
+    const bIndex = group.sortOrder.indexOf(bPosition);
+
+    return aIndex - bIndex;
   });
 
   return (
