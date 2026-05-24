@@ -1,4 +1,5 @@
 export enum ColorAssessment {
+  Garbage = "#6741D9",
   Terrible = "#E03131",
   Bad = "#FD7E14",
   Average = "#FCC419",
