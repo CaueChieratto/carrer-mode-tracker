@@ -32,6 +32,7 @@ export const AddDetails = () => {
         backSeasons={backMatch}
         titleText={`${match?.homeTeam} x ${match?.awayTeam}`}
       />
+
       <Navbar
         save={saveDetails}
         options={["", "Salvar", ""]}
@@ -43,6 +44,7 @@ export const AddDetails = () => {
         <Form className={Styles.form}>
           {fields.map((section, index) => (
             <FormSection
+              isMatch
               key={index}
               title={section.title}
               rows={section.fields}

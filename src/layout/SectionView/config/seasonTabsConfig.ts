@@ -20,6 +20,7 @@ export type TabConfig = {
     onOpenTransfers?: (type: "arrivals" | "exit") => void;
     isPlayer?: boolean;
     player?: Players;
+    onAddBadge?: (teamName: string) => void;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;
   action?: () => void;

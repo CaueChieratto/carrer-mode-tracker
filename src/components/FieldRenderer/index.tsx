@@ -5,6 +5,7 @@ import FormField from "../FormField";
 import { Field, FormSectionProps } from "../FormSection";
 import FormSegmentedControl from "../FormSegmentedControl";
 import FormSelect from "../FormSelect";
+import SearchableSelect from "../SearchableSelect";
 
 type RendererProps = FieldRendererProps & {
   onChange: (
@@ -89,13 +90,28 @@ const FieldRenderer = (props: FieldRendererProps) => {
   const value = formValues?.[field.id] ?? "";
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | { target: { name: string; value: string } },
   ) => {
-    onInputChange?.(e, field);
+    onInputChange?.(e as React.ChangeEvent<HTMLInputElement>, field);
   };
 
   if (field.inputType === "custom-select") {
     return <CustomSelectRenderer {...props} onChange={handleInputChange} />;
+  }
+
+  if (field.inputType === "searchable-select") {
+    return (
+      <SearchableSelect
+        name={field.id}
+        options={field.options || []}
+        value={value}
+        placeholder={field.placeholder}
+        onChange={handleInputChange}
+        disabled={field.disabled}
+      />
+    );
   }
 
   if (field.checkbox) {

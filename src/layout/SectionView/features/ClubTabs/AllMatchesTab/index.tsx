@@ -13,9 +13,14 @@ import { getMatchSeason, processMatches } from "./helpers/processMatches";
 type AllMatchesTabProps = {
   season: ClubData;
   career: Career;
+  onAddBadge?: (teamName: string) => void;
 };
 
-export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
+export const AllMatchesTab = ({
+  season,
+  career,
+  onAddBadge,
+}: AllMatchesTabProps) => {
   const [activeTab, setActiveTab] = useState<MatchStatus | string>(() => {
     return localStorage.getItem("matchActiveTab") || "SCHEDULED";
   });
@@ -59,44 +64,47 @@ export const AllMatchesTab = ({ season, career }: AllMatchesTabProps) => {
   });
 
   return (
-    <ContainerClubContent isMatch>
-      <ButtonsSwitch
-        isMatches
-        isGeralPage={isGeralPage}
-        selectOptions={MONTH_OPTIONS}
-        selectValue={selectedMonth}
-        onSelectChange={setSelectedMonth}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        seasonOptions={seasonOptions}
-        seasonValue={selectedSeasonLabel}
-        onSeasonChange={setSelectedSeasonLabel}
-      />
-      {!matches.length ? (
-        <NoStatsMessage
-          textOne="Nenhuma partida encontrada"
-          textTwo="Primeiro, adicione as partidas do time."
+    <>
+      <ContainerClubContent isMatch>
+        <ButtonsSwitch
+          isMatches
+          isGeralPage={isGeralPage}
+          selectOptions={MONTH_OPTIONS}
+          selectValue={selectedMonth}
+          onSelectChange={setSelectedMonth}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          seasonOptions={seasonOptions}
+          seasonValue={selectedSeasonLabel}
+          onSeasonChange={setSelectedSeasonLabel}
         />
-      ) : (
-        matches.map((match) => {
-          const matchSeason = getMatchSeason(
-            match.matchesId,
-            career,
-            season,
-            isGeralPage,
-          );
+        {!matches.length ? (
+          <NoStatsMessage
+            textOne="Nenhuma partida encontrada"
+            textTwo="Primeiro, adicione as partidas do time."
+          />
+        ) : (
+          matches.map((match) => {
+            const matchSeason = getMatchSeason(
+              match.matchesId,
+              career,
+              season,
+              isGeralPage,
+            );
 
-          return (
-            <MatchCard
-              key={`${match.date}-${match.homeTeam}-${match.awayTeam}`}
-              match={match}
-              season={matchSeason}
-              isGeralPage={isGeralPage}
-              career={career}
-            />
-          );
-        })
-      )}
-    </ContainerClubContent>
+            return (
+              <MatchCard
+                key={`${match.date}-${match.homeTeam}-${match.awayTeam}`}
+                match={match}
+                season={matchSeason}
+                isGeralPage={isGeralPage}
+                career={career}
+                onAddBadge={onAddBadge}
+              />
+            );
+          })
+        )}
+      </ContainerClubContent>
+    </>
   );
 };

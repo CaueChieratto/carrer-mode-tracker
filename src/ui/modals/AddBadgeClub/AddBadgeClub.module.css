@@ -1,0 +1,78 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 22px;
+}
+
+.upload_area {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.file_input {
+  display: none;
+}
+
+.file_label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border: 2px dashed var(--border-input);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.preview_img {
+  width: 100px;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  color: var(--colorSpan);
+}
+
+.error {
+  color: #f44336;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancel_btn,
+.save_btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  min-width: 100px;
+}
+
+.cancel_btn {
+  color: var(--background-color);
+}
+
+.save_btn {
+  color: #fff;
+}
+
+.save_btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

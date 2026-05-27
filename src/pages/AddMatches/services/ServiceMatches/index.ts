@@ -5,11 +5,13 @@ import {
   deleteDoc,
   getDocs,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../../../common/services/Firebase";
 import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { Career } from "../../../../common/interfaces/Career";
+import { Teams } from "../../interface/teams";
 
 export const ServiceMatches = {
   addMatchToSeason: async (
@@ -29,6 +31,87 @@ export const ServiceMatches = {
     await setDoc(matchRef, match);
 
     await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
+  },
+
+  addTeamToSeason: async (
+    careerId: string,
+    seasonId: string,
+    team: Teams,
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const careerRef = doc(db, `users/${user.uid}/careers/${careerId}`);
+    const careerSnap = await getDoc(careerRef);
+    if (!careerSnap.exists()) return;
+
+    const careerData = careerSnap.data() as Career;
+    const updatedClubData = careerData.clubData?.map((season) => {
+      if (season.id === seasonId) {
+        return { ...season, teams: [...(season.teams || []), team] };
+      }
+      return season;
+    });
+
+    await updateDoc(careerRef, {
+      clubData: updatedClubData,
+      updatedAt: Date.now(),
+    });
+  },
+
+  updateSeasonTeams: async (
+    careerId: string,
+    seasonId: string,
+    teams: Teams[],
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const careerRef = doc(db, `users/${user.uid}/careers/${careerId}`);
+    const careerSnap = await getDoc(careerRef);
+    if (!careerSnap.exists()) return;
+
+    const careerData = careerSnap.data() as Career;
+    const updatedClubData = careerData.clubData?.map((season) => {
+      if (season.id === seasonId) {
+        return { ...season, teams: teams };
+      }
+      return season;
+    });
+
+    await updateDoc(careerRef, {
+      clubData: updatedClubData,
+      updatedAt: Date.now(),
+    });
+  },
+
+  removeTeamFromSeason: async (
+    careerId: string,
+    seasonId: string,
+    team: Teams,
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const careerRef = doc(db, `users/${user.uid}/careers/${careerId}`);
+    const careerSnap = await getDoc(careerRef);
+    if (!careerSnap.exists()) return;
+
+    const careerData = careerSnap.data() as Career;
+    const updatedClubData = careerData.clubData?.map((season) => {
+      if (season.id === seasonId) {
+        return {
+          ...season,
+          teams: (season.teams || []).filter((t) => t.name !== team.name),
+        };
+      }
+      return season;
+    });
+
+    await updateDoc(careerRef, {
+      clubData: updatedClubData,
+      updatedAt: Date.now(),
+    });
   },
 
   updateMatchInSeason: async (

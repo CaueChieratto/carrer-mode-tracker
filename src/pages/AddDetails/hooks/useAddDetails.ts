@@ -2,15 +2,11 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useForm } from "../../../common/hooks/UseForm";
 import { useMatchData } from "../../Match/hooks/useMatchData";
 import { ServiceMatches } from "../../AddMatches/services/ServiceMatches";
-import { AddDetailsFormFields } from "../constants/FormFields";
 import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
-
-type MatchEventItem = {
-  id: string;
-  name: string;
-  type: "goal" | "assist" | "card" | "sub";
-  color?: string;
-};
+import { MatchWithOpponentEvents } from "../types";
+import { buildFormFields } from "../helpers/buildFormFields";
+import { calculateMatchResult } from "../helpers/calculateMatchResult";
+import { buildOpponentEvents } from "../helpers/buildOpponentEvents";
 
 export const useAddDetails = () => {
   const { career, season, match, loading, backMatch } = useMatchData();
@@ -26,303 +22,126 @@ export const useAddDetails = () => {
 
   const initializedMatchId = useRef<string | null>(null);
 
-  const matchEvents = useMemo(() => {
-    if (!match?.playerStats || !season?.players) return [];
-
-    const events: MatchEventItem[] = [];
-
-    match.playerStats.forEach((stat) => {
-      const p = season.players.find((player) => player.id === stat.playerId);
-      if (!p) return;
-
-      const isStarter = [
-        match.lineup?.goalkeeper?.playerId,
-        ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
-      ].includes(stat.playerId);
-
-      for (let i = 0; i < stat.goals; i++) {
-        events.push({
-          id: `goal_${stat.playerId}_${i}`,
-          name: `Gol: ${p.name}`,
-          type: "goal",
-        });
-      }
-
-      for (let i = 0; i < (stat.assists || 0); i++) {
-        events.push({
-          id: `assist_${stat.playerId}_${i}`,
-          name: `Assist: ${p.name}`,
-          type: "assist",
-        });
-      }
-
-      if (stat.yellowCard) {
-        events.push({
-          id: `yellow_${stat.playerId}`,
-          name: `Amarelo: ${p.name}`,
-          type: "card",
-          color: "yellow",
-        });
-      }
-
-      if (stat.redCard) {
-        events.push({
-          id: `red_${stat.playerId}`,
-          name: `Vermelho: ${p.name}`,
-          type: "card",
-          color: "red",
-        });
-      }
-
-      if (isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
-        events.push({
-          id: `sub_${stat.playerId}`,
-          name: `Sub: ${p.name}`,
-          type: "sub",
-        });
-      }
-    });
-
-    return events;
-  }, [match, season]);
-
   useEffect(() => {
-    if (match && career && initializedMatchId.current !== match.matchesId) {
-      const totalUserTeamGoals =
-        match.playerStats?.reduce((acc, stat) => acc + (stat.goals || 0), 0) ||
-        0;
+    if (!match || !career || initializedMatchId.current === match.matchesId)
+      return;
 
-      const isUserHome = match.homeTeam === career.clubName;
+    const totalUserTeamGoals =
+      match.playerStats?.reduce((acc, stat) => acc + (stat.goals || 0), 0) || 0;
+    const isUserHome = match.homeTeam === career.clubName;
 
-      const initial: Record<string, string> = {
-        homeScore:
-          match.homeScore !== undefined
-            ? String(match.homeScore)
-            : isUserHome && totalUserTeamGoals > 0
-              ? String(totalUserTeamGoals)
-              : "",
-        awayScore:
-          match.awayScore !== undefined
-            ? String(match.awayScore)
-            : !isUserHome && totalUserTeamGoals > 0
-              ? String(totalUserTeamGoals)
-              : "",
-        stoppage1T: match.stoppage1T ? String(match.stoppage1T) : "",
-        stoppage2T: match.stoppage2T ? String(match.stoppage2T) : "",
-        stoppageET1: match.stoppageET1 ? String(match.stoppageET1) : "",
-        stoppageET2: match.stoppageET2 ? String(match.stoppageET2) : "",
-      };
+    const initial: Record<string, string> = {
+      homeScore:
+        match.homeScore !== undefined
+          ? String(match.homeScore)
+          : isUserHome && totalUserTeamGoals > 0
+            ? String(totalUserTeamGoals)
+            : "",
+      awayScore:
+        match.awayScore !== undefined
+          ? String(match.awayScore)
+          : !isUserHome && totalUserTeamGoals > 0
+            ? String(totalUserTeamGoals)
+            : "",
+      stoppage1T: match.stoppage1T ? String(match.stoppage1T) : "",
+      stoppage2T: match.stoppage2T ? String(match.stoppage2T) : "",
+      stoppageET1: match.stoppageET1 ? String(match.stoppageET1) : "",
+      stoppageET2: match.stoppageET2 ? String(match.stoppageET2) : "",
+    };
 
-      match.playerStats?.forEach((stat) => {
-        const isStarter = [
-          match.lineup?.goalkeeper?.playerId,
-          ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
-        ].includes(stat.playerId);
+    const matchWithEvents = match as MatchWithOpponentEvents;
+    if (matchWithEvents.opponentEvents) {
+      const oppEv = matchWithEvents.opponentEvents;
 
-        stat.goalMinutes?.forEach((m, i) => {
-          initial[`eventMinute_goal_${stat.playerId}_${i}`] = m
-            ? String(m)
-            : "";
-        });
-
-        stat.assistTargets?.forEach((targetString, i) => {
-          initial[`eventMinute_assist_${stat.playerId}_${i}`] =
-            targetString || "";
-        });
-
-        if (stat.yellowCardMinute) {
-          initial[`eventMinute_yellow_${stat.playerId}`] = String(
-            stat.yellowCardMinute,
-          );
-        }
-
-        if (stat.redCardMinute) {
-          initial[`eventMinute_red_${stat.playerId}`] = String(
-            stat.redCardMinute,
-          );
-        }
-
-        if (isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
-          initial[`eventMinute_sub_${stat.playerId}`] = stat.minutesPlayed
-            ? String(stat.minutesPlayed)
-            : "";
-        }
+      oppEv.goals?.forEach((g, i) => {
+        initial[`opponentGoalPlayer_${i}`] = g.player;
+        initial[`opponentGoalMinute_${i}`] = g.minute;
       });
 
-      if (
-        match.homePenScore !== undefined &&
-        match.awayPenScore !== undefined
-      ) {
-        initial.homePenScore = String(match.homePenScore);
-        initial.awayPenScore = String(match.awayPenScore);
-        handleBooleanChange("hasPenalties", true);
-      } else {
-        handleBooleanChange("hasPenalties", false);
+      oppEv.assists?.forEach((a, i) => {
+        initial[`opponentAssistPlayer_${i}`] = a.player;
+        initial[`opponentAssistTo_${i}`] = a.goalReference;
+      });
+
+      if (oppEv.cards?.length) {
+        initial.opponentCardCount = String(oppEv.cards.length);
+        oppEv.cards.forEach((c, i) => {
+          initial[`opponentCardPlayer_${i}`] = c.player;
+          initial[`opponentYellowMin_${i}`] = c.yellowMinute;
+          initial[`opponentSecondYellowMin_${i}`] = c.secondYellowMinute;
+          initial[`opponentRedMin_${i}`] = c.redMinute;
+          handleBooleanChange(`opponentYellow_${i}`, c.yellow);
+          handleBooleanChange(`opponentSecondYellow_${i}`, c.secondYellow);
+          handleBooleanChange(`opponentRed_${i}`, c.red);
+        });
       }
-
-      setFormValues(initial);
-      handleBooleanChange("hasExtraTime", !!match.hasExtraTime);
-
-      initializedMatchId.current = match.matchesId;
     }
+
+    if (match.homePenScore !== undefined && match.awayPenScore !== undefined) {
+      initial.homePenScore = String(match.homePenScore);
+      initial.awayPenScore = String(match.awayPenScore);
+      handleBooleanChange("hasPenalties", true);
+    } else {
+      handleBooleanChange("hasPenalties", false);
+    }
+
+    setFormValues(initial);
+    handleBooleanChange("hasExtraTime", !!match.hasExtraTime);
+
+    initializedMatchId.current = match.matchesId;
   }, [match, career, setFormValues, handleBooleanChange]);
+
+  const handleLocalBooleanChange = useCallback(
+    (fieldId: string, value: boolean) => {
+      if (fieldId.startsWith("opponentSecondYellow_") && value) {
+        const index = fieldId.split("_")[1];
+        handleBooleanChange(`opponentRed_${index}`, false);
+      }
+      if (fieldId.startsWith("opponentRed_") && value) {
+        const index = fieldId.split("_")[1];
+        handleBooleanChange(`opponentSecondYellow_${index}`, false);
+      }
+      if (fieldId.startsWith("opponentYellow_") && !value) {
+        const index = fieldId.split("_")[1];
+        handleBooleanChange(`opponentSecondYellow_${index}`, false);
+      }
+      handleBooleanChange(fieldId, value);
+    },
+    [handleBooleanChange],
+  );
 
   const saveDetails = useCallback(async () => {
     if (!career || !season || !match) return;
-
     setIsSaving(true);
 
     try {
-      const stoppage1T = Number(formValues.stoppage1T) || 0;
-      const stoppage2T = Number(formValues.stoppage2T) || 0;
-      const stoppageET1 = Number(formValues.stoppageET1) || 0;
-      const stoppageET2 = Number(formValues.stoppageET2) || 0;
-
-      const getActualMinute = (nominalMinute: number) => {
-        if (!nominalMinute) return 0;
-        let actual = nominalMinute;
-        if (nominalMinute > 45) actual += stoppage1T;
-        if (nominalMinute > 90) actual += stoppage2T;
-        if (nominalMinute > 105) actual += stoppageET1;
-        return actual;
-      };
-
-      const maxMatchMinutes = booleanValues.hasExtraTime
-        ? 120 + stoppage1T + stoppage2T + stoppageET1 + stoppageET2
-        : 90 + stoppage1T + stoppage2T;
-
-      const startersIds = [
-        match.lineup?.goalkeeper?.playerId,
-        ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
-      ].filter(Boolean) as string[];
-
-      const currentStats = [...(match.playerStats || [])];
-
-      startersIds.forEach((starterId) => {
-        if (!currentStats.some((stat) => stat.playerId === starterId)) {
-          currentStats.push({
-            playerId: starterId,
-            minutesPlayed: 0,
-            goals: 0,
-            defenses: 0,
-            assists: 0,
-            distanceKm: 0,
-            rating: 0,
-            totalPasses: 0,
-            passPrecision: 0,
-            passesMissed: 0,
-            keyPasses: 0,
-            totalFinishings: 0,
-            finishingPrecision: 0,
-            finishingsMissed: 0,
-            totalDribbles: 0,
-            dribblePrecision: 0,
-            dribblesMissed: 0,
-            ballsRecovered: 0,
-            ballsLost: 0,
-            yellowCard: false,
-            secondYellowCard: false,
-            redCard: false,
-            cleanSheet: false,
-            substituteIn: "Nenhum",
-          });
-        }
-      });
-
-      const updatedStats = currentStats.map((stat) => {
-        const isStarter = startersIds.includes(stat.playerId);
-        let newMinutesPlayed = stat.minutesPlayed || 0;
-
-        const subNominal =
-          Number(formValues[`eventMinute_sub_${stat.playerId}`]) || 0;
-        const redCardNominal =
-          Number(formValues[`eventMinute_red_${stat.playerId}`]) || 0;
-
-        let entryMinute = 0;
-        if (!isStarter && stat.substituteIn && stat.substituteIn !== "Nenhum") {
-          const starterName = stat.substituteIn;
-          const starterStat = currentStats.find((s) => {
-            const sp = season.players.find(
-              (player) => player.id === s.playerId,
-            );
-            return sp?.name === starterName;
-          });
-          if (starterStat) {
-            const starterSubNominal =
-              Number(formValues[`eventMinute_sub_${starterStat.playerId}`]) ||
-              0;
-            entryMinute =
-              starterSubNominal > 0
-                ? getActualMinute(starterSubNominal)
-                : starterStat.minutesPlayed || 0;
-          }
-        }
-
-        if (redCardNominal > 0) {
-          const exitMinute = getActualMinute(redCardNominal);
-          newMinutesPlayed = Math.max(0, exitMinute - entryMinute);
-        } else if (
-          isStarter &&
-          stat.substituteIn &&
-          stat.substituteIn !== "Nenhum"
-        ) {
-          newMinutesPlayed =
-            subNominal > 0
-              ? getActualMinute(subNominal)
-              : stat.minutesPlayed || 0;
-        } else if (
-          !isStarter &&
-          stat.substituteIn &&
-          stat.substituteIn !== "Nenhum"
-        ) {
-          newMinutesPlayed = Math.max(0, maxMatchMinutes - entryMinute);
-        } else if (isStarter) {
-          newMinutesPlayed = maxMatchMinutes;
-        }
-
-        const goalMinutes = Array.from({ length: stat.goals || 0 }).map(
-          (_, i) =>
-            Number(formValues[`eventMinute_goal_${stat.playerId}_${i}`]) || 0,
-        );
-
-        const assistTargets = Array.from({ length: stat.assists || 0 }).map(
-          (_, i) =>
-            formValues[`eventMinute_assist_${stat.playerId}_${i}`] || "",
-        );
-
-        return {
-          ...stat,
-          goalMinutes,
-          assistTargets,
-          yellowCardMinute:
-            Number(formValues[`eventMinute_yellow_${stat.playerId}`]) || 0,
-          redCardMinute: redCardNominal,
-          minutesPlayed: newMinutesPlayed,
-        };
-      });
-
       const homeScoreNum = Number(formValues.homeScore) || 0;
       const awayScoreNum = Number(formValues.awayScore) || 0;
+      const opponentCardCountNum = Number(formValues.opponentCardCount) || 0;
 
       const isUserHome = match.homeTeam === career.clubName;
-      let result: "V" | "E" | "D" | "?" = "?";
+      const hasPenalties = !!booleanValues.hasPenalties;
+      const homePenScore = Number(formValues.homePenScore) || 0;
+      const awayPenScore = Number(formValues.awayPenScore) || 0;
 
-      if (homeScoreNum === awayScoreNum) {
-        result = "E";
-        if (booleanValues.hasPenalties) {
-          const homePen = Number(formValues.homePenScore) || 0;
-          const awayPen = Number(formValues.awayPenScore) || 0;
+      const result = calculateMatchResult(
+        homeScoreNum,
+        awayScoreNum,
+        isUserHome,
+        hasPenalties,
+        homePenScore,
+        awayPenScore,
+      );
 
-          if (homePen > awayPen) result = isUserHome ? "V" : "D";
-          else if (awayPen > homePen) result = isUserHome ? "D" : "V";
-        }
-      } else if (isUserHome) {
-        result = homeScoreNum > awayScoreNum ? "V" : "D";
-      } else {
-        result = awayScoreNum > homeScoreNum ? "V" : "D";
-      }
+      const opponentScoreNum = isUserHome ? awayScoreNum : homeScoreNum;
+      const opponentEvents = buildOpponentEvents(
+        opponentScoreNum,
+        opponentCardCountNum,
+        formValues,
+        booleanValues,
+      );
 
-      const updatedMatch: Match = {
+      const updatedMatch: MatchWithOpponentEvents = {
         ...match,
         homeScore: homeScoreNum,
         awayScore: awayScoreNum,
@@ -331,49 +150,66 @@ export const useAddDetails = () => {
         stoppageET1: Number(formValues.stoppageET1) || 0,
         stoppageET2: Number(formValues.stoppageET2) || 0,
         hasExtraTime: !!booleanValues.hasExtraTime,
-        playerStats: updatedStats,
         status: "FINISHED",
         result,
+        opponentEvents,
       };
 
-      if (booleanValues.hasPenalties) {
-        updatedMatch.homePenScore = Number(formValues.homePenScore) || 0;
-        updatedMatch.awayPenScore = Number(formValues.awayPenScore) || 0;
+      if (hasPenalties) {
+        updatedMatch.homePenScore = homePenScore;
+        updatedMatch.awayPenScore = awayPenScore;
       } else {
         delete updatedMatch.homePenScore;
         delete updatedMatch.awayPenScore;
       }
 
-      ServiceMatches.updateMatchInSeason(
+      await ServiceMatches.updateMatchInSeason(
         career.id,
         season.id,
-        updatedMatch,
-      ).catch((error) => {
-        console.error(
-          "Erro ao salvar os detalhes da partida no background:",
-          error,
-        );
-      });
+        updatedMatch as Match,
+      );
 
       backMatch();
+    } catch (error) {
+      console.error("Erro: ", error);
     } finally {
       setIsSaving(false);
     }
   }, [formValues, booleanValues, match, career, season, backMatch]);
 
+  const isUserHome = match?.homeTeam === career?.clubName;
+  const opponentScore =
+    Number(isUserHome ? formValues.awayScore : formValues.homeScore) || 0;
+  const opponentCardCount = Number(formValues.opponentCardCount) || 0;
+
+  const opponentGoalOptions = useMemo(() => {
+    return Array.from({ length: opponentScore }).map((_, i) => {
+      const min = formValues[`opponentGoalMinute_${i}`];
+      const player = formValues[`opponentGoalPlayer_${i}`];
+      if (player && min) return `${player} - ${min}'`;
+      if (player) return player;
+      if (min) return `${min}'`;
+      return `Gol ${i + 1}`;
+    });
+  }, [opponentScore, formValues]);
+
   const fields = useMemo(
     () =>
-      AddDetailsFormFields(
+      buildFormFields(
         !!booleanValues.hasExtraTime,
         !!booleanValues.hasPenalties,
-        matchEvents,
+        opponentScore,
+        opponentCardCount,
+        opponentGoalOptions,
+        booleanValues,
         match?.homeTeam,
         match?.awayTeam,
       ),
     [
-      booleanValues.hasExtraTime,
-      booleanValues.hasPenalties,
-      matchEvents,
+      booleanValues,
+      opponentScore,
+      opponentCardCount,
+      opponentGoalOptions,
       match?.homeTeam,
       match?.awayTeam,
     ],
@@ -383,13 +219,12 @@ export const useAddDetails = () => {
     loading,
     isSaving,
     career,
+    match,
     fields,
     formValues,
-    booleanValues,
     handleInputChange,
-    handleBooleanChange,
+    handleBooleanChange: handleLocalBooleanChange,
     saveDetails,
     backMatch,
-    match,
   };
 };

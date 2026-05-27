@@ -13,6 +13,9 @@ export const PlayerStatRow = ({
   value,
   isRating,
 }: PlayerStatRowProps) => {
+  const formattedValue =
+    isRating && Number(value) % 1 === 0 ? Number(value).toString() : value;
+
   return (
     <section className={Styles.player}>
       <header className={Styles.player_info}>
@@ -33,7 +36,7 @@ export const PlayerStatRow = ({
             className={Styles.ratingBadge}
             style={{ backgroundColor: UseRatingColor(+value) }}
           >
-            {value}
+            {formattedValue}
           </div>
         ) : (
           <h3 className={Styles.data_title_stat}>{value}</h3>

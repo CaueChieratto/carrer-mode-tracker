@@ -1,0 +1,78 @@
+.custom_select_container {
+  position: relative;
+  width: 100%;
+  font-size: 16px;
+}
+
+.custom_select_container.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.select_trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px;
+  background-color: var(--card-background);
+  cursor: text; /* Mudança para cursor de texto, já que é um input */
+}
+
+/* NOVO: Estilos para o input que fica invisível estruturalmente */
+.search_input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  min-width: 0;
+}
+
+.options_list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--background-color);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 4px;
+  list-style: none;
+  padding: 8px 0;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.option_item.highlighted {
+  background-color: var(--image-trophy-league);
+}
+
+.option_item {
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.option_item:hover {
+  background-color: var(--image-trophy-league);
+}
+
+.option_item.selected {
+  font-weight: bold;
+  background-color: var(--image-trophy-league);
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}

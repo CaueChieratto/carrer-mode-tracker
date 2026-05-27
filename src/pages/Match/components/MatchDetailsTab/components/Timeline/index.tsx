@@ -53,7 +53,7 @@ export const Timeline = ({
 
             <div className={Styles.events_list}>
               {stoppageEvents.map((event) => (
-                <EventRow key={event.id} event={event} isHome={isHome} />
+                <EventRow key={event.id} event={event} isUserHome={isHome} />
               ))}
 
               {stoppage !== undefined && stoppage > 0 && (
@@ -65,7 +65,7 @@ export const Timeline = ({
               )}
 
               {regularEvents.map((event) => (
-                <EventRow key={event.id} event={event} isHome={isHome} />
+                <EventRow key={event.id} event={event} isUserHome={isHome} />
               ))}
             </div>
           </div>

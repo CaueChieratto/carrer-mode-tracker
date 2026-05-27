@@ -4,13 +4,15 @@ import Styles from "./EventRow.module.css";
 
 type Props = {
   event: MatchEvent;
-  isHome: boolean;
+  isUserHome: boolean;
 };
 
-export const EventRow = ({ event, isHome }: Props) => {
+export const EventRow = ({ event, isUserHome }: Props) => {
   const timeDisplay = event.displayTime || `${event.time}'`;
 
-  if (isHome) {
+  const isHomeEvent = event.isOpponent ? !isUserHome : isUserHome;
+
+  if (isHomeEvent) {
     return (
       <div className={`${Styles.event_row} ${Styles.event_left}`}>
         <span className={Styles.event_time}>{timeDisplay}</span>

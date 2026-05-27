@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useTabView } from "../../common/hooks/UseTabView";
@@ -15,6 +15,9 @@ import {
   augmentCareerWithMatchStats,
   getAggregatedPlayersForCareer,
 } from "./helpers/mergeMatchStats";
+import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../common/types/enums/ModalType";
+import ModalManager from "../../common/constants/ModalManager";
 
 const SectionView = ({
   career,
@@ -35,6 +38,22 @@ const SectionView = ({
   isPlayer?: boolean;
   player?: Players;
 }) => {
+  const {
+    activeModal,
+    openModal,
+    closeModal,
+    selectedSeason,
+    selectedCareer,
+    setSelectedCareer,
+  } = useModalManager();
+
+  const [teamForBadge, setTeamForBadge] = useState<string>("");
+
+  const opemAddBadge = (teamName: string) => {
+    setTeamForBadge(teamName);
+    openModal(ModalType.ADD_BADGE_CLUB, augmentedCareer, augmentedSeason);
+  };
+
   const augmentedCareer = useMemo(
     () => augmentCareerWithMatchStats(career),
     [career],
@@ -120,11 +139,23 @@ const SectionView = ({
                 onOpenTransfers={onOpenTransfers}
                 isPlayer={isPlayer}
                 player={augmentedPlayer}
+                onAddBadge={opemAddBadge}
               />
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
+      {activeModal !== ModalType.NONE && (
+        <ModalManager
+          activeModal={activeModal}
+          selectedCareer={selectedCareer || augmentedCareer}
+          setSelectedCareer={setSelectedCareer}
+          selectedSeason={selectedSeason || augmentedSeason}
+          onClose={closeModal}
+          career={augmentedCareer}
+          teamName={teamForBadge}
+        />
+      )}
     </SeasonThemeProvider>
   );
 };

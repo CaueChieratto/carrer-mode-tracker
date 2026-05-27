@@ -14,6 +14,7 @@ type MatchCardProps = {
   match: Match;
   season: ClubData;
   isGeralPage: boolean;
+  onAddBadge?: (teamName: string) => void;
 };
 
 export const MatchCard = ({
@@ -21,7 +22,9 @@ export const MatchCard = ({
   match,
   season,
   isGeralPage,
+  onAddBadge,
 }: MatchCardProps) => {
+  const teams = season.teams || [];
   const leagueData = season.leagues?.find((l) => l.name === match.league);
 
   const { goToEdit, goToMatch } = useMatchNavigation({
@@ -32,22 +35,41 @@ export const MatchCard = ({
 
   const copyText = async () => {
     const text = buildMatchCopyText({ match, career });
-
     await Copy(text, "Copiado!");
   };
 
-  return (
-    <Card className={Styles.card}>
-      <MatchHeader
-        leagueName={match.league}
-        leagueData={leagueData}
-        onEdit={goToEdit}
-        isGeralPage={isGeralPage}
-        match={match}
-        onClick={copyText}
-      />
+  const isHomeCareerTeam = match.homeTeam === career.clubName;
+  const homeTeamData = teams.find((team) => team.name === match.homeTeam);
+  const awayTeamData = teams.find((team) => team.name === match.awayTeam);
 
-      <MatchBody match={match} onClick={goToMatch} />
-    </Card>
+  const homeBadge = isHomeCareerTeam
+    ? career.teamBadge
+    : homeTeamData?.badge || "";
+
+  const awayBadge = !isHomeCareerTeam
+    ? career.teamBadge
+    : awayTeamData?.badge || "";
+
+  return (
+    <>
+      <Card className={Styles.card}>
+        <MatchHeader
+          leagueName={match.league}
+          leagueData={leagueData}
+          onEdit={goToEdit}
+          isGeralPage={isGeralPage}
+          match={match}
+          onClick={copyText}
+        />
+
+        <MatchBody
+          match={match}
+          onClick={goToMatch}
+          homeBadge={homeBadge}
+          awayBadge={awayBadge}
+          onAddBadge={onAddBadge}
+        />
+      </Card>
+    </>
   );
 };

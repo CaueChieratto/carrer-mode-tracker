@@ -14,6 +14,7 @@ import { ClubData } from "../../interfaces/club/clubData";
 import { SeasonConfigs } from "../../../ui/modals/SeasonConfigs";
 import { getSeasonName } from "../../utils/GetSeasonName";
 import ReturnLoanConfirmModal from "../../../ui/modals/ReturnLoanConfirmModal";
+import { AddBadgeClub } from "../../../ui/modals/AddBadgeClub";
 
 type ModalManagerProps = {
   activeModal: ModalType;
@@ -36,6 +37,7 @@ type ModalManagerProps = {
   selectedSeason?: ClubData | null;
   onNavigateSeason?: (seasonId: string) => void;
   career?: Career;
+  teamName?: string;
 };
 
 const ModalManager = ({
@@ -53,6 +55,7 @@ const ModalManager = ({
   onNavigateSeason,
   selectedSeason,
   career,
+  teamName,
 }: ModalManagerProps) => {
   const closeModal = () => {
     UseCloseModal(saveClick!, onClose);
@@ -214,6 +217,22 @@ const ModalManager = ({
         </Modal>
       );
     }
+    case ModalType.ADD_BADGE_CLUB:
+      return (
+        <Modal
+          isOpen
+          closeModal={closeModal}
+          animationContainer="grow"
+          text="Adicione o escudo"
+        >
+          <AddBadgeClub
+            closeModal={closeModal}
+            teamName={teamName || ""}
+            careerId={selectedCareer?.id || career?.id || ""}
+            seasonId={selectedSeason?.id || ""}
+          />
+        </Modal>
+      );
 
     default:
       return null;

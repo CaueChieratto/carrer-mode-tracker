@@ -42,6 +42,7 @@ export const AddMatches = () => {
     matchesId,
     season,
     career,
+    formValues,
     setFormValues,
     handleBooleanChange,
   });

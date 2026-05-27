@@ -1,5 +1,5 @@
 import { LuCalendarClock } from "react-icons/lu";
-import { Field } from "../../../../../../../components/FormSection";
+import { Field } from "../../../../components/FormSection";
 import { IoMdTrophy } from "react-icons/io";
 import { GiHouse, GiPoliceBadge } from "react-icons/gi";
 import { FaTrashCan } from "react-icons/fa6";
@@ -7,6 +7,7 @@ import { FaTrashCan } from "react-icons/fa6";
 export const getMatchFormFields = (
   leagueOptions: readonly string[],
   selectedMonth: string = "Tudo",
+  teamOptions: readonly string[] = [],
 ): {
   title: string;
   fields: readonly (readonly Field[])[];
@@ -54,9 +55,10 @@ export const getMatchFormFields = (
           {
             id: "opponentTeam",
             name: "Adversário",
-            inputType: "text",
+            inputType: "searchable-select",
             placeholder: "Nome da equipe",
             icon: <GiPoliceBadge />,
+            options: teamOptions,
           },
         ],
         [

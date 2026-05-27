@@ -12,14 +12,20 @@ type MatchHeaderCardProps = {
   match: Match;
   hasPenalties: boolean;
   isUserHome: boolean;
-  goals?: Goal[];
+  userGoals?: Goal[];
+  opponentGoals?: Goal[];
+  homeBadge: string;
+  awayBadge: string;
 };
 
 export const MatchHeaderCard = ({
   match,
   isUserHome,
   hasPenalties,
-  goals = [],
+  userGoals = [],
+  opponentGoals = [],
+  homeBadge,
+  awayBadge,
 }: MatchHeaderCardProps) => {
   const date = match.date;
 
@@ -30,6 +36,11 @@ export const MatchHeaderCard = ({
   const awayTeam = match.awayTeam;
 
   const statusDisplay = match.status === "FINISHED" ? "Finalizado" : "Agendado";
+  const hasBothBadges = Boolean(homeBadge && awayBadge);
+
+  const homeGoals = isUserHome ? userGoals : opponentGoals;
+  const awayGoals = !isUserHome ? userGoals : opponentGoals;
+  const hasAnyGoals = homeGoals.length > 0 || awayGoals.length > 0;
 
   return (
     <div className={Styles.card}>
@@ -38,7 +49,13 @@ export const MatchHeaderCard = ({
       </div>
 
       <div className={Styles.main_row}>
-        <div className={Styles.team_name_left}>{homeTeam}</div>
+        <div className={Styles.team_container}>
+          {hasBothBadges ? (
+            <img src={homeBadge} className={Styles.team_badge} alt={homeTeam} />
+          ) : (
+            <div className={Styles.team_name_left}>{homeTeam}</div>
+          )}
+        </div>
 
         <div className={Styles.score_container}>
           <div className={Styles.score_row}>
@@ -46,6 +63,7 @@ export const MatchHeaderCard = ({
             <span className={Styles.score_separator}>-</span>
             <span className={Styles.score_number}>{awayScore}</span>
           </div>
+
           {hasPenalties ? (
             <span className={Styles.pen_score}>
               PEN {match.homePenScore} - {match.awayPenScore}
@@ -55,18 +73,23 @@ export const MatchHeaderCard = ({
           )}
         </div>
 
-        <div className={Styles.team_name_right}>{awayTeam}</div>
+        <div className={Styles.team_container}>
+          {hasBothBadges ? (
+            <img src={awayBadge} className={Styles.team_badge} alt={awayTeam} />
+          ) : (
+            <div className={Styles.team_name_right}>{awayTeam}</div>
+          )}
+        </div>
       </div>
 
-      {goals.length > 0 && (
+      {hasAnyGoals && (
         <div className={Styles.scorers_container}>
           <div className={Styles.scorers_left}>
-            {isUserHome &&
-              goals.map((goal, idx) => (
-                <span key={idx}>
-                  {goal.playerName} {goal.displayTime || `${goal.time}'`}
-                </span>
-              ))}
+            {homeGoals.map((goal, idx) => (
+              <span key={`home-${idx}`}>
+                {goal.playerName} {goal.displayTime || `${goal.time}'`}
+              </span>
+            ))}
           </div>
 
           <div className={Styles.icon_center}>
@@ -74,12 +97,11 @@ export const MatchHeaderCard = ({
           </div>
 
           <div className={Styles.scorers_right}>
-            {!isUserHome &&
-              goals.map((goal, idx) => (
-                <span key={idx}>
-                  {goal.playerName} {goal.displayTime || `${goal.time}'`}
-                </span>
-              ))}
+            {awayGoals.map((goal, idx) => (
+              <span key={`away-${idx}`}>
+                {goal.displayTime || `${goal.time}'`} {goal.playerName}
+              </span>
+            ))}
           </div>
         </div>
       )}
