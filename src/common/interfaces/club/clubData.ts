@@ -9,5 +9,5 @@ export interface ClubData {
   id: string;
   leagues?: League[];
   matches?: Match[];
-  teams: Teams[];
+  teams?: Teams[];
 }
