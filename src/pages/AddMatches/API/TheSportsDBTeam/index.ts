@@ -72,10 +72,7 @@ export async function fetchTeamByClubName(
     `[API CALL] 🌐 Chamando a API externa para buscar o time: "${club}"`,
   );
 
-  const targetUrl = encodeURIComponent(
-    "https://api.football-data.org/v4/teams?limit=500",
-  );
-  const url = `https://corsproxy.io/?${targetUrl}`;
+  const url = `/api/football-data/teams?limit=500`;
 
   try {
     const res = await fetch(url, {
