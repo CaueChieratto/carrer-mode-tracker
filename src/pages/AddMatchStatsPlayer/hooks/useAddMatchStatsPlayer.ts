@@ -297,10 +297,13 @@ export const useAddMatchStatsPlayer = () => {
         updatedStats.push(newStats);
       }
 
-      const maxMatchMinutes = Math.max(
-        90,
-        ...updatedStats.map((s) => s.minutesPlayed || 0),
-      );
+      const maxMatchMinutes = match.hasExtraTime
+        ? 120 +
+          (match.stoppage1T || 0) +
+          (match.stoppage2T || 0) +
+          (match.stoppageET1 || 0) +
+          (match.stoppageET2 || 0)
+        : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
 
       const oldStats = match.playerStats?.find((s) => s.playerId === player.id);
 
