@@ -1,5 +1,6 @@
-import { Match } from "../../../../types/Match";
 import { Career } from "../../../../../../../../../common/interfaces/Career";
+import { Match } from "../../../../types/Match";
+import { isLeagueCompetition } from "../isLeagueCompetition";
 
 type BuildMatchCopyTextParams = {
   match: Match;
@@ -30,11 +31,18 @@ export const buildMatchCopyText = ({
   const possession = isHome ? match.homePossession : match.awayPossession;
 
   const myShots = isHome ? match.homeFinishings : match.awayFinishings;
-
   const opponentShots = isHome ? match.awayFinishings : match.homeFinishings;
 
   const myXg = isHome ? match.homeXG : match.awayXG;
   const opponentXg = isHome ? match.awayXG : match.homeXG;
+
+  const isLeague = isLeagueCompetition(match.league);
+
+  const competitionText = isLeague ? "" : `pela ${match.league}`;
+
+  const matchContext = competitionText
+    ? `${location} ${competitionText}`
+    : location;
 
   const getPlayerStat = (id?: string | null) => {
     if (!id) return undefined;
@@ -76,17 +84,97 @@ export const buildMatchCopyText = ({
     (a, b) => b.rating - a.rating,
   )[0];
 
+  const substitutionsByStarter = new Map<
+    string,
+    {
+      playerName: string;
+      rating: number;
+      stat: NonNullable<typeof match.playerStats>[number];
+    }
+  >();
+
+  (match.lineup?.bench || []).forEach((benchPlayer) => {
+    const stat = getPlayerStat(benchPlayer.playerId);
+
+    if (!stat?.substituteIn) return;
+
+    substitutionsByStarter.set(stat.substituteIn, {
+      playerName: benchPlayer.playerName || "Desconhecido",
+      rating: stat.rating,
+      stat,
+    });
+  });
+
   const buildPlayerText = (
     playerName: string,
     rating: number,
     stat?: ReturnType<typeof getPlayerStat>,
     isMvp?: boolean,
   ): string => {
+    let text = `${playerName} (${rating})`;
+
     const highlight = buildHighlightText(stat);
 
-    return `${playerName} (${rating})${
-      highlight ? ` ${highlight}` : ""
-    }${isMvp ? " e foi eleito o MVP" : ""}`;
+    if (highlight) {
+      text += ` ${highlight}`;
+    }
+
+    if (isMvp) {
+      text += " foi eleito o MVP";
+    }
+
+    const substitute = substitutionsByStarter.get(playerName);
+
+    if (substitute && stat) {
+      const substituteHighlight = buildHighlightText(substitute.stat);
+
+      text += ` e saiu aos ${stat.minutesPlayed} minutos para entrada do ${substitute.playerName} (${substitute.rating})`;
+
+      if (substituteHighlight) {
+        text += ` ${substituteHighlight}`;
+      }
+    }
+
+    return text;
+  };
+
+  const buildOpponentEventsText = (): string => {
+    const events = (
+      match as Match & {
+        opponentEvents?: {
+          goals?: {
+            minute: string;
+            player: string;
+          }[];
+          assists?: {
+            goalReference: string;
+            player: string;
+          }[];
+        };
+      }
+    ).opponentEvents;
+
+    if (!events?.goals?.length) {
+      return "";
+    }
+
+    const goalsText = events.goals
+      .map((goal) => {
+        const goalReference = `${goal.player} - ${goal.minute}'`;
+
+        const assist = events.assists?.find(
+          (a) => a.goalReference === goalReference,
+        );
+
+        if (assist) {
+          return `${goal.player} aos ${goal.minute} minutos com assistência do ${assist.player}`;
+        }
+
+        return `${goal.player} aos ${goal.minute} minutos`;
+      })
+      .join(", ");
+
+    return `gols do adversário: ${goalsText}`;
   };
 
   const starters: string[] = [];
@@ -120,46 +208,9 @@ export const buildMatchCopyText = ({
   const startersText =
     starters.length > 0 ? `os titulares foram ${starters.join(", ")}` : "";
 
-  const starterIds = new Set<string>();
+  const opponentEventsText = buildOpponentEventsText();
 
-  const gkId = match.lineup?.goalkeeper?.playerId;
-  if (gkId) {
-    starterIds.add(gkId);
-  }
-
-  (match.lineup?.lines || []).forEach((player) => {
-    if (player.playerId) {
-      starterIds.add(player.playerId);
-    }
-  });
-
-  const benchPlayers: string[] = [];
-
-  (match.lineup?.bench || []).forEach((benchPlayer) => {
-    if (!benchPlayer.playerId) return;
-
-    if (starterIds.has(benchPlayer.playerId)) return;
-
-    const stat = getPlayerStat(benchPlayer.playerId);
-
-    if (!stat) return;
-
-    benchPlayers.push(
-      buildPlayerText(
-        benchPlayer.playerName || "Desconhecido",
-        stat.rating,
-        stat,
-        mvp?.playerId === benchPlayer.playerId,
-      ),
-    );
-  });
-
-  const benchText =
-    benchPlayers.length > 0
-      ? `quem entrou do banco foi ${benchPlayers.join(", ")}`
-      : "";
-
-  return `Dia ${day}, jogo contra o ${opponent} ${location}, ${resultText} por ${myScore} a ${opponentScore}, posse de ${possession}%, ${myShots} a ${opponentShots} em chutes com ${myXg} a ${opponentXg} de xG${
+  return `Dia ${day}, jogo contra o ${opponent} ${matchContext}, ${resultText} por ${myScore} a ${opponentScore}, posse de ${possession}%, ${myShots} a ${opponentShots} em chutes com ${myXg} a ${opponentXg} de xG${
     startersText ? `, ${startersText}` : ""
-  }${benchText ? `, ${benchText}` : ""}.`;
+  }${opponentEventsText ? `, ${opponentEventsText}` : ""}.`;
 };

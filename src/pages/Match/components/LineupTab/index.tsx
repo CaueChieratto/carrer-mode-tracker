@@ -114,8 +114,8 @@ export const LineupTab = ({
   useEffect(() => {
     onRegisterSave?.(async () => {
       const currentSavedLineup = buildSavedLineup();
-
       const activePlayerIds = new Set<string>();
+
       if (currentSavedLineup.goalkeeper.playerId) {
         activePlayerIds.add(currentSavedLineup.goalkeeper.playerId);
       }
@@ -130,7 +130,15 @@ export const LineupTab = ({
         activePlayerIds.has(stat.playerId),
       );
 
-      await saveLineup(currentSavedLineup, updatedPlayerStats);
+      const removedPlayerIds = (match.playerStats || [])
+        .filter((stat) => !activePlayerIds.has(stat.playerId))
+        .map((stat) => stat.playerId);
+
+      await saveLineup(
+        currentSavedLineup,
+        updatedPlayerStats,
+        removedPlayerIds,
+      );
 
       savedLineupRef.current = currentSavedLineup;
     });

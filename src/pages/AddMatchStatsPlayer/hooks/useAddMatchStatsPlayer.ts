@@ -9,6 +9,7 @@ import { buildPlayerStats } from "../helpers/buildPlayerStats";
 import { getInitialFormValues } from "../helpers/getInitialFormValues";
 import { FormFields } from "../constants/FormFields";
 import { getSubstitutionData } from "../helpers/getSubstitutionData";
+import { PlayerMatchStat } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 
 export const useAddMatchStatsPlayer = () => {
   const { playerId } = useParams<{ playerId: string }>();
@@ -283,93 +284,63 @@ export const useAddMatchStatsPlayer = () => {
 
   const savePlayerStats = useCallback(async () => {
     if (!career || !season || !match || !player) return;
-
     setIsSaving(true);
 
     try {
       const newStats = buildPlayerStats(player.id, formValues, booleanValues);
-      const updatedStats = [...(match.playerStats || [])];
 
-      const index = updatedStats.findIndex((s) => s.playerId === player.id);
-      if (index >= 0) {
-        updatedStats[index] = newStats;
-      } else {
-        updatedStats.push(newStats);
-      }
-
-      const maxMatchMinutes = match.hasExtraTime
-        ? 120 +
-          (match.stoppage1T || 0) +
-          (match.stoppage2T || 0) +
-          (match.stoppageET1 || 0) +
-          (match.stoppageET2 || 0)
-        : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
-
-      const oldStats = match.playerStats?.find((s) => s.playerId === player.id);
-
-      if (newStats.substituteIn !== oldStats?.substituteIn) {
-        if (oldStats?.substituteIn && oldStats.substituteIn !== "Nenhum") {
-          const oldCounterpart = season.players.find(
-            (p) => p.name === oldStats.substituteIn,
-          );
-          if (oldCounterpart) {
-            const oldIdx = updatedStats.findIndex(
-              (s) => s.playerId === oldCounterpart.id,
-            );
-            if (oldIdx >= 0) {
-              const { ...restOfStats } = updatedStats[oldIdx];
-              updatedStats[oldIdx] = restOfStats;
-            }
-          }
-        }
-      }
+      await ServiceMatches.savePlayerStatToSubcollection(
+        career.id,
+        season.id,
+        match.matchesId,
+        newStats,
+      );
 
       if (newStats.substituteIn && newStats.substituteIn !== "Nenhum") {
         const newCounterpart = season.players.find(
           (p) => p.name === newStats.substituteIn,
         );
+
         if (newCounterpart) {
-          const newIdx = updatedStats.findIndex(
-            (s) => s.playerId === newCounterpart.id,
-          );
+          const maxMatchMinutes = match.hasExtraTime
+            ? 120 +
+              (match.stoppage1T || 0) +
+              (match.stoppage2T || 0) +
+              (match.stoppageET1 || 0) +
+              (match.stoppageET2 || 0)
+            : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
 
           const counterpartMinutes = Math.max(
             0,
             maxMatchMinutes - newStats.minutesPlayed,
           );
 
-          if (newIdx >= 0) {
-            updatedStats[newIdx] = {
-              ...updatedStats[newIdx],
-              substituteIn: player.name,
-              minutesPlayed: counterpartMinutes,
-            };
-          } else {
-            updatedStats.push({
-              playerId: newCounterpart.id,
-              minutesPlayed: counterpartMinutes,
-              defenses: 0,
-              goals: 0,
-              assists: 0,
-              distanceKm: 0,
-              rating: 0,
-              yellowCard: false,
-              redCard: false,
-              cleanSheet: false,
-              substituteIn: player.name,
-            });
-          }
+          const counterpartStats: PlayerMatchStat = {
+            playerId: newCounterpart.id,
+            minutesPlayed: counterpartMinutes,
+            defenses: 0,
+            goals: 0,
+            assists: 0,
+            distanceKm: 0,
+            rating: 0,
+            yellowCard: false,
+            redCard: false,
+            cleanSheet: false,
+            substituteIn: player.name,
+          };
+
+          await ServiceMatches.savePlayerStatToSubcollection(
+            career.id,
+            season.id,
+            match.matchesId,
+            counterpartStats,
+          );
         }
       }
 
-      ServiceMatches.updateMatchInSeason(career.id, season.id, {
-        ...match,
-        playerStats: updatedStats,
-      }).catch((error) => {
-        console.error("Erro ao salvar as estatísticas no background:", error);
-      });
-
       backMatch();
+    } catch (error) {
+      console.error("Erro ao salvar as estatísticas:", error);
     } finally {
       setIsSaving(false);
     }

@@ -59,14 +59,12 @@ export function useMatchActions({
 
     const opponentNameLower = formValues.opponentTeam.toLowerCase();
 
-    // 1. Verifica se a equipa (nova ou atual) já está registada no array da temporada
     const teamAlreadyExistsInCurrentSeason = season.teams?.some(
       (team) => team.name.toLowerCase() === opponentNameLower,
     );
 
     let newTeamData: Teams | null = null;
 
-    // 2. Se a equipa NÃO existe no array, vamos buscar os dados dela (independente de ser criação ou edição)
     if (!teamAlreadyExistsInCurrentSeason) {
       let teamFromPreviousSeasons: Teams | undefined;
 
@@ -84,7 +82,7 @@ export function useMatchActions({
 
       if (teamFromPreviousSeasons) {
         newTeamData = {
-          name: formValues.opponentTeam, // Mantém a formatação do formulário
+          name: formValues.opponentTeam,
           badge: teamFromPreviousSeasons.badge || "",
         };
 
@@ -108,14 +106,12 @@ export function useMatchActions({
     try {
       setIsSaving(true);
 
-      // 3. Atualiza ou cria a partida
       if (matchesId) {
         await ServiceMatches.updateMatchInSeason(careerId, seasonId, matchData);
       } else {
         await ServiceMatches.addMatchToSeason(careerId, seasonId, matchData);
       }
 
-      // 4. Se gerámos dados para uma equipa que faltava, adicionamos ao array (sem apagar as outras)
       if (newTeamData) {
         await ServiceMatches.addTeamToSeason(careerId, seasonId, newTeamData);
       }
@@ -149,15 +145,12 @@ export function useMatchActions({
     try {
       setIsSaving(true);
 
-      // 1. Encontra os dados da partida antes de deletá-la para descobrir quem era o adversário
       const matchToDelete = season.matches?.find(
         (m) => m.matchesId === matchesId,
       );
 
-      // 2. Deleta a partida
       await ServiceMatches.deleteMatchFromSeason(careerId, seasonId, matchesId);
 
-      // 3. Lógica para remover o time do array da temporada (se for o último jogo contra ele)
       if (matchToDelete) {
         const opponentName =
           matchToDelete.homeTeam === career.clubName
@@ -166,15 +159,14 @@ export function useMatchActions({
 
         const hasOtherMatchesAgainstOpponent = season.matches?.some(
           (m) =>
-            m.matchesId !== matchesId && // Ignora a partida que acabou de ser deletada
+            m.matchesId !== matchesId &&
             (m.homeTeam === opponentName || m.awayTeam === opponentName),
         );
 
-        // Se não existir nenhuma outra partida na temporada contra esse time, removemos ele da lista
         if (!hasOtherMatchesAgainstOpponent) {
           await ServiceMatches.removeTeamFromSeason(careerId, seasonId, {
             name: opponentName,
-            badge: "", // O badge não é necessário para o filtro de remoção
+            badge: "",
           });
         }
       }

@@ -1,4 +1,3 @@
-// AddBadgeClub/index.tsx
 import Styles from "./AddBadgeClub.module.css";
 import Load from "../../../components/Load";
 import { useClubColors } from "../../../common/hooks/Colors/UseClubColors";

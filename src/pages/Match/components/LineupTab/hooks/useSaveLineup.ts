@@ -15,7 +15,11 @@ export const useSaveLineup = ({
   matchId,
 }: UseSaveLineupParams) => {
   return useCallback(
-    async (savedLineup: SavedLineup, playerStats: PlayerMatchStat[]) => {
+    async (
+      savedLineup: SavedLineup,
+      playerStats: PlayerMatchStat[],
+      removedPlayerIds: string[],
+    ) => {
       if (!careerId || !seasonId) return;
 
       try {
@@ -25,6 +29,7 @@ export const useSaveLineup = ({
           matchId,
           savedLineup,
           playerStats,
+          removedPlayerIds,
         );
       } catch (error) {
         console.error("Erro: ", error);

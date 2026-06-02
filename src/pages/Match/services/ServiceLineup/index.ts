@@ -1,4 +1,4 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../../../../common/services/Firebase";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
@@ -11,6 +11,7 @@ export const ServiceLineup = {
     matchesId: string,
     lineup: SavedLineup,
     playerStats: PlayerMatchStat[],
+    removedPlayerIds: string[] = [],
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -21,6 +22,14 @@ export const ServiceLineup = {
       matchesId,
     );
 
+    if (removedPlayerIds.length > 0) {
+      const deletePromises = removedPlayerIds.map((playerId) => {
+        const statRef = doc(matchRef, "playerStats", playerId);
+        return deleteDoc(statRef);
+      });
+      await Promise.all(deletePromises);
+    }
+
     await setDoc(
       matchRef,
       {
@@ -29,7 +38,6 @@ export const ServiceLineup = {
       },
       { merge: true },
     );
-
     await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
   },
 };

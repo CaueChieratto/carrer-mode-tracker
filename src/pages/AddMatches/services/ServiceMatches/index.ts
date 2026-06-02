@@ -12,6 +12,7 @@ import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatch
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { Career } from "../../../../common/interfaces/Career";
 import { Teams } from "../../interface/teams";
+import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 
 export const ServiceMatches = {
   addMatchToSeason: async (
@@ -147,6 +148,16 @@ export const ServiceMatches = {
       matchId,
     );
 
+    const statsCollectionRef = collection(matchRef, "playerStats");
+    const statsSnapshot = await getDocs(statsCollectionRef);
+
+    if (!statsSnapshot.empty) {
+      const deleteStatsPromises = statsSnapshot.docs.map((statDoc) =>
+        deleteDoc(statDoc.ref),
+      );
+      await Promise.all(deleteStatsPromises);
+    }
+
     await deleteDoc(matchRef);
 
     await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
@@ -166,6 +177,24 @@ export const ServiceMatches = {
     const snapshot = await getDocs(matchesCollectionRef);
 
     return snapshot.docs.map((doc) => doc.data() as Match);
+  },
+
+  savePlayerStatToSubcollection: async (
+    careerId: string,
+    seasonId: string,
+    matchId: string,
+    playerStat: PlayerMatchStat,
+  ) => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const statRef = doc(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches/${matchId}/playerStats`,
+      playerStat.playerId,
+    );
+
+    await setDoc(statRef, playerStat, { merge: true });
   },
 
   migrateOldMatchesToSubcollections: async (): Promise<void> => {

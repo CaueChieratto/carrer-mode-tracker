@@ -25,6 +25,7 @@ export const MatchCard = ({
   onAddBadge,
 }: MatchCardProps) => {
   const teams = season.teams || [];
+
   const leagueData = season.leagues?.find((l) => l.name === match.league);
 
   const { goToEdit, goToMatch } = useMatchNavigation({

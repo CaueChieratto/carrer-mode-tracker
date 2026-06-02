@@ -3,7 +3,13 @@ import { updateCareerFirestore } from "../../helpers/Setters";
 import { ClubData } from "../../interfaces/club/clubData";
 import { League } from "../../utils/Leagues";
 import { auth, db } from "../Firebase";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { stripHeavyData } from "../../utils/stripHeavyData";
 
@@ -73,9 +79,22 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
+
     const updatedClubData = career.clubData.filter(
       (season) => season.id !== seasonId,
     );
+
+    const seasonPath = `users/${user.uid}/careers/${careerId}/seasons/${seasonId}`;
+
+    const playersSnapshot = await getDocs(
+      collection(db, `${seasonPath}/players`),
+    );
+
+    for (const playerDoc of playersSnapshot.docs) {
+      await deleteDoc(playerDoc.ref);
+    }
+
+    await deleteDoc(doc(db, seasonPath));
 
     await updateCareerFirestore(user.uid, careerId, {
       clubData: stripHeavyData(updatedClubData),

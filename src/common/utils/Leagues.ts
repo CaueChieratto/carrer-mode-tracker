@@ -2,6 +2,7 @@ export type League = {
   name: string;
   trophy: string;
   logo: string;
+  league?: boolean;
 };
 
 export type CountryLeagues = {
@@ -41,6 +42,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "La Liga",
         logo: "/images/leagues/spain/laliga.png",
         trophy: "/images/trophies/spain/laliga.png",
+        league: true,
       },
       {
         name: "Copa do Rey",
@@ -56,6 +58,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "La liga 2",
         logo: "/images/leagues/spain/laliga2.png",
         trophy: "/images/trophies/spain/laliga2.png",
+        league: true,
       },
     ],
     Inglaterra: [
@@ -63,6 +66,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Premier League",
         logo: "/images/leagues/england/premierLeague.png",
         trophy: "/images/trophies/england/premierLeague.png",
+        league: true,
       },
       {
         name: "FA Cup",
@@ -83,16 +87,19 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Championship",
         logo: "/images/leagues/england/championship.png",
         trophy: "/images/trophies/england/championship.png",
+        league: true,
       },
       {
         name: "League One",
         logo: "/images/leagues/england/leagueOne.png",
         trophy: "/images/trophies/england/leagueOne.png",
+        league: true,
       },
       {
         name: "League Two",
         logo: "/images/leagues/england/leagueTwo.png",
         trophy: "/images/trophies/england/leagueTwo.png",
+        league: true,
       },
       {
         name: "BSM",
@@ -105,6 +112,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Bundesliga",
         logo: "/images/leagues/germany/bundesliga.png",
         trophy: "/images/trophies/germany/bundesliga.png",
+        league: true,
       },
       {
         name: "DFB-Pokal",
@@ -120,11 +128,13 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Bundesliga 2",
         logo: "/images/leagues/germany/bundesliga2.png",
         trophy: "/images/trophies/germany/bundesliga2.png",
+        league: true,
       },
       {
         name: "3. Liga",
         logo: "/images/leagues/germany/3liga.png",
         trophy: "/images/trophies/germany/3liga.png",
+        league: true,
       },
     ],
     Escócia: [
@@ -132,6 +142,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Scottish Prem",
         logo: "/images/leagues/scotland/scottishPremiership.png",
         trophy: "/images/trophies/scotland/scottishPremiership.png",
+        league: true,
       },
       {
         name: "Scottish Cup",
@@ -163,6 +174,7 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Brasileirão",
         logo: "/images/leagues/brasil/brasileirao.png",
         trophy: "/images/trophies/brasil/brasileirao.png",
+        league: true,
       },
       {
         name: "Copa do Brasil",
