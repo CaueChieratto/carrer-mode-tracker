@@ -26,6 +26,6 @@ export type OpponentEvents = {
   cards?: OpponentCard[];
 };
 
-export type MatchWithOpponentEvents = Match & {
+export type MatchWithOpponentEvents = Omit<Match, "opponentEvents"> & {
   opponentEvents?: OpponentEvents;
 };
