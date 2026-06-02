@@ -315,9 +315,11 @@ export const useAddMatchStatsPlayer = () => {
             maxMatchMinutes - newStats.minutesPlayed,
           );
 
+          const existingCounterpartStats = match.playerStats?.find(
+            (s) => s.playerId === newCounterpart.id,
+          );
+
           const counterpartStats: PlayerMatchStat = {
-            playerId: newCounterpart.id,
-            minutesPlayed: counterpartMinutes,
             defenses: 0,
             goals: 0,
             assists: 0,
@@ -326,6 +328,11 @@ export const useAddMatchStatsPlayer = () => {
             yellowCard: false,
             redCard: false,
             cleanSheet: false,
+
+            ...(existingCounterpartStats || {}),
+
+            playerId: newCounterpart.id,
+            minutesPlayed: counterpartMinutes,
             substituteIn: player.name,
           };
 
