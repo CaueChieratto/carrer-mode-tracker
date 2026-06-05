@@ -26,6 +26,7 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
     "1T": sortedEvents.filter((e) => e.period === "1T"),
   };
 
+  const isFinished = match.status === "FINISHED";
   const stoppage1 = match.stoppage1T || 0;
   const stoppage2 = match.stoppage2T || 0;
   const stoppageET1 = match.stoppageET1 || 0;
@@ -36,6 +37,7 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
   if (eventsByPeriod["PEN"].length > 0) {
     periods.push({ key: "PEN", label: "Pênaltis" });
   }
+
   if (
     match.hasExtraTime ||
     eventsByPeriod["2ET"].length > 0 ||
@@ -43,6 +45,7 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
   ) {
     periods.push({ key: "2ET", label: "2º PR", stoppage: stoppageET2 });
   }
+
   if (
     match.hasExtraTime ||
     eventsByPeriod["1ET"].length > 0 ||
@@ -50,10 +53,12 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
   ) {
     periods.push({ key: "1ET", label: "1º PR", stoppage: stoppageET1 });
   }
-  if (eventsByPeriod["2T"].length > 0 || stoppage2 > 0) {
+
+  if (isFinished || eventsByPeriod["2T"].length > 0 || stoppage2 > 0) {
     periods.push({ key: "2T", label: "2º Tempo", stoppage: stoppage2 });
   }
-  if (eventsByPeriod["1T"].length > 0 || stoppage1 > 0) {
+
+  if (isFinished || eventsByPeriod["1T"].length > 0 || stoppage1 > 0) {
     periods.push({ key: "1T", label: "1º Tempo", stoppage: stoppage1 });
   }
 

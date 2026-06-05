@@ -1,5 +1,8 @@
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
-import { getGroupForPosition } from "../../../../../../common/types/Positions";
+import {
+  getGroupForPosition,
+  POSITION_DATA,
+} from "../../../../../../common/types/Positions";
 import { PlayerMatchStat } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { LineupState } from "../../hooks/useLineup";
 import Styles from "./Bottom.module.css";
@@ -64,14 +67,26 @@ export const Bottom = ({
 
     if (!aPosition || !bPosition) return 0;
 
-    const group = getGroupForPosition(aPosition);
+    const groupA = getGroupForPosition(aPosition);
+    const groupB = getGroupForPosition(bPosition);
 
-    if (!group?.sortOrder) return 0;
+    if (!groupA || !groupB) return 0;
 
-    const aIndex = group.sortOrder.indexOf(aPosition);
-    const bIndex = group.sortOrder.indexOf(bPosition);
+    const groupAIndex = POSITION_DATA.findIndex((g) => g.key === groupA.key);
+    const groupBIndex = POSITION_DATA.findIndex((g) => g.key === groupB.key);
 
-    return aIndex - bIndex;
+    if (groupAIndex !== groupBIndex) {
+      return groupAIndex - groupBIndex;
+    }
+
+    const sortOrder = groupA.sortOrder || groupA.positions;
+    const aIndex = sortOrder.indexOf(aPosition);
+    const bIndex = sortOrder.indexOf(bPosition);
+
+    const safeAIndex = aIndex !== -1 ? aIndex : 999;
+    const safeBIndex = bIndex !== -1 ? bIndex : 999;
+
+    return safeAIndex - safeBIndex;
   });
 
   return (

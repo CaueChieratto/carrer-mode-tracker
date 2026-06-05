@@ -21,26 +21,38 @@ export const AllMatchesTab = ({
   career,
   onAddBadge,
 }: AllMatchesTabProps) => {
-  const [activeTab, setActiveTab] = useState<MatchStatus | string>(() => {
-    return localStorage.getItem("matchActiveTab") || "SCHEDULED";
-  });
-  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
-    return localStorage.getItem("matchSelectedMonth") || "Tudo";
-  });
-  const [selectedSeasonLabel, setSelectedSeasonLabel] = useState<string>(() => {
-    return localStorage.getItem("matchSelectedSeason") || "Todas";
-  });
-
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
+  const storageKeySuffix = isGeralPage ? "geral" : season.id;
+
+  const [activeTab, setActiveTab] = useState<MatchStatus | string>(() => {
+    return (
+      localStorage.getItem(`matchActiveTab_${storageKeySuffix}`) || "SCHEDULED"
+    );
+  });
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    return (
+      localStorage.getItem(`matchSelectedMonth_${storageKeySuffix}`) || "Tudo"
+    );
+  });
+  const [selectedSeasonLabel, setSelectedSeasonLabel] = useState<string>(() => {
+    return (
+      localStorage.getItem(`matchSelectedSeason_${storageKeySuffix}`) || "Todas"
+    );
+  });
+
   useEffect(() => {
-    localStorage.setItem("matchActiveTab", activeTab);
-
-    localStorage.setItem("matchSelectedMonth", selectedMonth);
-
-    localStorage.setItem("matchSelectedSeason", selectedSeasonLabel);
-  }, [activeTab, selectedMonth, selectedSeasonLabel]);
+    localStorage.setItem(`matchActiveTab_${storageKeySuffix}`, activeTab);
+    localStorage.setItem(
+      `matchSelectedMonth_${storageKeySuffix}`,
+      selectedMonth,
+    );
+    localStorage.setItem(
+      `matchSelectedSeason_${storageKeySuffix}`,
+      selectedSeasonLabel,
+    );
+  }, [activeTab, selectedMonth, selectedSeasonLabel, storageKeySuffix]);
 
   const seasonOptions = [
     "Todas",

@@ -17,7 +17,6 @@ export const Timeline = ({
     <div className={Styles.timeline_container}>
       {periods.map(({ key, label, stoppage }) => {
         const events = eventsByPeriod[key] || [];
-        if (!events.length && !stoppage) return null;
 
         let stoppageEvents: MatchEvent[] = [];
         let regularEvents: MatchEvent[] = [];
@@ -43,6 +42,8 @@ export const Timeline = ({
             regularEvents = events;
         }
 
+        const hasNoEvents = events.length === 0;
+
         return (
           <div key={key} className={Styles.period_section}>
             <div className={Styles.timeline_divider}>
@@ -52,6 +53,10 @@ export const Timeline = ({
             </div>
 
             <div className={Styles.events_list}>
+              {hasNoEvents && (
+                <span className={Styles.no_events}>Sem eventos</span>
+              )}
+
               {stoppageEvents.map((event) => (
                 <EventRow key={event.id} event={event} isUserHome={isHome} />
               ))}

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "squadSortOption";
-const STORAGE_KEY_ASC = "squadSortAsc";
 const DEFAULT_SORT = "Padrão";
 
-export const useSquadSort = () => {
+export const useSquadSort = (seasonId: string) => {
+  const STORAGE_KEY = `squadSortOption_${seasonId}`;
+  const STORAGE_KEY_ASC = `squadSortAsc_${seasonId}`;
+
   const [sortOption, setSortOption] = useState<string>(() => {
     return localStorage.getItem(STORAGE_KEY) || DEFAULT_SORT;
   });
@@ -17,7 +18,7 @@ export const useSquadSort = () => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, sortOption);
     localStorage.setItem(STORAGE_KEY_ASC, String(isAsc));
-  }, [sortOption, isAsc]);
+  }, [sortOption, isAsc, STORAGE_KEY, STORAGE_KEY_ASC]);
 
   const handleSortChange = (value: string) => {
     if (value === sortOption) {

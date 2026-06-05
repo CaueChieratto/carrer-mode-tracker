@@ -14,6 +14,7 @@ import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 import { useClubColors } from "../../../../../common/hooks/Colors/UseClubColors";
 import { ColorsService } from "../../../../../common/services/ColorsService";
 import { Copy } from "../../../../../common/utils/Copy";
+import { useLocation } from "react-router-dom";
 
 type SquadTabProps = {
   season: ClubData;
@@ -21,7 +22,13 @@ type SquadTabProps = {
 };
 
 const SquadTab = ({ season, career }: SquadTabProps) => {
-  const { sortOption, isAsc, handleSortChange } = useSquadSort();
+  const location = useLocation();
+  const isGeralPage = location.pathname.includes("/Geral");
+
+  const storageKeySuffix = isGeralPage ? "geral" : season.id;
+
+  const { sortOption, isAsc, handleSortChange } =
+    useSquadSort(storageKeySuffix);
 
   const { clubColor } = useClubColors(
     ColorsService.getColorSaved(career.id) || "#ffffff",

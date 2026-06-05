@@ -23,7 +23,10 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
-  const { sortOption, setSortOption, isReversed } = usePersistedSortOption();
+  const storageKeySuffix = isGeralPage ? "geral" : season.id;
+
+  const { sortOption, setSortOption, isReversed } =
+    usePersistedSortOption(storageKeySuffix);
 
   const playersToDisplay = useMemo(() => {
     return isGeralPage ? getAggregatedPlayersForCareer(career) : season.players;

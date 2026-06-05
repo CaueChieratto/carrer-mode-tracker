@@ -22,6 +22,9 @@ export interface AggregatedStats {
   totalBallsRecovered: number;
   totalBallsLost: number;
   totalKeyPasses: number;
+  wins: number;
+  draws: number;
+  losses: number;
 }
 
 const getValue = (isHome: boolean, home?: number, away?: number): number =>
@@ -51,9 +54,16 @@ export const calculateMatchStats = (
     totalBallsRecovered: 0,
     totalBallsLost: 0,
     totalKeyPasses: 0,
+    wins: 0,
+    draws: 0,
+    losses: 0,
   };
 
   matches.forEach((match) => {
+    if (match.result === "V") stats.wins++;
+    else if (match.result === "E") stats.draws++;
+    else if (match.result === "D") stats.losses++;
+
     const isHome = match.homeTeam === teamName;
 
     const scored = getValue(isHome, match.homeScore, match.awayScore);

@@ -150,11 +150,26 @@ export const useLineup = (season: ClubData, initialLineup?: SavedLineup) => {
       setSelectingSlotId(null);
 
       setTimeout(() => {
-        const slotElement = document.querySelector(
-          `[data-slot-id="${targetSlotId}"]`,
-        );
-        if (slotElement) {
-          slotElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        const isBench = targetSlotId.startsWith("bench-");
+        let elementToScroll: Element | null = null;
+
+        if (isBench) {
+          elementToScroll = document.querySelector(
+            'button[class*="empty_avatar"]',
+          );
+        }
+
+        if (!elementToScroll) {
+          elementToScroll = document.querySelector(
+            `[data-slot-id="${targetSlotId}"]`,
+          );
+        }
+
+        if (elementToScroll) {
+          elementToScroll.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         }
       }, 150);
     },

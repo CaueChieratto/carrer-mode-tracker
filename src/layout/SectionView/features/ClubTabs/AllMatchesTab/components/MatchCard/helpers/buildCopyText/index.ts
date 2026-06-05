@@ -72,7 +72,7 @@ export const buildMatchCopyText = ({
     if (stat.assists > 0) {
       parts.push(
         `${stat.assists} ${
-          stat.assists === 1 ? "assistencia" : "assistencias"
+          stat.assists === 1 ? "assistência" : "assistências"
         }`,
       );
     }

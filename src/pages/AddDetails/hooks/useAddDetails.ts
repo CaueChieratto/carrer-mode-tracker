@@ -204,6 +204,7 @@ export const useAddDetails = () => {
         booleanValues,
         match?.homeTeam,
         match?.awayTeam,
+        formValues,
       ),
     [
       booleanValues,
@@ -212,6 +213,7 @@ export const useAddDetails = () => {
       opponentGoalOptions,
       match?.homeTeam,
       match?.awayTeam,
+      formValues,
     ],
   );
 

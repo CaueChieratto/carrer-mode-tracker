@@ -14,6 +14,7 @@ export const buildFormFields = (
   booleanValues: Record<string, boolean> = {},
   homeTeam: string = "Mandante",
   awayTeam: string = "Visitante",
+  formValues: Record<string, string> = {},
 ): { title: string; fields: Field[][] }[] => {
   const stoppageFields: Field[] = [
     {
@@ -137,6 +138,15 @@ export const buildFormFields = (
     const assistFields: Field[] = [];
 
     for (let i = 0; i < opponentScore; i++) {
+      const availableGoalOptions = goalOptions.filter((option) => {
+        for (let j = 0; j < opponentScore; j++) {
+          if (i !== j && formValues[`opponentAssistTo_${j}`] === option) {
+            return false;
+          }
+        }
+        return true;
+      });
+
       goalFields.push(
         {
           id: `opponentGoalPlayer_${i}`,
@@ -166,7 +176,7 @@ export const buildFormFields = (
           id: `opponentAssistTo_${i}`,
           name: `Referente ao:`,
           inputType: "custom-select",
-          options: goalOptions,
+          options: availableGoalOptions,
           placeholder: "Selecione o gol...",
           icon: <TbTargetArrow />,
         },
