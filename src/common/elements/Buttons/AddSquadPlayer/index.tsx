@@ -24,7 +24,7 @@ export const AddSquadPlayer = ({ onClick }: AddSquadPlayerProps) => {
         border: activeStyle.border,
       }}
     >
-      Adicionar elenco <IoMdPersonAdd />
+      Adicionar jogador <IoMdPersonAdd />
     </Button>
   );
 };

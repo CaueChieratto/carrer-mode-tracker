@@ -33,7 +33,8 @@ export function useMatchActions({
 
   const saveMatch = useCallback(async () => {
     let finalDate = formValues.date;
-    const savedMonth = localStorage.getItem("matchSelectedMonth") || "Tudo";
+    const savedMonth =
+      localStorage.getItem(`matchSelectedMonth_${seasonId}`) || "Tudo";
 
     if (savedMonth !== "Tudo" && finalDate && finalDate.length <= 2) {
       const monthNum = MONTH_TO_NUM[savedMonth].toString().padStart(2, "0");

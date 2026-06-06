@@ -26,10 +26,10 @@ export function useMatchForm({
 }: UseMatchFormParams) {
   const initializedMatchId = useRef<string | null>(null);
 
-  const savedMonth = useMemo(
-    () => localStorage.getItem("matchSelectedMonth") || "Tudo",
-    [],
-  );
+  const savedMonth = useMemo(() => {
+    if (!season) return "Tudo";
+    return localStorage.getItem(`matchSelectedMonth_${season.id}`) || "Tudo";
+  }, [season]);
 
   useEffect(() => {
     if (!matchesId || !season || !career) return;

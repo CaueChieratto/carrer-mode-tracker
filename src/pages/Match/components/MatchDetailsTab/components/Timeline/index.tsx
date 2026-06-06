@@ -53,10 +53,6 @@ export const Timeline = ({
             </div>
 
             <div className={Styles.events_list}>
-              {hasNoEvents && (
-                <span className={Styles.no_events}>Sem eventos</span>
-              )}
-
               {stoppageEvents.map((event) => (
                 <EventRow key={event.id} event={event} isUserHome={isHome} />
               ))}
@@ -67,6 +63,10 @@ export const Timeline = ({
                     Tempo adicional {stoppage}
                   </span>
                 </div>
+              )}
+
+              {hasNoEvents && (
+                <span className={Styles.no_events}>Sem eventos</span>
               )}
 
               {regularEvents.map((event) => (
