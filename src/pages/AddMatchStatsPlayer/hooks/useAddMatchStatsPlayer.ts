@@ -234,6 +234,7 @@ export const useAddMatchStatsPlayer = () => {
 
   const matchGoalsCount = Number(formValues.matchGoals) || 0;
   const assistsCount = Number(formValues.assists) || 0;
+  const ownGoalsCount = Number(formValues.ownGoals) || 0;
   const hasYellowCard = booleanValues.yellowCard || false;
   const hasSecondYellowCard = booleanValues.secondYellowCard || false;
   const hasRedCard = booleanValues.redCard || false;
@@ -246,6 +247,7 @@ export const useAddMatchStatsPlayer = () => {
         matchGoalsCount,
         assistsCount,
         availableGoalsForAssist,
+        ownGoalsCount,
         hasYellowCard,
         hasSecondYellowCard,
         hasRedCard,
@@ -257,6 +259,7 @@ export const useAddMatchStatsPlayer = () => {
       assistsCount,
       availableGoalsForAssist,
       hasYellowCard,
+      ownGoalsCount,
       hasSecondYellowCard,
       hasRedCard,
       formValues,
@@ -322,6 +325,7 @@ export const useAddMatchStatsPlayer = () => {
           const counterpartStats: PlayerMatchStat = {
             defenses: 0,
             goals: 0,
+            ownGoals: 0,
             assists: 0,
             distanceKm: 0,
             rating: 0,

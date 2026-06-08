@@ -7,6 +7,7 @@ import { Sub } from "../../../../../../../../../../ui/IconsSVG/Sub";
 import { MVP } from "../../../../../../../../../../ui/IconsSVG/MVP";
 import { PlayerMatchStat } from "../../../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { NumberStats } from "../../../../../../../../ui/NumberStats";
+import { OwnGoal } from "../../../../../../../../../../ui/IconsSVG/OwnGoal";
 
 type PlayerDetailsProps = {
   player: Players;
@@ -31,6 +32,17 @@ export const PlayerDetails = ({
         {stats?.substituteIn && stats.substituteIn !== "Nenhum" && (
           <Sub className={Styles.subs} />
         )}
+
+        {stats && stats.ownGoals && stats.ownGoals > 0 ? (
+          <div className={Styles.ownGoal}>
+            <span className={Styles.subs}>
+              <OwnGoal lineup />
+            </span>
+            {stats.ownGoals > 1 && (
+              <NumberStats type="goals">{stats.ownGoals}</NumberStats>
+            )}
+          </div>
+        ) : null}
 
         {stats?.secondYellowCard ? (
           <RefereeCard className={Styles.referee_card} type="second-yellow" />

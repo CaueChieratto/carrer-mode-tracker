@@ -6,6 +6,7 @@ type Goal = {
   playerName: string;
   time: number;
   displayTime?: string;
+  isOwnGoal?: boolean;
 };
 
 type MatchHeaderCardProps = {
@@ -87,7 +88,8 @@ export const MatchHeaderCard = ({
           <div className={Styles.scorers_left}>
             {homeGoals.map((goal, idx) => (
               <span key={`home-${idx}`}>
-                {goal.playerName} {goal.displayTime || `${goal.time}'`}
+                {goal.playerName} {goal.isOwnGoal ? "(GC) " : ""}
+                {goal.displayTime || `${goal.time}'`}
               </span>
             ))}
           </div>
@@ -100,6 +102,7 @@ export const MatchHeaderCard = ({
             {awayGoals.map((goal, idx) => (
               <span key={`away-${idx}`}>
                 {goal.displayTime || `${goal.time}'`} {goal.playerName}
+                {goal.isOwnGoal ? " (GC)" : ""}
               </span>
             ))}
           </div>

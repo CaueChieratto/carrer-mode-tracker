@@ -3,6 +3,7 @@ import { OpponentEvents } from "../../types";
 export const buildOpponentEvents = (
   opponentScore: number,
   opponentCardCount: number,
+  opponentOwnGoalCount: number,
   formValues: Record<string, string>,
   booleanValues: Record<string, boolean>,
 ): OpponentEvents => {
@@ -26,5 +27,9 @@ export const buildOpponentEvents = (
         redMinute: formValues[`opponentRedMin_${i}`] || "",
       }))
       .filter((c) => c.player && (c.yellow || c.red)),
+    ownGoals: Array.from({ length: opponentOwnGoalCount }).map((_, i) => ({
+      player: formValues[`opponentOwnGoalPlayer_${i}`] || "",
+      minute: formValues[`opponentOwnGoalMinute_${i}`] || "",
+    })),
   };
 };

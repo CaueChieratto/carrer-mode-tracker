@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { TbShieldCancel, TbTargetArrow } from "react-icons/tb";
 import { Field } from "../../../../components/FormSection";
 import { RefereeCard } from "../../../../ui/IconsSVG/RefereeCard";
+import { OwnGoal } from "../../../../ui/IconsSVG/OwnGoal";
 
 const chunkArray = (arr: Field[], size: number): Field[][] =>
   arr.length > 0
@@ -18,6 +19,7 @@ export const FormFields = (
   matchGoalsCount: number = 0,
   assistsCount: number = 0,
   goalOptions: string[] = [],
+  ownGoalsCount: number = 0,
   hasYellowCard: boolean = false,
   hasSecondYellowCard: boolean = false,
   hasRedCard: boolean = false,
@@ -55,6 +57,16 @@ export const FormFields = (
       };
     },
   );
+
+  const ownGoalMinuteFields: Field[] = Array.from({
+    length: ownGoalsCount,
+  }).map((_, i) => ({
+    id: `ownGoalMinute_${i}`,
+    name: `Minuto Gol Contra ${i + 1}`,
+    inputType: "number",
+    placeholder: "Ex: 45",
+    icon: <OwnGoal />,
+  }));
 
   const disciplineCards: Field[] = [
     {
@@ -155,6 +167,8 @@ export const FormFields = (
             placeholder: "Ex: 1",
             icon: <TbShieldCancel />,
           },
+        ],
+        [
           {
             id: "matchGoals",
             name: "Gols",
@@ -169,9 +183,17 @@ export const FormFields = (
             placeholder: "Ex: 1",
             icon: <TbTargetArrow />,
           },
+          {
+            id: "ownGoals",
+            name: "Gols Contra",
+            inputType: "number",
+            placeholder: "Ex: 1",
+            icon: <OwnGoal />,
+          },
         ],
         ...chunkArray(goalMinuteFields, 2),
         ...chunkArray(assistFields, 2),
+        ...chunkArray(ownGoalMinuteFields, 2),
       ],
     },
     {

@@ -6,10 +6,15 @@ export const buildPlayerStats = (
   booleanValues: Record<string, boolean>,
 ): PlayerMatchStat => {
   const matchGoals = Number(formValues.matchGoals) || 0;
+  const ownGoals = Number(formValues.ownGoals) || 0;
   const assists = Number(formValues.assists) || 0;
 
   const goalMinutes = Array.from({ length: matchGoals })
     .map((_, i) => Number(formValues[`goalMinute_${i}`]))
+    .filter((val) => !isNaN(val) && val > 0);
+
+  const ownGoalMinutes = Array.from({ length: ownGoals })
+    .map((_, i) => Number(formValues[`ownGoalMinute_${i}`]))
     .filter((val) => !isNaN(val) && val > 0);
 
   const assistTargets = Array.from({ length: assists })
@@ -20,8 +25,9 @@ export const buildPlayerStats = (
     playerId,
     minutesPlayed: Number(formValues.minutesPlayed) || 0,
     goals: matchGoals,
-    defenses: Number(formValues.cleanSheets) || 0,
+    ownGoals: ownGoals,
     assists: assists,
+    defenses: Number(formValues.cleanSheets) || 0,
     distanceKm: Number(formValues.distanceKm) || 0,
     totalPasses: Number(formValues.totalPasses) || 0,
     passPrecision: Number(formValues.passPrecision) || 0,
@@ -40,6 +46,7 @@ export const buildPlayerStats = (
     secondYellowCard: booleanValues.secondYellowCard || false,
     redCard: booleanValues.redCard || false,
     goalMinutes,
+    ownGoalMinutes,
     assistTargets,
   };
 

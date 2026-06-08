@@ -17,7 +17,7 @@ export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
       <div className={Styles.mvp_header}>
         <div
           className={Styles.mvp_icon_wrapper}
-          style={{ backgroundColor: colors }}
+          style={{ backgroundColor: "#374df5" }}
         >
           <FaStar color="#fff" size={12} />
         </div>

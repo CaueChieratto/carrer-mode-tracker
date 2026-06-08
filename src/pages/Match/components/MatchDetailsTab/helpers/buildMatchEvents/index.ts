@@ -8,12 +8,21 @@ import { extractOpponentEvents } from "./helpers/extractOpponentEvents";
 export const buildMatchEvents = (match: Match, season: ClubData) => {
   const { mvpPlayerName, mvpRating } = extractMVP(match, season);
 
-  const { events: userEvents, goals: userGoalsList } = extractPlayerEvents(
-    match,
-    season,
-  );
-  const { events: opponentEvents, goals: opponentGoalsList } =
-    extractOpponentEvents(match);
+  const {
+    events: userEvents,
+    goals: userGoalsList,
+    ownGoals: userOwnGoals,
+  } = extractPlayerEvents(match, season);
+
+  const {
+    events: opponentEvents,
+    goals: opponentGoalsList,
+    ownGoals: opponentOwnGoals,
+  } = extractOpponentEvents(match);
+
+  const userGoalsCombined = [...userGoalsList, ...(opponentOwnGoals || [])];
+
+  const opponentGoalsCombined = [...opponentGoalsList, ...(userOwnGoals || [])];
 
   const allEvents = [...userEvents, ...opponentEvents];
   const sortedEvents = allEvents.sort((a, b) => b.sortTime - a.sortTime);
@@ -67,8 +76,8 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
     mvpRating,
     eventsByPeriod,
     periods,
-    userGoalsList: userGoalsList.sort((a, b) => a.sortTime - b.sortTime),
-    opponentGoalsList: opponentGoalsList.sort(
+    userGoalsList: userGoalsCombined.sort((a, b) => a.sortTime - b.sortTime),
+    opponentGoalsList: opponentGoalsCombined.sort(
       (a, b) => a.sortTime - b.sortTime,
     ),
   };

@@ -16,11 +16,12 @@ type MatchWithOpponentEvents = Match & {
 export const extractOpponentEvents = (match: Match) => {
   const events: MatchEvent[] = [];
   const goals: GoalListItem[] = [];
+  const ownGoals: GoalListItem[] = [];
 
   const matchWithEvents = match as MatchWithOpponentEvents;
   const oppEv = matchWithEvents.opponentEvents;
 
-  if (!oppEv) return { events, goals };
+  if (!oppEv) return { events, goals, ownGoals };
 
   if (oppEv.goals) {
     oppEv.goals.forEach((g: OpponentGoal, i: number) => {
@@ -56,6 +57,32 @@ export const extractOpponentEvents = (match: Match) => {
         time,
         displayTime,
         sortTime,
+      });
+    });
+  }
+
+  if (oppEv.ownGoals) {
+    oppEv.ownGoals.forEach((g: OpponentGoal, i: number) => {
+      if (!g.player || !g.minute) return;
+      const time = Number(g.minute) || 0;
+      const { period, displayTime, sortTime } = getEventDetails(time, match);
+
+      events.push({
+        id: `opp-own-goal-${i}`,
+        type: "own_goal",
+        time,
+        displayTime,
+        sortTime,
+        period,
+        mainPlayer: g.player,
+      });
+
+      ownGoals.push({
+        playerName: g.player,
+        time,
+        displayTime,
+        sortTime,
+        isOwnGoal: true,
       });
     });
   }
@@ -111,5 +138,5 @@ export const extractOpponentEvents = (match: Match) => {
     });
   }
 
-  return { events, goals };
+  return { events, goals, ownGoals };
 };

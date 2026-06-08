@@ -75,6 +75,14 @@ export const useAddDetails = () => {
           handleBooleanChange(`opponentRed_${i}`, c.red);
         });
       }
+
+      if (oppEv.ownGoals?.length) {
+        initial.opponentOwnGoalCount = String(oppEv.ownGoals.length);
+        oppEv.ownGoals.forEach((og, i) => {
+          initial[`opponentOwnGoalPlayer_${i}`] = og.player;
+          initial[`opponentOwnGoalMinute_${i}`] = og.minute;
+        });
+      }
     }
 
     if (match.homePenScore !== undefined && match.awayPenScore !== undefined) {
@@ -118,6 +126,8 @@ export const useAddDetails = () => {
       const homeScoreNum = Number(formValues.homeScore) || 0;
       const awayScoreNum = Number(formValues.awayScore) || 0;
       const opponentCardCountNum = Number(formValues.opponentCardCount) || 0;
+      const opponentOwnGoalCountNum =
+        Number(formValues.opponentOwnGoalCount) || 0;
 
       const isUserHome = match.homeTeam === career.clubName;
       const hasPenalties = !!booleanValues.hasPenalties;
@@ -137,6 +147,7 @@ export const useAddDetails = () => {
       const opponentEvents = buildOpponentEvents(
         opponentScoreNum,
         opponentCardCountNum,
+        opponentOwnGoalCountNum,
         formValues,
         booleanValues,
       );
@@ -180,7 +191,11 @@ export const useAddDetails = () => {
   const isUserHome = match?.homeTeam === career?.clubName;
   const opponentScore =
     Number(isUserHome ? formValues.awayScore : formValues.homeScore) || 0;
+
+  const userScore =
+    Number(isUserHome ? formValues.homeScore : formValues.awayScore) || 0;
   const opponentCardCount = Number(formValues.opponentCardCount) || 0;
+  const opponentOwnGoalCount = Number(formValues.opponentOwnGoalCount) || 0;
 
   const opponentGoalOptions = useMemo(() => {
     return Array.from({ length: opponentScore }).map((_, i) => {
@@ -200,6 +215,8 @@ export const useAddDetails = () => {
         !!booleanValues.hasPenalties,
         opponentScore,
         opponentCardCount,
+        opponentOwnGoalCount,
+        userScore,
         opponentGoalOptions,
         booleanValues,
         match?.homeTeam,
@@ -211,6 +228,8 @@ export const useAddDetails = () => {
       opponentScore,
       opponentCardCount,
       opponentGoalOptions,
+      opponentOwnGoalCount,
+      userScore,
       match?.homeTeam,
       match?.awayTeam,
       formValues,

@@ -48,16 +48,50 @@ export const getSubstitutionData = (
     const otherBenchStats = allStats.filter(
       (s) => s.playerId !== player.id && benchIds.includes(s.playerId),
     );
-    const usedStarterNames = otherBenchStats
-      .map((s) => s.substituteIn)
-      .filter(Boolean);
+
+    const usedNames = otherBenchStats
+      .map((s) => {
+        const targetName = s.substituteIn;
+        if (!targetName) return null;
+
+        const targetPlayer = season.players.find((p) => p.name === targetName);
+
+        if (targetPlayer && benchIds.includes(targetPlayer.id)) {
+          const targetStat = allStats.find(
+            (st) => st.playerId === targetPlayer.id,
+          );
+          const currentPlayerName = season.players.find(
+            (p) => p.id === s.playerId,
+          )?.name;
+
+          if (targetStat && targetStat.substituteIn === currentPlayerName) {
+            const sMinutes = s.minutesPlayed || 0;
+            const targetMinutes = targetStat.minutesPlayed || 0;
+
+            if (sMinutes < targetMinutes) {
+              return targetName;
+            } else {
+              return null;
+            }
+          }
+        }
+        return targetName;
+      })
+      .filter((name): name is string => Boolean(name));
 
     const starterNames = startersIds
       .map((id) => season.players.find((p) => p.id === id)?.name)
       .filter((name): name is string => Boolean(name));
 
-    options = starterNames.filter(
-      (n) => !usedStarterNames.includes(n) || n === currentSub,
+    const otherBenchNames = benchIds
+      .filter((id) => id !== player.id)
+      .map((id) => season.players.find((p) => p.id === id)?.name)
+      .filter((name): name is string => Boolean(name));
+
+    const possibleSubOutNames = [...starterNames, ...otherBenchNames];
+
+    options = possibleSubOutNames.filter(
+      (n) => !usedNames.includes(n) || n === currentSub,
     );
   }
 

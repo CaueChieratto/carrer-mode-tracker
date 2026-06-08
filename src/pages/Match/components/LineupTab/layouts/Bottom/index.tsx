@@ -48,6 +48,21 @@ export const Bottom = ({
         if (outPlayer) {
           const outStats = playerStats.find((s) => s.playerId === outPlayer.id);
 
+          if (outStats && outStats.substituteIn === slot.player.name) {
+            const trueOutStats = playerStats.find(
+              (s) =>
+                s.playerId !== outPlayer.id &&
+                s.substituteIn === slot.player!.name,
+            );
+
+            if (trueOutStats) return trueOutStats.minutesPlayed;
+
+            if ((stats.minutesPlayed || 0) > (outStats.minutesPlayed || 0)) {
+              return 0;
+            }
+            return outStats.minutesPlayed;
+          }
+
           if (outStats) return outStats.minutesPlayed;
         }
       }

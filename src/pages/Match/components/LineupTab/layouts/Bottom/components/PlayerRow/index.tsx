@@ -11,6 +11,7 @@ import { Row } from "../Row";
 import { PlayerMatchStat } from "../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { Players } from "../../../../../../../../common/interfaces/playersInfo/players";
 import { NumberStats } from "../../../../../../ui/NumberStats";
+import { OwnGoal } from "../../../../../../../../ui/IconsSVG/OwnGoal";
 
 type PlayerRowProps = {
   slot: BenchSlot;
@@ -41,16 +42,45 @@ export const PlayerRow = ({
   const handleRemove = () => onRemove(slot.slotId);
 
   let subMinute = 0;
+  let subOutName = stats?.substituteIn;
+  let showSub = false;
+
   if (
     stats?.substituteIn &&
     stats.substituteIn !== "Nenhum" &&
     allPlayers &&
     allStats
   ) {
+    showSub = true;
     const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
+
     if (outPlayer) {
       const outPlayerStats = allStats.find((s) => s.playerId === outPlayer.id);
-      if (outPlayerStats) {
+
+      if (outPlayerStats && outPlayerStats.substituteIn === slot.player.name) {
+        const trueSubOut = allStats.find(
+          (s) =>
+            s.playerId !== outPlayer.id && s.substituteIn === slot.player!.name,
+        );
+
+        if (trueSubOut) {
+          const trueSubOutPlayer = allPlayers.find(
+            (p) => p.id === trueSubOut.playerId,
+          );
+          if (trueSubOutPlayer) {
+            subOutName = trueSubOutPlayer.name;
+            subMinute = trueSubOut.minutesPlayed;
+          }
+        } else {
+          if (
+            (stats.minutesPlayed || 0) > (outPlayerStats.minutesPlayed || 0)
+          ) {
+            showSub = false;
+          } else {
+            subMinute = outPlayerStats.minutesPlayed;
+          }
+        }
+      } else if (outPlayerStats) {
         subMinute = outPlayerStats.minutesPlayed;
       }
     }
@@ -93,6 +123,18 @@ export const PlayerRow = ({
             </div>
           )}
 
+          {stats && stats.ownGoals && stats.ownGoals > 0 ? (
+            <div className={Styles.icons}>
+              <span className={Styles.icon_wrapper}>
+                <OwnGoal lineup />
+              </span>
+
+              {stats.ownGoals > 1 && (
+                <NumberStats type="bench">{stats.ownGoals}</NumberStats>
+              )}
+            </div>
+          ) : null}
+
           {stats?.secondYellowCard ? (
             <span className={Styles.icon_wrapper}>
               <RefereeCard
@@ -117,13 +159,13 @@ export const PlayerRow = ({
           )}
         </div>
 
-        {stats?.substituteIn && stats.substituteIn !== "Nenhum" && (
+        {showSub && (
           <div className={Styles.player_sub_row}>
             <span className={Styles.sub_icon_wrapper}>
               <Sub className={Styles.sub_icon} />
             </span>
             <span className={Styles.sub_minute}>{subMinute}'</span>
-            <span className={Styles.sub_out}>Saiu: {stats.substituteIn}</span>
+            <span className={Styles.sub_out}>Saiu: {subOutName}</span>
           </div>
         )}
       </div>

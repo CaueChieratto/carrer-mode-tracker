@@ -28,4 +28,6 @@ export interface PlayerMatchStat {
   keyPasses?: number;
   ballsRecovered?: number;
   ballsLost?: number;
+  ownGoals?: number;
+  ownGoalMinutes?: number[];
 }

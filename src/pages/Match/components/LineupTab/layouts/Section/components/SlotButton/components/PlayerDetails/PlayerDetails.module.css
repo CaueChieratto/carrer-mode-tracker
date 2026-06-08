@@ -25,8 +25,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 2;
+  z-index: 1000;
   padding: 0;
+
+  position: absolute;
+  top: -2px;
+  right: -12px;
 }
 
 .referee_card {

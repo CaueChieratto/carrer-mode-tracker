@@ -48,6 +48,7 @@ export const getInitialFormValues = (match: Match, playerId: string) => {
     dribblesMissed: formatValue(stats?.dribblesMissed),
     ballsRecovered: formatValue(stats?.ballsRecovered),
     ballsLost: formatValue(stats?.ballsLost),
+    ownGoals: formatValue(stats?.ownGoals),
     distanceKm: formatValue(stats?.distanceKm),
     yellowCard: stats?.yellowCard ? "true" : "false",
     yellowCardMinute: stats?.yellowCardMinute
@@ -65,6 +66,12 @@ export const getInitialFormValues = (match: Match, playerId: string) => {
   if (stats?.goalMinutes) {
     stats.goalMinutes.forEach((min: number, index: number) => {
       values[`goalMinute_${index}`] = String(min);
+    });
+  }
+
+  if (stats?.ownGoalMinutes) {
+    stats.ownGoalMinutes.forEach((min: number, index: number) => {
+      values[`ownGoalMinute_${index}`] = String(min);
     });
   }
 

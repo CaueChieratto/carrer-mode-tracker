@@ -10,6 +10,8 @@ export const buildFormFields = (
   hasPenalties: boolean,
   opponentScore: number = 0,
   opponentCardCount: number = 0,
+  opponentOwnGoalCount: number = 0,
+  userScore: number = 0,
   goalOptions: string[] = [],
   booleanValues: Record<string, boolean> = {},
   homeTeam: string = "Mandante",
@@ -32,6 +34,26 @@ export const buildFormFields = (
       icon: <IoMdTime />,
     },
   ];
+
+  const opponentControlFields: Field[] = [
+    {
+      id: "opponentCardCount",
+      name: "Qtd. Jogadores Advertidos",
+      inputType: "number",
+      placeholder: "Ex: 2",
+      icon: <RefereeCard type="yellow" />,
+    },
+  ];
+
+  if (userScore > 0) {
+    opponentControlFields.push({
+      id: "opponentOwnGoalCount",
+      name: "Qtd. Gols Contra do Adv.",
+      inputType: "number",
+      placeholder: "Ex: 1",
+      icon: <GiSoccerBall />,
+    });
+  }
 
   const formSections: { title: string; fields: Field[][] }[] = [
     {
@@ -119,17 +141,7 @@ export const buildFormFields = (
     },
     {
       title: "Eventos do Adversário - Controle",
-      fields: [
-        [
-          {
-            id: "opponentCardCount",
-            name: "Qtd. Jogadores Advertidos",
-            inputType: "number",
-            placeholder: "Ex: 2",
-            icon: <RefereeCard type="yellow" />,
-          },
-        ],
-      ],
+      fields: [opponentControlFields],
     },
   ];
 
@@ -273,6 +285,34 @@ export const buildFormFields = (
     formSections.push({
       title: "Eventos do Adversário - Disciplina",
       fields: disciplineFields,
+    });
+  }
+
+  if (opponentOwnGoalCount > 0 && userScore > 0) {
+    const ownGoalFields: Field[] = [];
+
+    for (let i = 0; i < opponentOwnGoalCount; i++) {
+      ownGoalFields.push(
+        {
+          id: `opponentOwnGoalPlayer_${i}`,
+          name: `Autor do Gol Contra ${i + 1}`,
+          inputType: "text",
+          placeholder: "Ex: J. Jogador",
+          icon: <IoIosPerson />,
+        },
+        {
+          id: `opponentOwnGoalMinute_${i}`,
+          name: `Minuto do Gol Contra ${i + 1}`,
+          inputType: "number",
+          placeholder: "Ex: 39",
+          icon: <IoMdTime />,
+        },
+      );
+    }
+
+    formSections.push({
+      title: "Eventos do Adversário - Gols Contra",
+      fields: chunkArray(ownGoalFields, 2),
     });
   }
 

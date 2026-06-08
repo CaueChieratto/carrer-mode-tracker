@@ -4,6 +4,7 @@ export type MatchEvent = {
   id: string;
   type:
     | "goal"
+    | "own_goal"
     | "yellow_card"
     | "red_card"
     | "second_yellow"
@@ -24,6 +25,7 @@ export type GoalListItem = {
   time: number;
   displayTime: string;
   sortTime: number;
+  isOwnGoal?: boolean;
 };
 
 export type OpponentGoal = {
@@ -50,4 +52,5 @@ export type OpponentEvents = {
   goals?: OpponentGoal[];
   assists?: OpponentAssist[];
   cards?: OpponentCard[];
+  ownGoals?: OpponentGoal[];
 };

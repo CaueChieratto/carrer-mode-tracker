@@ -5,6 +5,7 @@ import { PenaltyMiss } from "../../../../../../../../../../ui/IconsSVG/PenaltyMi
 import { RefereeCard } from "../../../../../../../../../../ui/IconsSVG/RefereeCard";
 import { Sub } from "../../../../../../../../../../ui/IconsSVG/Sub";
 import { MatchEvent } from "../../../../../../types";
+import { OwnGoal } from "../../../../../../../../../../ui/IconsSVG/OwnGoal";
 
 type Props = {
   type: MatchEvent["type"];
@@ -14,6 +15,8 @@ export const EventIcon = ({ type }: Props) => {
   switch (type) {
     case "goal":
       return <GiSoccerBall />;
+    case "own_goal":
+      return <OwnGoal />;
     case "penalty_goal":
       return <PenaltyGoal />;
     case "yellow_card":
