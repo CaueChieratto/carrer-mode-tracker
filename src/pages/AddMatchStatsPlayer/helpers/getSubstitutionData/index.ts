@@ -84,7 +84,12 @@ export const getSubstitutionData = (
       .filter((name): name is string => Boolean(name));
 
     const otherBenchNames = benchIds
-      .filter((id) => id !== player.id)
+      .filter((id) => {
+        if (id === player.id) return false;
+
+        const stat = allStats.find((s) => s.playerId === id);
+        return stat && stat.substituteIn && stat.substituteIn !== "Nenhum";
+      })
       .map((id) => season.players.find((p) => p.id === id)?.name)
       .filter((name): name is string => Boolean(name));
 

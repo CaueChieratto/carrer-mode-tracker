@@ -72,13 +72,7 @@ export const PlayerRow = ({
             subMinute = trueSubOut.minutesPlayed;
           }
         } else {
-          if (
-            (stats.minutesPlayed || 0) > (outPlayerStats.minutesPlayed || 0)
-          ) {
-            showSub = false;
-          } else {
-            subMinute = outPlayerStats.minutesPlayed;
-          }
+          subMinute = outPlayerStats.minutesPlayed;
         }
       } else if (outPlayerStats) {
         subMinute = outPlayerStats.minutesPlayed;
