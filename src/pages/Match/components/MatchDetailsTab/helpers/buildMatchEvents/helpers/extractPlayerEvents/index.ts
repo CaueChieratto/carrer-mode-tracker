@@ -14,7 +14,7 @@ export const extractPlayerEvents = (match: Match, season: ClubData) => {
   const starterIds = [
     match.lineup?.goalkeeper?.playerId,
     ...(match.lineup?.lines?.flat().map((s) => s.playerId) || []),
-  ].filter(Boolean);
+  ].filter(Boolean) as string[];
 
   match.playerStats.forEach((stat) => {
     const player = season.players.find((p) => p.id === stat.playerId);
@@ -174,55 +174,102 @@ export const extractPlayerEvents = (match: Match, season: ClubData) => {
       let subOutName = stat.substituteIn;
       let isValidSub = false;
 
-      if (stat.substituteIn && stat.substituteIn !== "Nenhum") {
+      for (const sId of starterIds) {
+        const ordered = [sId];
+        let curr = sId;
+
+        while (true) {
+          let next: string | null = null;
+          const currStat = match.playerStats?.find((s) => s.playerId === curr);
+
+          if (currStat?.substituteIn && currStat.substituteIn !== "Nenhum") {
+            const p = season.players.find(
+              (p) => p.name === currStat.substituteIn,
+            );
+            if (p && !ordered.includes(p.id)) next = p.id;
+          }
+
+          if (!next) {
+            const currPlayer = season.players.find((p) => p.id === curr);
+            if (currPlayer) {
+              const pointedBy = match.playerStats?.find(
+                (s) =>
+                  s.substituteIn === currPlayer.name &&
+                  !ordered.includes(s.playerId),
+              );
+              if (pointedBy) next = pointedBy.playerId;
+            }
+          }
+
+          if (next) {
+            ordered.push(next);
+            curr = next;
+          } else {
+            break;
+          }
+        }
+
+        const playerIndex = ordered.indexOf(player.id);
+        if (playerIndex > 0) {
+          subMinute = 0;
+          for (let k = 0; k < playerIndex; k++) {
+            const prevStat = match.playerStats?.find(
+              (s) => s.playerId === ordered[k],
+            );
+            subMinute += prevStat?.minutesPlayed || 0;
+          }
+          const prevPlayer = season.players.find(
+            (p) => p.id === ordered[playerIndex - 1],
+          );
+          if (prevPlayer) {
+            subOutName = prevPlayer.name;
+          }
+          isValidSub = true;
+          break;
+        }
+      }
+
+      if (!isValidSub && stat.substituteIn && stat.substituteIn !== "Nenhum") {
         isValidSub = true;
         const outPlayer = season.players.find(
           (p) => p.name === stat.substituteIn,
         );
-
         if (outPlayer) {
-          const outPlayerStats = match.playerStats?.find(
+          const outStats = match.playerStats?.find(
             (s) => s.playerId === outPlayer.id,
           );
-
-          if (outPlayerStats && outPlayerStats.substituteIn === player.name) {
-            const trueSubOut = match.playerStats?.find(
-              (s) =>
-                s.playerId !== outPlayer.id && s.substituteIn === player.name,
-            );
-
-            if (trueSubOut) {
-              const trueSubOutPlayer = season.players.find(
-                (p) => p.id === trueSubOut.playerId,
-              );
-              if (trueSubOutPlayer) {
-                subOutName = trueSubOutPlayer.name;
-                subMinute = trueSubOut.minutesPlayed || 0;
-              }
-            } else {
-              if (
-                (stat.minutesPlayed || 0) > (outPlayerStats.minutesPlayed || 0)
-              ) {
-                isValidSub = false;
-              } else {
-                subMinute = outPlayerStats.minutesPlayed || 0;
-              }
-            }
-          } else if (outPlayerStats) {
-            subMinute = outPlayerStats.minutesPlayed || 0;
-          }
+          subMinute = outStats?.minutesPlayed || 0;
         }
       }
 
       if (isValidSub) {
+        let clockSubMinute = subMinute;
+        const s1 = match.stoppage1T || 0;
+        const s2 = match.stoppage2T || 0;
+        const sET1 = match.stoppageET1 || 0;
+
+        if (match.hasExtraTime) {
+          if (subMinute > 105 + s1 + s2 + sET1) {
+            clockSubMinute = subMinute - s1 - s2 - sET1;
+          } else if (subMinute > 90 + s1 + s2) {
+            clockSubMinute = subMinute - s1 - s2;
+          } else if (subMinute > 45 + s1) {
+            clockSubMinute = subMinute - s1;
+          }
+        } else {
+          if (subMinute > 45 + s1) {
+            clockSubMinute = subMinute - s1;
+          }
+        }
+
         const { period, displayTime, sortTime } = getEventDetails(
-          subMinute,
+          clockSubMinute,
           match,
         );
         events.push({
           id: `sub-${stat.playerId}`,
           type: "sub",
-          time: subMinute,
+          time: clockSubMinute,
           displayTime,
           sortTime,
           period,

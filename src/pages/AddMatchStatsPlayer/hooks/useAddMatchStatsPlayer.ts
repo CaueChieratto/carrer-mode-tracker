@@ -196,11 +196,6 @@ export const useAddMatchStatsPlayer = () => {
           const outPlayer = season.players.find((p) => p.name === value);
 
           if (outPlayer) {
-            const outPlayerStats = match.playerStats.find(
-              (s) => s.playerId === outPlayer.id,
-            );
-            const outPlayerMinutes = outPlayerStats?.minutesPlayed || 0;
-
             const maxMatchMinutes = match.hasExtraTime
               ? 120 +
                 (match.stoppage1T || 0) +
@@ -209,9 +204,52 @@ export const useAddMatchStatsPlayer = () => {
                 (match.stoppageET2 || 0)
               : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
 
-            if (outPlayerMinutes > 0) {
+            const visited = new Set<string>();
+            const queue = [outPlayer.id];
+            let otherMins = 0;
+
+            while (queue.length > 0) {
+              const currentId = queue.shift()!;
+              if (visited.has(currentId)) continue;
+              visited.add(currentId);
+
+              if (currentId !== playerId) {
+                const stat = match.playerStats.find(
+                  (s) => s.playerId === currentId,
+                );
+                otherMins += stat?.minutesPlayed || 0;
+              }
+
+              const currentStat = match.playerStats.find(
+                (s) => s.playerId === currentId,
+              );
+              if (
+                currentStat?.substituteIn &&
+                currentStat.substituteIn !== "Nenhum"
+              ) {
+                const p = season.players.find(
+                  (p) => p.name === currentStat.substituteIn,
+                );
+                if (p && !visited.has(p.id)) queue.push(p.id);
+              }
+
+              const currentP = season.players.find((p) => p.id === currentId);
+              if (currentP) {
+                match.playerStats.forEach((s) => {
+                  if (
+                    s.substituteIn === currentP.name &&
+                    !visited.has(s.playerId)
+                  ) {
+                    queue.push(s.playerId);
+                  }
+                });
+              }
+            }
+
+            const currentMins = Number(formValues.minutesPlayed) || 0;
+            if (otherMins > 0 && currentMins === 0) {
               calculatedMinutes = String(
-                Math.max(0, maxMatchMinutes - outPlayerMinutes),
+                Math.max(0, maxMatchMinutes - otherMins),
               );
             }
           }
@@ -229,7 +267,7 @@ export const useAddMatchStatsPlayer = () => {
 
       handleInputChange(e, field);
     },
-    [handleInputChange, setFormValues, match, season],
+    [handleInputChange, setFormValues, match, season, formValues, playerId],
   );
 
   const matchGoalsCount = Number(formValues.matchGoals) || 0;
@@ -305,47 +343,102 @@ export const useAddMatchStatsPlayer = () => {
         );
 
         if (newCounterpart) {
-          const maxMatchMinutes = match.hasExtraTime
-            ? 120 +
-              (match.stoppage1T || 0) +
-              (match.stoppage2T || 0) +
-              (match.stoppageET1 || 0) +
-              (match.stoppageET2 || 0)
-            : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
-
-          const counterpartMinutes = Math.max(
-            0,
-            maxMatchMinutes - newStats.minutesPlayed,
-          );
-
           const existingCounterpartStats = match.playerStats?.find(
             (s) => s.playerId === newCounterpart.id,
           );
 
-          const counterpartStats: PlayerMatchStat = {
-            defenses: 0,
-            goals: 0,
-            ownGoals: 0,
-            assists: 0,
-            distanceKm: 0,
-            rating: 0,
-            yellowCard: false,
-            redCard: false,
-            cleanSheet: false,
+          const hasDefinedMinutes =
+            existingCounterpartStats &&
+            (existingCounterpartStats.minutesPlayed ?? 0) > 0;
 
-            ...(existingCounterpartStats || {}),
+          if (!hasDefinedMinutes) {
+            const maxMatchMinutes = match.hasExtraTime
+              ? 120 +
+                (match.stoppage1T || 0) +
+                (match.stoppage2T || 0) +
+                (match.stoppageET1 || 0) +
+                (match.stoppageET2 || 0)
+              : 90 + (match.stoppage1T || 0) + (match.stoppage2T || 0);
 
-            playerId: newCounterpart.id,
-            minutesPlayed: counterpartMinutes,
-            substituteIn: player.name,
-          };
+            const visited = new Set<string>();
+            const queue = [player.id];
+            let otherMins = 0;
 
-          await ServiceMatches.savePlayerStatToSubcollection(
-            career.id,
-            season.id,
-            match.matchesId,
-            counterpartStats,
-          );
+            while (queue.length > 0) {
+              const currentId = queue.shift()!;
+              if (visited.has(currentId)) continue;
+              visited.add(currentId);
+
+              if (currentId !== newCounterpart.id && currentId !== player.id) {
+                const stat = match.playerStats?.find(
+                  (s) => s.playerId === currentId,
+                );
+                otherMins += stat?.minutesPlayed || 0;
+              }
+
+              const currentStat =
+                currentId === player.id
+                  ? newStats
+                  : match.playerStats?.find((s) => s.playerId === currentId);
+              if (
+                currentStat?.substituteIn &&
+                currentStat.substituteIn !== "Nenhum"
+              ) {
+                const p = season.players.find(
+                  (p) => p.name === currentStat.substituteIn,
+                );
+                if (p && !visited.has(p.id)) queue.push(p.id);
+              }
+
+              const currentP = season.players.find((p) => p.id === currentId);
+              if (currentP) {
+                match.playerStats?.forEach((s) => {
+                  if (
+                    s.substituteIn === currentP.name &&
+                    !visited.has(s.playerId)
+                  ) {
+                    queue.push(s.playerId);
+                  }
+                });
+                if (
+                  newStats.substituteIn === currentP.name &&
+                  !visited.has(player.id)
+                ) {
+                  queue.push(player.id);
+                }
+              }
+            }
+
+            const counterpartMinutes = Math.max(
+              0,
+              maxMatchMinutes - newStats.minutesPlayed - otherMins,
+            );
+
+            const counterpartStats: PlayerMatchStat = {
+              defenses: 0,
+              goals: 0,
+              ownGoals: 0,
+              assists: 0,
+              distanceKm: 0,
+              rating: 0,
+              yellowCard: false,
+              redCard: false,
+              cleanSheet: false,
+
+              ...(existingCounterpartStats || {}),
+
+              playerId: newCounterpart.id,
+              minutesPlayed: counterpartMinutes,
+              substituteIn: player.name,
+            };
+
+            await ServiceMatches.savePlayerStatToSubcollection(
+              career.id,
+              season.id,
+              match.matchesId,
+              counterpartStats,
+            );
+          }
         }
       }
 

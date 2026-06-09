@@ -36,42 +36,72 @@ export const Bottom = ({
 }: BottomProps) => {
   const { filledSlots, firstEmptySlot } = getBenchSlots(lineup);
 
-  const sortedFilledSlots = [...filledSlots].sort((a, b) => {
-    const getSubMinute = (slot: typeof a) => {
-      if (!slot.player) return Infinity;
+  const starterIds = [
+    lineup.goalkeeper.player?.id,
+    ...lineup.lines.flat().map((s) => s.player?.id),
+  ].filter(Boolean) as string[];
 
-      const stats = playerStats.find((s) => s.playerId === slot.player!.id);
+  const getPlayerChainInfo = (playerId: string) => {
+    for (const sId of starterIds) {
+      const ordered = [sId];
+      let curr = sId;
 
-      if (stats?.substituteIn && stats.substituteIn !== "Nenhum") {
-        const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
-
-        if (outPlayer) {
-          const outStats = playerStats.find((s) => s.playerId === outPlayer.id);
-
-          if (outStats && outStats.substituteIn === slot.player.name) {
-            const trueOutStats = playerStats.find(
+      while (true) {
+        let next: string | null = null;
+        const currStat = playerStats.find((s) => s.playerId === curr);
+        if (currStat?.substituteIn && currStat.substituteIn !== "Nenhum") {
+          const p = allPlayers.find((p) => p.name === currStat.substituteIn);
+          if (p && !ordered.includes(p.id)) next = p.id;
+        }
+        if (!next) {
+          const currPlayer = allPlayers.find((p) => p.id === curr);
+          if (currPlayer) {
+            const pointedBy = playerStats.find(
               (s) =>
-                s.playerId !== outPlayer.id &&
-                s.substituteIn === slot.player!.name,
+                s.substituteIn === currPlayer.name &&
+                !ordered.includes(s.playerId),
             );
-
-            if (trueOutStats) return trueOutStats.minutesPlayed;
-
-            if ((stats.minutesPlayed || 0) > (outStats.minutesPlayed || 0)) {
-              return 0;
-            }
-            return outStats.minutesPlayed;
+            if (pointedBy) next = pointedBy.playerId;
           }
-
-          if (outStats) return outStats.minutesPlayed;
+        }
+        if (next) {
+          ordered.push(next);
+          curr = next;
+        } else {
+          break;
         }
       }
 
-      return Infinity;
-    };
+      const playerIndex = ordered.indexOf(playerId);
+      if (playerIndex > 0) {
+        let subMinute = 0;
+        for (let k = 0; k < playerIndex; k++) {
+          const prevStat = playerStats.find((s) => s.playerId === ordered[k]);
+          subMinute += prevStat?.minutesPlayed || 0;
+        }
+        const prevPlayer = allPlayers.find(
+          (p) => p.id === ordered[playerIndex - 1],
+        );
+        return { subMinute, subOutName: prevPlayer?.name };
+      }
+    }
 
-    const aMinute = getSubMinute(a);
-    const bMinute = getSubMinute(b);
+    const stat = playerStats.find((s) => s.playerId === playerId);
+    if (stat?.substituteIn && stat.substituteIn !== "Nenhum") {
+      const outPlayer = allPlayers.find((p) => p.name === stat.substituteIn);
+      const outStats = playerStats.find((s) => s.playerId === outPlayer?.id);
+      return {
+        subMinute: outStats?.minutesPlayed || 0,
+        subOutName: outPlayer?.name,
+      };
+    }
+
+    return { subMinute: Infinity, subOutName: undefined };
+  };
+
+  const sortedFilledSlots = [...filledSlots].sort((a, b) => {
+    const aMinute = getPlayerChainInfo(a.player!.id).subMinute;
+    const bMinute = getPlayerChainInfo(b.player!.id).subMinute;
 
     if (aMinute !== bMinute) {
       return aMinute - bMinute;
@@ -126,6 +156,7 @@ export const Bottom = ({
             ? playerStats.find((s) => s.playerId === slot.player!.id)
             : undefined;
           const isMVP = slot.player ? mvpId === slot.player!.id : false;
+          const chainInfo = getPlayerChainInfo(slot.player!.id);
 
           return (
             <PlayerRow
@@ -138,6 +169,8 @@ export const Bottom = ({
               allPlayers={allPlayers}
               allStats={playerStats}
               isFromGeral={isFromGeral}
+              chainSubMinute={chainInfo.subMinute}
+              chainSubOutName={chainInfo.subOutName}
             />
           );
         })}

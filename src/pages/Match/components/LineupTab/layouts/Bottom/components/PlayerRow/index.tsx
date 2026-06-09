@@ -22,6 +22,8 @@ type PlayerRowProps = {
   allStats?: PlayerMatchStat[];
   allPlayers?: Players[];
   isFromGeral?: boolean;
+  chainSubMinute?: number;
+  chainSubOutName?: string;
 };
 
 export const PlayerRow = ({
@@ -33,6 +35,8 @@ export const PlayerRow = ({
   allPlayers,
   allStats,
   isFromGeral,
+  chainSubMinute,
+  chainSubOutName,
 }: PlayerRowProps) => {
   if (!slot.player) return null;
 
@@ -52,30 +56,17 @@ export const PlayerRow = ({
     allStats
   ) {
     showSub = true;
-    const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
 
-    if (outPlayer) {
-      const outPlayerStats = allStats.find((s) => s.playerId === outPlayer.id);
-
-      if (outPlayerStats && outPlayerStats.substituteIn === slot.player.name) {
-        const trueSubOut = allStats.find(
-          (s) =>
-            s.playerId !== outPlayer.id && s.substituteIn === slot.player!.name,
+    if (chainSubMinute !== undefined && chainSubMinute !== Infinity) {
+      subMinute = chainSubMinute;
+      subOutName = chainSubOutName;
+    } else {
+      const outPlayer = allPlayers.find((p) => p.name === stats.substituteIn);
+      if (outPlayer) {
+        const outPlayerStats = allStats.find(
+          (s) => s.playerId === outPlayer.id,
         );
-
-        if (trueSubOut) {
-          const trueSubOutPlayer = allPlayers.find(
-            (p) => p.id === trueSubOut.playerId,
-          );
-          if (trueSubOutPlayer) {
-            subOutName = trueSubOutPlayer.name;
-            subMinute = trueSubOut.minutesPlayed;
-          }
-        } else {
-          subMinute = outPlayerStats.minutesPlayed;
-        }
-      } else if (outPlayerStats) {
-        subMinute = outPlayerStats.minutesPlayed;
+        subMinute = outPlayerStats?.minutesPlayed || 0;
       }
     }
   }

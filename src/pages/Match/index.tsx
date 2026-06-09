@@ -73,6 +73,8 @@ export const Match = () => {
     }
   };
 
+  console.log(match);
+
   return (
     <>
       {isActionLoading && <Load isTransfers />}
