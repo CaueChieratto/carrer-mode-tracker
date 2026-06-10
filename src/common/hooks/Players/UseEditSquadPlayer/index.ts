@@ -50,6 +50,11 @@ export const useEditSquadPlayer = ({
       playerBeingEdited,
     );
 
+    if (playerBeingEdited) {
+      updatedPlayerData.loan = playerBeingEdited.loan;
+      updatedPlayerData.sell = playerBeingEdited.sell;
+    }
+
     delete updatedPlayerData.buy;
     delete updatedPlayerData.statsLeagues;
     delete updatedPlayerData.ballonDor;

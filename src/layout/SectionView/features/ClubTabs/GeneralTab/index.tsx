@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import CompetitionsCard from "./components/CompetitionsCard";
@@ -13,6 +14,9 @@ type GeneralTabProps = {
 };
 
 const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
+  const location = useLocation();
+  const isGeralPage = location.pathname.includes("/Geral");
+
   return (
     <>
       <SummaryCard season={season} />
@@ -25,7 +29,7 @@ const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
 
       <TransferCardBalance season={season} career={career} />
 
-      {season.matches && season.matches?.length > 0 && (
+      {(isGeralPage || (season.matches?.length ?? 0) > 0) && (
         <MatchStatsCard season={season} career={career} />
       )}
 

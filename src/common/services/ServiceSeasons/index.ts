@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { stripHeavyData } from "../../utils/stripHeavyData";
+import { getSeasonDateRange } from "../../utils/GetSeasonDateRange";
 
 export const ServiceSeasons = {
   addSeason: async (careerId: string): Promise<void> => {
@@ -26,6 +27,14 @@ export const ServiceSeasons = {
       seasonNumber++;
     }
 
+    const { startDate } = getSeasonDateRange(
+      seasonNumber,
+      career.createdAt,
+      career.nation,
+    );
+
+    const returnDate = startDate;
+
     const previousSeason = career.clubData.find(
       (season) => season.seasonNumber === seasonNumber - 1,
     );
@@ -37,17 +46,57 @@ export const ServiceSeasons = {
     const playersForNewSeason = playersFromPreviousSeason
       .filter((player) => !player.sell)
       .map((player) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { statsLeagues, ballonDor, ...playerData } = player;
+        const lastContract = player.contract?.[player.contract.length - 1];
 
-        return {
-          ...playerData,
+        const shouldReturnLoan =
+          player.loan &&
+          !player.incomingLoan &&
+          (lastContract?.loanDuration ?? 0) <= 1;
+
+        const updatedPlayer = {
+          ...player,
           age: (player.age || 0) + 1,
           contractTime: Math.max(0, (player.contractTime || 0) - 1),
           statsLeagues: [],
           ballonDor: 0,
           buy: false,
         };
+
+        if (shouldReturnLoan) {
+          updatedPlayer.loan = false;
+
+          const lastContract = player.contract[player.contract.length - 1];
+
+          updatedPlayer.contract.push({
+            buyValue: 0,
+            sellValue: 0,
+            fromClub: lastContract.leftClub || "Fim de Empréstimo",
+            leftClub: "",
+            dataArrival: returnDate,
+            dataExit: null,
+          });
+
+          updatedPlayer.contract.push({
+            buyValue: 0,
+            sellValue: 0,
+            fromClub: "",
+            leftClub: "",
+            dataArrival: null,
+            dataExit: null,
+          });
+        } else if (
+          player.loan &&
+          !player.incomingLoan &&
+          (lastContract?.loanDuration ?? 0) > 1
+        ) {
+          updatedPlayer.contract = player.contract.map((contract, index) =>
+            index === player.contract.length - 1
+              ? { ...contract, loanDuration: (contract.loanDuration || 0) - 1 }
+              : contract,
+          );
+        }
+
+        return updatedPlayer;
       });
 
     const newSeasonId = uuidv4();
@@ -60,17 +109,25 @@ export const ServiceSeasons = {
 
     const updatedClubData = [...career.clubData, newSeason];
 
-    await updateCareerFirestore(user.uid, careerId, {
-      clubData: stripHeavyData(updatedClubData),
-    });
+    try {
+      await updateCareerFirestore(user.uid, careerId, {
+        clubData: stripHeavyData(updatedClubData),
+      });
 
-    for (const player of playersForNewSeason) {
-      const playerRef = doc(
-        db,
-        `users/${user.uid}/careers/${careerId}/seasons/${newSeasonId}/players`,
-        player.id,
+      for (const player of playersForNewSeason) {
+        const playerRef = doc(
+          db,
+          `users/${user.uid}/careers/${careerId}/seasons/${newSeasonId}/players`,
+          player.id,
+        );
+        await setDoc(playerRef, player);
+      }
+    } catch (error) {
+      console.error(
+        `[addSeason] ERRO ao tentar criar e salvar a temporada:`,
+        error,
       );
-      await setDoc(playerRef, player);
+      throw error;
     }
   },
 

@@ -167,19 +167,43 @@ export const ServicePlayers = {
     const newContractData = updatedPlayer.contract
       ? updatedPlayer.contract[0]
       : null;
-    const existingContract = player.contract ? player.contract[0] : {};
-    const mergedContract = newContractData
-      ? [
+
+    let mergedContract = player.contract || [];
+
+    if (newContractData) {
+      if (player.loan) {
+        const lastIndex = mergedContract.length - 1;
+        if (lastIndex >= 0) {
+          mergedContract = mergedContract.map((contractItem, idx) =>
+            idx === lastIndex
+              ? {
+                  ...contractItem,
+                  ...newContractData,
+                  isLoan: contractItem.isLoan,
+                  loanDuration: contractItem.loanDuration,
+                  wagePercentage: contractItem.wagePercentage,
+                  leftClub: contractItem.leftClub,
+                  buyOptionValue: contractItem.buyOptionValue,
+                  dataExit: contractItem.dataExit,
+                }
+              : contractItem,
+          );
+        }
+      } else {
+        const existingContract = player.contract ? player.contract[0] : {};
+        mergedContract = [
           { ...existingContract, ...newContractData },
           ...(player.contract?.slice(1) || []),
-        ]
-      : player.contract || [];
+        ];
+      }
+    }
 
     const finalPlayer = {
       ...player,
       ...updatedPlayer,
       contract: mergedContract,
     };
+
     const playerRef = doc(
       db,
       `users/${user!.uid}/careers/${careerId}/seasons/${seasonId}/players`,

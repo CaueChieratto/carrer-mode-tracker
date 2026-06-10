@@ -17,10 +17,9 @@
   border-radius: 8px;
   padding: 14px;
   background-color: var(--card-background);
-  cursor: text; /* Mudança para cursor de texto, já que é um input */
+  cursor: text;
 }
 
-/* NOVO: Estilos para o input que fica invisível estruturalmente */
 .search_input {
   flex: 1;
   border: none;

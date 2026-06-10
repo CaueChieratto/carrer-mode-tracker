@@ -8,6 +8,7 @@ import { MVP } from "../../../../../../../../../../ui/IconsSVG/MVP";
 import { PlayerMatchStat } from "../../../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
 import { NumberStats } from "../../../../../../../../ui/NumberStats";
 import { OwnGoal } from "../../../../../../../../../../ui/IconsSVG/OwnGoal";
+import { OverflowText } from "../../../../../../../../../../components/OverflowText";
 
 type PlayerDetailsProps = {
   player: Players;
@@ -26,90 +27,114 @@ export const PlayerDetails = ({
   stats,
   isFromGeral,
 }: PlayerDetailsProps) => (
-  <>
-    <div className={Styles.container}>
-      <div className={Styles.container_stats}>
-        {stats?.substituteIn && stats.substituteIn !== "Nenhum" && (
-          <Sub className={Styles.subs} />
-        )}
+  <div className={Styles.player_wrapper}>
+    {!isFromGeral && (
+      <button
+        className={Styles.slot_remove}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove!();
+        }}
+        type="button"
+      >
+        ×
+      </button>
+    )}
 
+    <div className={Styles.player_circle}>
+      <span className={Styles.shirt_number_center}>{player.shirtNumber}</span>
+
+      <div className={Styles.top_left_stats}>
+        {stats?.secondYellowCard ? (
+          <div className={Styles.stat_circle}>
+            <RefereeCard type="second-yellow" />
+          </div>
+        ) : stats?.redCard ? (
+          <div className={Styles.stat_circle}>
+            <RefereeCard type="red" />
+          </div>
+        ) : stats?.yellowCard ? (
+          <div className={Styles.stat_circle}>
+            <RefereeCard type="yellow" />
+          </div>
+        ) : null}
+      </div>
+
+      <div className={Styles.mid_left_stats}>
+        {stats?.substituteIn && stats.substituteIn !== "Nenhum" && (
+          <div className={Styles.stat_circle}>
+            <Sub />
+          </div>
+        )}
+      </div>
+
+      {isMVP && (
+        <div className={Styles.bottom_left_stats}>
+          <div className={Styles.stat_circle}>
+            <MVP />
+          </div>
+        </div>
+      )}
+
+      <div className={Styles.top_right_stats}>
+        {stats && stats.goals > 0 && (
+          <div className={Styles.stat_circle}>
+            <span className={Styles.stat_icon}>
+              <GiSoccerBall />
+            </span>
+            {stats.goals > 1 && (
+              <span className={Styles.stat_icon_number}>
+                <NumberStats type="goals">{stats.goals}</NumberStats>
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className={Styles.mid_right_stats}>
+        {stats && stats.assists > 0 && (
+          <div className={Styles.stat_circle}>
+            <span className={Styles.stat_icon}>
+              <Boot />
+            </span>
+            {stats.assists > 1 && (
+              <span className={Styles.stat_icon_number}>
+                <NumberStats type="goals">{stats.assists}</NumberStats>
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className={Styles.bottom_right_stats}>
         {stats && stats.ownGoals && stats.ownGoals > 0 ? (
-          <div className={Styles.ownGoal}>
-            <span className={Styles.subs}>
+          <div className={Styles.stat_circle}>
+            <span className={Styles.stat_icon}>
               <OwnGoal lineup />
             </span>
             {stats.ownGoals > 1 && (
-              <NumberStats type="goals">{stats.ownGoals}</NumberStats>
+              <span className={Styles.stat_icon_number}>
+                <NumberStats type="goals">{stats.ownGoals}</NumberStats>
+              </span>
             )}
           </div>
         ) : null}
-
-        {stats?.secondYellowCard ? (
-          <RefereeCard className={Styles.referee_card} type="second-yellow" />
-        ) : stats?.redCard ? (
-          <RefereeCard className={Styles.referee_card} type="red" />
-        ) : stats?.yellowCard ? (
-          <RefereeCard className={Styles.referee_card} type="yellow" />
-        ) : null}
       </div>
 
-      {!isFromGeral && (
-        <button
-          className={Styles.slot_remove}
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove!();
-          }}
-          type="button"
-        >
-          ×
-        </button>
+      {stats?.rating != null && stats.rating > 0 && (
+        <span className={Styles.rating} style={{ backgroundColor }}>
+          {stats.rating === 10 ? "10" : stats.rating.toFixed(1)}
+        </span>
       )}
     </div>
-    <div className={Styles.slot_label}>
-      <span className={Styles.slot_shirt_number}>{player.shirtNumber}</span>
-      <span className={Styles.slot_name}>{player.name}</span>
+
+    <div className={Styles.name_background}>
+      <OverflowText
+        text={player.name}
+        className={`${Styles.player_name_text} ${
+          player.name.length > 8 ? Styles.long_name : ""
+        }`}
+      />
     </div>
-    <div className={Styles.wrapper}>
-      <div className={Styles.container_rating}>
-        {stats && stats.goals > 0 && (
-          <>
-            <span className={Styles.stats}>
-              <GiSoccerBall size={16} />
-            </span>
-            {stats && stats.goals > 1 && (
-              <NumberStats type="goals">{stats.goals}</NumberStats>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className={Styles.container_rating}>
-        {stats?.rating != null && stats.rating > 0 && (
-          <span className={Styles.rating} style={{ backgroundColor }}>
-            {stats.rating === 10 ? "10" : stats.rating.toFixed(1)}
-          </span>
-        )}
-
-        {isMVP && (
-          <p className={`${Styles.stats} ${Styles.mvp}`}>
-            <MVP />
-          </p>
-        )}
-      </div>
-
-      <div className={Styles.container_rating}>
-        {stats && stats.assists > 0 && (
-          <>
-            <span className={Styles.stats}>
-              <Boot />
-            </span>
-            {stats && stats.assists > 1 && (
-              <NumberStats type="assist">{stats.assists}</NumberStats>
-            )}
-          </>
-        )}
-      </div>
-    </div>
-  </>
+  </div>
 );

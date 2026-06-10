@@ -27,13 +27,19 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
       );
 
       if (type === "arrivals") {
-        filteredPlayers = uniquePlayers.filter((p) =>
-          p.contract?.some((c) => c.fromClub),
-        );
+        filteredPlayers = uniquePlayers
+          .filter((p) => p.contract?.some((c) => c.fromClub))
+          .map((p) => ({
+            ...p,
+            contract: p.contract.filter((c) => c.fromClub),
+          }));
       } else {
-        filteredPlayers = uniquePlayers.filter((p) =>
-          p.contract?.some((c) => c.leftClub),
-        );
+        filteredPlayers = uniquePlayers
+          .filter((p) => p.contract?.some((c) => c.leftClub))
+          .map((p) => ({
+            ...p,
+            contract: p.contract.filter((c) => c.leftClub),
+          }));
       }
     } else {
       const { startDate, endDate } = getSeasonDateRange(
@@ -43,26 +49,49 @@ export const useOpenTransfersModal = (career?: Career, season?: ClubData) => {
       );
 
       if (type === "arrivals") {
-        filteredPlayers = (season.players || []).filter((p) => {
-          return p.contract?.some((c) => {
-            if (!c.fromClub) return false;
-            const arrivalDate = c.dataArrival || career.createdAt;
-            return (
-              new Date(arrivalDate) >= startDate &&
-              new Date(arrivalDate) <= endDate
-            );
-          });
-        });
+        filteredPlayers = (season.players || [])
+          .filter((p) => {
+            return p.contract?.some((c) => {
+              if (!c.fromClub) return false;
+              const arrivalDate = c.dataArrival || career.createdAt;
+              return (
+                new Date(arrivalDate) >= startDate &&
+                new Date(arrivalDate) <= endDate
+              );
+            });
+          })
+          .map((p) => ({
+            ...p,
+            contract: p.contract.filter((c) => {
+              if (!c.fromClub) return false;
+              const arrivalDate = c.dataArrival || career.createdAt;
+              return (
+                new Date(arrivalDate) >= startDate &&
+                new Date(arrivalDate) <= endDate
+              );
+            }),
+          }));
       } else {
-        filteredPlayers = (season.players || []).filter((p) => {
-          return p.contract?.some((c) => {
-            if (!c.leftClub) return false;
-            const exitDate = c.dataExit || career.createdAt;
-            return (
-              new Date(exitDate) >= startDate && new Date(exitDate) <= endDate
-            );
-          });
-        });
+        filteredPlayers = (season.players || [])
+          .filter((p) => {
+            return p.contract?.some((c) => {
+              if (!c.leftClub) return false;
+              const exitDate = c.dataExit || career.createdAt;
+              return (
+                new Date(exitDate) >= startDate && new Date(exitDate) <= endDate
+              );
+            });
+          })
+          .map((p) => ({
+            ...p,
+            contract: p.contract.filter((c) => {
+              if (!c.leftClub) return false;
+              const exitDate = c.dataExit || career.createdAt;
+              return (
+                new Date(exitDate) >= startDate && new Date(exitDate) <= endDate
+              );
+            }),
+          }));
       }
     }
 

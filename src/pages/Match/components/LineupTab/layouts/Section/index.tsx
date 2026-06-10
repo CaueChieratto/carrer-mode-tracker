@@ -28,7 +28,7 @@ export const Section = ({
   isFromGeral,
 }: SectionProps) => {
   const getGapSize = (playersCount: number) => {
-    if (playersCount >= 5) return "10px";
+    if (playersCount >= 5) return "16px";
     if (playersCount === 4) return "30px";
     if (playersCount === 3) return "65px";
     return "60px";

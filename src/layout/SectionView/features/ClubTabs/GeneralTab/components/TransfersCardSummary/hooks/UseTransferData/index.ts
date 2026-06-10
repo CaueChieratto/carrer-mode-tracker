@@ -53,20 +53,36 @@ export const useTransferData = (career: Career, season: ClubData) => {
         career.createdAt,
       );
     }
+
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
       career.nation,
     );
-    const seasonArrivals = (season.players || []).filter((p) => {
-      return p.contract?.some((c) => {
-        if (!c.fromClub) return false;
-        const arrivalDate = c.dataArrival || career.createdAt;
-        return (
-          new Date(arrivalDate) >= startDate && new Date(arrivalDate) <= endDate
-        );
-      });
-    });
+
+    const seasonArrivals = (season.players || [])
+      .filter((p) => {
+        return p.contract?.some((c) => {
+          if (!c.fromClub) return false;
+          const arrivalDate = c.dataArrival || career.createdAt;
+          return (
+            new Date(arrivalDate) >= startDate &&
+            new Date(arrivalDate) <= endDate
+          );
+        });
+      })
+      .map((p) => ({
+        ...p,
+        contract: p.contract.filter((c) => {
+          if (!c.fromClub) return false;
+          const arrivalDate = c.dataArrival || career.createdAt;
+          return (
+            new Date(arrivalDate) >= startDate &&
+            new Date(arrivalDate) <= endDate
+          );
+        }),
+      }));
+
     return sortPlayersByDate(seasonArrivals, true, career.createdAt);
   }, [career, season, isGeralPage]);
 
@@ -83,18 +99,34 @@ export const useTransferData = (career: Career, season: ClubData) => {
         career.createdAt,
       );
     }
+
     const { startDate, endDate } = getSeasonDateRange(
       season.seasonNumber,
       career.createdAt,
       career.nation,
     );
-    const seasonDepartures = (season.players || []).filter((p) => {
-      return p.contract?.some((c) => {
-        if (!c.leftClub) return false;
-        const exitDate = c.dataExit || career.createdAt;
-        return new Date(exitDate) >= startDate && new Date(exitDate) <= endDate;
-      });
-    });
+
+    const seasonDepartures = (season.players || [])
+      .filter((p) => {
+        return p.contract?.some((c) => {
+          if (!c.leftClub) return false;
+          const exitDate = c.dataExit || career.createdAt;
+          return (
+            new Date(exitDate) >= startDate && new Date(exitDate) <= endDate
+          );
+        });
+      })
+      .map((p) => ({
+        ...p,
+        contract: p.contract.filter((c) => {
+          if (!c.leftClub) return false;
+          const exitDate = c.dataExit || career.createdAt;
+          return (
+            new Date(exitDate) >= startDate && new Date(exitDate) <= endDate
+          );
+        }),
+      }));
+
     return sortPlayersByDate(seasonDepartures, false, career.createdAt);
   }, [career, season, isGeralPage]);
 

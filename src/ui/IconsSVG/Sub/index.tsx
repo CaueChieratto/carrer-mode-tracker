@@ -1,5 +1,5 @@
 type SubProps = {
-  className: string;
+  className?: string;
 };
 
 export const Sub = ({ className }: SubProps) => {
