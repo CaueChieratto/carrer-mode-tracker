@@ -21,11 +21,9 @@
 }
 
 .shirt_number_center {
-  font-size: 18px;
-  font-weight: 900;
+  font-size: 20px;
+  font-weight: bold;
   color: #010127;
-  font-family: Arial, sans-serif;
-  letter-spacing: -0.5px;
 }
 
 .stat_circle {
@@ -59,7 +57,7 @@
 .top_left_stats {
   position: absolute;
   top: -8px;
-  right: 30px;
+  right: 34px;
   z-index: 12;
 }
 
@@ -74,14 +72,14 @@
 .bottom_left_stats {
   position: absolute;
   bottom: -8px;
-  right: 30px;
+  right: 34px;
   z-index: 10;
 }
 
 .top_right_stats {
   position: absolute;
   top: -8px;
-  left: 30px;
+  left: 34px;
   z-index: 12;
 }
 
@@ -96,19 +94,19 @@
 .bottom_right_stats {
   position: absolute;
   bottom: -8px;
-  left: 30px;
+  left: 34px;
   z-index: 10;
 }
 
 .rating {
   position: absolute;
-  bottom: -14px;
+  bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
-  height: 20px;
-  width: 18px;
+  height: 22px;
+  width: 24px;
   color: #fff;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   border-radius: 2px;
   display: flex;
@@ -144,7 +142,7 @@
 .name_background {
   display: flex;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 17px;
   padding: 4px 10px;
   border-radius: 6px;
   width: 60px;

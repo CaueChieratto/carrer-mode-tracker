@@ -1,11 +1,14 @@
 export const MVP = () => {
   return (
     <svg
-      width="16"
-      height="16"
+      width="18"
+      height="18"
       fill="none"
       viewBox="0 0 24 24"
-      style={{ color: "#374DF5" }}
+      style={{
+        color: "#374DF5",
+        display: "block",
+      }}
     >
       <circle cx="12" cy="12" r="12" fill="#fff"></circle>
       <circle cx="12" cy="12" r="11" fill="currentColor"></circle>
