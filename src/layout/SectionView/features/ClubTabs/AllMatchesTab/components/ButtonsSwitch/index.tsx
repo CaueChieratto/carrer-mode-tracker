@@ -8,23 +8,20 @@ import { IoCopyOutline } from "react-icons/io5";
 type ButtonsSwitchProps = {
   activeTab?: MatchStatus | string;
   setActiveTab?: (tab: MatchStatus | string) => void;
-  selectOptions: string[];
-  selectValue: string;
-  onSelectChange: (value: string) => void;
+  selectOptions?: string[];
+  selectValue?: string;
+  onSelectChange?: (value: string) => void;
   seasonOptions?: string[];
   seasonValue?: string;
   onSeasonChange?: (value: string) => void;
   isMatches?: boolean;
   isGeralPage?: boolean;
   onClickCopy?: () => void;
+  customTabs?: { value: string; label: string }[];
+  disableThemeHook?: boolean;
 };
 
-const TABS = [
-  { value: "SCHEDULED", label: "Calendário" },
-  { value: "FINISHED", label: "Resultados" },
-];
-
-export const ButtonsSwitch = ({
+const ButtonsSwitchBase = ({
   activeTab,
   setActiveTab,
   selectOptions,
@@ -36,20 +33,25 @@ export const ButtonsSwitch = ({
   seasonOptions,
   seasonValue,
   onSeasonChange,
-}: ButtonsSwitchProps) => {
-  const { clubColor } = useSeasonTheme();
-
+  customTabs,
+  clubColor,
+}: ButtonsSwitchProps & { clubColor: string }) => {
   const getButtonStyle = (isActive: boolean) => ({
     backgroundColor: isActive ? clubColor : "#f0f0f0",
     color: isActive ? "#fff" : "#555",
     border: isActive ? `1px solid ${clubColor}` : "1px solid #ccc",
   });
 
+  const tabsToRender = customTabs || [
+    { value: "SCHEDULED", label: "Calendário" },
+    { value: "FINISHED", label: "Resultados" },
+  ];
+
   return (
     <div className={Styles.container}>
       {isMatches && setActiveTab && !isGeralPage && (
         <>
-          {TABS.map((tab) => {
+          {tabsToRender.map((tab) => {
             const isActive = activeTab === tab.value;
 
             return (
@@ -80,19 +82,21 @@ export const ButtonsSwitch = ({
         </div>
       )}
 
-      <div
-        className="swiper-no-swiping"
-        style={{ width: "100%", maxHeight: "48px" }}
-      >
-        <CustomSelect
-          name="monthFilter"
-          options={selectOptions}
-          value={selectValue}
-          onChange={(e) => onSelectChange(e.target.value)}
-        />
-      </div>
+      {selectOptions && onSelectChange && selectValue !== undefined && (
+        <div
+          className="swiper-no-swiping"
+          style={{ width: "100%", maxHeight: "48px" }}
+        >
+          <CustomSelect
+            name="monthFilter"
+            options={selectOptions}
+            value={selectValue}
+            onChange={(e) => onSelectChange(e.target.value)}
+          />
+        </div>
+      )}
 
-      {!isMatches && (
+      {!isMatches && onClickCopy && (
         <Button
           className={Styles.button}
           style={{
@@ -108,4 +112,16 @@ export const ButtonsSwitch = ({
       )}
     </div>
   );
+};
+
+const ButtonsSwitchThemed = (props: ButtonsSwitchProps) => {
+  const { clubColor } = useSeasonTheme();
+  return <ButtonsSwitchBase {...props} clubColor={clubColor} />;
+};
+
+export const ButtonsSwitch = (props: ButtonsSwitchProps) => {
+  if (props.disableThemeHook) {
+    return <ButtonsSwitchBase {...props} clubColor="rgba(0, 48, 144, 0.9)" />;
+  }
+  return <ButtonsSwitchThemed {...props} />;
 };

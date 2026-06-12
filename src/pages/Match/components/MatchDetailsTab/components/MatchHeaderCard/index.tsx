@@ -52,7 +52,13 @@ export const MatchHeaderCard = ({
       <div className={Styles.main_row}>
         <div className={Styles.team_container}>
           {hasBothBadges ? (
-            <img src={homeBadge} className={Styles.team_badge} alt={homeTeam} />
+            <div className={Styles.team_badge_container}>
+              <img
+                src={homeBadge}
+                className={Styles.team_badge}
+                alt={homeTeam}
+              />
+            </div>
           ) : (
             <div className={Styles.team_name_left}>{homeTeam}</div>
           )}
@@ -76,7 +82,13 @@ export const MatchHeaderCard = ({
 
         <div className={Styles.team_container}>
           {hasBothBadges ? (
-            <img src={awayBadge} className={Styles.team_badge} alt={awayTeam} />
+            <div className={Styles.team_badge_container}>
+              <img
+                src={awayBadge}
+                className={Styles.team_badge}
+                alt={awayTeam}
+              />
+            </div>
           ) : (
             <div className={Styles.team_name_right}>{awayTeam}</div>
           )}

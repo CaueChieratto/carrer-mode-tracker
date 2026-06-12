@@ -6,6 +6,8 @@ type OverflowTextProps = {
   className?: string;
   style?: React.CSSProperties;
   direction?: "left" | "right";
+  widthReference?: number;
+  disableDynamicMinWidth?: boolean;
 };
 
 export const OverflowText = ({
@@ -13,6 +15,8 @@ export const OverflowText = ({
   className = "",
   style,
   direction = "left",
+  widthReference,
+  disableDynamicMinWidth = false,
 }: OverflowTextProps) => {
   const textRef = useRef<HTMLSpanElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -22,7 +26,7 @@ export const OverflowText = ({
 
     if (!el || !el.parentElement) return;
 
-    const parentWidth = el.parentElement.clientWidth;
+    const parentWidth = widthReference ?? el.parentElement?.clientWidth ?? 0;
     const contentWidth = el.scrollWidth;
 
     const buffer = 15;
@@ -36,11 +40,20 @@ export const OverflowText = ({
       const distance = totalWidth - parentWidth;
 
       el.style.setProperty("--scroll-distance", `${distance}px`);
-      el.style.setProperty("--dynamic-min-width", `${totalWidth}px`);
+
+      if (!disableDynamicMinWidth) {
+        el.style.setProperty("--dynamic-min-width", `${totalWidth}px`);
+      } else {
+        el.style.removeProperty("--dynamic-min-width");
+      }
     } else {
-      el.style.setProperty("--dynamic-min-width", "100%");
+      if (!disableDynamicMinWidth) {
+        el.style.setProperty("--dynamic-min-width", "100%");
+      } else {
+        el.style.removeProperty("--dynamic-min-width");
+      }
     }
-  }, [text]);
+  }, [text, widthReference, disableDynamicMinWidth]);
 
   return (
     <span

@@ -7,13 +7,13 @@
 }
 
 .marqueeLeft {
-  min-width: var(--dynamic-min-width, 100%);
+  min-width: var(--dynamic-min-width, auto);
   --scroll-distance: 0px;
   animation: marqueeBlinkResetLeft 6s linear infinite;
 }
 
 .marqueeRight {
-  min-width: var(--dynamic-min-width, 100%);
+  min-width: var(--dynamic-min-width, auto);
   --scroll-distance: 0px;
   animation: marqueeBlinkResetRight 6s linear infinite;
 }

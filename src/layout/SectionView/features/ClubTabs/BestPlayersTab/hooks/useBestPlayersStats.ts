@@ -110,7 +110,9 @@ export const useBestPlayersStats = (
     });
 
     const aggregated = Array.from(playerStatsMap.values()).map((acc) => {
-      const games = acc.games || 1;
+      const minutes = acc.minutesPlayed > 0 ? acc.minutesPlayed : 1;
+      const multiplier90 = 90 / minutes;
+
       return {
         player: acc.player,
         games: acc.games,
@@ -124,38 +126,47 @@ export const useBestPlayersStats = (
           acc.goals + acc.assists > 0
             ? acc.minutesPlayed / (acc.goals + acc.assists)
             : 0,
+
         totalFinishings: acc.totalFinishings,
-        finishingsPerGame: acc.totalFinishings / games,
+        finishingsPer90: acc.totalFinishings * multiplier90,
         finishingsOnTarget: acc.totalFinishings - acc.finishingsMissed,
-        finishingsOnTargetPerGame:
-          (acc.totalFinishings - acc.finishingsMissed) / games,
+        finishingsOnTargetPer90:
+          (acc.totalFinishings - acc.finishingsMissed) * multiplier90,
         finishingsMissed: acc.finishingsMissed,
-        finishingsMissedPerGame: acc.finishingsMissed / games,
+        finishingsMissedPer90: acc.finishingsMissed * multiplier90,
+
         totalPasses: acc.totalPasses,
-        passesPerGame: acc.totalPasses / games,
+        passesPer90: acc.totalPasses * multiplier90,
         passesCompleted: acc.totalPasses - acc.passesMissed,
-        passesCompletedPerGame: (acc.totalPasses - acc.passesMissed) / games,
+        passesCompletedPer90:
+          (acc.totalPasses - acc.passesMissed) * multiplier90,
         passesMissed: acc.passesMissed,
-        passesMissedPerGame: acc.passesMissed / games,
+        passesMissedPer90: acc.passesMissed * multiplier90,
+
         keyPasses: acc.keyPasses,
-        keyPassesPerGame: acc.keyPasses / games,
+        keyPassesPer90: acc.keyPasses * multiplier90,
+
         totalDribbles: acc.totalDribbles,
-        dribblesPerGame: acc.totalDribbles / games,
+        dribblesPer90: acc.totalDribbles * multiplier90,
         dribblesCompleted: acc.totalDribbles - acc.dribblesMissed,
-        dribblesCompletedPerGame:
-          (acc.totalDribbles - acc.dribblesMissed) / games,
+        dribblesCompletedPer90:
+          (acc.totalDribbles - acc.dribblesMissed) * multiplier90,
         dribblesMissed: acc.dribblesMissed,
-        dribblesMissedPerGame: acc.dribblesMissed / games,
+        dribblesMissedPer90: acc.dribblesMissed * multiplier90,
+
         ballsRecovered: acc.ballsRecovered,
-        ballsRecoveredPerGame: acc.ballsRecovered / games,
+        ballsRecoveredPer90: acc.ballsRecovered * multiplier90,
+
         ballsLost: acc.ballsLost,
-        ballsLostPerGame: acc.ballsLost / games,
+        ballsLostPer90: acc.ballsLost * multiplier90,
+
         yellowCards: acc.yellowCards,
-        yellowCardsPerGame: acc.yellowCards / games,
+        yellowCardsPer90: acc.yellowCards * multiplier90,
         redCards: acc.redCards,
-        redCardsPerGame: acc.redCards / games,
+        redCardsPer90: acc.redCards * multiplier90,
+
         distanceKm: acc.distanceKm,
-        distanceKmPerGame: acc.distanceKm / games,
+        distanceKmPer90: acc.distanceKm * multiplier90,
         maxDistanceKmInGame: acc.maxDistanceKmInGame,
         minutesPlayed: acc.minutesPlayed,
       } as AggregatedPlayerStats;

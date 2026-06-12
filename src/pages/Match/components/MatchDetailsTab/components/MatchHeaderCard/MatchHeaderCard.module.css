@@ -126,6 +126,16 @@
   gap: 6px;
 }
 
+.team_badge_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 8px 8px 16px #00000040;
+}
+
 .team_badge {
   width: 50px;
 }

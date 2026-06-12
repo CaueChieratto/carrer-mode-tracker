@@ -1,5 +1,6 @@
 import { UseRatingColor } from "../../../../../../../common/hooks/Colors/GetOverallColor";
 import { Players } from "../../../../../../../common/interfaces/playersInfo/players";
+import { PlayerInfo } from "../../../../../../../components/PlayerInfo";
 import Styles from "./PlayerStatRow.module.css";
 
 type PlayerStatRowProps = {
@@ -18,17 +19,13 @@ export const PlayerStatRow = ({
 
   return (
     <section className={Styles.player}>
-      <header className={Styles.player_info}>
-        <div className={Styles.player_info_top}>
-          <h2 className={Styles.data_title}>{player.name}</h2>
-          <div className={Styles.data}>{player.position}</div>
-          <div className={Styles.data}>{player.shirtNumber}</div>
-        </div>
-        <div className={Styles.player_info_bottom}>
-          <h2 className={Styles.data}>{player.age} anos</h2>
-          <div className={Styles.data}>{player.nation}</div>
-        </div>
-      </header>
+      <PlayerInfo
+        name={player.name}
+        position={player.position}
+        shirtNumber={player.shirtNumber}
+        age={player.age}
+        nation={player.nation}
+      />
 
       <footer className={Styles.stat_block}>
         {isRating ? (

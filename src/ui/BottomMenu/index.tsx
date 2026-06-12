@@ -3,11 +3,28 @@ import Styles from "./BottomMenu.module.css";
 import { FiMoon } from "react-icons/fi";
 import { BsQuestionCircle } from "react-icons/bs";
 import { useTheme } from "../../contexts/LightThemeContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { FaPeopleArrows } from "react-icons/fa";
 
-const BottomMenu = () => {
+type BottomMenuProps = {
+  noHavePlayers?: boolean;
+};
+
+const BottomMenu = ({ noHavePlayers }: BottomMenuProps) => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const { careerId, seasonId, playerId } = useParams();
+  const location = useLocation();
+
+  const compareClick = () => {
+    if (playerId) {
+      navigate(`/Career/${careerId}/Geral/Player/${playerId}/Compare`);
+    } else if (location.pathname.includes("/Geral")) {
+      navigate(`/Career/${careerId}/Geral/Compare`);
+    } else if (seasonId) {
+      navigate(`/Career/${careerId}/Season/${seasonId}/Compare`);
+    }
+  };
 
   return (
     <div className={Styles.background}>
@@ -19,6 +36,9 @@ const BottomMenu = () => {
             <FiMoon size={30} onClick={toggleTheme} />
           )}
         </div>
+
+        {!noHavePlayers && <FaPeopleArrows size={30} onClick={compareClick} />}
+
         <BsQuestionCircle size={30} onClick={() => navigate("/tutorial")} />
       </div>
     </div>

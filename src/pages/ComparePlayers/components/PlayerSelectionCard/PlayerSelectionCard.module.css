@@ -1,0 +1,70 @@
+.playerCard {
+  flex: 1;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-card-titles);
+  cursor: pointer;
+  min-height: 140px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.playerCard:active {
+  transform: scale(0.98);
+}
+
+.activeCard {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.plusIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--icon-background-subtle);
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.selectText {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.selectedPlayer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.playerName {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--blackColor);
+}
+
+.changeText {
+  font-size: 12px;
+  color: var(--colorSpan);
+  text-decoration: underline;
+}
+
+.lockedCard {
+  cursor: default;
+}
+
+.lockedCard:active {
+  transform: none;
+}

@@ -1,21 +1,5 @@
-.player_info {
-  -ms-overflow-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.custom_player_info {
   max-width: 250px;
   overflow: scroll;
-  scrollbar-width: none;
   width: 450px;
-}
-
-.player_info_top {
-  align-items: center;
-  display: flex;
-  gap: 6px;
-}
-
-.player_info_bottom {
-  display: flex;
-  gap: 8px;
 }

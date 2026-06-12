@@ -1,6 +1,5 @@
+import { PlayerInfo } from "../../../../../../../../../../components/PlayerInfo";
 import Styles from "./HeaderSection_Player.module.css";
-import Data from "../../Section.module.css";
-import CaptainArmbandIcon from "../../../../../../../../../../ui/CaptainArmbandIcon";
 
 type HeaderSection_PlayerProps = {
   name: string;
@@ -11,30 +10,13 @@ type HeaderSection_PlayerProps = {
   captain?: boolean;
 };
 
-const HeaderSection_Player = ({
-  name,
-  position,
-  shirtNumber,
-  age,
-  nation,
-  captain,
-}: HeaderSection_PlayerProps) => {
+const HeaderSection_Player = (props: HeaderSection_PlayerProps) => {
   return (
-    <header
-      className={Styles.player_info}
+    <PlayerInfo
+      {...props}
+      customContainerClass={Styles.custom_player_info}
       onTouchMove={(e) => e.stopPropagation()}
-    >
-      <div className={Styles.player_info_top}>
-        <h2 className={Data.data_title}>{name}</h2>
-        <div className={Data.data}>{position}</div>
-        <div className={Data.data}>{shirtNumber}</div>
-        {captain && <CaptainArmbandIcon />}
-      </div>
-      <div className={Styles.player_info_bottom}>
-        <h2 className={Data.data}>{age} anos</h2>
-        <div className={Data.data}>{nation}</div>
-      </div>
-    </header>
+    />
   );
 };
 

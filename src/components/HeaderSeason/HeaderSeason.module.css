@@ -44,12 +44,13 @@
   color: #eaeaea;
   font-size: 28px;
   font-weight: 600;
+  max-width: 200px;
+  overflow: hidden;
 }
 
 .p {
-  position: absolute;
-  top: 90%;
-  left: 28%;
+  max-width: 170px;
+  overflow: hidden;
 }
 
 .button {

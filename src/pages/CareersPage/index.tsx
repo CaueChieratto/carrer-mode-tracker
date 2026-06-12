@@ -69,7 +69,7 @@ const CareersPage = () => {
       ) : (
         <EmptyCareers onOpenModal={onOpenModal} />
       )}
-      {activeModal === ModalType.NONE && <BottomMenu />}
+      {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
       <ModalManager
         saveClick={saveClick}
         setSelectedCareer={setSelectedCareer}

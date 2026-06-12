@@ -9,6 +9,7 @@ import { PlayerMatchStat } from "../../../../../../../../../../layout/SectionVie
 import { NumberStats } from "../../../../../../../../ui/NumberStats";
 import { OwnGoal } from "../../../../../../../../../../ui/IconsSVG/OwnGoal";
 import { OverflowText } from "../../../../../../../../../../components/OverflowText";
+import { PlayerCircle } from "./PlayerCircle";
 
 type PlayerDetailsProps = {
   player: Players;
@@ -36,14 +37,15 @@ export const PlayerDetails = ({
           onRemove!();
         }}
         type="button"
+        style={{
+          top: stats?.rating != null && stats.rating > 0 ? "85px" : "65px",
+        }}
       >
         ×
       </button>
     )}
 
-    <div className={Styles.player_circle}>
-      <span className={Styles.shirt_number_center}>{player.shirtNumber}</span>
-
+    <PlayerCircle shirtNumber={player.shirtNumber}>
       <div className={Styles.top_left_stats}>
         {stats?.secondYellowCard ? (
           <div className={Styles.stat_circle}>
@@ -70,8 +72,10 @@ export const PlayerDetails = ({
 
       {isMVP && (
         <div className={Styles.bottom_left_stats}>
-          <div className={Styles.stat_circle}>
-            <MVP />
+          <div className={Styles.container_mvp}>
+            <div className={Styles.mvp}>
+              <MVP />
+            </div>
           </div>
         </div>
       )}
@@ -122,18 +126,30 @@ export const PlayerDetails = ({
       </div>
 
       {stats?.rating != null && stats.rating > 0 && (
-        <span className={Styles.rating} style={{ backgroundColor }}>
+        <span
+          className={Styles.rating}
+          style={{
+            backgroundColor,
+          }}
+        >
           {stats.rating === 10 ? "10" : stats.rating.toFixed(1)}
         </span>
       )}
-    </div>
+    </PlayerCircle>
 
-    <div className={Styles.name_background}>
+    <div
+      className={Styles.name_background}
+      style={{
+        marginTop: stats?.rating != null && stats.rating > 0 ? "20px" : "0",
+      }}
+    >
       <OverflowText
+        disableDynamicMinWidth
         text={player.name}
         className={`${Styles.player_name_text} ${
           player.name.length > 8 ? Styles.long_name : ""
         }`}
+        widthReference={40}
       />
     </div>
   </div>

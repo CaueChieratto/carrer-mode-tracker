@@ -82,7 +82,7 @@ export const Match = () => {
           careerId={career.id}
           career={career}
           backSeasons={goBack}
-          titleText={`${match.homeTeam} x ${match.awayTeam}`}
+          titleTextMatch={`${match.homeTeam} x ${match.awayTeam}`}
         />
         <Navbar
           options={tabsConfig.map((tab) => tab.title)}
@@ -118,7 +118,7 @@ export const Match = () => {
           ))}
         </Swiper>
 
-        {activeModal === ModalType.NONE && <BottomMenu />}
+        {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
       </SeasonThemeProvider>
     </>
   );

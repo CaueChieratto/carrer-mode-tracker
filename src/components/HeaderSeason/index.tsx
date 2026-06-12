@@ -5,12 +5,14 @@ import Button from "../Button";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import { Match } from "../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { OverflowText } from "../OverflowText";
 
 type HeaderSeasonProps = {
   career: Career;
   season?: number;
   careerId: string;
   titleText?: string;
+  titleTextMatch?: string;
   backSeasons?: () => void;
   isPlayer?: boolean;
   match?: Match;
@@ -22,6 +24,7 @@ const HeaderSeason = ({
   season,
   careerId,
   titleText,
+  titleTextMatch,
   backSeasons,
   player,
   isPlayer,
@@ -63,16 +66,35 @@ const HeaderSeason = ({
                   <img src={career.teamBadge} className={Styles.img} />
                 )}
 
-                <div className={Styles.container}>
+                <div
+                  className={Styles.container}
+                  style={
+                    titleTextMatch
+                      ? { alignItems: "center" }
+                      : { alignItems: "flex-start" }
+                  }
+                >
                   {match ? (
-                    <h1 className={Styles.h1}>{match.league}</h1>
+                    <h1 className={Styles.h1}>
+                      <OverflowText text={match.league || ""} />
+                    </h1>
                   ) : (
                     <h1 className={Styles.h1}>{career.clubName}</h1>
                   )}
                   {season && (
                     <p className={Styles.season}>Temporada {season}</p>
                   )}
-                  {titleText && <p className={Styles.season}>{titleText}</p>}
+                  {(titleTextMatch || titleText) && (
+                    <p className={Styles.season}>
+                      {titleTextMatch ? (
+                        <p className={Styles.p}>
+                          <OverflowText text={titleTextMatch} />
+                        </p>
+                      ) : (
+                        titleText
+                      )}
+                    </p>
+                  )}
                 </div>
               </>
             )}

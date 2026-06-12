@@ -1,0 +1,42 @@
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-input);
+}
+
+.statRow:last-child {
+  border-bottom: none;
+}
+
+.statLabel {
+  text-align: center;
+  font-size: 14px;
+  color: var(--colorSpan);
+  font-weight: 500;
+}
+
+.statValue {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  color: var(--blackColor);
+}
+
+.statValue:first-child {
+  justify-content: flex-start;
+}
+
+.statValue:last-child {
+  justify-content: flex-end;
+}
+
+.ratingBadge {
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

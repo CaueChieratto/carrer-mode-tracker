@@ -51,7 +51,7 @@ const AddSeasons = () => {
           onAddSeason={handleAddSeason}
         />
       </div>
-      {activeModal === ModalType.NONE && <BottomMenu />}
+      {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
     </>
   );
 };
