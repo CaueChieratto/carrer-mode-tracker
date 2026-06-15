@@ -43,6 +43,11 @@ export const statConfigs: StatConfig[] = [
     format: (v: number) => `${v}'`,
   },
   {
+    title: "Minutos por jogo",
+    key: "minutesPerGame",
+    format: (v: number) => `${Math.round(v)}'`,
+  },
+  {
     title: "Maior distância em um jogo",
     key: "maxDistanceKmInGame",
     format: (v: number) => `${v.toFixed(1)}km`,

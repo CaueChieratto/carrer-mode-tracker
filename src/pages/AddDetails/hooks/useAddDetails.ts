@@ -7,6 +7,8 @@ import { MatchWithOpponentEvents } from "../types";
 import { buildFormFields } from "../helpers/buildFormFields";
 import { calculateMatchResult } from "../helpers/calculateMatchResult";
 import { buildOpponentEvents } from "../helpers/buildOpponentEvents";
+import { formatRating } from "../../../common/utils/FormatRating";
+import { Field } from "../../../components/FormSection";
 
 export const useAddDetails = () => {
   const { career, season, match, loading, backMatch } = useMatchData();
@@ -47,6 +49,10 @@ export const useAddDetails = () => {
       stoppage2T: match.stoppage2T ? String(match.stoppage2T) : "",
       stoppageET1: match.stoppageET1 ? String(match.stoppageET1) : "",
       stoppageET2: match.stoppageET2 ? String(match.stoppageET2) : "",
+      opponentMvpName: match.opponentMvpName || "",
+      opponentMvpRating: match.opponentMvpRating
+        ? String(match.opponentMvpRating)
+        : "",
     };
 
     const matchWithEvents = match as MatchWithOpponentEvents;
@@ -98,6 +104,24 @@ export const useAddDetails = () => {
 
     initializedMatchId.current = match.matchesId;
   }, [match, career, setFormValues, handleBooleanChange]);
+
+  const handleLocalInputChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+      field: Field,
+    ) => {
+      let value = e.target.value;
+
+      if (field.id === "opponentMvpRating") {
+        value = formatRating(value);
+        setFormValues((prev) => ({ ...prev, [field.id]: value }));
+        return;
+      }
+
+      handleInputChange(e, field);
+    },
+    [handleInputChange, setFormValues],
+  );
 
   const handleLocalBooleanChange = useCallback(
     (fieldId: string, value: boolean) => {
@@ -164,6 +188,10 @@ export const useAddDetails = () => {
         status: "FINISHED",
         result,
         opponentEvents,
+        opponentMvpName: formValues.opponentMvpName || undefined,
+        opponentMvpRating: formValues.opponentMvpRating
+          ? Number(formValues.opponentMvpRating)
+          : undefined,
       };
 
       if (hasPenalties) {
@@ -243,7 +271,7 @@ export const useAddDetails = () => {
     match,
     fields,
     formValues,
-    handleInputChange,
+    handleInputChange: handleLocalInputChange,
     handleBooleanChange: handleLocalBooleanChange,
     saveDetails,
     backMatch,

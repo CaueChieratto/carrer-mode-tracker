@@ -41,12 +41,13 @@ export const getSeasonTabsConfig = (
         navigate(`/Career/${careerId}/Season/${seasonId}/AddPlayer?from=squad`),
     },
 
-    !isPlayer && {
+    {
       title: "Partidas",
       component: AllMatchesTab,
-      actionButton: Buttons.AddMatches,
-      action: () =>
-        navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`),
+      actionButton: !isPlayer ? Buttons.AddMatches : undefined,
+      action: !isPlayer
+        ? () => navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`)
+        : undefined,
     },
 
     {

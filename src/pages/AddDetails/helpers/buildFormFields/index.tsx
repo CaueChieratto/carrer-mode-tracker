@@ -76,6 +76,22 @@ export const buildFormFields = (
           },
         ],
         stoppageFields,
+        [
+          {
+            id: "opponentMvpName",
+            name: "Nome do MVP (Adversário)",
+            inputType: "text",
+            placeholder: "Ex: J. Jogador",
+            icon: <IoIosPerson />,
+          },
+          {
+            id: "opponentMvpRating",
+            name: "Nota do MVP",
+            inputType: "number",
+            placeholder: "Ex: 9.5",
+            icon: <TbTargetArrow />,
+          },
+        ],
       ],
     },
     {

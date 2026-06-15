@@ -169,6 +169,7 @@ export const useBestPlayersStats = (
         distanceKmPer90: acc.distanceKm * multiplier90,
         maxDistanceKmInGame: acc.maxDistanceKmInGame,
         minutesPlayed: acc.minutesPlayed,
+        minutesPerGame: acc.games > 0 ? acc.minutesPlayed / acc.games : 0,
       } as AggregatedPlayerStats;
     });
 

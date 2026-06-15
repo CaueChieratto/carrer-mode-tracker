@@ -11,6 +11,7 @@ type Params = {
   activeTab: MatchStatus | string;
   selectedMonth: string;
   selectedSeasonId?: string;
+  playerId?: string;
 };
 
 const parseDate = (date: string): number => {
@@ -47,8 +48,22 @@ const filterMatches = (
   matches: Match[],
   status: MatchStatus | string,
   selectedMonth: string,
+  playerId?: string,
 ): Match[] => {
   return matches.filter((match) => {
+    if (playerId) {
+      const playerStat = match.playerStats?.find(
+        (p) => p.playerId === playerId,
+      );
+      if (
+        !playerStat ||
+        !playerStat.minutesPlayed ||
+        playerStat.minutesPlayed <= 0
+      ) {
+        return false;
+      }
+    }
+
     const statusMatch = match.status === status;
 
     let monthMatch = true;
@@ -69,6 +84,7 @@ export const processMatches = ({
   activeTab,
   selectedMonth,
   selectedSeasonId,
+  playerId,
 }: Params): Match[] => {
   const baseMatches = getAllMatches(
     season,
@@ -82,7 +98,7 @@ export const processMatches = ({
 
   const sorted = sortMatches(baseMatches, isFinished);
 
-  return filterMatches(sorted, status, selectedMonth);
+  return filterMatches(sorted, status, selectedMonth, playerId);
 };
 
 export const getMatchSeason = (

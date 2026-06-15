@@ -2,6 +2,13 @@ import { ClubData } from "../../../../../../../../common/interfaces/club/clubDat
 import { Match } from "../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 
 export const extractMVP = (match: Match, season: ClubData) => {
+  if (match.opponentMvpName && match.opponentMvpRating) {
+    return {
+      mvpPlayerName: match.opponentMvpName,
+      mvpRating: Number(match.opponentMvpRating),
+    };
+  }
+
   let mvpPlayerName = "Nenhum";
   let mvpRating = 0;
 

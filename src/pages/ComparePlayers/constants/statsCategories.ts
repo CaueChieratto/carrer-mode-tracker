@@ -98,6 +98,7 @@ export const getStatsCategories = (
       title: "Disciplina & Presença",
       stats: [
         { label: "Minutos jogados", key: "minutesPlayed" },
+        { label: "Minutos por jogo", key: "minutesPerGame" },
         { label: "Maior distância em um jogo", key: "maxDistanceKmInGame" },
         { label: "Distância por 90 min", key: "distanceKmPer90" },
         { label: "Distância total", key: "distanceKm" },

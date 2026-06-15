@@ -164,6 +164,10 @@ export const getAggregatedStats = (
     ballsLostPer90: (ballsLost * multiplier90).toFixed(1),
 
     minutesPlayed: coreStats.minutesPlayed,
+    minutesPerGame:
+      coreStats.games > 0
+        ? `${Math.round(coreStats.minutesPlayed / coreStats.games)}'`
+        : "-",
     maxDistanceKmInGame: `${maxDistanceKmInGame.toFixed(1)}km`,
     distanceKmPer90: `${(distanceKm * multiplier90).toFixed(1)}km`,
     distanceKm: `${distanceKm.toFixed(1)}km`,

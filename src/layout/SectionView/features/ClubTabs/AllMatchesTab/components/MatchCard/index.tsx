@@ -1,6 +1,7 @@
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
 import Card from "../../../../../../../ui/Card";
 import { Match } from "../../types/Match";
+import { PlayerMatchStat } from "../../types/PlayerMatchStat";
 import Styles from "./MatchCard.module.css";
 import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";
@@ -15,6 +16,7 @@ type MatchCardProps = {
   season: ClubData;
   isGeralPage: boolean;
   onAddBadge?: (teamName: string) => void;
+  playerStat?: PlayerMatchStat;
 };
 
 export const MatchCard = ({
@@ -23,6 +25,7 @@ export const MatchCard = ({
   season,
   isGeralPage,
   onAddBadge,
+  playerStat,
 }: MatchCardProps) => {
   const teams = season.teams || [];
 
@@ -32,6 +35,7 @@ export const MatchCard = ({
     seasonId: season.id,
     matchId: match.matchesId,
     isGeralPage,
+    playerId: playerStat?.playerId,
   });
 
   const copyText = async () => {
@@ -69,6 +73,8 @@ export const MatchCard = ({
           homeBadge={homeBadge}
           awayBadge={awayBadge}
           onAddBadge={onAddBadge}
+          playerStat={playerStat}
+          isHomeCareerTeam={isHomeCareerTeam}
         />
       </Card>
     </>

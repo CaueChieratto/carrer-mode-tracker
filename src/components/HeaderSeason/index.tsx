@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../common/interfaces/Career";
 import Styles from "./HeaderSeason.module.css";
 import Button from "../Button";
@@ -6,6 +6,7 @@ import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import { Match } from "../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
 import { OverflowText } from "../OverflowText";
+import { PlayerCircle } from "../../pages/Match/components/LineupTab/layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
 
 type HeaderSeasonProps = {
   career: Career;
@@ -31,8 +32,14 @@ const HeaderSeason = ({
   match,
 }: HeaderSeasonProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { seasonId } = useParams<{ seasonId?: string }>();
 
   const { clubColor, darkClubColor } = useSeasonTheme();
+
+  const searchParams = new URLSearchParams(location.search);
+  const fromPlayerId = searchParams.get("playerId");
+  const isFromGeral = searchParams.get("fromGeral") === "true";
 
   const leagueLogo = career.clubData
     ?.flatMap((club) => club.leagues)
@@ -49,12 +56,15 @@ const HeaderSeason = ({
         {career.teamBadge && (
           <>
             {isPlayer ? (
-              <div className={Styles.container}>
-                <h1 className={Styles.h1}>
-                  {player?.name} <span>{player?.overall}</span>{" "}
-                </h1>
+              <div className={Styles.container_player}>
+                <PlayerCircle shirtNumber={player?.shirtNumber} />
+                <div className={Styles.container}>
+                  <h1 className={match ? Styles.h1 : Styles.h1_player}>
+                    {player?.name}
+                  </h1>
 
-                {titleText && <p className={Styles.season}>{titleText}</p>}
+                  {titleText && <p className={Styles.season}>{titleText}</p>}
+                </div>
               </div>
             ) : (
               <>
@@ -85,7 +95,7 @@ const HeaderSeason = ({
                     <p className={Styles.season}>Temporada {season}</p>
                   )}
                   {(titleTextMatch || titleText) && (
-                    <p className={Styles.season}>
+                    <span className={Styles.season}>
                       {titleTextMatch ? (
                         <p className={Styles.p}>
                           <OverflowText text={titleTextMatch} />
@@ -93,7 +103,7 @@ const HeaderSeason = ({
                       ) : (
                         titleText
                       )}
-                    </p>
+                    </span>
                   )}
                 </div>
               </>
@@ -102,13 +112,38 @@ const HeaderSeason = ({
         )}
       </div>
       <Button
-        onClick={() =>
-          !backSeasons
-            ? navigate(
-                isPlayer ? `/Career/${careerId}/Geral` : `/Career/${careerId}`,
-              )
-            : backSeasons()
-        }
+        onClick={() => {
+          if (fromPlayerId) {
+            if (isFromGeral) {
+              navigate(`/Career/${careerId}/Geral/Player/${fromPlayerId}`);
+            } else if (seasonId) {
+              navigate(
+                `/Career/${careerId}/Season/${seasonId}/EditPlayer/${fromPlayerId}`,
+              );
+            } else {
+              navigate(`/Career/${careerId}`);
+            }
+            return;
+          }
+
+          if (backSeasons) {
+            backSeasons();
+            return;
+          }
+
+          if (isPlayer) {
+            if (location.pathname.includes("/Geral")) {
+              navigate(`/Career/${careerId}/Geral`);
+            } else if (seasonId) {
+              navigate(`/Career/${careerId}/Season/${seasonId}`);
+            } else {
+              navigate(`/Career/${careerId}`);
+            }
+            return;
+          }
+
+          navigate(`/Career/${careerId}`);
+        }}
         className={Styles.button}
       >
         Voltar

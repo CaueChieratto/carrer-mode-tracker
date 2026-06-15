@@ -42,4 +42,5 @@ export type AggregatedPlayerStats = {
   distanceKm: number;
   maxDistanceKmInGame: number;
   minutesPlayed: number;
+  minutesPerGame: number;
 };

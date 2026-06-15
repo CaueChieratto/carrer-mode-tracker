@@ -60,14 +60,72 @@ export const ComparePlayers = () => {
       )}
 
       {showSeasonSelect && (
-        <div className={Styles.seasonSelectWrapper}>
-          <CustomSelect
-            name="seasonSelect"
-            options={state.seasonOptions}
-            value={state.selectedSeasonLabel}
-            placeholder="Selecione a temporada"
-            onChange={actions.handleSeasonChange}
-          />
+        <div
+          className={Styles.seasonSelectWrapper}
+          style={{
+            flexDirection: "column",
+            alignItems: "stretch",
+            width: "100%",
+            maxWidth: "400px",
+            margin: "0 auto 20px auto",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              width: "100%",
+              gap: "6px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "var(--colorSpan)",
+              }}
+            >
+              {state.player1?.name || "Jogador 1"}
+            </span>
+            <CustomSelect
+              name="seasonSelect"
+              options={state.seasonOptions}
+              value={state.selectedSeasonLabel}
+              placeholder="Selecione a temporada"
+              onChange={actions.handleSeasonChange}
+            />
+          </div>
+
+          {state.player2 && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                width: "100%",
+                gap: "6px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "var(--colorSpan)",
+                }}
+              >
+                {state.player2.name}
+              </span>
+              <CustomSelect
+                name="seasonSelect2"
+                options={state.seasonOptions2}
+                value={state.selectedSeasonLabel2}
+                placeholder="Selecione a temporada"
+                onChange={actions.handleSeasonChange2}
+              />
+            </div>
+          )}
         </div>
       )}
 

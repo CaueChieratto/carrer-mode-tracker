@@ -44,4 +44,6 @@ export type Match = {
   awayYellowCards?: number;
   homeRedCards?: number;
   awayRedCards?: number;
+  opponentMvpName?: string;
+  opponentMvpRating?: number;
 };

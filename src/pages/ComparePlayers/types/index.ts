@@ -50,6 +50,7 @@ export interface PlayerStatsDisplay {
   ballsLostPer90: string;
 
   minutesPlayed: number;
+  minutesPerGame: string;
   maxDistanceKmInGame: string;
   distanceKmPer90: string;
   distanceKm: string;

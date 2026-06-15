@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import Styles from "./PlayerCircle.module.css";
 
 type PlayerCircleProps = {
-  shirtNumber: number | string;
+  shirtNumber: number | string | undefined;
   children?: ReactNode;
 };
 

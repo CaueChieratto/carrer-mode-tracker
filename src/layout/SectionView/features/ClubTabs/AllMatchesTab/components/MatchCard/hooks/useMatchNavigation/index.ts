@@ -4,12 +4,14 @@ type UseMatchNavigationParams = {
   seasonId: string;
   matchId: string;
   isGeralPage: boolean;
+  playerId?: string;
 };
 
 export const useMatchNavigation = ({
   seasonId,
   matchId,
   isGeralPage,
+  playerId,
 }: UseMatchNavigationParams) => {
   const { careerId, seasonId: paramSeasonId } = useParams();
   const navigate = useNavigate();
@@ -18,7 +20,13 @@ export const useMatchNavigation = ({
 
   const buildUrl = (path: string) => {
     const base = `/Career/${careerId}/Season/${currentSeasonId}/${path}/${matchId}`;
-    return isGeralPage ? `${base}?fromGeral=true` : base;
+    const params = new URLSearchParams();
+
+    if (isGeralPage) params.append("fromGeral", "true");
+    if (playerId) params.append("playerId", playerId);
+
+    const qs = params.toString();
+    return qs ? `${base}?${qs}` : base;
   };
 
   const goToEdit = () => {

@@ -23,6 +23,12 @@
   gap: 4px;
 }
 
+.container_player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .img {
   width: 50px;
 }
@@ -38,6 +44,13 @@
 
 .img_league {
   width: 40px;
+}
+
+.h1_player {
+  color: #eaeaea;
+  font-size: 28px;
+  font-weight: 600;
+  overflow: hidden;
 }
 
 .h1 {

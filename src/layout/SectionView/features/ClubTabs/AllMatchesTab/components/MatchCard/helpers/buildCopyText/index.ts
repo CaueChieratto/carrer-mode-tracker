@@ -77,6 +77,28 @@ export const buildMatchCopyText = ({
       );
     }
 
+    if (stat.defenses && stat.defenses > 0) {
+      parts.push(
+        `${stat.defenses} ${stat.defenses === 1 ? "defesa" : "defesas"}`,
+      );
+    }
+
+    if (stat.ownGoals && stat.ownGoals > 0) {
+      const ownGoalMinutesText = (stat.ownGoalMinutes || [])
+        .map((minute) => `${minute} minutos`)
+        .join(", ");
+
+      const ownGoalText = `${stat.ownGoals} ${
+        stat.ownGoals === 1 ? "gol contra" : "gols contra"
+      }`;
+
+      parts.push(
+        ownGoalMinutesText
+          ? `${ownGoalText} aos ${ownGoalMinutesText}`
+          : ownGoalText,
+      );
+    }
+
     return parts.join(" e ");
   };
 
@@ -128,10 +150,16 @@ export const buildMatchCopyText = ({
     if (substitute && stat) {
       const substituteHighlight = buildHighlightText(substitute.stat);
 
+      const isSubstituteMvp = mvp?.playerId === substitute.stat.playerId;
+
       text += ` e saiu aos ${stat.minutesPlayed} minutos para entrada do ${substitute.playerName} (${substitute.rating})`;
 
       if (substituteHighlight) {
         text += ` ${substituteHighlight}`;
+      }
+
+      if (isSubstituteMvp) {
+        text += " que foi eleito o MVP";
       }
     }
 
@@ -150,31 +178,51 @@ export const buildMatchCopyText = ({
             goalReference: string;
             player: string;
           }[];
+          ownGoals?: {
+            minute: string;
+            player: string;
+          }[];
         };
       }
     ).opponentEvents;
 
-    if (!events?.goals?.length) {
-      return "";
+    const parts: string[] = [];
+
+    if (events?.goals?.length) {
+      const goalsText = events.goals
+        .map((goal) => {
+          const goalReference = `${goal.player} - ${goal.minute}'`;
+
+          const assist = events.assists?.find(
+            (a) => a.goalReference === goalReference,
+          );
+
+          if (assist) {
+            return `${goal.player} aos ${goal.minute} minutos com assistência do ${assist.player}`;
+          }
+
+          return `${goal.player} aos ${goal.minute} minutos`;
+        })
+        .join(", ");
+
+      parts.push(`gols do adversário: ${goalsText}`);
     }
 
-    const goalsText = events.goals
-      .map((goal) => {
-        const goalReference = `${goal.player} - ${goal.minute}'`;
+    if (events?.ownGoals?.length) {
+      const ownGoalsText = events.ownGoals
+        .map((og) => `${og.player} aos ${og.minute} minutos`)
+        .join(", ");
 
-        const assist = events.assists?.find(
-          (a) => a.goalReference === goalReference,
-        );
+      parts.push(`gols contra a favor: ${ownGoalsText}`);
+    }
 
-        if (assist) {
-          return `${goal.player} aos ${goal.minute} minutos com assistência do ${assist.player}`;
-        }
+    if (match.opponentMvpName && match.opponentMvpRating) {
+      parts.push(
+        `sendo ${match.opponentMvpName} o MVP da partida com nota ${match.opponentMvpRating}`,
+      );
+    }
 
-        return `${goal.player} aos ${goal.minute} minutos`;
-      })
-      .join(", ");
-
-    return `gols do adversário: ${goalsText}`;
+    return parts.join(", e ");
   };
 
   const starters: string[] = [];
@@ -205,8 +253,7 @@ export const buildMatchCopyText = ({
     );
   });
 
-  const startersText =
-    starters.length > 0 ? `os titulares foram ${starters.join(", ")}` : "";
+  const startersText = starters.length > 0 ? `${starters.join(", ")}` : "";
 
   const opponentEventsText = buildOpponentEventsText();
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import { ButtonsSwitch } from "./components/ButtonsSwitch";
@@ -14,12 +15,14 @@ type AllMatchesTabProps = {
   season: ClubData;
   career: Career;
   onAddBadge?: (teamName: string) => void;
+  player?: Players;
 };
 
 export const AllMatchesTab = ({
   season,
   career,
   onAddBadge,
+  player,
 }: AllMatchesTabProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
@@ -73,6 +76,7 @@ export const AllMatchesTab = ({
     activeTab,
     selectedMonth,
     selectedSeasonId,
+    playerId: player?.id,
   });
 
   return (
@@ -93,7 +97,11 @@ export const AllMatchesTab = ({
         {!matches.length ? (
           <NoStatsMessage
             textOne="Nenhuma partida encontrada"
-            textTwo="Primeiro, adicione as partidas do time."
+            textTwo={
+              player
+                ? "O jogador ainda não tem partidas com minutos jogados."
+                : "Primeiro, adicione as partidas do time."
+            }
           />
         ) : (
           matches.map((match) => {
@@ -104,6 +112,10 @@ export const AllMatchesTab = ({
               isGeralPage,
             );
 
+            const playerStat = player?.id
+              ? match.playerStats?.find((p) => p.playerId === player.id)
+              : undefined;
+
             return (
               <MatchCard
                 key={`${match.date}-${match.homeTeam}-${match.awayTeam}`}
@@ -112,6 +124,7 @@ export const AllMatchesTab = ({
                 isGeralPage={isGeralPage}
                 career={career}
                 onAddBadge={onAddBadge}
+                playerStat={playerStat}
               />
             );
           })
