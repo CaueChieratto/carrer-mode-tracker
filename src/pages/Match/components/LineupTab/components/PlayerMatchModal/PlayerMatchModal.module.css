@@ -1,0 +1,113 @@
+.playerHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.playerInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.playerName {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.ratingBadge {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.matchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.matchTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blackColor);
+}
+
+.matchDate {
+  font-size: 14px;
+  color: var(--colorSpan, #888);
+}
+
+.minutesRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.minutesLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--blackColor, #555);
+}
+
+.minutesValue {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 0 -16px 16px -16px;
+}
+
+.statsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.statsTitle {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #fafafa;
+}
+
+.statRow:last-child {
+  border-bottom: none;
+}
+
+.statLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: var(--blackColor, #444);
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 600;
+}

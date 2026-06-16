@@ -15,6 +15,7 @@ export type MatchTabConfig = {
     career: Career;
     onRegisterSave?: (fn: () => Promise<void> | void) => void;
     isFromGeral?: boolean;
+    onOpenPlayerModal?: (playerId: string) => void;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;
   action?: () => void;

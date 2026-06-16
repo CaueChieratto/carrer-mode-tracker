@@ -188,11 +188,19 @@ export const useAddDetails = () => {
         status: "FINISHED",
         result,
         opponentEvents,
-        opponentMvpName: formValues.opponentMvpName || undefined,
-        opponentMvpRating: formValues.opponentMvpRating
-          ? Number(formValues.opponentMvpRating)
-          : undefined,
       };
+
+      if (
+        formValues.opponentMvpName &&
+        formValues.opponentMvpName.trim() !== ""
+      ) {
+        updatedMatch.opponentMvpName = formValues.opponentMvpName.trim();
+        updatedMatch.opponentMvpRating =
+          Number(formValues.opponentMvpRating) || 0;
+      } else {
+        updatedMatch.opponentMvpName = "";
+        updatedMatch.opponentMvpRating = 0;
+      }
 
       if (hasPenalties) {
         updatedMatch.homePenScore = homePenScore;

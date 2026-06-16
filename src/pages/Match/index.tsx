@@ -15,6 +15,7 @@ import { getMatchTabsConfig } from "./constants/MatchTabsConfig";
 import { useMatchData } from "./hooks/useMatchData";
 import Styles from "./Match.module.css";
 import { useNavigate } from "react-router-dom";
+import { PlayerMatchModal } from "./components/LineupTab/components/PlayerMatchModal";
 
 export const Match = () => {
   const {
@@ -32,6 +33,8 @@ export const Match = () => {
 
   const { activeModal } = useModalManager();
   const [isActionLoading, setIsActionLoading] = useState(false);
+
+  const [modalPlayerId, setModalPlayerId] = useState<string | null>(null);
 
   const saveLineupRef = useRef<(() => Promise<void> | void) | null>(null);
 
@@ -73,6 +76,10 @@ export const Match = () => {
     }
   };
 
+  const selectedPlayer = modalPlayerId
+    ? season.players.find((p) => p.id === modalPlayerId)
+    : null;
+
   return (
     <>
       {isActionLoading && <Load isTransfers />}
@@ -89,6 +96,15 @@ export const Match = () => {
           activeOption={activeIndex}
           onOptionClick={handleTabClick}
         />
+
+        {modalPlayerId && (
+          <PlayerMatchModal
+            isOpen={!!modalPlayerId}
+            closeModal={() => setModalPlayerId(null)}
+            match={match}
+            player={selectedPlayer}
+          />
+        )}
 
         {ActionButton && !isFromGeral && (
           <ContainerButton className={Styles.container_button}>
@@ -112,6 +128,7 @@ export const Match = () => {
                   career={career}
                   isFromGeral={isFromGeral}
                   onRegisterSave={registerSave}
+                  onOpenPlayerModal={setModalPlayerId}
                 />
               </div>
             </SwiperSlide>

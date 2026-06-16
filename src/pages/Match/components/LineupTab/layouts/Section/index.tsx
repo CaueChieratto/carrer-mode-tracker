@@ -11,6 +11,7 @@ type SectionProps = {
   removePlayer: (slotId: string) => void;
   swapPlayers: (idA: string, idB: string) => void;
   onPlayerClick: (playerId: string) => void;
+  onOpenModal?: (playerId: string) => void;
   playerStats: PlayerMatchStat[];
   mvpId: string | null;
   isFromGeral?: boolean;
@@ -23,6 +24,7 @@ export const Section = ({
   removePlayer,
   swapPlayers,
   onPlayerClick,
+  onOpenModal,
   mvpId,
   playerStats,
   isFromGeral,
@@ -33,6 +35,9 @@ export const Section = ({
     if (playersCount === 3) return "65px";
     return "60px";
   };
+
+  const handleSlotClick =
+    isFromGeral && onOpenModal ? onOpenModal : onPlayerClick;
 
   return (
     <div className={Styles.field_wrapper}>
@@ -56,7 +61,7 @@ export const Section = ({
                     onOpen={() => openPlayerPicker(slot.slotId)}
                     onRemove={() => removePlayer(slot.slotId)}
                     onSwap={(targetId) => swapPlayers(slot.slotId, targetId)}
-                    onPlayerClick={onPlayerClick}
+                    onPlayerClick={handleSlotClick}
                     playerStats={playerStats}
                     mvpId={mvpId}
                   />
@@ -75,7 +80,7 @@ export const Section = ({
               onOpen={() => openPlayerPicker("gk-0")}
               onRemove={() => removePlayer("gk-0")}
               onSwap={(targetId) => swapPlayers("gk-0", targetId)}
-              onPlayerClick={onPlayerClick}
+              onPlayerClick={handleSlotClick}
               playerStats={playerStats}
               mvpId={mvpId}
             />

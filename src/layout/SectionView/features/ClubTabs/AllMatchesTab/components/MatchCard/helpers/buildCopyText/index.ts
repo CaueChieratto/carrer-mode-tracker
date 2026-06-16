@@ -106,6 +106,12 @@ export const buildMatchCopyText = ({
     (a, b) => b.rating - a.rating,
   )[0];
 
+  const opponentMvpRating = match.opponentMvpRating || 0;
+  const myMvpRating = mvp?.rating || 0;
+
+  const isOurMvpOverall = myMvpRating >= opponentMvpRating && myMvpRating > 0;
+  const isOpponentMvpOverall = opponentMvpRating > myMvpRating;
+
   const substitutionsByStarter = new Map<
     string,
     {
@@ -150,7 +156,8 @@ export const buildMatchCopyText = ({
     if (substitute && stat) {
       const substituteHighlight = buildHighlightText(substitute.stat);
 
-      const isSubstituteMvp = mvp?.playerId === substitute.stat.playerId;
+      const isSubstituteMvp =
+        isOurMvpOverall && mvp?.playerId === substitute.stat.playerId;
 
       text += ` e saiu aos ${stat.minutesPlayed} minutos para entrada do ${substitute.playerName} (${substitute.rating})`;
 
@@ -216,7 +223,11 @@ export const buildMatchCopyText = ({
       parts.push(`gols contra a favor: ${ownGoalsText}`);
     }
 
-    if (match.opponentMvpName && match.opponentMvpRating) {
+    if (
+      isOpponentMvpOverall &&
+      match.opponentMvpName &&
+      match.opponentMvpRating
+    ) {
       parts.push(
         `sendo ${match.opponentMvpName} o MVP da partida com nota ${match.opponentMvpRating}`,
       );
@@ -235,7 +246,7 @@ export const buildMatchCopyText = ({
         match.lineup.goalkeeper.playerName || "Desconhecido",
         stat?.rating || 0,
         stat,
-        mvp?.playerId === match.lineup.goalkeeper.playerId,
+        isOurMvpOverall && mvp?.playerId === match.lineup.goalkeeper.playerId,
       ),
     );
   }
@@ -248,7 +259,7 @@ export const buildMatchCopyText = ({
         player.playerName || "Desconhecido",
         stat?.rating || 0,
         stat,
-        mvp?.playerId === player.playerId,
+        isOurMvpOverall && mvp?.playerId === player.playerId,
       ),
     );
   });

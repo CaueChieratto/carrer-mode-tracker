@@ -41,7 +41,7 @@ export const PlayerDetails = ({
           top: stats?.rating != null && stats.rating > 0 ? "85px" : "65px",
         }}
       >
-        ×
+        ✕
       </button>
     )}
 

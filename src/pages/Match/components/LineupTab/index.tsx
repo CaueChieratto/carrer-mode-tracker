@@ -18,6 +18,7 @@ type LineupTabProps = {
   match: Match;
   isFromGeral?: boolean;
   onRegisterSave?: (fn: () => Promise<void> | void) => void;
+  onOpenPlayerModal?: (playerId: string) => void;
 };
 
 const parseDate = (dateStr: string): number => {
@@ -40,12 +41,12 @@ export const LineupTab = ({
   match,
   isFromGeral,
   onRegisterSave,
+  onOpenPlayerModal,
 }: LineupTabProps) => {
   const { careerId, seasonId } = useParams<{
     careerId: string;
     seasonId: string;
   }>();
-
   const navigate = useNavigate();
 
   const savedLineupRef = useRef<SavedLineup | null>(match.lineup || null);
@@ -60,7 +61,6 @@ export const LineupTab = ({
     if (!isLineupEmpty(match.lineup)) return match.lineup;
 
     const matches = season.matches || [];
-
     const sortedMatches = [...matches].sort(
       (a, b) => parseDate(a.date) - parseDate(b.date),
     );
@@ -79,7 +79,6 @@ export const LineupTab = ({
           return prevMatch.lineup;
         }
       }
-
       for (let i = currentIndex - 1; i >= 0; i--) {
         const prevMatch = sortedMatches[i];
         if (!isLineupEmpty(prevMatch.lineup)) {
@@ -129,7 +128,6 @@ export const LineupTab = ({
       const updatedPlayerStats = (match.playerStats || []).filter((stat) =>
         activePlayerIds.has(stat.playerId),
       );
-
       const removedPlayerIds = (match.playerStats || [])
         .filter((stat) => !activePlayerIds.has(stat.playerId))
         .map((stat) => stat.playerId);
@@ -139,14 +137,12 @@ export const LineupTab = ({
         updatedPlayerStats,
         removedPlayerIds,
       );
-
       savedLineupRef.current = currentSavedLineup;
     });
   }, [onRegisterSave, saveLineup, buildSavedLineup, match.playerStats]);
 
   const playerClick = (playerId: string) => {
     const lineupToCheck = savedLineupRef.current || match.lineup;
-
     const isPlayerSaved = [
       lineupToCheck?.goalkeeper?.playerId,
       ...(lineupToCheck?.lines?.map((s) => s.playerId) || []),
@@ -167,14 +163,12 @@ export const LineupTab = ({
     if (!match.playerStats || match.playerStats.length === 0) return null;
     let highestRating = 0;
     let id: string | null = null;
-
     match.playerStats.forEach((stat) => {
       if (stat.rating > highestRating) {
         highestRating = stat.rating;
         id = stat.playerId;
       }
     });
-
     return highestRating > 0 ? id : null;
   }, [match.playerStats]);
 
@@ -192,7 +186,6 @@ export const LineupTab = ({
           selectedFormation={selectedFormation}
           handleFormationChange={handleFormationChange}
         />
-
         <Section
           isFromGeral={isFromGeral}
           lineup={lineup}
@@ -201,10 +194,10 @@ export const LineupTab = ({
           removePlayer={removePlayer}
           swapPlayers={swapPlayers}
           onPlayerClick={playerClick}
+          onOpenModal={onOpenPlayerModal}
           playerStats={playerStats}
           mvpId={mvpId}
         />
-
         {selectingSlotId && !isFromGeral && (
           <PlayerPicker
             players={activePlayers}
@@ -221,6 +214,7 @@ export const LineupTab = ({
         openPlayerPicker={openPlayerPicker}
         removePlayer={removePlayer}
         onPlayerClick={playerClick}
+        onOpenModal={onOpenPlayerModal}
         playerStats={playerStats}
         mvpId={mvpId}
         allPlayers={season.players}

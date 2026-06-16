@@ -17,6 +17,7 @@ type BottomProps = {
   openPlayerPicker: (slotId: string) => void;
   removePlayer: (slotId: string) => void;
   onPlayerClick: (playerId: string) => void;
+  onOpenModal?: (playerId: string) => void;
   playerStats: PlayerMatchStat[];
   mvpId: string | null;
   allPlayers: Players[];
@@ -29,6 +30,7 @@ export const Bottom = ({
   openPlayerPicker,
   removePlayer,
   onPlayerClick,
+  onOpenModal,
   mvpId,
   playerStats,
   allPlayers,
@@ -49,10 +51,12 @@ export const Bottom = ({
       while (true) {
         let next: string | null = null;
         const currStat = playerStats.find((s) => s.playerId === curr);
+
         if (currStat?.substituteIn && currStat.substituteIn !== "Nenhum") {
           const p = allPlayers.find((p) => p.name === currStat.substituteIn);
           if (p && !ordered.includes(p.id)) next = p.id;
         }
+
         if (!next) {
           const currPlayer = allPlayers.find((p) => p.id === curr);
           if (currPlayer) {
@@ -64,6 +68,7 @@ export const Bottom = ({
             if (pointedBy) next = pointedBy.playerId;
           }
         }
+
         if (next) {
           ordered.push(next);
           curr = next;
@@ -109,7 +114,6 @@ export const Bottom = ({
 
     const aPosition = a.player?.position;
     const bPosition = b.player?.position;
-
     if (!aPosition || !bPosition) return 0;
 
     const groupA = getGroupForPosition(aPosition);
@@ -164,6 +168,7 @@ export const Bottom = ({
               slot={slot}
               onRemove={removePlayer}
               onPlayerClick={onPlayerClick}
+              onOpenModal={onOpenModal}
               stats={stats}
               isMVP={isMVP}
               allPlayers={allPlayers}

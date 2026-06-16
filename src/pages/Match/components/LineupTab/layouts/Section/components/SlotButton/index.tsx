@@ -64,7 +64,13 @@ export const SlotButton = ({
           onPointerMove={handlePointerMove}
           onPointerUp={clearTimer}
           onPointerLeave={clearTimer}
-          onClick={handleClick}
+          onClick={(e) => {
+            if (isFromGeral) {
+              clickAction();
+            } else {
+              handleClick(e);
+            }
+          }}
         >
           <PlayerDetails
             isFromGeral={isFromGeral}

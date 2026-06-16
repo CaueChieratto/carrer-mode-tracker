@@ -17,6 +17,7 @@ type PlayerRowProps = {
   slot: BenchSlot;
   onRemove: (slotId: string) => void;
   onPlayerClick: (playerId: string) => void;
+  onOpenModal?: (playerId: string) => void;
   stats?: PlayerMatchStat;
   isMVP?: boolean;
   allStats?: PlayerMatchStat[];
@@ -30,6 +31,7 @@ export const PlayerRow = ({
   slot,
   onRemove,
   onPlayerClick,
+  onOpenModal,
   isMVP,
   stats,
   allPlayers,
@@ -56,7 +58,6 @@ export const PlayerRow = ({
     allStats
   ) {
     showSub = true;
-
     if (chainSubMinute !== undefined && chainSubMinute !== Infinity) {
       subMinute = chainSubMinute;
       subOutName = chainSubOutName;
@@ -71,17 +72,30 @@ export const PlayerRow = ({
     }
   }
 
+  const enteredGame =
+    showSub || Boolean(stats?.minutesPlayed && stats.minutesPlayed > 0);
+
   return (
     <Row data-slot-id={slot.slotId}>
       <div
         className={Styles.player_info}
+        style={
+          (isFromGeral && enteredGame) || !isFromGeral
+            ? { cursor: "pointer" }
+            : undefined
+        }
         onClick={() => {
-          if (!isFromGeral) onPlayerClick(slot.player!.id);
+          if (isFromGeral) {
+            if (enteredGame && onOpenModal) {
+              onOpenModal(slot.player!.id);
+            }
+          } else {
+            onPlayerClick(slot.player!.id);
+          }
         }}
       >
         <div className={Styles.player_name_row}>
           <span className={Styles.shirt_number}>{slot.player.shirtNumber}</span>
-
           <span className={Styles.player_name}>{slot.player.name}</span>
 
           {stats && stats.goals > 0 && (
@@ -89,37 +103,31 @@ export const PlayerRow = ({
               <span className={Styles.icon_wrapper}>
                 <GiSoccerBall size={14} />
               </span>
-
               {stats.goals > 1 && (
                 <NumberStats type="bench">{stats.goals}</NumberStats>
               )}
             </div>
           )}
-
           {stats && stats.assists > 0 && (
             <div className={Styles.icons}>
               <span className={Styles.icon_wrapper}>
                 <Boot />
               </span>
-
               {stats.assists > 1 && (
                 <NumberStats type="bench">{stats.assists}</NumberStats>
               )}
             </div>
           )}
-
           {stats && stats.ownGoals && stats.ownGoals > 0 ? (
             <div className={Styles.icons}>
               <span className={Styles.icon_wrapper}>
                 <OwnGoal lineup />
               </span>
-
               {stats.ownGoals > 1 && (
                 <NumberStats type="bench">{stats.ownGoals}</NumberStats>
               )}
             </div>
           ) : null}
-
           {stats?.secondYellowCard ? (
             <span className={Styles.icon_wrapper}>
               <RefereeCard
@@ -143,7 +151,6 @@ export const PlayerRow = ({
             </span>
           )}
         </div>
-
         {showSub && (
           <div className={Styles.player_sub_row}>
             <span className={Styles.sub_icon_wrapper}>
