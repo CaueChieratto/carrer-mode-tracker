@@ -11,6 +11,7 @@ import GeneralTab from "../features/ClubTabs/GeneralTab";
 import SquadTab from "../features/ClubTabs/SquadTab";
 import { StatsTab_Club } from "../features/ClubTabs/StatsTab_Club";
 import { BestPlayersTab } from "../features/ClubTabs/BestPlayersTab";
+import { CuriositiesTab } from "../features/ClubTabs/CuriositiesTab";
 
 export type TabConfig = {
   title: string;
@@ -67,6 +68,12 @@ export const getSeasonTabsConfig = (
     {
       title: isPlayer ? "Total" : "Geral",
       component: isPlayer ? TotalPlayerTab : GeneralTab,
+      actionButton: Buttons.ChangeClubColors,
+    },
+
+    !isPlayer && {
+      title: "Curiosidades",
+      component: CuriositiesTab,
       actionButton: Buttons.ChangeClubColors,
     },
   ].filter(Boolean) as TabConfig[];

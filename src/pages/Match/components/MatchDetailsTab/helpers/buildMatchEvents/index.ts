@@ -6,7 +6,10 @@ import { extractPlayerEvents } from "./helpers/extractPlayerEvents";
 import { extractOpponentEvents } from "./helpers/extractOpponentEvents";
 
 export const buildMatchEvents = (match: Match, season: ClubData) => {
-  const { mvpPlayerName, mvpRating } = extractMVP(match, season);
+  const { mvpPlayerName, mvpRating, shirtNumber, isUserPlayer } = extractMVP(
+    match,
+    season,
+  );
 
   const {
     events: userEvents,
@@ -74,6 +77,8 @@ export const buildMatchEvents = (match: Match, season: ClubData) => {
   return {
     mvpPlayerName,
     mvpRating,
+    isUserPlayer,
+    shirtNumber,
     eventsByPeriod,
     periods,
     userGoalsList: userGoalsCombined.sort((a, b) => a.sortTime - b.sortTime),

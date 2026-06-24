@@ -73,16 +73,21 @@ export function useMatchForm({
   );
 
   const allTeams = useMemo(() => {
-    if (!season || !season.teams) return [];
+    if (!career?.clubData) return [];
 
     const teamMap = new Map<string, Teams>();
 
-    season.teams.forEach((t) => {
-      teamMap.set(t.name.toLowerCase().replace(/\s/g, ""), t);
+    career.clubData.forEach((season) => {
+      season.teams?.forEach((t) => {
+        const key = t.name.toLowerCase().replace(/\s/g, "");
+        if (!teamMap.has(key)) {
+          teamMap.set(key, t);
+        }
+      });
     });
 
     return Array.from(teamMap.values());
-  }, [season]);
+  }, [career]);
 
   const teamOptions = useMemo(() => {
     let filtered = allTeams;

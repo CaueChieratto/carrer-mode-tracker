@@ -31,6 +31,8 @@ export const MatchDetailsTab = ({
     periods,
     userGoalsList,
     opponentGoalsList,
+    shirtNumber,
+    isUserPlayer,
   } = buildMatchEvents(match, season);
 
   const hasPenalties =
@@ -54,7 +56,14 @@ export const MatchDetailsTab = ({
         awayBadge={awayBadge}
       />
 
-      {mvpRating && <MVPCard playerName={mvpPlayerName} rating={mvpRating} />}
+      {mvpRating && (
+        <MVPCard
+          shirtNumber={shirtNumber}
+          playerName={mvpPlayerName}
+          rating={mvpRating}
+          isUserPlayer={isUserPlayer}
+        />
+      )}
 
       {periods.length > 0 && (
         <Timeline

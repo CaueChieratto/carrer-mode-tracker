@@ -2,13 +2,21 @@ import { FaStar } from "react-icons/fa";
 import Styles from "./MVPCard.module.css";
 import { CardDetails } from "../../../../../../ui/IconsSVG/CardDetails";
 import { UseMatchRatingColor } from "../../../../../../common/hooks/Colors/GetOverallColor";
+import { PlayerCircle } from "../../../LineupTab/layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
 
 type MVPCardProps = {
   playerName: string;
   rating: number;
+  shirtNumber: number | null;
+  isUserPlayer: boolean;
 };
 
-export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
+export const MVPCard = ({
+  playerName,
+  rating,
+  shirtNumber,
+  isUserPlayer,
+}: MVPCardProps) => {
   const colors = UseMatchRatingColor(rating);
 
   return (
@@ -26,6 +34,9 @@ export const MVPCard = ({ playerName, rating }: MVPCardProps) => {
 
       <div className={Styles.mvp_content}>
         <div className={Styles.mvp_info}>
+          {isUserPlayer && shirtNumber && (
+            <PlayerCircle shirtNumber={shirtNumber} />
+          )}
           <span className={Styles.mvp_name}>{playerName}</span>
         </div>
         <div className={Styles.mvp_rating} style={{ backgroundColor: colors }}>
