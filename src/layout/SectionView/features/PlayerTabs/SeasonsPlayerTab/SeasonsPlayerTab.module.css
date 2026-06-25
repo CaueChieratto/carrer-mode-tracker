@@ -107,3 +107,13 @@
   min-width: 150px;
   text-align: center;
 }
+
+.copy {
+  position: absolute;
+  top: -28px;
+  right: -22px;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -7,6 +7,8 @@ import { Trophy } from "../../../../../../common/interfaces/club/trophy";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { sortLeaguesByLevel } from "../../../../../../common/utils/Sorts";
 import Card from "../../../../../../ui/Card";
+import { Copy } from "../../../../../../common/utils/Copy";
+import { buildPlayerTabCopyText } from "../../helpers/buildPlayerTabCopyText";
 
 type PlayerSeasonProps = {
   season: ClubData;
@@ -36,10 +38,24 @@ const PlayerSeason = ({
 
   const sortedLeagues = sortLeaguesByLevel(playerInSeason.statsLeagues);
 
+  const copySeason = async () => {
+    if (!playerInSeason) return;
+    const text = buildPlayerTabCopyText(
+      "SEASON",
+      playerInSeason,
+      trophiesWonInSeason,
+      seasonString,
+    );
+    await Copy(text, "Estatísticas da temporada copiadas com sucesso!");
+  };
+
   return (
     <Card className={Styles.card} key={season.id}>
-      <SeasonRow seasonString={seasonString} player={player} />
-
+      <SeasonRow
+        seasonString={seasonString}
+        player={player}
+        onClickCopy={copySeason}
+      />
       {sortedLeagues.map((leagueStats) => {
         const trophy = trophiesWonInSeason.find(
           (t) => t.leagueName === leagueStats.leagueName,
