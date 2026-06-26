@@ -17,7 +17,7 @@ type TotalPlayerTabProps = {
 };
 
 const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
-  const { allTrophiesWon } = useTotalPlayerTab(career, player);
+  const { allTrophiesWon, seasonsCount } = useTotalPlayerTab(career, player);
   const [expand, setExpand] = useState<Record<string, boolean>>({});
 
   const toggleExpand = (leagueName: string) => {
@@ -26,18 +26,6 @@ const TotalPlayerTab = ({ player, career }: TotalPlayerTabProps) => {
       [leagueName]: !prev[leagueName],
     }));
   };
-
-  const normalizedName = player?.name.trim().toLowerCase();
-  const normalizedNation = player?.nation.trim().toLowerCase();
-  const seasonsCount = player
-    ? career.clubData.filter((s) =>
-        s.players.some(
-          (p) =>
-            p.name.trim().toLowerCase() === normalizedName &&
-            p.nation.trim().toLowerCase() === normalizedNation,
-        ),
-      ).length
-    : 0;
 
   const copyTotalLeague = async () => {
     if (!player) return;

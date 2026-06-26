@@ -19,33 +19,35 @@ const getSeasonString = (seasonNumber: number, career: Career): string => {
 };
 
 export const useTotalPlayerTab = (career: Career, player?: Players) => {
-  const allTrophiesWon = useMemo((): Trophy[] => {
-    if (!player) return [];
+  const { allTrophiesWon, seasonsCount } = useMemo(() => {
+    if (!player) return { allTrophiesWon: [], seasonsCount: 0 };
 
     const normalizedName = player.name.trim().toLowerCase();
     const normalizedNation = player.nation.trim().toLowerCase();
 
-    const seasonsPlayerPlayedStrings = career.clubData
-      .filter((season) => {
-        const playerInSeason = season.players.find(
-          (p) =>
-            p.name.trim().toLowerCase() === normalizedName &&
-            p.nation.trim().toLowerCase() === normalizedNation,
-        );
+    const seasonsPlayerPlayed = career.clubData.filter((season) => {
+      const playerInSeason = season.players.find(
+        (p) =>
+          p.name.trim().toLowerCase() === normalizedName &&
+          p.nation.trim().toLowerCase() === normalizedNation,
+      );
 
-        if (!playerInSeason) return false;
+      if (!playerInSeason) return false;
 
-        const totalStats = calculateTotalStats(playerInSeason);
-        return (
-          totalStats.games > 0 ||
-          totalStats.goals > 0 ||
-          totalStats.assists > 0 ||
-          totalStats.defenses > 0 ||
-          totalStats.minutesPlayed > 0 ||
-          totalStats.cleanSheets > 0
-        );
-      })
-      .map((season) => getSeasonString(season.seasonNumber, career));
+      const totalStats = calculateTotalStats(playerInSeason);
+      return (
+        totalStats.games > 0 ||
+        totalStats.goals > 0 ||
+        totalStats.assists > 0 ||
+        totalStats.defenses > 0 ||
+        totalStats.minutesPlayed > 0 ||
+        totalStats.cleanSheets > 0
+      );
+    });
+
+    const seasonsPlayerPlayedStrings = seasonsPlayerPlayed.map((season) =>
+      getSeasonString(season.seasonNumber, career),
+    );
 
     const playerTrophies = career.trophies
       .map((trophy) => {
@@ -64,12 +66,17 @@ export const useTotalPlayerTab = (career: Career, player?: Players) => {
       })
       .filter((trophy): trophy is Trophy => trophy !== null);
 
-    return playerTrophies.sort(
+    const sortedTrophies = playerTrophies.sort(
       (a, b) =>
         (LeagueLevels[a.leagueName] ?? 999) -
         (LeagueLevels[b.leagueName] ?? 999),
     );
+
+    return {
+      allTrophiesWon: sortedTrophies,
+      seasonsCount: seasonsPlayerPlayed.length,
+    };
   }, [career, player]);
 
-  return { allTrophiesWon };
+  return { allTrophiesWon, seasonsCount };
 };

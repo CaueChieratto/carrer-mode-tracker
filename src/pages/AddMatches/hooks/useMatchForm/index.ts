@@ -79,7 +79,7 @@ export function useMatchForm({
 
     career.clubData.forEach((season) => {
       season.teams?.forEach((t) => {
-        const key = t.name.toLowerCase().replace(/\s/g, "");
+        const key = `${t.name.toLowerCase().replace(/\s/g, "")}-${t.leagueName || ""}`;
         if (!teamMap.has(key)) {
           teamMap.set(key, t);
         }
@@ -105,7 +105,7 @@ export function useMatchForm({
       );
     }
 
-    return filtered.map((t) => t.name);
+    return Array.from(new Set(filtered.map((t) => t.name)));
   }, [allTeams, formValues.league, formValues.opponentTeam]);
 
   const formFields = useMemo(
