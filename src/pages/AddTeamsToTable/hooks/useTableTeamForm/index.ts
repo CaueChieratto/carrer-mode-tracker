@@ -5,13 +5,13 @@ import { Career } from "../../../../common/interfaces/Career";
 import { getTableTeamFormFields } from "../../constants/TableTeamFormFields";
 
 type UseFormReturn = ReturnType<typeof useForm>;
-
 interface UseTableTeamFormParams {
   career?: Career;
   season?: ClubData;
   formValues: Record<string, string>;
   setFormValues: UseFormReturn["setFormValues"];
   isEditing?: boolean;
+  addedTeamNames?: string[];
 }
 
 export function useTableTeamForm({
@@ -19,6 +19,7 @@ export function useTableTeamForm({
   season,
   formValues,
   isEditing = false,
+  addedTeamNames = [],
 }: UseTableTeamFormParams) {
   const teamOptions = useMemo(() => {
     let options = season?.teams ? season.teams.map((t) => t.name) : [];
@@ -33,6 +34,13 @@ export function useTableTeamForm({
       options.push(career.clubName);
     }
 
+    if (addedTeamNames.length > 0) {
+      options = options.filter((name) => {
+        const isCurrentEditingTeam = isEditing && name === formValues.teamName;
+        return !addedTeamNames.includes(name) || isCurrentEditingTeam;
+      });
+    }
+
     if (formValues.teamName) {
       const searchValue = formValues.teamName.trim().toLowerCase();
       options = options.filter((name) =>
@@ -41,7 +49,7 @@ export function useTableTeamForm({
     }
 
     return options;
-  }, [season, career, formValues.teamName]);
+  }, [season, career, formValues.teamName, addedTeamNames, isEditing]);
 
   const hasSelectedTeam = useMemo(() => {
     if (!formValues.teamName) return false;

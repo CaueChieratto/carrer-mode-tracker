@@ -50,6 +50,7 @@ export const getTableTeamFormFields = (
               "Rebaixamento",
               "Acesso",
               "Play-off para Promoção",
+              "Nenhuma",
             ],
           },
         ],

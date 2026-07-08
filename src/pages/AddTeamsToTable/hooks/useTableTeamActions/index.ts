@@ -84,6 +84,7 @@ export function useTableTeamActions({
         | "relegation"
         | "promotion"
         | "promotion_playoff"
+        | "none"
         | "default" => {
         switch (val) {
           case "Campeão":
@@ -100,6 +101,8 @@ export function useTableTeamActions({
             return "promotion";
           case "Play-off para Promoção":
             return "promotion_playoff";
+          case "Nenhuma":
+            return "none";
           default:
             return "default";
         }

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef, useEffect, useState } from "react";
 import { Form, useParams, useLocation } from "react-router-dom";
 import Styles from "./AddTeamsToTable.module.css";
 import { useTableTeamForm } from "./hooks/useTableTeamForm/index.ts";
@@ -10,6 +10,7 @@ import HeaderSeason from "../../components/HeaderSeason/index.tsx";
 import Load from "../../components/Load/index.tsx";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext/index.tsx";
 import Navbar from "../../ui/Navbar/index.tsx";
+import { ServiceTable } from "./services/ServiceTable/index.ts";
 
 export const AddTeamsToTable = () => {
   const { careerId, seasonId, teamId } = useParams<{
@@ -22,6 +23,7 @@ export const AddTeamsToTable = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
   const { career, season } = useSeasonData(careerId, seasonId);
+  const [addedTeamNames, setAddedTeamNames] = useState<string[]>([]);
 
   const {
     formValues,
@@ -33,9 +35,22 @@ export const AddTeamsToTable = () => {
   } = useForm();
 
   useEffect(() => {
+    const fetchTable = async () => {
+      if (careerId && seasonId) {
+        try {
+          const data = await ServiceTable.getTableBySeason(careerId, seasonId);
+          setAddedTeamNames(data.map((t) => t.name));
+        } catch (error) {
+          console.error("Erro ao buscar tabela: ", error);
+        }
+      }
+    };
+    fetchTable();
+  }, [careerId, seasonId]);
+
+  useEffect(() => {
     if (state?.teamToEdit) {
       const t = state.teamToEdit;
-
       const mapZoneToForm = (zone?: string) => {
         switch (zone) {
           case "first":
@@ -52,8 +67,10 @@ export const AddTeamsToTable = () => {
             return "Acesso";
           case "promotion_playoff":
             return "Play-off para Promoção";
+          case "none":
+            return "Nenhuma";
           default:
-            return "Padrão";
+            return "Padrão (Automático)";
         }
       };
 
@@ -80,6 +97,7 @@ export const AddTeamsToTable = () => {
     formValues,
     setFormValues,
     isEditing: !!teamId,
+    addedTeamNames,
   });
 
   const { isSaving, saveTableTeam, deleteTableTeam } = useTableTeamActions({
