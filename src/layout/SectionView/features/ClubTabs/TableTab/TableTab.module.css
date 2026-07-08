@@ -81,6 +81,14 @@
   background-color: #008b8b;
 }
 
+.pos_promotion {
+  background-color: #009688;
+}
+
+.pos_promotion_playoff {
+  background-color: #49cb40;
+}
+
 .pos_relegation {
   background-color: #bd2027;
 }

@@ -48,6 +48,10 @@ export const AddTeamsToTable = () => {
             return "Conference League";
           case "relegation":
             return "Rebaixamento";
+          case "promotion":
+            return "Acesso";
+          case "promotion_playoff":
+            return "Play-off para Promoção";
           default:
             return "Padrão";
         }
@@ -71,6 +75,7 @@ export const AddTeamsToTable = () => {
   }, [careerId, seasonId]);
 
   const { formFields } = useTableTeamForm({
+    career,
     season,
     formValues,
     setFormValues,
@@ -81,6 +86,7 @@ export const AddTeamsToTable = () => {
     careerId: careerId!,
     seasonId: seasonId!,
     teamId,
+    career: career!,
     season: season!,
     formValues,
     onSuccess: back,

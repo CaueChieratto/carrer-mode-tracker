@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Career } from "../../../../common/interfaces/Career";
 import { ServiceTable } from "../../services/ServiceTable";
 
 interface UseTableTeamActionsParams {
   careerId: string;
   seasonId: string;
   teamId?: string;
+  career: Career;
   season: ClubData;
   formValues: Record<string, string>;
   onSuccess: () => void;
@@ -15,6 +17,7 @@ export function useTableTeamActions({
   careerId,
   seasonId,
   teamId,
+  career,
   season,
   formValues,
   onSuccess,
@@ -46,7 +49,9 @@ export function useTableTeamActions({
       (t) => t.name.trim().toLowerCase() === searchName,
     );
 
-    if (!existingTeam) {
+    const isCareerTeam = career?.clubName.trim().toLowerCase() === searchName;
+
+    if (!existingTeam && !isCareerTeam) {
       alert("Por favor, selecione um time válido da lista.");
       return;
     }
@@ -54,7 +59,13 @@ export function useTableTeamActions({
     try {
       setIsSaving(true);
 
-      const teamBadge = existingTeam.badge || "";
+      let teamBadge = "";
+      if (existingTeam) {
+        teamBadge = existingTeam.badge || "";
+      } else if (isCareerTeam) {
+        teamBadge = career.teamBadge || "";
+      }
+
       const played = Number(formValues.played || 0);
       const won = Number(formValues.won || 0);
       const drawn = Number(formValues.drawn || 0);
@@ -71,6 +82,8 @@ export function useTableTeamActions({
         | "europa"
         | "conference"
         | "relegation"
+        | "promotion"
+        | "promotion_playoff"
         | "default" => {
         switch (val) {
           case "Campeão":
@@ -83,6 +96,10 @@ export function useTableTeamActions({
             return "conference";
           case "Rebaixamento":
             return "relegation";
+          case "Acesso":
+            return "promotion";
+          case "Play-off para Promoção":
+            return "promotion_playoff";
           default:
             return "default";
         }
@@ -120,7 +137,7 @@ export function useTableTeamActions({
     } finally {
       setIsSaving(false);
     }
-  }, [careerId, seasonId, teamId, formValues, season, onSuccess]);
+  }, [careerId, seasonId, teamId, formValues, season, career, onSuccess]);
 
   return { isSaving, saveTableTeam, deleteTableTeam };
 }

@@ -48,6 +48,8 @@ export const getTableTeamFormFields = (
               "Liga Europeia",
               "Conference League",
               "Rebaixamento",
+              "Acesso",
+              "Play-off para Promoção",
             ],
           },
         ],

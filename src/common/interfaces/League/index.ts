@@ -3,4 +3,5 @@ export type League = {
   trophy: string;
   logo: string;
   league?: boolean;
+  isFirstDivision?: boolean;
 };

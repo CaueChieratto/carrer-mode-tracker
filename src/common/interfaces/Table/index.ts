@@ -4,6 +4,8 @@ export type QualificationZone =
   | "europa"
   | "conference"
   | "relegation"
+  | "promotion"
+  | "promotion_playoff"
   | "none";
 
 export type TableRowData = {

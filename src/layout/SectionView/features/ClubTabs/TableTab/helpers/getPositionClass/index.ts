@@ -13,6 +13,10 @@ export const getPositionClass = (zone: QualificationZone) => {
       return Styles.pos_conference;
     case "relegation":
       return Styles.pos_relegation;
+    case "promotion":
+      return Styles.pos_promotion;
+    case "promotion_playoff":
+      return Styles.pos_promotion_playoff;
     default:
       return Styles.pos_default;
   }

@@ -54,7 +54,10 @@ export const TableTab = ({ season, career }: TableTabProps) => {
   const storageKey = `tableActiveTab_${isGeralPage ? "geral" : selectedSeasonData.id}`;
   const { activeMode, setActiveMode } = useTableMode(storageKey);
 
-  const { tableData } = useTableData(career, selectedSeasonData);
+  const { tableData, isFirstDivision } = useTableData(
+    career,
+    selectedSeasonData,
+  );
   const columns = buildTableColumns(activeMode);
 
   const rowClick = (row: TableRowData) => {
@@ -138,7 +141,10 @@ export const TableTab = ({ season, career }: TableTabProps) => {
                 onRowClick={isGeralPage ? undefined : rowClick}
               />
             </table>
-            <LegendTable />
+            <LegendTable
+              tableData={tableData}
+              isFirstDivision={isFirstDivision}
+            />
           </Card>
         </>
       )}
