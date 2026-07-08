@@ -17,6 +17,7 @@ import { Copy } from "../../../../../common/utils/Copy";
 import { buildTableCopyText } from "./helpers/buildTableCopyText";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import CustomSelect from "../../../../../components/CustomSelect";
+import { leaguesByContinent } from "../../../../../common/utils/league";
 
 type TableTabProps = {
   season: ClubData;
@@ -60,6 +61,29 @@ export const TableTab = ({ season, career }: TableTabProps) => {
   );
   const columns = buildTableColumns(activeMode);
 
+  const mainLeague = useMemo(() => {
+    if (
+      !selectedSeasonData.leagues ||
+      selectedSeasonData.leagues.length === 0
+    ) {
+      return undefined;
+    }
+
+    const allKnownCompetitions = Object.values(leaguesByContinent).flatMap(
+      (continent) => Object.values(continent).flat(),
+    );
+
+    const trueLeague = selectedSeasonData.leagues.find((seasonComp) => {
+      if (seasonComp.league) return true;
+      const knownComp = allKnownCompetitions.find(
+        (c) => c.name === seasonComp.name,
+      );
+      return knownComp?.league === true;
+    });
+
+    return trueLeague || selectedSeasonData.leagues[0];
+  }, [selectedSeasonData.leagues]);
+
   const rowClick = (row: TableRowData) => {
     if (isGeralPage) return;
 
@@ -73,11 +97,20 @@ export const TableTab = ({ season, career }: TableTabProps) => {
 
   const copyClick = async () => {
     if (!tableData.length) return;
-
     let text = buildTableCopyText(tableData, activeMode);
 
+    let headerText = "";
+
+    if (mainLeague?.name) {
+      headerText += `${mainLeague.name}\n`;
+    }
+
     if (isGeralPage && selectedSeasonLabel) {
-      text = `${selectedSeasonLabel}\n\n${text}`;
+      headerText += `${selectedSeasonLabel}\n`;
+    }
+
+    if (headerText) {
+      text = `${headerText}\n${text}`;
     }
 
     await Copy(text, "Tabela copiada com sucesso!");
@@ -131,6 +164,21 @@ export const TableTab = ({ season, career }: TableTabProps) => {
           </div>
 
           <Card className={Styles.card}>
+            {mainLeague && (
+              <div className={Styles.league_header}>
+                {mainLeague.logo && (
+                  <div className={Styles.background_image}>
+                    <img
+                      src={mainLeague.logo}
+                      alt={mainLeague.name}
+                      className={Styles.league_image}
+                    />
+                  </div>
+                )}
+                <span className={Styles.league_name}>{mainLeague.name}</span>
+              </div>
+            )}
+
             <table className={Styles.table}>
               <TableHeader columns={columns} />
               <TableBody

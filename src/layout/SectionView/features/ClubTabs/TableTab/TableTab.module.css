@@ -12,6 +12,36 @@
   justify-content: space-between;
 }
 
+.league_header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-left: 4px;
+}
+
+.background_image {
+  background-color: #fff;
+  width: fit-content;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.league_image {
+  width: 30px;
+  object-fit: contain;
+}
+
+.league_name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-add-player, #000);
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -34,6 +64,10 @@
   border-bottom: 1px solid var(--border-input);
   padding-left: 4px;
   vertical-align: middle;
+}
+
+tbody {
+  border-top: 1px solid var(--border-input);
 }
 
 .highlight_row {
