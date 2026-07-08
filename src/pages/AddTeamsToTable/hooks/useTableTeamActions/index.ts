@@ -63,7 +63,15 @@ export function useTableTeamActions({
       const goalsAgainst = Number(formValues.goalsAgainst || 0);
       const calculatedPoints = won * 3 + drawn * 1;
 
-      const mapFormToZone = (val?: string) => {
+      const mapFormToZone = (
+        val?: string,
+      ):
+        | "first"
+        | "champions"
+        | "europa"
+        | "conference"
+        | "relegation"
+        | "default" => {
         switch (val) {
           case "Campeão":
             return "first";

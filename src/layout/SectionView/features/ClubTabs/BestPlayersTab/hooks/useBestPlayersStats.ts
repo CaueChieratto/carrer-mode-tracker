@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
 import { Career } from "../../../../../../common/interfaces/Career";
-import { AggregatedPlayerStats } from "../types/AggregatedPlayerStats";
 import { PlayerStatsAccumulator } from "../../../../../../common/interfaces/PlayerStatsAccumulator/PlayerStatsAccumulator";
 import { getAggregatedPlayersForCareer } from "../../../../helpers/mergeMatchStats";
+import { AggregatedPlayerStats } from "../../../../../../common/interfaces/AggregatedPlayerStats/AggregatedPlayerStats";
 
 export const useBestPlayersStats = (
   season: ClubData,

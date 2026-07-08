@@ -1,4 +1,4 @@
-import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { Players } from "../playersInfo/players";
 
 export type AggregatedPlayerStats = {
   player: Players;

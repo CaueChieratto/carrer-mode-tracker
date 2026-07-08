@@ -1,4 +1,4 @@
-import { AggregatedPlayerStats } from "../types/AggregatedPlayerStats";
+import { AggregatedPlayerStats } from "../../../../../../common/interfaces/AggregatedPlayerStats/AggregatedPlayerStats";
 
 export type StatConfig = {
   title: string;

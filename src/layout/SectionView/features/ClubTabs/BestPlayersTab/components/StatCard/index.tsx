@@ -2,9 +2,9 @@ import { useState, useMemo } from "react";
 import Card from "../../../../../../../ui/Card";
 import { PlayerStatRow } from "../PlayerStatRow";
 import Styles from "./StatCard.module.css";
-import { AggregatedPlayerStats } from "../../types/AggregatedPlayerStats";
 import { CgCopy } from "react-icons/cg";
 import { Copy } from "../../../../../../../common/utils/Copy";
+import { AggregatedPlayerStats } from "../../../../../../../common/interfaces/AggregatedPlayerStats/AggregatedPlayerStats";
 
 type StatCardProps = {
   title: string;
