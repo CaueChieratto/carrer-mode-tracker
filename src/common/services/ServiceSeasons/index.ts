@@ -1,7 +1,7 @@
 import { getCareerById } from "../../helpers/Getters";
 import { updateCareerFirestore } from "../../helpers/Setters";
 import { ClubData } from "../../interfaces/club/clubData";
-import { League } from "../../utils/Leagues";
+import { League } from "../../interfaces/League";
 import { auth, db } from "../Firebase";
 import {
   collection,

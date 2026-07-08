@@ -3,10 +3,8 @@ import { LeagueLevels } from "../../../../../../common/constants/LeagueLevels";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { getContinentByCountry } from "../../../../../../common/services/GetContinentByCountry";
-import {
-  League,
-  leaguesByContinent,
-} from "../../../../../../common/utils/Leagues";
+import { League } from "../../../../../../common/interfaces/League";
+import { leaguesByContinent } from "../../../../../../common/utils/league";
 
 export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
   const [expand, setExpand] = useState<Record<string, boolean>>({});

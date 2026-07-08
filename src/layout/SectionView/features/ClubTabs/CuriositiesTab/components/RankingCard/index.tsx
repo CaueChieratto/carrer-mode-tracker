@@ -1,6 +1,9 @@
 import React from "react";
 import { MdOutlineWarning } from "react-icons/md";
-import { RankingItem, RankingType } from "../../types";
+import {
+  RankingItem,
+  RankingType,
+} from "../../../../../../../common/interfaces/Curiosities";
 import { getRankingSuffix } from "../../helpers/getRankingSuffix";
 import Styles from "./RankingCard.module.css";
 import { OverflowText } from "../../../../../../../components/OverflowText";

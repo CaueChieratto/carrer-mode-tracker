@@ -1,11 +1,12 @@
 import { Career } from "../../interfaces/Career";
 import { Trophy } from "../../interfaces/club/trophy";
-import { League, leaguesByContinent } from "../../utils/Leagues";
+import { League } from "../../interfaces/League";
+import { leaguesByContinent } from "../../utils/league";
 
 export const mergeTrophies = (
   career: Career,
   leagueName: string,
-  seasons: string[]
+  seasons: string[],
 ): Trophy[] => {
   const trophies: Trophy[] = career.trophies || [];
 
@@ -23,7 +24,7 @@ export const mergeTrophies = (
 
   if (existingTrophy) {
     existingTrophy.seasons = Array.from(
-      new Set([...existingTrophy.seasons, ...seasons])
+      new Set([...existingTrophy.seasons, ...seasons]),
     );
   } else {
     trophies.push({

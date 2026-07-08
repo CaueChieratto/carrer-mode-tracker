@@ -1,7 +1,7 @@
 import { useSeasonTheme } from "../../../../../../../common/hooks/Seasons/UseSeasonTheme";
 import Button from "../../../../../../../components/Button";
 import Styles from "./ButtonsSwitch.module.css";
-import { MatchStatus } from "../../types/MatchStatus";
+import { MatchStatus } from "../../../../../../../common/interfaces/MatchStatus";
 import CustomSelect from "../../../../../../../components/CustomSelect";
 import { IoCopyOutline } from "react-icons/io5";
 

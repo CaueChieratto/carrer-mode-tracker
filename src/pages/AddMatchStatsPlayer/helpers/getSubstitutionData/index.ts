@@ -1,6 +1,6 @@
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 
 export const getSubstitutionData = (
   match: Match,

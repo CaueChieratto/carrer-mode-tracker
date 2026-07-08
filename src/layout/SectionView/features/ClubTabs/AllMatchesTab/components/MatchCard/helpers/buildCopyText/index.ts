@@ -1,5 +1,5 @@
 import { Career } from "../../../../../../../../../common/interfaces/Career";
-import { Match } from "../../../../types/Match";
+import { Match } from "../../../../../../../../../common/interfaces/Match";
 import { isLeagueCompetition } from "../isLeagueCompetition";
 
 type BuildMatchCopyTextParams = {

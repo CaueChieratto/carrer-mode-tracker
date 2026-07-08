@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { getAvailablePlayers } from "../../helpers/getAvailablePlayers";
 import { getAggregatedStats } from "../../helpers/getAggregatedStats";
-import { AugmentedCareer } from "../../types";
+import { AugmentedCareer } from "../../../../common/interfaces/ComparePlayers";
 import { useCareers } from "../../../../common/hooks/Career/UseCareer";
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { augmentCareerWithMatchStats } from "../../../../layout/SectionView/helpers/mergeMatchStats";

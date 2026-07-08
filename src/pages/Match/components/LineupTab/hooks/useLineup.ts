@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { FORMATIONS, Formation } from "../../../constants/Formations";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
-import { SavedLineup } from "../../../types/Lineup";
+import { SavedLineup } from "../../../../../common/interfaces/Lineup";
 import {
   buildEmptyLineup,
   resolveInitialFormation,

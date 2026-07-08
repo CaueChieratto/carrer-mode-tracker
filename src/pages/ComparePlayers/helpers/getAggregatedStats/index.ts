@@ -1,8 +1,11 @@
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { formatDisplayValue } from "../../../../common/utils/FormatValue";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 import { calculateTotalStats } from "../../../../layout/SectionView/features/ClubTabs/StatsTab_Club/components/PlayerStatsList/utils/calculateTotalStats";
-import { PlayerStatsDisplay, AugmentedCareer } from "../../types";
+import {
+  PlayerStatsDisplay,
+  AugmentedCareer,
+} from "../../../../common/interfaces/ComparePlayers";
 
 export const getAggregatedStats = (
   player: Players | null,

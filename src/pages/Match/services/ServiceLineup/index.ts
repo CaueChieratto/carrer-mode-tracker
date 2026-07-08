@@ -1,8 +1,8 @@
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../../../../common/services/Firebase";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
-import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
-import { SavedLineup } from "../../types/Lineup";
+import { PlayerMatchStat } from "../../../../common/interfaces/PlayerMatchStat";
+import { SavedLineup } from "../../../../common/interfaces/Lineup";
 
 export const ServiceLineup = {
   saveLineupToMatch: async (

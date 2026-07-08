@@ -1,4 +1,4 @@
-import { leaguesByContinent } from "./Leagues";
+import { leaguesByContinent } from "./league";
 
 export const getSeasonName = (
   seasonNumber: number,

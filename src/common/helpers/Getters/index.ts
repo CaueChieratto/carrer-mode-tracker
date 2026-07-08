@@ -3,7 +3,7 @@ import { ServicePlayers } from "../../services/ServicePlayers";
 import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
 import { db } from "../../services/Firebase";
 import { Career } from "../../interfaces/Career";
-import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../interfaces/Match";
 import { Players } from "../../interfaces/playersInfo/players";
 
 export const getAllCareers = (

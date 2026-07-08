@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { auth, db } from "../../../../../common/services/Firebase";
-import { Teams } from "../../../../../pages/AddMatches/interface/teams";
+import { Teams } from "../../../../../common/interfaces/Teams";
 
 type UpdateBadgeParams = {
   careerId: string;

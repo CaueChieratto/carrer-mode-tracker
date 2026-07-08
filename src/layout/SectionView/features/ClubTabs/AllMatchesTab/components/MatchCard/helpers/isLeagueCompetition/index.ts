@@ -1,4 +1,4 @@
-import { leaguesByContinent } from "../../../../../../../../../common/utils/Leagues";
+import { leaguesByContinent } from "../../../../../../../../../common/utils/league";
 
 export const isLeagueCompetition = (leagueName: string): boolean => {
   for (const continent of Object.values(leaguesByContinent)) {

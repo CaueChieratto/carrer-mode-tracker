@@ -2,7 +2,7 @@ import { FieldMarkings } from "./components/FieldMarkings";
 import { LineupState } from "../../hooks/useLineup";
 import { SlotButton } from "./components/SlotButton";
 import Styles from "./Section.module.css";
-import { PlayerMatchStat } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../common/interfaces/PlayerMatchStat";
 
 type SectionProps = {
   lineup: LineupState;
@@ -30,7 +30,7 @@ export const Section = ({
   isFromGeral,
 }: SectionProps) => {
   const getGapSize = (playersCount: number) => {
-    if (playersCount >= 5) return "15px";
+    if (playersCount >= 5) return "13px";
     if (playersCount === 4) return "30px";
     if (playersCount === 3) return "65px";
     return "60px";

@@ -1,4 +1,4 @@
-import { PlayerStatsDisplay } from "../types";
+import { PlayerStatsDisplay } from "../../../common/interfaces/ComparePlayers";
 
 type StatKey = keyof PlayerStatsDisplay;
 

@@ -1,4 +1,4 @@
-import { leaguesByContinent } from "../../utils/Leagues";
+import { leaguesByContinent } from "../../utils/league";
 
 export const getContinentByCountry = (country: string): string | null => {
   for (const continent in leaguesByContinent) {

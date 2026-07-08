@@ -6,7 +6,7 @@ import { ServiceMatches } from "../../services/ServiceMatches";
 import { validateMatchForm } from "../../validators/validateMatchForm";
 import { MONTH_TO_NUM } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/constants/MONTH_OPTIONS";
 import { buildTeamData } from "../../helpers/buildTeamData";
-import { Teams } from "../../interface/teams";
+import { Teams } from "../../../../common/interfaces/Teams";
 
 interface UseMatchActionsParams {
   careerId: string;
@@ -67,32 +67,14 @@ export function useMatchActions({
     let newTeamData: Teams | null = null;
 
     if (!teamAlreadyExistsInCurrentSeason) {
-      let teamFromPreviousSeasons: Teams | undefined;
+      const teamFromUserHistory =
+        await ServiceMatches.findTeamAcrossUserCareers(formValues.opponentTeam);
 
-      if (career.clubData) {
-        for (const pastSeason of career.clubData) {
-          const foundTeam = pastSeason.teams?.find(
-            (t) => t.name.toLowerCase() === opponentNameLower,
-          );
-          if (foundTeam) {
-            teamFromPreviousSeasons = foundTeam;
-            break;
-          }
-        }
-      }
-
-      if (teamFromPreviousSeasons) {
+      if (teamFromUserHistory && teamFromUserHistory.badge) {
         newTeamData = {
           name: formValues.opponentTeam,
-          badge: teamFromPreviousSeasons.badge || "",
+          badge: teamFromUserHistory.badge,
         };
-
-        if (!newTeamData.badge) {
-          const fallbackData = await buildTeamData({
-            opponentTeam: formValues.opponentTeam,
-          });
-          newTeamData.badge = fallbackData.badge;
-        }
       } else {
         newTeamData = await buildTeamData({
           opponentTeam: formValues.opponentTeam,
@@ -109,6 +91,25 @@ export function useMatchActions({
 
       if (matchesId) {
         await ServiceMatches.updateMatchInSeason(careerId, seasonId, matchData);
+
+        const existingTeam = season.teams?.find(
+          (t) => t.name.toLowerCase() === opponentNameLower,
+        );
+
+        if (existingTeam && existingTeam.leagueName !== formValues.league) {
+          const updatedTeams =
+            season.teams?.map((t) =>
+              t.name.toLowerCase() === opponentNameLower
+                ? { ...t, leagueName: formValues.league }
+                : t,
+            ) || [];
+
+          await ServiceMatches.updateSeasonTeams(
+            careerId,
+            seasonId,
+            updatedTeams,
+          );
+        }
       } else {
         await ServiceMatches.addMatchToSeason(careerId, seasonId, matchData);
       }

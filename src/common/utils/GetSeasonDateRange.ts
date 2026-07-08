@@ -1,9 +1,9 @@
-import { leaguesByContinent } from "./Leagues";
+import { leaguesByContinent } from "./league";
 
 export const getSeasonDateRange = (
   seasonNumber: number,
   careerCreatedAt: Date,
-  nation: string
+  nation: string,
 ): { startDate: Date; endDate: Date } => {
   const europeanNations = Object.keys(leaguesByContinent.Europa);
   const isEuropean = europeanNations.includes(nation);

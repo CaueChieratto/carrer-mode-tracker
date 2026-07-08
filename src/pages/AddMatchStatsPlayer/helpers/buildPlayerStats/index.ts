@@ -1,4 +1,4 @@
-import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../common/interfaces/PlayerMatchStat";
 
 export const buildPlayerStats = (
   playerId: string,

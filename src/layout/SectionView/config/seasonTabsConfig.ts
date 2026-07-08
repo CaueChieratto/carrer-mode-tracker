@@ -12,6 +12,7 @@ import SquadTab from "../features/ClubTabs/SquadTab";
 import { StatsTab_Club } from "../features/ClubTabs/StatsTab_Club";
 import { BestPlayersTab } from "../features/ClubTabs/BestPlayersTab";
 import { CuriositiesTab } from "../features/ClubTabs/CuriositiesTab";
+import { TableTab } from "../features/ClubTabs/TableTab";
 
 export type TabConfig = {
   title: string;
@@ -49,6 +50,14 @@ export const getSeasonTabsConfig = (
       action: !isPlayer
         ? () => navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`)
         : undefined,
+    },
+
+    !isPlayer && {
+      title: "Classificação",
+      component: TableTab,
+      actionButton: Buttons.AddTeamsToTable,
+      action: () =>
+        navigate(`/Career/${careerId}/Season/${seasonId}/AddTeamsToTable`),
     },
 
     {

@@ -1,4 +1,4 @@
-import { Match } from "../../../../../../../AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../../../../../common/interfaces/Match";
 
 const parseDateObj = (date: string) => {
   const [day, month, year] = date.split("/").map(Number);

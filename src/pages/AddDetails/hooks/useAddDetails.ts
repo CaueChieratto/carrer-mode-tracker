@@ -1,19 +1,25 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { useForm } from "../../../common/hooks/UseForm";
-import { useMatchData } from "../../Match/hooks/useMatchData";
-import { ServiceMatches } from "../../AddMatches/services/ServiceMatches";
-import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
-import { MatchWithOpponentEvents } from "../types";
-import { buildFormFields } from "../helpers/buildFormFields";
-import { calculateMatchResult } from "../helpers/calculateMatchResult";
-import { buildOpponentEvents } from "../helpers/buildOpponentEvents";
 import { formatRating } from "../../../common/utils/FormatRating";
 import { Field } from "../../../components/FormSection";
+import { ServiceMatches } from "../../AddMatches/services/ServiceMatches";
+import { ServiceTable } from "../../AddTeamsToTable/services/ServiceTable";
+import { TableTeamData } from "../../../common/interfaces/TableTeamData";
+import { useMatchData } from "../../Match/hooks/useMatchData";
+import { buildFormFields } from "../helpers/buildFormFields";
+import { buildInitialFormValues } from "./helpers/buildInitialFormValues";
+import { buildMatchPayload } from "./helpers/buildMatchPayload";
+import {
+  getUpdatedTableTeamData,
+  getNewTableTeamData,
+} from "./helpers/calculateTableStats";
+import { resolveCardConflicts } from "./helpers/resolveCardConflicts";
+import { Match } from "../../../common/interfaces/Match";
+import { leaguesByContinent } from "../../../common/utils/league";
 
 export const useAddDetails = () => {
   const { career, season, match, loading, backMatch } = useMatchData();
   const [isSaving, setIsSaving] = useState(false);
-
   const {
     formValues,
     setFormValues,
@@ -21,86 +27,19 @@ export const useAddDetails = () => {
     handleInputChange,
     handleBooleanChange,
   } = useForm();
-
   const initializedMatchId = useRef<string | null>(null);
 
   useEffect(() => {
     if (!match || !career || initializedMatchId.current === match.matchesId)
       return;
 
-    const totalUserTeamGoals =
-      match.playerStats?.reduce((acc, stat) => acc + (stat.goals || 0), 0) || 0;
-    const isUserHome = match.homeTeam === career.clubName;
+    const { initialFormValues, booleansToSet } = buildInitialFormValues(
+      match,
+      career.clubName,
+    );
 
-    const initial: Record<string, string> = {
-      homeScore:
-        match.homeScore !== undefined
-          ? String(match.homeScore)
-          : isUserHome && totalUserTeamGoals > 0
-            ? String(totalUserTeamGoals)
-            : "",
-      awayScore:
-        match.awayScore !== undefined
-          ? String(match.awayScore)
-          : !isUserHome && totalUserTeamGoals > 0
-            ? String(totalUserTeamGoals)
-            : "",
-      stoppage1T: match.stoppage1T ? String(match.stoppage1T) : "",
-      stoppage2T: match.stoppage2T ? String(match.stoppage2T) : "",
-      stoppageET1: match.stoppageET1 ? String(match.stoppageET1) : "",
-      stoppageET2: match.stoppageET2 ? String(match.stoppageET2) : "",
-      opponentMvpName: match.opponentMvpName || "",
-      opponentMvpRating: match.opponentMvpRating
-        ? String(match.opponentMvpRating)
-        : "",
-    };
-
-    const matchWithEvents = match as MatchWithOpponentEvents;
-    if (matchWithEvents.opponentEvents) {
-      const oppEv = matchWithEvents.opponentEvents;
-
-      oppEv.goals?.forEach((g, i) => {
-        initial[`opponentGoalPlayer_${i}`] = g.player;
-        initial[`opponentGoalMinute_${i}`] = g.minute;
-      });
-
-      oppEv.assists?.forEach((a, i) => {
-        initial[`opponentAssistPlayer_${i}`] = a.player;
-        initial[`opponentAssistTo_${i}`] = a.goalReference;
-      });
-
-      if (oppEv.cards?.length) {
-        initial.opponentCardCount = String(oppEv.cards.length);
-        oppEv.cards.forEach((c, i) => {
-          initial[`opponentCardPlayer_${i}`] = c.player;
-          initial[`opponentYellowMin_${i}`] = c.yellowMinute;
-          initial[`opponentSecondYellowMin_${i}`] = c.secondYellowMinute;
-          initial[`opponentRedMin_${i}`] = c.redMinute;
-          handleBooleanChange(`opponentYellow_${i}`, c.yellow);
-          handleBooleanChange(`opponentSecondYellow_${i}`, c.secondYellow);
-          handleBooleanChange(`opponentRed_${i}`, c.red);
-        });
-      }
-
-      if (oppEv.ownGoals?.length) {
-        initial.opponentOwnGoalCount = String(oppEv.ownGoals.length);
-        oppEv.ownGoals.forEach((og, i) => {
-          initial[`opponentOwnGoalPlayer_${i}`] = og.player;
-          initial[`opponentOwnGoalMinute_${i}`] = og.minute;
-        });
-      }
-    }
-
-    if (match.homePenScore !== undefined && match.awayPenScore !== undefined) {
-      initial.homePenScore = String(match.homePenScore);
-      initial.awayPenScore = String(match.awayPenScore);
-      handleBooleanChange("hasPenalties", true);
-    } else {
-      handleBooleanChange("hasPenalties", false);
-    }
-
-    setFormValues(initial);
-    handleBooleanChange("hasExtraTime", !!match.hasExtraTime);
+    setFormValues(initialFormValues);
+    booleansToSet.forEach(({ key, value }) => handleBooleanChange(key, value));
 
     initializedMatchId.current = match.matchesId;
   }, [match, career, setFormValues, handleBooleanChange]);
@@ -111,13 +50,11 @@ export const useAddDetails = () => {
       field: Field,
     ) => {
       let value = e.target.value;
-
       if (field.id === "opponentMvpRating") {
         value = formatRating(value);
         setFormValues((prev) => ({ ...prev, [field.id]: value }));
         return;
       }
-
       handleInputChange(e, field);
     },
     [handleInputChange, setFormValues],
@@ -125,90 +62,71 @@ export const useAddDetails = () => {
 
   const handleLocalBooleanChange = useCallback(
     (fieldId: string, value: boolean) => {
-      if (fieldId.startsWith("opponentSecondYellow_") && value) {
-        const index = fieldId.split("_")[1];
-        handleBooleanChange(`opponentRed_${index}`, false);
-      }
-      if (fieldId.startsWith("opponentRed_") && value) {
-        const index = fieldId.split("_")[1];
-        handleBooleanChange(`opponentSecondYellow_${index}`, false);
-      }
-      if (fieldId.startsWith("opponentYellow_") && !value) {
-        const index = fieldId.split("_")[1];
-        handleBooleanChange(`opponentSecondYellow_${index}`, false);
-      }
+      const { updates } = resolveCardConflicts(fieldId, value);
+      updates.forEach(({ key, value }) => handleBooleanChange(key, value));
       handleBooleanChange(fieldId, value);
     },
     [handleBooleanChange],
   );
 
+  const syncTeamStats = useCallback(
+    async (
+      teamName: string,
+      goalsFor: number,
+      goalsAgainst: number,
+      result: "V" | "E" | "D" | "?",
+      currentTable: TableTeamData[],
+    ) => {
+      if (!career || !season) return;
+
+      const teamInTable = currentTable.find(
+        (t) => t.name.trim().toLowerCase() === teamName.trim().toLowerCase(),
+      );
+
+      if (teamInTable) {
+        const updatedData = getUpdatedTableTeamData(
+          teamInTable,
+          goalsFor,
+          goalsAgainst,
+          result,
+        );
+        await ServiceTable.updateTeamInTable(
+          career.id,
+          season.id,
+          teamInTable.id,
+          updatedData,
+        );
+      } else {
+        const existingTeamInfo = season?.teams?.find(
+          (t) => t.name === teamName,
+        );
+        const badge =
+          existingTeamInfo?.badge ||
+          (teamName === career.clubName ? career.teamBadge || "" : "");
+        const newTeamData = getNewTableTeamData(
+          teamName,
+          goalsFor,
+          goalsAgainst,
+          result,
+          badge,
+        );
+        await ServiceTable.addTeamToTable(career.id, season.id, newTeamData);
+      }
+    },
+    [career, season],
+  );
+
   const saveDetails = useCallback(async () => {
     if (!career || !season || !match) return;
     setIsSaving(true);
-
     try {
-      const homeScoreNum = Number(formValues.homeScore) || 0;
-      const awayScoreNum = Number(formValues.awayScore) || 0;
-      const opponentCardCountNum = Number(formValues.opponentCardCount) || 0;
-      const opponentOwnGoalCountNum =
-        Number(formValues.opponentOwnGoalCount) || 0;
-
       const isUserHome = match.homeTeam === career.clubName;
-      const hasPenalties = !!booleanValues.hasPenalties;
-      const homePenScore = Number(formValues.homePenScore) || 0;
-      const awayPenScore = Number(formValues.awayPenScore) || 0;
-
-      const result = calculateMatchResult(
-        homeScoreNum,
-        awayScoreNum,
-        isUserHome,
-        hasPenalties,
-        homePenScore,
-        awayPenScore,
-      );
-
-      const opponentScoreNum = isUserHome ? awayScoreNum : homeScoreNum;
-      const opponentEvents = buildOpponentEvents(
-        opponentScoreNum,
-        opponentCardCountNum,
-        opponentOwnGoalCountNum,
+      const { updatedMatch, userResult } = buildMatchPayload(
+        match,
         formValues,
         booleanValues,
+        isUserHome,
       );
-
-      const updatedMatch: MatchWithOpponentEvents = {
-        ...match,
-        homeScore: homeScoreNum,
-        awayScore: awayScoreNum,
-        stoppage1T: Number(formValues.stoppage1T) || 0,
-        stoppage2T: Number(formValues.stoppage2T) || 0,
-        stoppageET1: Number(formValues.stoppageET1) || 0,
-        stoppageET2: Number(formValues.stoppageET2) || 0,
-        hasExtraTime: !!booleanValues.hasExtraTime,
-        status: "FINISHED",
-        result,
-        opponentEvents,
-      };
-
-      if (
-        formValues.opponentMvpName &&
-        formValues.opponentMvpName.trim() !== ""
-      ) {
-        updatedMatch.opponentMvpName = formValues.opponentMvpName.trim();
-        updatedMatch.opponentMvpRating =
-          Number(formValues.opponentMvpRating) || 0;
-      } else {
-        updatedMatch.opponentMvpName = "";
-        updatedMatch.opponentMvpRating = 0;
-      }
-
-      if (hasPenalties) {
-        updatedMatch.homePenScore = homePenScore;
-        updatedMatch.awayPenScore = awayPenScore;
-      } else {
-        delete updatedMatch.homePenScore;
-        delete updatedMatch.awayPenScore;
-      }
 
       await ServiceMatches.updateMatchInSeason(
         career.id,
@@ -216,18 +134,74 @@ export const useAddDetails = () => {
         updatedMatch as Match,
       );
 
+      const matchLeagueName = match.league.trim().toLowerCase();
+
+      const foundLeagueInDb = season.leagues?.find(
+        (l) => l.name.trim().toLowerCase() === matchLeagueName,
+      );
+
+      let isLeagueMatch = foundLeagueInDb?.league === true;
+
+      if (!isLeagueMatch) {
+        const allStaticLeagues = Object.values(leaguesByContinent).flatMap(
+          (continent) => Object.values(continent).flat(),
+        );
+
+        const foundStaticLeague = allStaticLeagues.find(
+          (l) => l.name.trim().toLowerCase() === matchLeagueName,
+        );
+
+        isLeagueMatch = foundStaticLeague?.league === true;
+      }
+
+      if (isLeagueMatch && match.status !== "FINISHED") {
+        const currentTable = await ServiceTable.getTableBySeason(
+          career.id,
+          season.id,
+        );
+        const opponentName = isUserHome ? match.awayTeam : match.homeTeam;
+        const opponentResult =
+          userResult === "V" ? "D" : userResult === "D" ? "V" : "E";
+
+        const homeScoreNum = Number(formValues.homeScore) || 0;
+        const awayScoreNum = Number(formValues.awayScore) || 0;
+        const userScoreNum = isUserHome ? homeScoreNum : awayScoreNum;
+        const opponentScoreNum = isUserHome ? awayScoreNum : homeScoreNum;
+
+        await Promise.all([
+          syncTeamStats(
+            career.clubName,
+            userScoreNum,
+            opponentScoreNum,
+            userResult,
+            currentTable,
+          ),
+          syncTeamStats(
+            opponentName,
+            opponentScoreNum,
+            userScoreNum,
+            opponentResult,
+            currentTable,
+          ),
+        ]);
+      }
       backMatch();
-    } catch (error) {
-      console.error("Erro: ", error);
     } finally {
       setIsSaving(false);
     }
-  }, [formValues, booleanValues, match, career, season, backMatch]);
+  }, [
+    formValues,
+    booleanValues,
+    match,
+    career,
+    season,
+    backMatch,
+    syncTeamStats,
+  ]);
 
   const isUserHome = match?.homeTeam === career?.clubName;
   const opponentScore =
     Number(isUserHome ? formValues.awayScore : formValues.homeScore) || 0;
-
   const userScore =
     Number(isUserHome ? formValues.homeScore : formValues.awayScore) || 0;
   const opponentCardCount = Number(formValues.opponentCardCount) || 0;

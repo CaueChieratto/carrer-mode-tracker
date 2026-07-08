@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { AggregatedPlayerStats } from "../types/AggregatedPlayerStats";
-import { PlayerStatsAccumulator } from "../types/PlayerStatsAccumulator";
+import { PlayerStatsAccumulator } from "../../../../../../common/interfaces/PlayerStatsAccumulator/PlayerStatsAccumulator";
 import { getAggregatedPlayersForCareer } from "../../../../helpers/mergeMatchStats";
 
 export const useBestPlayersStats = (

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { League } from "../../common/utils/Leagues";
+import { League } from "../../common/interfaces/League";
 import { Career } from "../../common/interfaces/Career";
 import Button from "../Button";
 import CustomSelect from "../CustomSelect";

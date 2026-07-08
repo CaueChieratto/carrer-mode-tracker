@@ -4,7 +4,7 @@ import Styles from "./HeaderSeason.module.css";
 import Button from "../Button";
 import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
-import { Match } from "../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../common/interfaces/Match";
 import { OverflowText } from "../OverflowText";
 import { PlayerCircle } from "../../pages/Match/components/LineupTab/layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
 

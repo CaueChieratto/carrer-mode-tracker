@@ -9,7 +9,7 @@ import { buildPlayerStats } from "../helpers/buildPlayerStats";
 import { getInitialFormValues } from "../helpers/getInitialFormValues";
 import { FormFields } from "../constants/FormFields";
 import { getSubstitutionData } from "../helpers/getSubstitutionData";
-import { PlayerMatchStat } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../common/interfaces/PlayerMatchStat";
 
 export const useAddMatchStatsPlayer = () => {
   const { playerId } = useParams<{ playerId: string }>();

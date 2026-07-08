@@ -8,11 +8,11 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../../../common/services/Firebase";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 import { updateCareerFirestore } from "../../../../common/helpers/Setters";
 import { Career } from "../../../../common/interfaces/Career";
-import { Teams } from "../../interface/teams";
-import { PlayerMatchStat } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { Teams } from "../../../../common/interfaces/Teams";
+import { PlayerMatchStat } from "../../../../common/interfaces/PlayerMatchStat";
 
 export const ServiceMatches = {
   addMatchToSeason: async (
@@ -195,6 +195,36 @@ export const ServiceMatches = {
     );
 
     await setDoc(statRef, playerStat, { merge: true });
+  },
+
+  findTeamAcrossUserCareers: async (
+    teamName: string,
+  ): Promise<Teams | null> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const careersRef = collection(db, `users/${user.uid}/careers`);
+    const snapshot = await getDocs(careersRef);
+
+    const searchName = teamName.toLowerCase().trim();
+
+    for (const careerDoc of snapshot.docs) {
+      const careerData = careerDoc.data() as Career;
+
+      if (!careerData.clubData) continue;
+
+      for (const season of careerData.clubData) {
+        const foundTeam = season.teams?.find(
+          (t) => t.name.toLowerCase().trim() === searchName,
+        );
+
+        if (foundTeam && foundTeam.badge) {
+          return foundTeam;
+        }
+      }
+    }
+
+    return null;
   },
 
   migrateOldMatchesToSubcollections: async (): Promise<void> => {

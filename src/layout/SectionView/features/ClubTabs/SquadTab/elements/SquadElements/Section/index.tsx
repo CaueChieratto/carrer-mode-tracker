@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FooterSection_Player from "./components/FooterSection_Player";
 import HeaderSection_Player from "./components/HeaderSection_Player";
 import Data from "./Section.module.css";
-import { Match } from "../../../../AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../../common/interfaces/Match";
 import { Contract } from "../../../../../../../../common/interfaces/playersInfo/contract";
 
 type SectionProps = {

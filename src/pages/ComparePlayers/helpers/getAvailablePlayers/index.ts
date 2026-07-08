@@ -1,7 +1,7 @@
 import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { getAggregatedPlayersForCareer } from "../../../../layout/SectionView/helpers/mergeMatchStats";
-import { AugmentedCareer } from "../../types";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { AugmentedCareer } from "../../../../common/interfaces/ComparePlayers";
+import { Match } from "../../../../common/interfaces/Match";
 
 export const getAvailablePlayers = (
   augmentedCareer: AugmentedCareer | null,

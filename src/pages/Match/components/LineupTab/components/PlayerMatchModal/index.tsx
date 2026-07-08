@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "../../../../../../components/Modal";
 import SlideUpModal from "../../../../../../ui/modals/SlideUpModal";
-import { Match } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../../../common/interfaces/Match";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { UseRatingColor } from "../../../../../../common/hooks/Colors/GetOverallColor";
 import { FiClock } from "react-icons/fi";

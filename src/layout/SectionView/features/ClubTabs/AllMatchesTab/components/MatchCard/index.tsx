@@ -1,7 +1,7 @@
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
 import Card from "../../../../../../../ui/Card";
-import { Match } from "../../types/Match";
-import { PlayerMatchStat } from "../../types/PlayerMatchStat";
+import { Match } from "../../../../../../../common/interfaces/Match";
+import { PlayerMatchStat } from "../../../../../../../common/interfaces/PlayerMatchStat";
 import Styles from "./MatchCard.module.css";
 import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";

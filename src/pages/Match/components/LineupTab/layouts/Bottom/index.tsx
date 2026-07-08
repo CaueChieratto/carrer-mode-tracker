@@ -3,7 +3,7 @@ import {
   getGroupForPosition,
   POSITION_DATA,
 } from "../../../../../../common/types/Positions";
-import { PlayerMatchStat } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../common/interfaces/PlayerMatchStat";
 import { LineupState } from "../../hooks/useLineup";
 import Styles from "./Bottom.module.css";
 import { EmptySlotRow } from "./components/EmptySlotRow";

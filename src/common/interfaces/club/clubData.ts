@@ -1,7 +1,8 @@
-import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
-import { Teams } from "../../../pages/AddMatches/interface/teams";
-import { League } from "../../utils/Leagues";
+import { Match } from "../Match";
+import { Teams } from "../Teams";
+import { League } from "../League";
 import { Players } from "../playersInfo/players";
+import { TableRowData } from "../Table";
 
 export interface ClubData {
   players: Players[];
@@ -10,4 +11,5 @@ export interface ClubData {
   leagues?: League[];
   matches?: Match[];
   teams?: Teams[];
+  table?: TableRowData[];
 }

@@ -1,4 +1,4 @@
-import { OpponentEvents } from "../../types";
+import { OpponentEvents } from "../../../../common/interfaces/OpponentEventsMatches";
 
 export const buildOpponentEvents = (
   opponentScore: number,

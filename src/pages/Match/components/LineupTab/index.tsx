@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 import { useLineup } from "./hooks/useLineup";
 import { useSaveLineup } from "./hooks/useSaveLineup";
 import { Header } from "./layouts/Header";
@@ -10,7 +10,7 @@ import { Section } from "./layouts/Section";
 import { PlayerPicker } from "./components/PlayerPicker";
 import { Bottom } from "./layouts/Bottom";
 import Styles from "./LineupTab.module.css";
-import { SavedLineup } from "../../types/Lineup";
+import { SavedLineup } from "../../../../common/interfaces/Lineup";
 
 type LineupTabProps = {
   season: ClubData;

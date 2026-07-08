@@ -5,7 +5,7 @@ import Label from "../Label";
 import CustomSelect from "../CustomSelect";
 import Styles from "./CareerFormFields.module.css";
 import { createCareerFields } from "../../common/constants/CreateCareerFields";
-import { leaguesByContinent } from "../../common/utils/Leagues";
+import { leaguesByContinent } from "../../common/utils/league";
 
 const excludedRegions = ["UEFA", "Conmebol"];
 const countryOptions = Object.values(leaguesByContinent)

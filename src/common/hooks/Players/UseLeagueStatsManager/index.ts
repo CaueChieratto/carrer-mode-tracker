@@ -4,7 +4,7 @@ import { ClubData } from "../../../interfaces/club/clubData";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
 import { Stats } from "../../../interfaces/playersStats/stats";
 import { ServicePlayers } from "../../../services/ServicePlayers";
-import { leaguesByContinent } from "../../../utils/Leagues";
+import { leaguesByContinent } from "../../../utils/league";
 
 type UseLeagueStatsManagerProps = {
   career: Career;

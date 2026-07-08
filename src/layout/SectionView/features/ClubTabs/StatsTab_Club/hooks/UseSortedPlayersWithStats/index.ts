@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Players } from "../../../../../../../common/interfaces/playersInfo/players";
-import { Match } from "../../../AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../common/interfaces/Match";
 import { sortPlayersWithStatsByPosition } from "./utils/sortPlayersWithStatsByPosition";
 
 export const useSortedPlayersWithStats = (

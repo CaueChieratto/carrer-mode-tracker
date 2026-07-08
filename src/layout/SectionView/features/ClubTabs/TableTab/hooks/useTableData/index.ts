@@ -1,0 +1,69 @@
+import { useEffect, useMemo, useState } from "react";
+import { Career } from "../../../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
+import { ServiceTable } from "../../../../../../../pages/AddTeamsToTable/services/ServiceTable";
+import {
+  QualificationZone,
+  TableRowData,
+} from "../../../../../../../common/interfaces/Table";
+import { TableTeamData } from "../../../../../../../common/interfaces/TableTeamData";
+
+export const useTableData = (career: Career, season: ClubData) => {
+  const [rawTableData, setRawTableData] = useState<TableTeamData[]>([]);
+
+  useEffect(() => {
+    const fetchTable = async () => {
+      try {
+        if (career.id && season.id) {
+          const data = await ServiceTable.getTableBySeason(
+            career.id,
+            season.id,
+          );
+          setRawTableData(data);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar a tabela no Firebase:", error);
+      }
+    };
+
+    fetchTable();
+  }, [career.id, season.id]);
+
+  const getQualificationZone = (
+    position: number,
+    totalTeams: number = 20,
+  ): QualificationZone => {
+    if (position === 1) return "first";
+    if (position >= 2 && position <= 4) return "champions";
+    if (position === 5) return "europa";
+    if (position === 6) return "conference";
+    if (position >= totalTeams - 2) return "relegation";
+    return "none";
+  };
+
+  const tableData = useMemo<TableRowData[]>(() => {
+    const sortedData = [...rawTableData].sort((a, b) => {
+      if (b.points !== a.points) return b.points - a.points;
+      if (b.goalDiff !== a.goalDiff) return b.goalDiff - a.goalDiff;
+      return b.goalsFor - a.goalsFor;
+    });
+
+    return sortedData.map((team, index) => {
+      const position = index + 1;
+      const defaultZone = getQualificationZone(position, sortedData.length);
+
+      const finalZone =
+        team.customZone && team.customZone !== "default"
+          ? team.customZone
+          : defaultZone;
+
+      return {
+        ...team,
+        position,
+        zone: finalZone,
+      };
+    });
+  }, [rawTableData]);
+
+  return { tableData };
+};

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { League } from "../../../common/utils/Leagues";
+import { League } from "../../../common/interfaces/League";
 import { Career } from "../../../common/interfaces/Career";
 import { ServiceSeasons } from "../../../common/services/ServiceSeasons";
 import { getAvailableLeagues } from "../helpers/getAvailableLeagues";

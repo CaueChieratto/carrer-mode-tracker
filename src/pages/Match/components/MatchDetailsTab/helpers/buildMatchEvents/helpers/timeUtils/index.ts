@@ -1,4 +1,4 @@
-import { Match } from "../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../../common/interfaces/Match";
 import { PeriodKey } from "../../../../types";
 
 export const getEventDetails = (t: number, match: Match) => {

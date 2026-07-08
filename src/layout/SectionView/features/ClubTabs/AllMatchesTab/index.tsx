@@ -7,7 +7,7 @@ import { ContainerClubContent } from "../../../../../components/ContainerClubCon
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import { ButtonsSwitch } from "./components/ButtonsSwitch";
 import { MatchCard } from "./components/MatchCard";
-import { MatchStatus } from "./types/MatchStatus";
+import { MatchStatus } from "../../../../../common/interfaces/MatchStatus";
 import { MONTH_OPTIONS } from "./constants/MONTH_OPTIONS";
 import { getMatchSeason, processMatches } from "./helpers/processMatches";
 

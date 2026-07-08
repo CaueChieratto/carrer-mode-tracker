@@ -16,6 +16,7 @@ import { AddDetails } from "./pages/AddDetails";
 import { AddMatchStatsPlayer } from "./pages/AddMatchStatsPlayer";
 import { useIsMobile } from "./common/hooks/useIsMobile";
 import { ComparePlayers } from "./pages/ComparePlayers";
+import { AddTeamsToTable } from "./pages/AddTeamsToTable";
 
 type AppProps = {
   career?: Career;
@@ -63,6 +64,14 @@ export default function App({ career }: AppProps) {
     {
       path: "/Career/:careerId/Geral/Player/:playerId/Compare",
       element: <ComparePlayers />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/AddTeamsToTable",
+      element: <AddTeamsToTable />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/AddTeamsToTable/:teamId",
+      element: <AddTeamsToTable />,
     },
     {
       path: "/Career/:careerId/Season/:seasonId/AddPlayer",

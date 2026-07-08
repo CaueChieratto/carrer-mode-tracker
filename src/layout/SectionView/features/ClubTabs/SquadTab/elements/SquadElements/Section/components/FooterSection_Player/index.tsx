@@ -2,7 +2,7 @@ import Styles from "./FooterSection_Player.module.css";
 import Data from "../../Section.module.css";
 import { formatDisplayValue } from "../../../../../../../../../../common/utils/FormatValue";
 import { getVisualContract } from "./utils/getVisualContract";
-import { Match } from "../../../../../../AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../../../../common/interfaces/Match";
 
 type FooterSection_PlayerProps = {
   playerValue: number;

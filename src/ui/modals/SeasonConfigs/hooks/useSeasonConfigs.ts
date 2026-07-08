@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useClubColors } from "../../../../common/hooks/Colors/UseClubColors";
 import { Career } from "../../../../common/interfaces/Career";
 import { ColorsService } from "../../../../common/services/ColorsService";
-import { League } from "../../../../common/utils/Leagues";
+import { League } from "../../../../common/interfaces/League";
 import { SeasonView } from "../types/SeasonView";
 
 type UseSeasonConfigsParams = {

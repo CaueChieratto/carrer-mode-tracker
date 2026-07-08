@@ -3,7 +3,7 @@ import { useForm } from "../../../../common/hooks/UseForm";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { getMatchFormFields } from "../../constants/MatchFormFields";
-import { Teams } from "../../interface/teams";
+import { Teams } from "../../../../common/interfaces/Teams";
 
 type UseFormReturn = ReturnType<typeof useForm>;
 

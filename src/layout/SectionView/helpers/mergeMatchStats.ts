@@ -2,8 +2,8 @@ import { Career } from "../../../common/interfaces/Career";
 import { ClubData } from "../../../common/interfaces/club/clubData";
 import { Players } from "../../../common/interfaces/playersInfo/players";
 import { LeagueStats } from "../../../common/interfaces/playersStats/leagueStats";
-import { League } from "../../../common/utils/Leagues";
-import { Match } from "../features/ClubTabs/AllMatchesTab/types/Match";
+import { League } from "../../../common/interfaces/League";
+import { Match } from "../../../common/interfaces/Match";
 
 export const getUnifiedPlayerLeagueStats = (
   player: Players,

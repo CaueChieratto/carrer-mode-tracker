@@ -3,8 +3,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../../common/services/Firebase";
 import { useSeasonData } from "../../../common/hooks/Seasons/UseSeasonData";
-import { Match } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
-import { PlayerMatchStat } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { Match } from "../../../common/interfaces/Match";
+import { PlayerMatchStat } from "../../../common/interfaces/PlayerMatchStat";
 
 export const useMatchData = () => {
   const { careerId, seasonId, matchesId } = useParams<{

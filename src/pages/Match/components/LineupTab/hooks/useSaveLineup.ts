@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { ServiceLineup } from "../../../services/ServiceLineup";
-import { SavedLineup } from "../../../types/Lineup";
-import { PlayerMatchStat } from "../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { SavedLineup } from "../../../../../common/interfaces/Lineup";
+import { PlayerMatchStat } from "../../../../../common/interfaces/PlayerMatchStat";
 
 type UseSaveLineupParams = {
   careerId?: string;

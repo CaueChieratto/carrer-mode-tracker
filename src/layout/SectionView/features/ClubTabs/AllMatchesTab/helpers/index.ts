@@ -1,4 +1,4 @@
-import { MatchResult } from "../types/MatchResult";
+import { MatchResult } from "../../../../../../common/interfaces/MatchResult";
 
 const RESULT_COLORS: Record<MatchResult, string> = {
   V: "#4caf50",

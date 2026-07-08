@@ -1,7 +1,7 @@
 import { LuPencilLine } from "react-icons/lu";
-import { League } from "../../../../../../../../../common/utils/Leagues";
+import { League } from "../../../../../../../../../common/interfaces/League";
 import Styles from "./MatchHeader.module.css";
-import { Match } from "../../../../types/Match";
+import { Match } from "../../../../../../../../../common/interfaces/Match";
 import { CgCopy } from "react-icons/cg";
 
 type MatchHeaderProps = {

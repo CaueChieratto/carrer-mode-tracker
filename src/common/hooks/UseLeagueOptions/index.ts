@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { getContinentByCountry } from "../../services/GetContinentByCountry";
-import { leaguesByContinent } from "../../utils/Leagues";
 import { sortLeaguesForSelect } from "../../utils/Sorts";
+import { leaguesByContinent } from "../../utils/league";
 
 export const useLeagueOptions = (country: string) => {
   const continent = useMemo(() => getContinentByCountry(country), [country]);
@@ -21,7 +21,7 @@ export const useLeagueOptions = (country: string) => {
       ] || [];
 
     const allLeaguesNames = [...countryLeagues, ...specificLeagues].map(
-      (league) => league.name
+      (league) => league.name,
     );
 
     return sortLeaguesForSelect(allLeaguesNames);

@@ -1,8 +1,8 @@
 import { GiSoccerBall } from "react-icons/gi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { getResultColor } from "../../../../helpers";
-import { Match } from "../../../../types/Match";
-import { PlayerMatchStat } from "../../../../types/PlayerMatchStat";
+import { Match } from "../../../../../../../../../common/interfaces/Match";
+import { PlayerMatchStat } from "../../../../../../../../../common/interfaces/PlayerMatchStat";
 import { UseRatingColor } from "../../../../../../../../../common/hooks/Colors/GetOverallColor";
 import Styles from "./MatchBody.module.css";
 import { Boot } from "../../../../../../../../../ui/IconsSVG/Boot";

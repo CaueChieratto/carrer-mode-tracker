@@ -1,4 +1,4 @@
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 
 const parseNum = (val: string | undefined): number | undefined =>
   val && val !== "" ? Number(val) : undefined;

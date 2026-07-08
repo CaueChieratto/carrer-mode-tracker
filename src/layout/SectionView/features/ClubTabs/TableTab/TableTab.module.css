@@ -1,0 +1,108 @@
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px #0003;
+  padding: 16px;
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  color: var(--blackColor);
+}
+
+.table th {
+  color: var(--color-tertiary);
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.table td {
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-input);
+  padding-left: 4px;
+  vertical-align: middle;
+}
+
+.highlight_row {
+  background-color: var(--highlight-bg);
+  font-weight: 700 !important;
+}
+
+.highlight_row td:first-child {
+  border-left: 4px solid var(--highlight-border);
+  padding-left: 2px;
+}
+
+.team_cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 24px;
+}
+
+.position_badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.pos_first {
+  background-color: #e6b800;
+}
+
+.pos_champions {
+  background-color: #1a9c4b;
+}
+
+.pos_europa {
+  background-color: #004b9b;
+}
+
+.pos_conference {
+  background-color: #008b8b;
+}
+
+.pos_relegation {
+  background-color: #bd2027;
+}
+
+.pos_default {
+  background-color: #9e9e9e;
+}
+
+.team_logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.goals_diff {
+  color: var(--blackColor);
+}
+
+.goals_diff.positive {
+  color: #2e7d32;
+}
+
+.goals_diff.negative {
+  color: #c62828;
+}

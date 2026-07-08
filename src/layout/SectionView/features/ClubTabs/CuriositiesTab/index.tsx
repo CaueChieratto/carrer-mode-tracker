@@ -5,17 +5,10 @@ import { ContainerClubContent } from "../../../../../components/ContainerClubCon
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import { useCuriosities } from "./hooks/useCuriosities";
 import Styles from "./CuriositiesTab.module.css";
-import {
-  MdAccessTime,
-  MdPeopleOutline,
-  MdOutlineWarning,
-  MdOutlineStarBorder,
-  MdSportsSoccer,
-  MdTimer,
-} from "react-icons/md";
 import Card from "../../../../../ui/Card";
 import { OverflowText } from "../../../../../components/OverflowText";
 import { RankingCard } from "./components/RankingCard";
+import { rankingCards } from "./constants";
 
 type CuriositiesTabProps = {
   season: ClubData;
@@ -64,138 +57,17 @@ export const CuriositiesTab = ({ season, career }: CuriositiesTabProps) => {
       <div className={Styles.section}>
         <h3 className={Styles.section_title}>Rankings</h3>
         <div className={Styles.rankings_grid}>
-          <RankingCard
-            title="Jogadores Decisivos (Gols da Vitória)"
-            icon={<MdOutlineStarBorder />}
-            data={rankings.topDecisivePlayers}
-            type="goals"
-            accentColor="#eab308"
-          />
-          <RankingCard
-            title="Especialistas em Abrir o Placar"
-            icon={<MdSportsSoccer />}
-            data={rankings.topOpeners}
-            type="goals"
-            accentColor="#f97316"
-          />
-          <RankingCard
-            title="Reis da Assistência (Em Vitórias)"
-            icon={<MdPeopleOutline />}
-            data={rankings.topWinAssistants}
-            type="assists"
-            accentColor="#3b82f6"
-          />
-          <RankingCard
-            title="Especialistas dos Acréscimos (90'+)"
-            icon={<MdTimer />}
-            data={rankings.topStoppageTimeExperts}
-            type="goals"
-            accentColor="#8b5cf6"
-          />
-          <RankingCard
-            title="Duplas Dinâmicas"
-            icon={<MdPeopleOutline />}
-            data={rankings.topTeamDuos}
-            type="goals"
-            accentColor="#8b5cf6"
-          />
-          <RankingCard
-            title="Jogador & Minuto Letal"
-            icon={<MdOutlineStarBorder />}
-            data={rankings.topPlayerGoalMinutes}
-            type="goals"
-            accentColor="#10b981"
-          />
-          <RankingCard
-            title="Assistente & Minuto Letal"
-            icon={<MdPeopleOutline />}
-            data={rankings.topPlayerAssistMinutes}
-            type="assists"
-            accentColor="#3b82f6"
-          />
-          <RankingCard
-            title="Minutos Letais (Gols Pró)"
-            icon={<MdAccessTime />}
-            data={rankings.topScoringMinutes}
-            type="goals"
-            isMinuteLabel
-            accentColor="#10b981"
-          />
-
-          <RankingCard
-            title="Intervalos Mais Perigosos"
-            icon={<MdOutlineWarning />}
-            data={rankings.dangerousIntervals}
-            type="goals"
-            accentColor="#f43f5e"
-          />
-          <RankingCard
-            title="Minutos de Tensão (Gols Sofridos)"
-            icon={<MdAccessTime />}
-            data={rankings.topConcedingMinutes}
-            type="goals"
-            isMinuteLabel
-            accentColor="#ef4444"
-          />
-
-          <RankingCard
-            title="Rivais Mais Frequentes"
-            icon={<MdPeopleOutline />}
-            data={rankings.topOpponents}
-            type="times"
-            accentColor="#eab308"
-          />
-          <RankingCard
-            title="Maiores Vítimas (Gols Marcados)"
-            icon={<MdOutlineStarBorder />}
-            data={rankings.topVictims}
-            type="goals"
-            accentColor="#22c55e"
-          />
-          <RankingCard
-            title="Sacos de Pancada (Saldo de Gols)"
-            icon={<MdOutlineStarBorder />}
-            data={rankings.topPunchingBags}
-            type="goals"
-            accentColor="#14b8a6"
-          />
-
-          <RankingCard
-            title="Times Pedras no Sapato (Gols Sofridos)"
-            icon={<MdOutlineWarning />}
-            data={rankings.topOpponentTeamsScorers}
-            type="goals"
-            accentColor="#ef4444"
-          />
-          <RankingCard
-            title="Maiores Carrascos (Jogadores)"
-            icon={<MdOutlineWarning />}
-            data={rankings.topOpponentScorers}
-            type="goals"
-            accentColor="#f59e0b"
-          />
-          <RankingCard
-            title="Carrascos Reincidentes"
-            icon={<MdOutlineWarning />}
-            data={rankings.topReincidents}
-            type="times"
-            accentColor="#f97316"
-          />
-          <RankingCard
-            title="Duplas Letais (Rivais)"
-            icon={<MdPeopleOutline />}
-            data={rankings.topOpponentDuos}
-            type="goals"
-            accentColor="#ef4444"
-          />
-
-          <RankingCard
-            title="Placares Repetidos"
-            icon={<MdOutlineStarBorder />}
-            data={rankings.topScores}
-            type="times"
-            accentColor="#3b82f6"
-          />
+          {rankingCards.map((card) => (
+            <RankingCard
+              key={card.key}
+              title={card.title}
+              icon={card.icon}
+              data={rankings[card.key]}
+              type={card.type}
+              accentColor={card.accentColor}
+              isMinuteLabel={card.isMinuteLabel}
+            />
+          ))}
         </div>
       </div>
     </div>

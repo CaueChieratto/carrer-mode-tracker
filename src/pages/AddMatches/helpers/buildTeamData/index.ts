@@ -1,6 +1,6 @@
-import { League } from "../../../../common/utils/Leagues";
+import { League } from "../../../../common/interfaces/League";
 import { fetchTeamByClubName } from "../../API/TheSportsDBTeam";
-import { Teams } from "../../interface/teams";
+import { Teams } from "../../../../common/interfaces/Teams";
 
 interface BuildTeamDataParams {
   opponentTeam: string;

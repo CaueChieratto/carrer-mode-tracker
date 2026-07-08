@@ -4,7 +4,7 @@ import {
   CircularStatRow,
   CircularStatRowProps,
 } from "./components/CircularStatRow";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
 import { Career } from "../../../../common/interfaces/Career";
 

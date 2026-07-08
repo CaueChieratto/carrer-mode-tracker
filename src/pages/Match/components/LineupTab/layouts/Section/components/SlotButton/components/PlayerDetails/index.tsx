@@ -5,7 +5,7 @@ import { Boot } from "../../../../../../../../../../ui/IconsSVG/Boot";
 import { RefereeCard } from "../../../../../../../../../../ui/IconsSVG/RefereeCard";
 import { Sub } from "../../../../../../../../../../ui/IconsSVG/Sub";
 import { MVP } from "../../../../../../../../../../ui/IconsSVG/MVP";
-import { PlayerMatchStat } from "../../../../../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/PlayerMatchStat";
+import { PlayerMatchStat } from "../../../../../../../../../../common/interfaces/PlayerMatchStat";
 import { NumberStats } from "../../../../../../../../ui/NumberStats";
 import { OwnGoal } from "../../../../../../../../../../ui/IconsSVG/OwnGoal";
 import { OverflowText } from "../../../../../../../../../../components/OverflowText";

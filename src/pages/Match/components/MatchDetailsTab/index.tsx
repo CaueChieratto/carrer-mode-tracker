@@ -4,9 +4,9 @@ import { Career } from "../../../../common/interfaces/Career";
 import { MVPCard } from "./components/MVPCard";
 import { Timeline } from "./components/Timeline";
 import { buildMatchEvents } from "./helpers/buildMatchEvents";
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 import { MatchHeaderCard } from "./components/MatchHeaderCard";
-import { Teams } from "../../../AddMatches/interface/teams";
+import { Teams } from "../../../../common/interfaces/Teams";
 
 type MatchDetailsTabProps = {
   match: Match;

@@ -1,5 +1,5 @@
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
-import { Match } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../../../common/interfaces/Match";
 import { MatchEvent, PeriodKey } from "../../types";
 import { extractMVP } from "./helpers/extractMVP";
 import { extractPlayerEvents } from "./helpers/extractPlayerEvents";

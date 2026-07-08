@@ -1,4 +1,4 @@
-import { Match } from "../../../../../../../AllMatchesTab/types/Match";
+import { Match } from "../../../../../../../../../../../common/interfaces/Match";
 import { formatContractDisplay, getContractInMonths } from "./FormatContract";
 import { getLatestFinishedMatch } from "./getLatestFinishedMatch";
 

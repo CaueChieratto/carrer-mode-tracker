@@ -1,7 +1,7 @@
 import { Formation, FORMATIONS } from "../../../constants/Formations";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
-import { SavedLineup } from "../../../types/Lineup";
+import { SavedLineup } from "../../../../../common/interfaces/Lineup";
 import { LineupState } from "../hooks/useLineup";
 
 export const buildEmptyLineup = (formation: Formation): LineupState => {

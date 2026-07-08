@@ -1,4 +1,4 @@
-import { Match } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../common/interfaces/Match";
 
 export const getInitialFormValues = (match: Match, playerId: string) => {
   const stats = match.playerStats?.find((s) => s.playerId === playerId);

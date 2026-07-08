@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
-import { Match } from "../../AllMatchesTab/types/Match";
-import { CuriositiesData } from "../types";
+import { Match } from "../../../../../../common/interfaces/Match";
+import { CuriositiesData } from "../../../../../../common/interfaces/Curiosities";
 import { buildCuriosities } from "../helpers/buildCuriosities";
 
 export const useCuriosities = (
@@ -15,7 +15,22 @@ export const useCuriosities = (
       ? career.clubData.flatMap((s) => s.matches || [])
       : season.matches || [];
 
-    const finishedMatches = matches.filter((m) => m.status === "FINISHED");
+    const parseDateString = (dateStr: string) => {
+      if (!dateStr) return 0;
+
+      const parts = dateStr.split("/");
+      if (parts.length === 3) {
+        const year = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+
+        return new Date(`${year}-${parts[1]}-${parts[0]}T12:00:00Z`).getTime();
+      }
+
+      return new Date(dateStr).getTime();
+    };
+
+    const finishedMatches = matches
+      .filter((m) => m.status === "FINISHED")
+      .sort((a, b) => parseDateString(a.date) - parseDateString(b.date));
 
     if (finishedMatches.length === 0) {
       return { highlights: [], rankings: null };

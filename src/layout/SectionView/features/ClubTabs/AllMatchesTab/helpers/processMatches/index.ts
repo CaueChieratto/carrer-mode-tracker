@@ -1,8 +1,8 @@
-import { MatchStatus } from "../../types/MatchStatus";
+import { MatchStatus } from "../../../../../../../common/interfaces/MatchStatus";
 import { MONTH_TO_NUM } from "../../constants/MONTH_OPTIONS";
 import { Career } from "../../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
-import { Match } from "../../types/Match";
+import { Match } from "../../../../../../../common/interfaces/Match";
 
 type Params = {
   season: ClubData;

@@ -1,6 +1,6 @@
 import { GiSoccerBall } from "react-icons/gi";
 import Styles from "./MatchHeaderCard.module.css";
-import { Match } from "../../../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/types/Match";
+import { Match } from "../../../../../../common/interfaces/Match";
 
 type Goal = {
   playerName: string;
