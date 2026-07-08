@@ -39,12 +39,14 @@ export const TableRow = ({
       <td className={Styles.align_left}>
         <div className={Styles.team_cell}>
           {activeMode === "Resumido" && displayBadge && (
-            <img
-              src={displayBadge}
-              alt={row.name}
-              className={Styles.team_logo}
-              onError={handleBadgeError}
-            />
+            <div className={Styles.wrapper_img}>
+              <img
+                src={displayBadge}
+                alt={row.name}
+                className={Styles.team_logo}
+                onError={handleBadgeError}
+              />
+            </div>
           )}
           <span>{row.name}</span>
         </div>

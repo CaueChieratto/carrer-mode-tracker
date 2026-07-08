@@ -21,7 +21,7 @@ export function useTableTeamForm({
   isEditing = false,
 }: UseTableTeamFormParams) {
   const teamOptions = useMemo(() => {
-    const options = season?.teams ? season.teams.map((t) => t.name) : [];
+    let options = season?.teams ? season.teams.map((t) => t.name) : [];
 
     if (
       career?.clubName &&
@@ -33,14 +33,25 @@ export function useTableTeamForm({
       options.push(career.clubName);
     }
 
+    if (formValues.teamName) {
+      const searchValue = formValues.teamName.trim().toLowerCase();
+      options = options.filter((name) =>
+        name.toLowerCase().includes(searchValue),
+      );
+    }
+
     return options;
-  }, [season, career]);
+  }, [season, career, formValues.teamName]);
 
   const hasSelectedTeam = useMemo(() => {
     if (!formValues.teamName) return false;
     const searchName = formValues.teamName.trim().toLowerCase();
-    return teamOptions.some((name) => name.trim().toLowerCase() === searchName);
-  }, [formValues.teamName, teamOptions]);
+
+    const allOptions = season?.teams ? season.teams.map((t) => t.name) : [];
+    if (career?.clubName) allOptions.push(career.clubName);
+
+    return allOptions.some((name) => name.trim().toLowerCase() === searchName);
+  }, [formValues.teamName, season, career]);
 
   const formFields = useMemo(
     () => getTableTeamFormFields(teamOptions, hasSelectedTeam, isEditing),

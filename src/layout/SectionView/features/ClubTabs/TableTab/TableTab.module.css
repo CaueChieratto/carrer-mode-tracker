@@ -97,6 +97,13 @@
   background-color: #9e9e9e;
 }
 
+.wrapper_img {
+  display: flex;
+  background-color: #fff;
+  padding: 3px;
+  border-radius: 4px;
+}
+
 .team_logo {
   width: 24px;
   height: 24px;
