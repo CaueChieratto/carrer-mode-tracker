@@ -117,6 +117,19 @@ export const useAddMatchStatsPlayer = () => {
     ) => {
       let value = e.target.value;
 
+      const percentageFields = [
+        "passPrecision",
+        "finishingPrecision",
+        "dribblePrecision",
+      ];
+
+      if (percentageFields.includes(field.id)) {
+        if (value !== "") {
+          const numericValue = Number(value.replace(/\D/g, ""));
+          value = String(Math.min(100, Math.max(0, numericValue)));
+        }
+      }
+
       if (field.id === "minutesPlayed") {
         value = value.replace(/\D/g, "").slice(0, 3);
         setFormValues((prev) => ({ ...prev, [field.id]: value }));

@@ -5,6 +5,7 @@ import { useMatchData } from "../../Match/hooks/useMatchData";
 import { AddStatsMatchFormFields } from "../constants/FormFields";
 import { buildInitialStats } from "../helpers/buildInitialStats";
 import { buildMatchUpdate } from "../helpers/buildMatchUpdate";
+import { Field } from "../../../components/FormSection";
 
 export const useAddStatsMatch = () => {
   const { career, season, match, loading, backMatch } = useMatchData();
@@ -12,6 +13,35 @@ export const useAddStatsMatch = () => {
   const initializedMatchId = useRef<string | null>(null);
 
   const { formValues, setFormValues, handleInputChange } = useForm();
+
+  const handleLocalInputChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+      field: Field,
+    ) => {
+      let value = e.target.value;
+
+      const percentageFields = [
+        "userPossession",
+        "homeShotAccuracy",
+        "awayShotAccuracy",
+        "homePassAccuracy",
+        "awayPassAccuracy",
+      ];
+
+      if (percentageFields.includes(field.id)) {
+        if (value !== "") {
+          const numericValue = Number(value.replace(/\D/g, ""));
+          value = String(Math.min(100, Math.max(0, numericValue)));
+        }
+        setFormValues((prev) => ({ ...prev, [field.id]: value }));
+        return;
+      }
+
+      handleInputChange(e, field);
+    },
+    [handleInputChange, setFormValues],
+  );
 
   const isUserHome = match?.homeTeam === career?.clubName;
 
@@ -55,7 +85,7 @@ export const useAddStatsMatch = () => {
     match,
     fields,
     formValues,
-    handleInputChange,
+    handleInputChange: handleLocalInputChange,
     saveStats,
     backMatch,
   };
