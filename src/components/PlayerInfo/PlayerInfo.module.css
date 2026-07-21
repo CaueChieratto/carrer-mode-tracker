@@ -1,20 +1,33 @@
 .player_info {
   -ms-overflow-style: none;
+  scrollbar-width: none;
+  gap: 4px;
+}
+
+.player_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.player_content {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  scrollbar-width: none;
+  max-width: 200px;
+  overflow: hidden;
 }
 
 .player_info_top {
-  align-items: center;
   display: flex;
+  align-items: center;
   gap: 6px;
 }
 
 .player_info_bottom {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .data_title {
