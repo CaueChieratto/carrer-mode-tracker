@@ -12,9 +12,10 @@ import { OverflowText } from "../../../OverflowText";
 type TransfersPanelProps = {
   title: string;
   players: Players[];
+  currency?: string;
 };
 
-const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
+const TransfersPanel = ({ title, players, currency }: TransfersPanelProps) => {
   const isArrival = title === "Chegadas";
   const transferType = isArrival ? "arrivals" : "exit";
 
@@ -53,11 +54,11 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
             const value = isArrival ? contract.buyValue : contract.sellValue;
             const date = isArrival ? contract.dataArrival : contract.dataExit;
 
-            let displayValue = formatDisplayValue(value as number);
+            let displayValue = formatDisplayValue(value as number, currency);
 
             if (isArrival) {
               if (value && (value as number) > 0) {
-                displayValue = formatDisplayValue(value as number);
+                displayValue = formatDisplayValue(value as number, currency);
               } else if (contract.isLoan) {
                 displayValue = "Empréstimo";
               } else if (contract.fromClub === "Passes Livres") {
@@ -67,7 +68,7 @@ const TransfersPanel = ({ title, players }: TransfersPanelProps) => {
               }
             } else {
               if (value && (value as number) > 0) {
-                displayValue = formatDisplayValue(value as number);
+                displayValue = formatDisplayValue(value as number, currency);
               } else if (contract.isLoan) {
                 if (contract.fromClub && contract.leftClub) {
                   displayValue = "Fim do Empréstimo";

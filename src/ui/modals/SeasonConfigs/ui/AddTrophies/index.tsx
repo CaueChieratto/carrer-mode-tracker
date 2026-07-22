@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
-import ContainerForm from "../../components/ContainerForm";
-import Form from "../../components/Form";
-import CustomSelect from "../../components/CustomSelect";
-import Button from "../../components/Button";
-import { Career } from "../../common/interfaces/Career";
-import { useClubColors } from "../../common/hooks/Colors/UseClubColors";
-import { useAddTrophies } from "../../common/hooks/Career/UseAddTrophies";
-import { ColorsService } from "../../common/services/ColorsService";
+import ContainerForm from "../../../../../components/ContainerForm";
+import Form from "../../../../../components/Form";
+import CustomSelect from "../../../../../components/CustomSelect";
+import Button from "../../../../../components/Button";
+import { Career } from "../../../../../common/interfaces/Career";
+import { useClubColors } from "../../../../../common/hooks/Colors/UseClubColors";
+import { useAddTrophies } from "../../../../../common/hooks/Career/UseAddTrophies";
+import { ColorsService } from "../../../../../common/services/ColorsService";
 import Styles from "./AddTrophies.module.css";
-import { ClubData } from "../../common/interfaces/club/clubData";
+import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { FaTimes } from "react-icons/fa";
 
 type AddTrophiesProps = {

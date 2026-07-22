@@ -110,8 +110,11 @@ export const getAggregatedStats = (
   return {
     age: `${player.age} anos`,
     position: player.position,
-    marketValue: formatDisplayValue(player.playerValue),
-    salary: formatDisplayValue(player.salary),
+    marketValue: formatDisplayValue(
+      player.playerValue,
+      augmentedCareer.currency,
+    ),
+    salary: formatDisplayValue(player.salary, augmentedCareer.currency),
     seasonsAtClub: compareMode === "total" ? seasonsAtClub : undefined,
 
     games: coreStats.games,

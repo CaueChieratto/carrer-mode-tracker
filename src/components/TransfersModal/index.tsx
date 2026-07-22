@@ -8,6 +8,7 @@ type TransfersModalProps = {
   closeModal: () => void;
   transferType: "arrivals" | "exit";
   playersToShow: Players[];
+  currency?: string;
 };
 
 const TransfersModal = ({
@@ -15,6 +16,7 @@ const TransfersModal = ({
   closeModal,
   transferType,
   playersToShow,
+  currency,
 }: TransfersModalProps) => {
   return (
     <Modal
@@ -27,6 +29,7 @@ const TransfersModal = ({
         <TransfersPanel
           title={transferType === "arrivals" ? "Chegadas" : "Saídas"}
           players={playersToShow}
+          currency={currency}
         />
       </SlideUpModal>
     </Modal>

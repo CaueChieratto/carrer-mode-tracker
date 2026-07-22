@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
-import { League } from "../../common/interfaces/League";
-import { Career } from "../../common/interfaces/Career";
-import Button from "../Button";
-import CustomSelect from "../CustomSelect";
+import { League } from "../../../../../common/interfaces/League";
+import { Career } from "../../../../../common/interfaces/Career";
+import Button from "../../../../../components/Button";
+import CustomSelect from "../../../../../components/CustomSelect";
 import Styles from "./SelectLeagues.module.css";
 import { FaTimes } from "react-icons/fa";
 import { useSelectLeagues } from "./hooks/useSelectLeagues";

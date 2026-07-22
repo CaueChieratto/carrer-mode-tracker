@@ -46,7 +46,10 @@ export const mapDocToCareer = (
   } as Career;
 };
 
-export const mapPlayerToFormValues = (player: Players) => {
+export const mapPlayerToFormValues = (
+  player: Players,
+  currency: string = "EUR",
+) => {
   const latestContract =
     player.contract?.[player.contract.length - 1] || player.contract?.[0];
   const isIncomingLoan = !!(
@@ -55,8 +58,8 @@ export const mapPlayerToFormValues = (player: Players) => {
 
   const displaySalary =
     isIncomingLoan && latestContract?.fullSalary
-      ? formatDisplayValue(latestContract.fullSalary)
-      : formatDisplayValue(player.salary);
+      ? formatDisplayValue(latestContract.fullSalary, currency)
+      : formatDisplayValue(player.salary, currency);
 
   const formValues = {
     playerName: player.name || "",
@@ -66,7 +69,7 @@ export const mapPlayerToFormValues = (player: Players) => {
     age: player.age?.toString() || "",
     nation: player.nation || "",
     shirtNumber: player.shirtNumber || "",
-    playerValue: formatDisplayValue(player.playerValue),
+    playerValue: formatDisplayValue(player.playerValue, currency),
     contractTime: isIncomingLoan
       ? latestContract?.loanDuration?.toString() ||
         player.contractTime?.toString() ||
@@ -76,7 +79,7 @@ export const mapPlayerToFormValues = (player: Players) => {
     fromClub: latestContract?.fromClub || "",
     buyValue:
       player.buy && latestContract?.buyValue
-        ? formatDisplayValue(latestContract.buyValue as number)
+        ? formatDisplayValue(latestContract.buyValue as number, currency)
         : "",
     dateArrival: latestContract?.dataArrival
       ? brasilDatePlaceholderShort(new Date(latestContract.dataArrival))

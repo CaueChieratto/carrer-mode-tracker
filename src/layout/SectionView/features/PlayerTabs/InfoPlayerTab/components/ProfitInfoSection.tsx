@@ -5,11 +5,13 @@ import ProfitDisplay from "./ProfitDisplay";
 type ProfitInfoSectionProps = {
   buyValue: number;
   sellValue: number;
+  currency?: string;
 };
 
 const ProfitInfoSection: React.FC<ProfitInfoSectionProps> = ({
   buyValue,
   sellValue,
+  currency,
 }) => (
   <InfoCard title="Lucro com o jogador">
     <ProfitDisplay
@@ -19,6 +21,7 @@ const ProfitInfoSection: React.FC<ProfitInfoSectionProps> = ({
       textOne="Valor da venda"
       textTwo="Valor da compra"
       textTree="Lucro total"
+      currency={currency}
     />
   </InfoCard>
 );

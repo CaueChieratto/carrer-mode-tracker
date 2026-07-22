@@ -1,15 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
 import { Career } from "../../../common/interfaces/Career";
 import Button from "../../../components/Button";
-import AddTrophies from "../../AddTrophies";
+import AddTrophies from "./ui/AddTrophies";
 import Styles from "./SeasonConfigs.module.css";
 import { IoOptionsOutline } from "react-icons/io5";
 import { GiTrophiesShelf } from "react-icons/gi";
 import { CardsModal } from "./components/CardsModal";
-import { SelectLeagues } from "../../../components/SelectLeagues";
+import { SelectLeagues } from "./ui/SelectLeagues";
 import { useSeasonConfigs } from "./hooks/useSeasonConfigs";
 import { SEASON_ENTER_LABEL } from "./constants/seasonLabels";
 import { ClubData } from "../../../common/interfaces/club/clubData";
+import { BsCurrencyExchange } from "react-icons/bs";
+import { SelectCurrency } from "./ui/SelectCurrency";
 
 type SeasonConfigsProps = {
   career: Career;
@@ -62,6 +64,16 @@ export const SeasonConfigs = ({
                 darkClubColor={darkClubColor}
               />
             )}
+
+            <CardsModal
+              className={Styles.currencyCard}
+              icon={<BsCurrencyExchange className={Styles.icon} />}
+              label="Alterar"
+              title="Moeda"
+              onClick={() => setView("currency")}
+              clubColor={clubColor}
+              darkClubColor={darkClubColor}
+            />
           </div>
 
           {canProceed && (
@@ -104,6 +116,16 @@ export const SeasonConfigs = ({
             seasonName={seasonName}
           />
         </div>
+      )}
+
+      {view === "currency" && (
+        <SelectCurrency
+          careerId={career.id}
+          clubColor={clubColor}
+          career={career}
+          setSelectedCareer={setSelectedCareer}
+          onClose={() => setView("menu")}
+        />
       )}
     </>
   );

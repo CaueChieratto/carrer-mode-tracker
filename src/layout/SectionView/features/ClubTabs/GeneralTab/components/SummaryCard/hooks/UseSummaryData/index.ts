@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { ClubData } from "../../../../../../../../../common/interfaces/club/clubData";
 import { formatDisplayValue } from "../../../../../../../../../common/utils/FormatValue";
 
-export const useSummaryData = (season: ClubData) => {
+export const useSummaryData = (season: ClubData, currency?: string) => {
   const activePlayers = useMemo(
     () => season.players.filter((player) => !player.sell),
     [season.players],
@@ -37,14 +37,14 @@ export const useSummaryData = (season: ClubData) => {
       { info: "Média de idade", number: averageAge },
       {
         info: "Salários Semanais",
-        number: formatDisplayValue(weeklySalaries),
+        number: formatDisplayValue(weeklySalaries, currency),
       },
       {
         info: "Valor do plantel",
-        number: formatDisplayValue(squadValue),
+        number: formatDisplayValue(squadValue, currency),
       },
     ],
-    [totalPlayers, averageAge, weeklySalaries, squadValue],
+    [totalPlayers, averageAge, weeklySalaries, squadValue, currency],
   );
 
   return { content };

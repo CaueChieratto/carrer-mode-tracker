@@ -15,6 +15,7 @@ type TransactionInfoSectionProps = {
   value: number;
   age: number;
   date: Date | null;
+  currency?: string;
 };
 
 const TransactionInfoSection: React.FC<TransactionInfoSectionProps> = ({
@@ -23,6 +24,7 @@ const TransactionInfoSection: React.FC<TransactionInfoSectionProps> = ({
   value,
   age,
   date,
+  currency,
 }) => {
   const config = transactionConfig[type];
 
@@ -36,7 +38,7 @@ const TransactionInfoSection: React.FC<TransactionInfoSectionProps> = ({
         />
         <InfoItem
           label={config.valueLabel}
-          value={formatDisplayValue(value)}
+          value={formatDisplayValue(value, currency)}
           icon={<GiMoneyStack />}
           color={config.color}
         />

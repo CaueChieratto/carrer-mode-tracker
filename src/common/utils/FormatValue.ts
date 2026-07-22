@@ -1,20 +1,34 @@
-export const formatValue = (value: number | string): string => {
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  EUR: "€",
+  GBP: "£",
+  USD: "$",
+  BRL: "R$",
+};
+
+export const formatValue = (
+  value: number | string,
+  currencyCode: string = "EUR",
+): string => {
   const num =
-    typeof value === "string" ? parseInt(value.replace(/\D/g, ""), 10) : value;
+    typeof value === "string"
+      ? parseFloat(value.replace(/[^0-9.]/g, ""))
+      : value;
 
   if (isNaN(num) || num === 0) {
     return "";
   }
 
+  const symbol = CURRENCY_SYMBOLS[currencyCode] || currencyCode;
+
   if (num >= 1000000) {
     const millions = num / 1000000;
-    return `€${millions % 1 === 0 ? millions : millions.toFixed(1)}M`;
+    return `${symbol}${millions % 1 === 0 ? millions : millions.toFixed(1)}M`;
   }
   if (num >= 1000) {
     const thousands = num / 1000;
-    return `€${thousands % 1 === 0 ? thousands : thousands.toFixed(1)}k`;
+    return `${symbol}${thousands % 1 === 0 ? thousands : thousands.toFixed(1)}k`;
   }
-  return `€${num}`;
+  return `${symbol}${num}`;
 };
 
 export const parseValue = (value: string): number => {
@@ -22,8 +36,7 @@ export const parseValue = (value: string): number => {
 
   const cleaned = value
     .toLowerCase()
-    .replace("€", "")
-    .replace(/\s/g, "")
+    .replace(/[^0-9kmb.,]/g, "")
     .replace(",", ".");
 
   const multipliers: { [key: string]: number } = {
@@ -44,23 +57,28 @@ export const parseValue = (value: string): number => {
   return isNaN(finalNumber) ? 0 : finalNumber;
 };
 
-export const formatDisplayValue = (value: number): string => {
+export const formatDisplayValue = (
+  value: number,
+  currencyCode: string = "EUR",
+): string => {
   if (isNaN(value) || value === null) {
     return "";
   }
 
+  const symbol = CURRENCY_SYMBOLS[currencyCode] || currencyCode;
+
   if (Math.abs(value) >= 1000000000) {
     const billions = value / 1000000000;
-    return `€${billions % 1 === 0 ? billions : billions.toFixed(1)}B`;
+    return `${symbol}${billions % 1 === 0 ? billions : billions.toFixed(1)}B`;
   }
   if (Math.abs(value) >= 1000000) {
     const millions = value / 1000000;
-    return `€${millions % 1 === 0 ? millions : millions.toFixed(1)}M`;
+    return `${symbol}${millions % 1 === 0 ? millions : millions.toFixed(1)}M`;
   }
   if (Math.abs(value) >= 1000) {
     const thousands = value / 1000;
-    return `€${thousands % 1 === 0 ? thousands : thousands.toFixed(1)}k`;
+    return `${symbol}${thousands % 1 === 0 ? thousands : thousands.toFixed(1)}k`;
   }
 
-  return `€${value}`;
+  return `${symbol}${value}`;
 };

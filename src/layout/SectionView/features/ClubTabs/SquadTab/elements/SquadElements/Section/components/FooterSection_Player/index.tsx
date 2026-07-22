@@ -9,6 +9,7 @@ type FooterSection_PlayerProps = {
   salary: number;
   contractTime: number;
   matches: Match[];
+  currency?: string;
 };
 
 const FooterSection_Player = ({
@@ -16,12 +17,15 @@ const FooterSection_Player = ({
   salary,
   contractTime,
   matches,
+  currency,
 }: FooterSection_PlayerProps) => {
   return (
     <footer className={Styles.player_contract}>
-      <h3 className={Data.data_title}>{formatDisplayValue(playerValue)}</h3>
+      <h3 className={Data.data_title}>
+        {formatDisplayValue(playerValue, currency)}
+      </h3>
       <div className={Styles.player_contract_bottom}>
-        <h3 className={Data.data}>{formatDisplayValue(salary)}</h3>
+        <h3 className={Data.data}>{formatDisplayValue(salary, currency)}</h3>
         <div className={Data.data}>
           {getVisualContract(contractTime, matches)}
         </div>

@@ -40,6 +40,7 @@ const Geral = () => {
         closeModal={handleCloseModal}
         transferType={transferType}
         playersToShow={playersToShow}
+        currency={career.currency}
       />
       {activeModal === ModalType.NONE && !isModalOpen && <BottomMenu />}
     </>

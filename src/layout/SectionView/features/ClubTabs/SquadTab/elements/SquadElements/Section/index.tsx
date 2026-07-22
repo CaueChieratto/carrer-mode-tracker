@@ -19,6 +19,7 @@ type SectionProps = {
   matches: Match[];
   loan?: boolean;
   contract?: Contract[];
+  currency?: string;
 };
 
 export const Section = ({
@@ -35,6 +36,7 @@ export const Section = ({
   matches,
   loan,
   contract,
+  currency,
 }: SectionProps) => {
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
@@ -71,6 +73,7 @@ export const Section = ({
         salary={displaySalary}
         playerValue={playerValue}
         matches={matches}
+        currency={currency}
       />
     </section>
   );

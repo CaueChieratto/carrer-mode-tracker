@@ -48,3 +48,9 @@
 .container_add_trophies {
   width: 100%;
 }
+
+.currencyCard {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 6px);
+}

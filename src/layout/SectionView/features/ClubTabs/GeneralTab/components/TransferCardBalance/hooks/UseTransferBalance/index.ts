@@ -85,19 +85,19 @@ export const useTransferBalance = (career: Career, season: ClubData) => {
 
   const content = [
     {
-      value: formatDisplayValue(totalSpent),
+      value: formatDisplayValue(totalSpent, career.currency),
       name: "Contratações: ",
       number: signings.length,
       color: "#c81419",
     },
     {
-      value: formatDisplayValue(totalEarned),
+      value: formatDisplayValue(totalEarned, career.currency),
       name: "Vendas: ",
       number: sales.length,
       color: "#0bb32a",
     },
     {
-      value: formatDisplayValue(Math.abs(profit)),
+      value: formatDisplayValue(Math.abs(profit), career.currency),
       name: profit >= 0 ? "Lucro" : "Perda",
       color: profit >= 0 ? "#0bb32a" : "#c81419",
     },

@@ -14,10 +14,11 @@ type AddSquad_PlayerProps = {
   player?: Players;
   openModal: (modal: ModalType, career?: Career) => void;
   season: ClubData;
+  career: Career;
 };
 
 const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
-  ({ player, openModal }, ref) => {
+  ({ player, career, openModal }, ref) => {
     const {
       formValues,
       setFormValues,
@@ -34,7 +35,10 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
 
     useEffect(() => {
       if (player) {
-        const initialFormValues = mapPlayerToFormValues(player);
+        const initialFormValues = mapPlayerToFormValues(
+          player,
+          career?.currency,
+        );
         setFormValues(initialFormValues);
         handleBooleanChange("isSigning", player.buy);
         handleBooleanChange("isCaptain", player.captain);

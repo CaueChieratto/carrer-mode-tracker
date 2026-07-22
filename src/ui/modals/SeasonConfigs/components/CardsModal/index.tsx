@@ -8,6 +8,7 @@ type CardsModalProps = {
   onClick: () => void;
   clubColor: string;
   darkClubColor: string;
+  className?: string;
 };
 
 export const CardsModal = ({
@@ -17,10 +18,11 @@ export const CardsModal = ({
   onClick,
   clubColor,
   darkClubColor,
+  className,
 }: CardsModalProps) => {
   return (
     <ContainerButton
-      className={Styles.card}
+      className={`${Styles.card} ${className ?? ""}`}
       style={
         {
           "--club-color": clubColor,

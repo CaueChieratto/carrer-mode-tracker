@@ -19,7 +19,7 @@ const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
 
   return (
     <>
-      <SummaryCard season={season} />
+      <SummaryCard season={season} career={career} />
 
       <TransfersCardSummary
         season={season}

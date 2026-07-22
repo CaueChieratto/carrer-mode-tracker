@@ -34,7 +34,6 @@ const TrophiesPanel = ({
                 seasonsChampions={trophy.seasons.length}
                 style={{ backgroundColor: clubColor, color: "white" }}
               />
-
               <LeagueTrophyCard
                 trophy={trophy}
                 selectedCareer={selectedCareer}

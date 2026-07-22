@@ -175,4 +175,13 @@ export const ServiceSeasons = {
       clubData: stripHeavyData(updatedClubData),
     });
   },
+
+  updateCurrency: async (careerId: string, currency: string): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    await updateCareerFirestore(user.uid, careerId, {
+      currency,
+    });
+  },
 };

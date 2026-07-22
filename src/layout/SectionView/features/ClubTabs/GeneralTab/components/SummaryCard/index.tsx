@@ -7,9 +7,11 @@ import { BsCalendar4 } from "react-icons/bs";
 import { FaMoneyBillWave, FaHandHoldingUsd } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { useSummaryData } from "./hooks/UseSummaryData";
+import { Career } from "../../../../../../../common/interfaces/Career";
 
 type SummaryCardProps = {
   season: ClubData;
+  career: Career;
 };
 
 const iconMap: { [key: string]: React.ReactNode } = {
@@ -19,8 +21,8 @@ const iconMap: { [key: string]: React.ReactNode } = {
   "Valor do plantel": <FaHandHoldingUsd />,
 };
 
-const SummaryCard = ({ season }: SummaryCardProps) => {
-  const { content } = useSummaryData(season);
+const SummaryCard = ({ season, career }: SummaryCardProps) => {
+  const { content } = useSummaryData(season, career.currency);
 
   return (
     <Card className={Titles.card}>

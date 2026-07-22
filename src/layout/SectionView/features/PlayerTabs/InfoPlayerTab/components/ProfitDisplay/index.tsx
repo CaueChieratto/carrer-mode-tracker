@@ -12,6 +12,7 @@ type ProfitDisplayProps = {
   textTwo: string;
   textTree: string;
   isProfit?: boolean;
+  currency?: string;
 };
 
 const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
@@ -24,6 +25,7 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
   textTwo,
   textTree,
   isProfit,
+  currency,
 }) => {
   const profit = sellValue - buyValue;
 
@@ -36,8 +38,8 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
           style={{ color: isProfit ? "#0bb32aff" : "var(--color-quaternary)" }}
         >
           {isProfit
-            ? formatDisplayValue(sellValue)
-            : formatDisplayValue(playerValue)}
+            ? formatDisplayValue(sellValue, currency)
+            : formatDisplayValue(playerValue, currency)}
         </h2>
       </div>
 
@@ -49,7 +51,9 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
           className={Styles.value}
           style={{ color: isProfit ? "#c81419ff" : "var(--color-quaternary)" }}
         >
-          {isProfit ? formatDisplayValue(buyValue) : formatDisplayValue(salary)}
+          {isProfit
+            ? formatDisplayValue(buyValue, currency)
+            : formatDisplayValue(salary, currency)}
         </h2>
       </div>
 
@@ -67,7 +71,9 @@ const ProfitDisplay: React.FC<ProfitDisplayProps> = ({
               : "var(--color-quaternary)",
           }}
         >
-          {isProfit ? formatDisplayValue(Math.abs(profit)) : contractTime}
+          {isProfit
+            ? formatDisplayValue(Math.abs(profit), currency)
+            : contractTime}
         </h2>
       </div>
     </div>

@@ -26,6 +26,8 @@ const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
     leftClub,
   } = usePlayerInfo(player, career);
 
+  const currency = career.currency;
+
   if (!player) {
     return <PlayerNotFound />;
   }
@@ -35,10 +37,9 @@ const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
       {!player.sell && (
         <>
           <PlayerInfoSection player={player} />
-          <ContractInfoSection player={player} />
+          <ContractInfoSection player={player} currency={currency} />
         </>
       )}
-
       {hasBeenBought && (
         <TransactionInfoSection
           type="buy"
@@ -46,9 +47,9 @@ const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
           value={numericBuyValue}
           age={getPlayerAgeForTransaction(dataArrival || null) ?? player.age}
           date={dataArrival || null}
+          currency={currency}
         />
       )}
-
       {hasBeenSold && (
         <TransactionInfoSection
           type="sell"
@@ -56,13 +57,14 @@ const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
           value={numericSellValue}
           age={getPlayerAgeForTransaction(dataExit || null) ?? player.age}
           date={dataExit || null}
+          currency={currency}
         />
       )}
-
       {hasBeenBought && hasBeenSold && (
         <ProfitInfoSection
           buyValue={numericBuyValue}
           sellValue={numericSellValue}
+          currency={currency}
         />
       )}
     </>

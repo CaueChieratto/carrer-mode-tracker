@@ -42,9 +42,11 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
     return buildSquadData(season.players, criteria, isAsc);
   }, [season.players, criteria, isAsc]);
 
+  const currency = career.currency || "€";
+
   const copySquad = async () => {
     if (!flatData.length) return;
-    const text = buildSquadCopyText(flatData);
+    const text = buildSquadCopyText(flatData, currency);
 
     await Copy(text, "Elenco copiado com sucesso!");
   };
@@ -76,6 +78,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
                   {...player}
                   matches={season.matches || []}
                   key={player.id}
+                  currency={currency}
                 />
               ))}
             </Card>
@@ -89,6 +92,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
               {...player}
               matches={season.matches || []}
               key={player.id}
+              currency={currency}
             />
           ))}
         </Card>

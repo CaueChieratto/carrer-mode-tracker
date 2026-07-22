@@ -38,6 +38,7 @@ const Season = () => {
         closeModal={handleCloseModal}
         transferType={transferType}
         playersToShow={playersToShow}
+        currency={career.currency}
       />
       {activeModal === ModalType.NONE && <BottomMenu />}
     </>

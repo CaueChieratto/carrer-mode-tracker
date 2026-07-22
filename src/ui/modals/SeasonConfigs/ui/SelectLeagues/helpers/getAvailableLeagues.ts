@@ -1,5 +1,5 @@
-import { League } from "../../../common/interfaces/League";
-import { leaguesByContinent } from "../../../common/utils/league";
+import { League } from "../../../../../../common/interfaces/League";
+import { leaguesByContinent } from "../../../../../../common/utils/league";
 
 export const getAvailableLeagues = (nation: string): League[] => {
   for (const [continent, countries] of Object.entries(leaguesByContinent)) {
