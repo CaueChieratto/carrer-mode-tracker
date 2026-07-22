@@ -14,17 +14,10 @@ type InfoPlayerTabProps = {
 };
 
 const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
-  const {
-    numericBuyValue,
-    numericSellValue,
-    hasBeenBought,
-    hasBeenSold,
-    getPlayerAgeForTransaction,
-    dataArrival,
-    dataExit,
-    fromClub,
-    leftClub,
-  } = usePlayerInfo(player, career);
+  const { transactions, getPlayerAgeForTransaction } = usePlayerInfo(
+    player,
+    career,
+  );
 
   const currency = career.currency;
 
@@ -40,33 +33,56 @@ const InfoPlayerTab: React.FC<InfoPlayerTabProps> = ({ player, career }) => {
           <ContractInfoSection player={player} currency={currency} />
         </>
       )}
-      {hasBeenBought && (
-        <TransactionInfoSection
-          type="buy"
-          club={fromClub || ""}
-          value={numericBuyValue}
-          age={getPlayerAgeForTransaction(dataArrival || null) ?? player.age}
-          date={dataArrival || null}
-          currency={currency}
-        />
-      )}
-      {hasBeenSold && (
-        <TransactionInfoSection
-          type="sell"
-          club={leftClub || ""}
-          value={numericSellValue}
-          age={getPlayerAgeForTransaction(dataExit || null) ?? player.age}
-          date={dataExit || null}
-          currency={currency}
-        />
-      )}
-      {hasBeenBought && hasBeenSold && (
-        <ProfitInfoSection
-          buyValue={numericBuyValue}
-          sellValue={numericSellValue}
-          currency={currency}
-        />
-      )}
+
+      {transactions.map((transaction, index) => (
+        <React.Fragment key={`trans-${index}`}>
+          {transaction.hasBeenBought && (
+            <TransactionInfoSection
+              title={transaction.arrivalTitle}
+              clubLabel="Clube anterior"
+              club={transaction.fromClub || ""}
+              valueLabel={transaction.arrivalValueLabel}
+              value={transaction.arrivalValueDisplay}
+              ageLabel="Idade na chegada"
+              age={
+                getPlayerAgeForTransaction(transaction.dataArrival || null) ??
+                player.age
+              }
+              dateLabel="Data da chegada"
+              date={transaction.dataArrival || null}
+              color="#c81419ff"
+              currency={currency}
+            />
+          )}
+
+          {transaction.hasBeenSold && (
+            <TransactionInfoSection
+              title={transaction.exitTitle}
+              clubLabel="Clube destino"
+              club={transaction.leftClub || ""}
+              valueLabel={transaction.exitValueLabel}
+              value={transaction.exitValueDisplay}
+              ageLabel="Idade na saída"
+              age={
+                getPlayerAgeForTransaction(transaction.dataExit || null) ??
+                player.age
+              }
+              dateLabel="Data da saída"
+              date={transaction.dataExit || null}
+              color="#0bb32aff"
+              currency={currency}
+            />
+          )}
+
+          {transaction.numericSellValue > 0 && (
+            <ProfitInfoSection
+              buyValue={transaction.numericBuyValue}
+              sellValue={transaction.numericSellValue}
+              currency={currency}
+            />
+          )}
+        </React.Fragment>
+      ))}
     </>
   );
 };

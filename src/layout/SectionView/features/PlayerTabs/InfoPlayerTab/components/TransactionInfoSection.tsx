@@ -2,7 +2,6 @@ import React from "react";
 import { BiRefresh } from "react-icons/bi";
 import { GiMoneyStack, GiPoliceBadge } from "react-icons/gi";
 import { RiCalendarScheduleLine } from "react-icons/ri";
-import { transactionConfig } from "../constants/TransactionConfig";
 import { brasilDatePlaceholder } from "../../../../../../common/utils/Date";
 import { formatDisplayValue } from "../../../../../../common/utils/FormatValue";
 import InfoCard from "./InfoCard";
@@ -10,42 +9,49 @@ import InfoItem from "./InfoItem";
 import InfoRow from "./InfoRow";
 
 type TransactionInfoSectionProps = {
-  type: "buy" | "sell";
+  title: string;
+  clubLabel: string;
   club: string;
-  value: number;
+  valueLabel: string;
+  value: number | string;
+  ageLabel: string;
   age: number;
+  dateLabel: string;
   date: Date | null;
+  color: string;
   currency?: string;
 };
 
 const TransactionInfoSection: React.FC<TransactionInfoSectionProps> = ({
-  type,
+  title,
+  clubLabel,
   club,
+  valueLabel,
   value,
+  ageLabel,
   age,
+  dateLabel,
   date,
+  color,
   currency,
 }) => {
-  const config = transactionConfig[type];
+  const displayValue =
+    typeof value === "number" ? formatDisplayValue(value, currency) : value;
 
   return (
-    <InfoCard title={config.title}>
+    <InfoCard title={title}>
       <InfoRow>
+        <InfoItem label={clubLabel} value={club} icon={<GiPoliceBadge />} />
         <InfoItem
-          label={config.clubLabel}
-          value={club}
-          icon={<GiPoliceBadge />}
-        />
-        <InfoItem
-          label={config.valueLabel}
-          value={formatDisplayValue(value, currency)}
+          label={valueLabel}
+          value={displayValue}
           icon={<GiMoneyStack />}
-          color={config.color}
+          color={color}
         />
-        <InfoItem label={config.ageLabel} value={age} icon={<BiRefresh />} />
+        <InfoItem label={ageLabel} value={age} icon={<BiRefresh />} />
         {date && (
           <InfoItem
-            label={config.dateLabel}
+            label={dateLabel}
             value={brasilDatePlaceholder(new Date(date))}
             icon={<RiCalendarScheduleLine />}
           />
