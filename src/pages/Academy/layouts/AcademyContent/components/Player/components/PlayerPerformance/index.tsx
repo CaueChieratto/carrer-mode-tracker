@@ -19,14 +19,15 @@ export const PlayerPerformance: React.FC = () => {
             Nenhuma estatística disponível para este jogador.
           </p>
         ) : (
-          <div className={Styles.tournamentsContainer}>
-            {tournamentStats.map((stat) => (
-              <TournamentStatItem key={stat.tournamentId} stat={stat} />
-            ))}
-          </div>
+          <>
+            <div className={Styles.tournamentsContainer}>
+              {tournamentStats.map((stat) => (
+                <TournamentStatItem key={stat.tournamentId} stat={stat} />
+              ))}
+            </div>
+            <GeneralStatsFooter totalStats={totalStats} />
+          </>
         )}
-
-        <GeneralStatsFooter totalStats={totalStats} />
       </ActiveStatCardProvider>
     </div>
   );

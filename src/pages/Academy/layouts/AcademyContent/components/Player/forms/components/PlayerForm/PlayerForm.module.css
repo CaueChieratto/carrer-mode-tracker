@@ -26,7 +26,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
-  font-size: 15px;
+  font-size: 16px;
   background-color: var(--card-background);
   border: 1px solid var(--border-input);
   border-radius: 8px;

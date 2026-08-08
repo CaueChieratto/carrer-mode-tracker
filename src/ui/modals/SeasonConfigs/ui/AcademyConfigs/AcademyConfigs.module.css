@@ -80,7 +80,6 @@
 .label {
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--blackColor);
 }
@@ -90,7 +89,7 @@
   background: transparent;
   border: none;
   color: var(--color-add-player);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   outline: none;
   padding: 0;
