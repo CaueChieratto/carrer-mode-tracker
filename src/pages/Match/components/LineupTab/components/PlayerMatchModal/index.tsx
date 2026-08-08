@@ -6,6 +6,7 @@ import { UseRatingColor } from "../../../../../../common/hooks/Colors/GetOverall
 import { FiClock } from "react-icons/fi";
 import Styles from "./PlayerMatchModal.module.css";
 import { PlayerCircle } from "../../layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
+import React from "react";
 
 type PlayerMatchModalProps = {
   isOpen: boolean;

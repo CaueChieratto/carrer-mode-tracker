@@ -6,6 +6,7 @@ import TransactionInfoSection from "./components/TransactionInfoSection";
 import { usePlayerInfo } from "./hooks/usePlayerInfo";
 import { Career } from "../../../../../common/interfaces/Career";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
+import React from "react";
 
 type InfoPlayerTabProps = {
   player?: Players;

@@ -9,6 +9,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import Load from "../../components/Load";
 import { getStatsCategories } from "./constants/statsCategories";
 import { ButtonsSwitch } from "../../components/ButtonsSwitch";
+import React from "react";
 
 export const ComparePlayers = () => {
   const { state, actions } = useComparePlayers();
