@@ -110,6 +110,7 @@ const FieldRenderer = (props: FieldRendererProps) => {
         placeholder={field.placeholder}
         onChange={handleInputChange}
         disabled={field.disabled}
+        useAlternateStyle={field.id === "nation"}
       />
     );
   }

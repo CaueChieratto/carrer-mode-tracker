@@ -18,7 +18,9 @@
   border-radius: 12px;
   background-color: var(--card-background);
   padding: 0 12px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .form_group:first-child {
@@ -55,6 +57,33 @@
 .input:-webkit-autofill:focus,
 .input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--club-color) !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.inputAcademy {
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  height: 48px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--blackColor) !important;
+  background-color: transparent !important;
+}
+
+.inputAcademy::placeholder {
+  opacity: 0.6;
+  font-weight: 500;
+  color: var(--blackColor) !important;
+}
+
+.inputAcademy:-webkit-autofill,
+.inputAcademy:-webkit-autofill:hover,
+.inputAcademy:-webkit-autofill:focus,
+.inputAcademy:-webkit-autofill:active {
+  color: var(--blackColor) !important;
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }

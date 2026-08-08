@@ -1,0 +1,19 @@
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.deleteBtn {
+  margin-top: -4px;
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}

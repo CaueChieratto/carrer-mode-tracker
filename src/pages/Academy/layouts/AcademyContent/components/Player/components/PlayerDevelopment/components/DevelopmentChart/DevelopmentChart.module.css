@@ -1,0 +1,25 @@
+.chartWrapper {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollableArea {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.scrollableArea::-webkit-scrollbar {
+  display: none;
+}
+
+.svgWrapper {
+  position: relative;
+  display: block;
+}

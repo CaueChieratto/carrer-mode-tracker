@@ -1,0 +1,37 @@
+.card {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px #0003;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 35px;
+}
+
+.cardHeaderWithSelect {
+  height: 90px;
+}
+
+.h2 {
+  font-size: 18px;
+  color: var(--color-quaternary);
+  gap: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.selectCompact {
+  padding: 12px 14px;
+}
+
+.icon {
+  color: var(--club-color);
+}

@@ -1,4 +1,3 @@
-import React from "react";
 import Modal from "../../../../../../components/Modal";
 import SlideUpModal from "../../../../../../ui/modals/SlideUpModal";
 import { Match } from "../../../../../../common/interfaces/Match";

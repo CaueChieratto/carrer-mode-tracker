@@ -1,0 +1,9 @@
+/* components/TournamentMatchCard/TournamentMatchCard.module.css */
+.matchCard {
+  background-color: var(--highlight-bg);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 2px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+}

@@ -17,6 +17,7 @@ import { AddMatchStatsPlayer } from "./pages/AddMatchStatsPlayer";
 import { useIsMobile } from "./common/hooks/useIsMobile";
 import { ComparePlayers } from "./pages/ComparePlayers";
 import { AddTeamsToTable } from "./pages/AddTeamsToTable";
+import { Academy } from "./pages/Academy";
 
 type AppProps = {
   career?: Career;
@@ -45,6 +46,7 @@ export default function App({ career }: AppProps) {
 
   const router = createBrowserRouter([
     { path: "/", element: <Welcome /> },
+    { path: "/Career/:careerId/Academy", element: <Academy /> },
     { path: "/Career/:careerId/Geral", element: <Geral /> },
     { path: "/Career/:careerId/Geral/Player/:playerId", element: <Players /> },
     { path: "/Career/:careerId", element: <AddSeasons /> },

@@ -1,4 +1,3 @@
-import React from "react";
 import Styles from "./StatRow.module.css";
 import { UseRatingColor } from "../../../../common/hooks/Colors/GetOverallColor";
 

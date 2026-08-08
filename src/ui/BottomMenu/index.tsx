@@ -5,12 +5,14 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { useTheme } from "../../contexts/LightThemeContext";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaPeopleArrows } from "react-icons/fa";
+import { IoColorPalette } from "react-icons/io5";
 
 type BottomMenuProps = {
   noHavePlayers?: boolean;
+  changeClubColor?: () => void;
 };
 
-const BottomMenu = ({ noHavePlayers }: BottomMenuProps) => {
+const BottomMenu = ({ noHavePlayers, changeClubColor }: BottomMenuProps) => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const { careerId, seasonId, playerId } = useParams();
@@ -38,6 +40,10 @@ const BottomMenu = ({ noHavePlayers }: BottomMenuProps) => {
         </div>
 
         {!noHavePlayers && <FaPeopleArrows size={30} onClick={compareClick} />}
+
+        {changeClubColor && (
+          <IoColorPalette size={30} onClick={changeClubColor} />
+        )}
 
         <BsQuestionCircle size={30} onClick={() => navigate("/tutorial")} />
       </div>

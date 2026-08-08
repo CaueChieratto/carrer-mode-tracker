@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Career } from "../../../common/interfaces/Career";
 import Button from "../../../components/Button";
 import AddTrophies from "./ui/AddTrophies";
 import Styles from "./SeasonConfigs.module.css";
-import { IoOptionsOutline } from "react-icons/io5";
+import { IoOptionsOutline, IoPeopleOutline } from "react-icons/io5";
 import { GiTrophiesShelf } from "react-icons/gi";
 import { CardsModal } from "./components/CardsModal";
 import { SelectLeagues } from "./ui/SelectLeagues";
@@ -12,6 +12,8 @@ import { SEASON_ENTER_LABEL } from "./constants/seasonLabels";
 import { ClubData } from "../../../common/interfaces/club/clubData";
 import { BsCurrencyExchange } from "react-icons/bs";
 import { SelectCurrency } from "./ui/SelectCurrency";
+import { AcademyConfigs } from "./ui/AcademyConfigs";
+import { useAcademyConfigs } from "./ui/AcademyConfigs/hooks/useAcademyConfigs";
 
 type SeasonConfigsProps = {
   career: Career;
@@ -28,6 +30,12 @@ export const SeasonConfigs = ({
   seasonName,
   season,
 }: SeasonConfigsProps) => {
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(`@academy_viewState_${career.id}`);
+    };
+  }, [career.id]);
+
   const {
     view,
     setView,
@@ -39,6 +47,11 @@ export const SeasonConfigs = ({
     darkClubColor,
     canProceed,
   } = useSeasonConfigs({ career, setSelectedCareer });
+
+  const { isSaving: isSavingAcademy, handleSaveAcademy } = useAcademyConfigs({
+    career,
+    setSelectedCareer,
+  });
 
   return (
     <>
@@ -53,7 +66,6 @@ export const SeasonConfigs = ({
               clubColor={clubColor}
               darkClubColor={darkClubColor}
             />
-
             {canProceed && (
               <CardsModal
                 icon={<GiTrophiesShelf className={Styles.icon} />}
@@ -64,9 +76,7 @@ export const SeasonConfigs = ({
                 darkClubColor={darkClubColor}
               />
             )}
-
             <CardsModal
-              className={Styles.currencyCard}
               icon={<BsCurrencyExchange className={Styles.icon} />}
               label="Alterar"
               title="Moeda"
@@ -74,8 +84,17 @@ export const SeasonConfigs = ({
               clubColor={clubColor}
               darkClubColor={darkClubColor}
             />
+            {canProceed && (
+              <CardsModal
+                icon={<IoPeopleOutline className={Styles.icon} />}
+                label="Configurar"
+                title="Base"
+                onClick={() => setView("base")}
+                clubColor={clubColor}
+                darkClubColor={darkClubColor}
+              />
+            )}
           </div>
-
           {canProceed && (
             <Button
               className={Styles.button}
@@ -125,6 +144,16 @@ export const SeasonConfigs = ({
           career={career}
           setSelectedCareer={setSelectedCareer}
           onClose={() => setView("menu")}
+        />
+      )}
+
+      {view === "base" && (
+        <AcademyConfigs
+          clubColor={clubColor}
+          onClose={() => setView("menu")}
+          onSave={handleSaveAcademy}
+          isSaving={isSavingAcademy}
+          initialData={career.academy}
         />
       )}
     </>

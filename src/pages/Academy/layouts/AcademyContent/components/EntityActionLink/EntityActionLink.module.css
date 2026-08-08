@@ -1,0 +1,84 @@
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.actionCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 18px;
+  border-radius: 250px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--club-color) 12%, var(--card-background)),
+    var(--card-background)
+  );
+  overflow: hidden;
+  transition: 0.25s;
+}
+
+.actionCard:active {
+  transform: scale(0.97);
+}
+
+.iconContainer {
+  position: relative;
+  z-index: 2;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--club-color);
+  color: white;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+.arrow {
+  position: relative;
+  z-index: 2;
+  font-size: 22px;
+  color: var(--club-color);
+}
+
+.backCard {
+  background: linear-gradient(
+    315deg,
+    color-mix(in srgb, var(--club-color) 12%, var(--card-background)),
+    var(--card-background)
+  );
+}
+
+.backCard .iconContainer {
+  background: transparent;
+  border: 2px solid var(--club-color);
+  color: var(--club-color);
+}
+
+.backCard .arrow {
+  transform: rotate(180deg);
+}

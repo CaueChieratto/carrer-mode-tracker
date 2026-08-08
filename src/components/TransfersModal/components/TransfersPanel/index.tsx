@@ -21,9 +21,10 @@ const TransfersPanel = ({ title, players, currency }: TransfersPanelProps) => {
 
   const transferEvents = useMemo(() => {
     const events: TransferEvent[] = [];
-
     players.forEach((player) => {
-      if (!player.contract) return;
+      if (!player.contract) {
+        return;
+      }
 
       player.contract.forEach((contract) => {
         const isValidForTab = isArrival
@@ -63,6 +64,8 @@ const TransfersPanel = ({ title, players, currency }: TransfersPanelProps) => {
                 displayValue = "Empréstimo";
               } else if (contract.fromClub === "Passes Livres") {
                 displayValue = "Custo Zero";
+              } else if (contract.fromClub === "Base") {
+                displayValue = "Promovido da Base";
               } else if (contract.fromClub) {
                 displayValue = "Fim do Empréstimo";
               }

@@ -1,0 +1,65 @@
+.chartSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: var(--border-input);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.7;
+}
+
+.verticalGridLine {
+  stroke: var(--border-input);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  opacity: 0.4;
+}
+
+.yAxisLabel {
+  fill: var(--color-tertiary);
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: start;
+}
+
+.xAxisLabel {
+  fill: var(--color-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.dataLine {
+  fill: none;
+  stroke: var(--club-color);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.dataPoint {
+  fill: var(--card-background);
+  stroke: var(--club-color);
+  stroke-width: 2.5;
+  transition: all 0.2s ease;
+}
+
+.activePoint {
+  fill: var(--club-color);
+}
+
+.activeRing {
+  fill: none;
+  stroke: var(--club-color);
+  stroke-width: 2;
+  opacity: 0.4;
+}
+
+.touchTarget {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}

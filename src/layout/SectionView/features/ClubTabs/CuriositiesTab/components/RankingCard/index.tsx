@@ -1,4 +1,3 @@
-import React from "react";
 import { MdOutlineWarning } from "react-icons/md";
 import {
   RankingItem,

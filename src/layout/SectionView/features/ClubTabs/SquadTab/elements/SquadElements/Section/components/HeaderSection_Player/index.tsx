@@ -8,6 +8,8 @@ type HeaderSection_PlayerProps = {
   age: number;
   nation: string;
   captain?: boolean;
+  isAcademy?: boolean;
+  nickname?: string;
 };
 
 const HeaderSection_Player = (props: HeaderSection_PlayerProps) => {

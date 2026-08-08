@@ -5,7 +5,7 @@ import Card from "../../../../../ui/Card";
 import Styles from "./SquadTab.module.css";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
-import { ButtonsSwitch } from "../AllMatchesTab/components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 import { POSITION_DATA } from "../../../../../common/types/Positions";
 import { useSquadSort } from "./hooks/useSquadSort";
 import { buildSquadData } from "./helpers/buildSquadData";
@@ -51,6 +51,10 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
     await Copy(text, "Elenco copiado com sucesso!");
   };
 
+  const academyNickname = career?.academy?.nickname;
+
+  console.log({ flatData });
+
   return (
     <ContainerClubContent>
       <ButtonsSwitch
@@ -79,6 +83,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
                   matches={season.matches || []}
                   key={player.id}
                   currency={currency}
+                  academyNickname={academyNickname}
                 />
               ))}
             </Card>
@@ -93,6 +98,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
               matches={season.matches || []}
               key={player.id}
               currency={currency}
+              academyNickname={academyNickname}
             />
           ))}
         </Card>

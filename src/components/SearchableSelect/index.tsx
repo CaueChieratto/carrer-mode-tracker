@@ -10,6 +10,7 @@ type SearchableSelectProps = {
   onChange: (event: { target: { name: string; value: string } }) => void;
   disabled?: boolean;
   className?: string;
+  useAlternateStyle?: boolean;
 };
 
 const SearchableSelect = ({
@@ -20,6 +21,7 @@ const SearchableSelect = ({
   onChange,
   className,
   disabled = false,
+  useAlternateStyle,
 }: SearchableSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -100,9 +102,9 @@ const SearchableSelect = ({
 
   return (
     <div
-      className={`${Styles.custom_select_container} ${
-        disabled ? Styles.disabled : ""
-      }`}
+      className={`${
+        useAlternateStyle ? Styles.container : Styles.custom_select_container
+      } ${disabled ? Styles.disabled : ""}`}
       ref={selectRef}
       onKeyDown={handleKeyDown}
     >

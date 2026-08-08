@@ -1,0 +1,31 @@
+.matchHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  font-size: 12px;
+  color: var(--color-tertiary);
+  font-weight: 600;
+  height: 32px;
+}
+
+.matchDate {
+  justify-self: start;
+}
+
+.editButton {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 28px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--color-tertiary);
+  cursor: pointer;
+}
+
+.headerRight {
+  justify-self: end;
+}

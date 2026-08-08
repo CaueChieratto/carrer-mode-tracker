@@ -20,6 +20,8 @@ type SectionProps = {
   loan?: boolean;
   contract?: Contract[];
   currency?: string;
+  isAcademy?: boolean;
+  academyNickname?: string;
 };
 
 export const Section = ({
@@ -37,6 +39,8 @@ export const Section = ({
   loan,
   contract,
   currency,
+  isAcademy,
+  academyNickname,
 }: SectionProps) => {
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
@@ -58,6 +62,8 @@ export const Section = ({
     }
   }
 
+  const finalNickname = isAcademy ? academyNickname : undefined;
+
   return (
     <section className={Data.player} onClick={handleNavigate}>
       <HeaderSection_Player
@@ -67,6 +73,8 @@ export const Section = ({
         position={position}
         shirtNumber={shirtNumber}
         captain={captain}
+        isAcademy={isAcademy}
+        nickname={finalNickname}
       />
       <FooterSection_Player
         contractTime={contractTime}

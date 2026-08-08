@@ -2,7 +2,7 @@ import Card from "../../../../../../../ui/Card";
 import Titles from "../../GeneralTab.module.css";
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
 import SummaryItem from "./components/SummaryItem";
-import React from "react";
+
 import { BsCalendar4 } from "react-icons/bs";
 import { FaMoneyBillWave, FaHandHoldingUsd } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";

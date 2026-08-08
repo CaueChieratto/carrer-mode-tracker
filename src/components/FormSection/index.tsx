@@ -81,7 +81,6 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
       onKeyDown,
       onKeyUp,
       onBooleanChange,
-      isMatch,
     } = props;
 
     const { clubColor } = useSeasonTheme();
@@ -103,35 +102,41 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
           {title}
         </h2>
         <div className={Styles.form_section}>
-          {visibleRows.map((fields, rowIndex) => (
-            <div
-              key={rowIndex}
-              className={`${fields.length > 1 ? Styles.form_row : ""} ${isMatch ? Styles.isMatch : ""}`}
-            >
-              {fields.map((field) => (
-                <div key={field.id} className={Styles.form_group}>
-                  <Label htmlFor={field.id} className={Styles.label}>
-                    <ContainerIcon className={Styles.icon}>
-                      {field.icon}
-                    </ContainerIcon>
-                    {field.name}
-                  </Label>
-                  <FieldRenderer
-                    onActionClick={onActionClick}
-                    field={field}
-                    formValues={formValues}
-                    clubColor={clubColor}
-                    isSelectDisabled={field.disabled}
-                    onInputChange={onInputChange}
-                    onKeyDown={onKeyDown}
-                    onKeyUp={onKeyUp}
-                    onBooleanChange={onBooleanChange}
-                  />
-                  {field.note && <p className={Styles.note}>{field.note}</p>}
-                </div>
-              ))}
-            </div>
-          ))}
+          {visibleRows.map((fields, rowIndex) => {
+            const isNationRow = fields.some((field) => field.id === "nation");
+
+            return (
+              <div
+                key={rowIndex}
+                className={`${fields.length > 1 ? Styles.form_row : ""} ${
+                  isNationRow ? Styles.isMatch : ""
+                }`}
+              >
+                {fields.map((field) => (
+                  <div key={field.id} className={Styles.form_group}>
+                    <Label htmlFor={field.id} className={Styles.label}>
+                      <ContainerIcon className={Styles.icon}>
+                        {field.icon}
+                      </ContainerIcon>
+                      {field.name}
+                    </Label>
+                    <FieldRenderer
+                      onActionClick={onActionClick}
+                      field={field}
+                      formValues={formValues}
+                      clubColor={clubColor}
+                      isSelectDisabled={field.disabled}
+                      onInputChange={onInputChange}
+                      onKeyDown={onKeyDown}
+                      onKeyUp={onKeyUp}
+                      onBooleanChange={onBooleanChange}
+                    />
+                    {field.note && <p className={Styles.note}>{field.note}</p>}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </>
     );

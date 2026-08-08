@@ -24,6 +24,9 @@
   --text_shadow: null;
   --highlight-bg: #e8ecf3;
   --highlight-border: #b0b5be;
+  --bg-overlay: #0000000a;
+  --border-overlay: #00000014;
+  --text-placeholder: #0000004d;
 }
 
 :root[data-theme="dark"] {
@@ -50,6 +53,9 @@
   --text_shadow: #000000f2;
   --highlight-bg: #404347;
   --highlight-border: #6b7280;
+  --bg-overlay: #ffffff0a;
+  --border-overlay: #ffffff14;
+  --text-placeholder: #ffffff4d;
 }
 
 * {

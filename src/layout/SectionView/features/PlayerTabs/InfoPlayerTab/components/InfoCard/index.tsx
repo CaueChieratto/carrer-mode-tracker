@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "../../../../../../../ui/Card";
 import Styles from "../../InfoPlayerTab.module.css";
 

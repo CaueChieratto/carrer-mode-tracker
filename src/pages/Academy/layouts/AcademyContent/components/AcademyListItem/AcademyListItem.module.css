@@ -1,0 +1,59 @@
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: var(--highlight-bg);
+  border-radius: 8px;
+  border-left: 4px solid var(--club-color);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  height: 69px;
+}
+
+.listItem.selected {
+  border-left-width: 8px;
+  padding-left: 8px;
+  background-color: color-mix(
+    in srgb,
+    var(--highlight-bg) 80%,
+    var(--club-color) 20%
+  );
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.wrapperLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  max-width: 140px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--blackColor);
+  max-width: 140px;
+  overflow: hidden;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--color);
+}
+
+.wrapperRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  position: relative;
+}

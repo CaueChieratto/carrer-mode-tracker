@@ -1,7 +1,15 @@
-.custom_select_container {
+.custom_select_container,
+.container {
   position: relative;
-  width: 100%;
   font-size: 16px;
+}
+
+.container {
+  width: 116px;
+}
+
+.custom_select_container {
+  width: 100%;
 }
 
 .custom_select_container.disabled {

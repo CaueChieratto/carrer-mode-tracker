@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.tournamentsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.noData {
+  text-align: center;
+  color: var(--color-tertiary);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 24px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

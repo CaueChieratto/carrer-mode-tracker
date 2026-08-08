@@ -8,7 +8,7 @@ import { useBestPlayersStats } from "./hooks/useBestPlayersStats";
 import { StatCard } from "./components/StatCard";
 import { statConfigs } from "./constants/statConfigs";
 import { Copy } from "../../../../../common/utils/Copy";
-import { ButtonsSwitch } from "../AllMatchesTab/components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 
 type BestPlayersTabProps = {
   season: ClubData;

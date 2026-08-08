@@ -1,0 +1,41 @@
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin: 0 0 12px 0;
+}
+
+.addPlayerRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+.addBtn {
+  background-color: var(--club-color);
+  color: white;
+  border: none;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.playerList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: var(--color-tertiary);
+  font-style: italic;
+  margin: 0;
+}

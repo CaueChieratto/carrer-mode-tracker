@@ -1,0 +1,16 @@
+.wrapperBtn {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.enterMatchBtn {
+  color: var(--club-color);
+  background-color: transparent;
+  padding: 10px 20px 0 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}

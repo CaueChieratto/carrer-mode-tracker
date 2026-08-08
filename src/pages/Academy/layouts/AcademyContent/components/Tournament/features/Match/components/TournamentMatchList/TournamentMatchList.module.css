@@ -1,0 +1,13 @@
+.matchList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: var(--color-tertiary);
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+}

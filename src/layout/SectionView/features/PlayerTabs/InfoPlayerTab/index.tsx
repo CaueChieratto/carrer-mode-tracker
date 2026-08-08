@@ -1,4 +1,3 @@
-import React from "react";
 import ContractInfoSection from "./components/ContractInfoSection";
 import PlayerInfoSection from "./components/PlayerInfoSection";
 import PlayerNotFound from "./components/PlayerNotFound";

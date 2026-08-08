@@ -7,7 +7,7 @@ import PlayerStatsList from "./components/PlayerStatsList";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
 import { getAggregatedPlayersForCareer } from "../../../helpers/mergeMatchStats";
-import { ButtonsSwitch } from "../AllMatchesTab/components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 import { buildPlayersCopyText } from "./helpers/buildPlayersCopyText";
 import { sortPlayersList } from "./helpers/sortPlayersList";
 import { usePersistedSortOption } from "./hooks/usePersistedSortOption";

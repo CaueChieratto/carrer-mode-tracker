@@ -5,7 +5,7 @@ import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
-import { ButtonsSwitch } from "./components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 import { MatchCard } from "./components/MatchCard";
 import { MatchStatus } from "../../../../../common/interfaces/MatchStatus";
 import { MONTH_OPTIONS } from "./constants/MONTH_OPTIONS";

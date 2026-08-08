@@ -1,0 +1,56 @@
+.statsCard {
+  background-color: var(--highlight-bg);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin: 0 0 12px 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 12px;
+}
+
+.statsGridGol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.wrapperBtn {
+  display: flex;
+  justify-content: center;
+}
+
+.saveStatsBtn {
+  background-color: transparent;
+  border: 1px solid var(--club-color);
+  color: var(--club-color);
+  padding: 6px 32px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

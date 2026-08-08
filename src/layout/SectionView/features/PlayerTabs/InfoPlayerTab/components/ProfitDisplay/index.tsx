@@ -1,4 +1,3 @@
-import React from "react";
 import { formatDisplayValue } from "../../../../../../../common/utils/FormatValue";
 import Styles from "../../InfoPlayerTab.module.css";
 

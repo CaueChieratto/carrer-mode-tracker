@@ -42,18 +42,15 @@ export const useSeasonView = (isGeralPage: boolean, isPlayer?: boolean) => {
   }, [isGeralPage, career, seasonId, latestSeason, aggregatedPlayers]);
 
   const tabsConfig = useMemo(() => {
+    if (!career) return [];
+
     if (isGeralPage) {
       if (!latestSeason) return [];
-      return getSeasonTabsConfig(
-        careerId!,
-        latestSeason.id,
-        navigate,
-        !!isPlayer,
-      );
+      return getSeasonTabsConfig(career, latestSeason.id, navigate, !!isPlayer);
     }
     if (!seasonId) return [];
-    return getSeasonTabsConfig(careerId!, seasonId, navigate, !!isPlayer);
-  }, [careerId, seasonId, navigate, isGeralPage, latestSeason, isPlayer]);
+    return getSeasonTabsConfig(career, seasonId, navigate, !!isPlayer);
+  }, [career, seasonId, navigate, isGeralPage, latestSeason, isPlayer]);
 
   const {
     isModalOpen,

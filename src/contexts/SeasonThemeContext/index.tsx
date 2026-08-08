@@ -42,7 +42,7 @@ export const SeasonThemeProvider = ({
   const [currentColor, setCurrentColor] = useState(
     ColorsService.getColorSaved(career?.id || "default") ||
       career.colorsTeams[0] ||
-      "#ffffff"
+      "#ffffff",
   );
 
   const { clubColor, darkClubColor } = useClubColors(currentColor);
@@ -82,7 +82,7 @@ export const SeasonThemeProvider = ({
       career,
       changeClubColor,
     }),
-    [activeStyle, clubColor, darkClubColor, career, changeClubColor]
+    [activeStyle, clubColor, darkClubColor, career, changeClubColor],
   );
 
   return (

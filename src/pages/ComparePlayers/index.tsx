@@ -1,4 +1,3 @@
-import React from "react";
 import Styles from "./ComparePlayers.module.css";
 import { useComparePlayers } from "./hooks/useComparePlayers";
 import { StatRow } from "./components/StatRow";
@@ -9,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import Load from "../../components/Load";
 import { getStatsCategories } from "./constants/statsCategories";
-import { ButtonsSwitch } from "../../layout/SectionView/features/ClubTabs/AllMatchesTab/components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../components/ButtonsSwitch";
 
 export const ComparePlayers = () => {
   const { state, actions } = useComparePlayers();

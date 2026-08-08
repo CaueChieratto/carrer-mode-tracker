@@ -1,8 +1,8 @@
-import React from "react";
 import Styles from "./PlayerInfo.module.css";
 import CaptainArmbandIcon from "../../ui/CaptainArmbandIcon";
 import { PlayerCircle } from "../../pages/Match/components/LineupTab/layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
 import { OverflowText } from "../OverflowText";
+import { toSingular } from "../../pages/Academy/layouts/AcademyContent/components/FeedItem/helpers/toSingular";
 
 export type PlayerInfoProps = {
   name: string;
@@ -11,6 +11,8 @@ export type PlayerInfoProps = {
   age: number | string;
   nation: string;
   captain?: boolean;
+  isAcademy?: boolean;
+  nickname?: string;
   customContainerClass?: string;
   onTouchMove?: React.TouchEventHandler<HTMLElement>;
 };
@@ -22,6 +24,8 @@ export const PlayerInfo = ({
   age,
   nation,
   captain,
+  isAcademy,
+  nickname,
   customContainerClass = "",
   onTouchMove,
 }: PlayerInfoProps) => {
@@ -33,21 +37,27 @@ export const PlayerInfo = ({
       <div className={Styles.player_header}>
         <PlayerCircle isSquad shirtNumber={shirtNumber} />
         <div className={Styles.player_content}>
-          <OverflowText
-            className={Styles.player_info_top}
-            disableDynamicMinWidth={true}
-            style={{ display: "flex", minWidth: "auto" }}
-            text={
-              (
-                <>
-                  <span className={Styles.data_title}>{name}</span>
-                  <span className={Styles.data}>{position}</span>
-                  {captain && <CaptainArmbandIcon />}
-                </>
-              ) as unknown as string
-            }
-          />
-
+          <div className={Styles.player_info_top}>
+            <div className={Styles.name_wrapper}>
+              <OverflowText
+                className={Styles.data_title}
+                disableDynamicMinWidth={true}
+                style={{ minWidth: "auto" }}
+                text={name}
+              />
+            </div>
+            <span className={Styles.data}>{position}</span>
+            {isAcademy && nickname && (
+              <span className={Styles.academy_badge}>
+                {toSingular(nickname)}
+              </span>
+            )}
+            {captain && (
+              <div className={Styles.icon_wrapper}>
+                <CaptainArmbandIcon />
+              </div>
+            )}
+          </div>
           <div className={Styles.player_info_bottom}>
             <div className={Styles.data}>{age} anos</div>
             <div className={Styles.data}>{nation}</div>

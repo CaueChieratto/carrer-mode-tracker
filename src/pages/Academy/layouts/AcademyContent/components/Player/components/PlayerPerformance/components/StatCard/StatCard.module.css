@@ -1,0 +1,89 @@
+.statCard {
+  background-color: var(--highlight-bg);
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.statIcon {
+  font-size: 22px;
+  color: var(--club-color);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--blackColor);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-tertiary);
+  text-align: center;
+}
+
+.titlesCard {
+  background-color: var(--highlight-bg);
+  border: 1px solid var(--border-input);
+  border-left: 6px solid var(--club-color);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 20px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.titlesIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #d4af371a;
+  border-radius: 50%;
+}
+
+.titlesIcon {
+  font-size: 24px;
+  color: var(--club-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titlesInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.titlesValue {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--blackColor);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.titlesLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-tertiary);
+}

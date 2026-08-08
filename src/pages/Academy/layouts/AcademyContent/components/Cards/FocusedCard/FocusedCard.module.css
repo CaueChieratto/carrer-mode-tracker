@@ -1,0 +1,20 @@
+.activeViewContainer {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.activeViewContainer.noAnimation {
+  animation: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

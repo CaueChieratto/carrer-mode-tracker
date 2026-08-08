@@ -4,7 +4,7 @@ import { Career } from "../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
 import Card from "../../../../../ui/Card";
-import { ButtonsSwitch } from "../AllMatchesTab/components/ButtonsSwitch";
+import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 import { useTableData } from "./hooks/useTableData";
 import { useTableMode } from "./hooks/useTableMode";
 import { buildTableColumns } from "./helpers/buildTableColumns";

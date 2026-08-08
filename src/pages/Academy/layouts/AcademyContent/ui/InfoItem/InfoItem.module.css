@@ -1,0 +1,14 @@
+.title,
+.subtitle {
+  font-size: 13px;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.subtitle {
+  font-weight: 700;
+  color: var(--club-color);
+}

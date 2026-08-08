@@ -1,0 +1,38 @@
+.container,
+.container_academy {
+  display: flex;
+}
+
+.container {
+  gap: 15px;
+}
+
+.container_academy {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button,
+.button_academy {
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  min-width: 120px;
+  height: 48px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.button_academy {
+  height: 40px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 160px;
+}

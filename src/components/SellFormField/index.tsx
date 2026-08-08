@@ -11,6 +11,7 @@ type SellFormFieldProps = {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isAcademy?: boolean;
 };
 
 const SellFormField = ({
@@ -19,6 +20,7 @@ const SellFormField = ({
   icon,
   placeholder,
   value,
+  isAcademy,
   onChange,
 }: SellFormFieldProps) => {
   return (
@@ -31,7 +33,7 @@ const SellFormField = ({
         <Input
           id={id}
           name={id}
-          className={Styles.input}
+          className={isAcademy ? Styles.inputAcademy : Styles.input}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

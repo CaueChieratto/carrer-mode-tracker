@@ -65,10 +65,11 @@ export const useTransferData = (career: Career, season: ClubData) => {
         return p.contract?.some((c) => {
           if (!c.fromClub) return false;
           const arrivalDate = c.dataArrival || career.createdAt;
-          return (
+          const isDateValid =
             new Date(arrivalDate) >= startDate &&
-            new Date(arrivalDate) <= endDate
-          );
+            new Date(arrivalDate) <= endDate;
+
+          return isDateValid;
         });
       })
       .map((p) => ({

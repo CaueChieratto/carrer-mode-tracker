@@ -10,11 +10,13 @@ import { formatDateInputShort } from "../../../common/utils/Date";
 type ReturnLoanConfirmModalProps = {
   closeModal: () => void;
   onConfirm: (returnDate: string) => void | Promise<void>;
+  isAcademy?: boolean;
 };
 
 const ReturnLoanConfirmModal = ({
   closeModal,
   onConfirm,
+  isAcademy,
 }: ReturnLoanConfirmModalProps) => {
   const [returnDate, setReturnDate] = useState("");
 
@@ -41,6 +43,7 @@ const ReturnLoanConfirmModal = ({
     >
       <div style={{ marginBottom: "20px", width: "100%" }}>
         <SellFormField
+          isAcademy={isAcademy}
           id="returnDate"
           name="Data de Retorno"
           icon={<BsCalendar2Event />}

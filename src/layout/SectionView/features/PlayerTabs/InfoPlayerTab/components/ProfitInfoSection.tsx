@@ -1,4 +1,3 @@
-import React from "react";
 import InfoCard from "./InfoCard";
 import ProfitDisplay from "./ProfitDisplay";
 

@@ -1,0 +1,52 @@
+import { AcademyService } from "../../../../services/AcademyService";
+import { TournamentForm } from "../../forms/components/TournamentForm";
+import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
+import { getTournamentTexts } from "./constants/TEXTS";
+import { getSeasonStartYear } from "../../../../utils/getSeasonStartYear";
+import { TournamentDataPayload } from "../../forms/types/TournamentDataPayload";
+
+type CreateAcademyTournamentFormProps = {
+  onComplete: () => void;
+};
+
+export const CreateAcademyTournamentForm = ({
+  onComplete,
+}: CreateAcademyTournamentFormProps) => {
+  const { career, seasonId, tournamentsAcademy } = useAcademyContext();
+
+  const tournamentName = career.academy!.tournament;
+
+  const texts = getTournamentTexts(tournamentName);
+
+  const addTournament = async (data: TournamentDataPayload) => {
+    try {
+      const [day, month] = data.date.split("/");
+      const startYear = getSeasonStartYear(career, seasonId);
+      const finalDate = `${day}/${month}/${startYear}`;
+
+      const editionNumber = tournamentsAcademy.length + 1;
+
+      const tournamentData = {
+        name: `${career.academy!.tournament} - ${editionNumber}ª Edição`,
+        date: finalDate,
+        totalMatches: 0,
+        matches: [],
+        tournamentResult: "Torneio Marcado",
+        isChampion: false,
+      };
+
+      await AcademyService.addTournamentToAcademy(
+        career.id,
+        seasonId,
+        tournamentData,
+      );
+      onComplete();
+    } catch (error) {
+      console.error("Erro ao adicionar torneio:", error);
+      alert("Falha ao salvar o torneio. Tente novamente.");
+      throw error;
+    }
+  };
+
+  return <TournamentForm texts={texts} onSubmitData={addTournament} />;
+};

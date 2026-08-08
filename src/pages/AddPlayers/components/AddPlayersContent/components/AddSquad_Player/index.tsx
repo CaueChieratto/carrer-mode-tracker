@@ -2,13 +2,13 @@ import Styles from "./AddSquad_Player.module.css";
 import Form from "../../../../../../components/Form";
 import FormSection from "../../../../../../components/FormSection";
 import { forwardRef, useEffect } from "react";
-import { squadFormFields } from "./constants/SquadFormFields";
 import { useForm } from "../../../../../../common/hooks/UseForm";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { ModalType } from "../../../../../../common/types/enums/ModalType";
 import { mapPlayerToFormValues } from "../../../../../../common/helpers/Mappers";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import { getSquadFormFields } from "./constants/SquadFormFields";
 
 type AddSquad_PlayerProps = {
   player?: Players;
@@ -68,9 +68,11 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
     const isSigning = booleanValues.isSigning;
     const isIncomingLoan = booleanValues.isLoan;
 
+    const dynamicFields = getSquadFormFields(formValues.nation || "");
+
     return (
       <Form className={Styles.form} ref={ref}>
-        {squadFormFields
+        {dynamicFields
           .filter(
             (section) =>
               !("editOnly" in section && section.editOnly) || isEditing,

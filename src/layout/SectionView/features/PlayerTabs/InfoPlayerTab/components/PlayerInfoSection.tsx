@@ -1,4 +1,3 @@
-import React from "react";
 import { GrMap } from "react-icons/gr";
 import { FaCalendar, FaTshirt } from "react-icons/fa";
 import { FaUserLarge } from "react-icons/fa6";

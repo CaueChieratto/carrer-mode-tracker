@@ -13,6 +13,8 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { stripHeavyData } from "../../utils/stripHeavyData";
 import { getSeasonDateRange } from "../../utils/GetSeasonDateRange";
+import { AcademyData } from "../../interfaces/AcademyData";
+import { AcademyPlayers } from "../../../pages/Academy/layouts/AcademyContent/interfaces/AcademyPlayers/AcademyPlayers";
 
 export const ServiceSeasons = {
   addSeason: async (careerId: string): Promise<void> => {
@@ -20,8 +22,8 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
-    const existingNumbers = career.clubData.map((s) => s.seasonNumber);
 
+    const existingNumbers = career.clubData.map((s) => s.seasonNumber);
     let seasonNumber = 1;
     while (existingNumbers.includes(seasonNumber)) {
       seasonNumber++;
@@ -32,12 +34,12 @@ export const ServiceSeasons = {
       career.createdAt,
       career.nation,
     );
-
     const returnDate = startDate;
 
     const previousSeason = career.clubData.find(
       (season) => season.seasonNumber === seasonNumber - 1,
     );
+
     const playersFromPreviousSeason = previousSeason
       ? previousSeason.players
       : [];
@@ -47,7 +49,6 @@ export const ServiceSeasons = {
       .filter((player) => !player.sell)
       .map((player) => {
         const lastContract = player.contract?.[player.contract.length - 1];
-
         const shouldReturnLoan =
           player.loan &&
           !player.incomingLoan &&
@@ -64,9 +65,7 @@ export const ServiceSeasons = {
 
         if (shouldReturnLoan) {
           updatedPlayer.loan = false;
-
           const lastContract = player.contract[player.contract.length - 1];
-
           updatedPlayer.contract.push({
             buyValue: 0,
             sellValue: 0,
@@ -75,7 +74,6 @@ export const ServiceSeasons = {
             dataArrival: returnDate,
             dataExit: null,
           });
-
           updatedPlayer.contract.push({
             buyValue: 0,
             sellValue: 0,
@@ -95,11 +93,28 @@ export const ServiceSeasons = {
               : contract,
           );
         }
-
         return updatedPlayer;
       });
 
     const newSeasonId = uuidv4();
+
+    let academyPlayersToCopy: AcademyPlayers[] = [];
+    if (previousSeason) {
+      const previousAcademyRef = collection(
+        db,
+        `users/${user.uid}/careers/${careerId}/seasons/${previousSeason.id}/academyPlayers`,
+      );
+      const snapshot = await getDocs(previousAcademyRef);
+
+      academyPlayersToCopy = snapshot.docs.map((doc) => {
+        const player = doc.data() as AcademyPlayers;
+        return {
+          ...player,
+          evolutionHistory: [],
+        };
+      });
+    }
+
     const newSeason: ClubData = {
       players: [],
       seasonNumber,
@@ -122,6 +137,15 @@ export const ServiceSeasons = {
         );
         await setDoc(playerRef, player);
       }
+
+      for (const academyPlayer of academyPlayersToCopy) {
+        const academyPlayerRef = doc(
+          db,
+          `users/${user.uid}/careers/${careerId}/seasons/${newSeasonId}/academyPlayers`,
+          academyPlayer.id,
+        );
+        await setDoc(academyPlayerRef, academyPlayer);
+      }
     } catch (error) {
       console.error(
         `[addSeason] ERRO ao tentar criar e salvar a temporada:`,
@@ -136,7 +160,6 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
-
     const updatedClubData = career.clubData.filter(
       (season) => season.id !== seasonId,
     );
@@ -146,13 +169,18 @@ export const ServiceSeasons = {
     const playersSnapshot = await getDocs(
       collection(db, `${seasonPath}/players`),
     );
-
     for (const playerDoc of playersSnapshot.docs) {
       await deleteDoc(playerDoc.ref);
     }
 
-    await deleteDoc(doc(db, seasonPath));
+    const academyPlayersSnapshot = await getDocs(
+      collection(db, `${seasonPath}/academyPlayers`),
+    );
+    for (const academyPlayerDoc of academyPlayersSnapshot.docs) {
+      await deleteDoc(academyPlayerDoc.ref);
+    }
 
+    await deleteDoc(doc(db, seasonPath));
     await updateCareerFirestore(user.uid, careerId, {
       clubData: stripHeavyData(updatedClubData),
     });
@@ -182,6 +210,18 @@ export const ServiceSeasons = {
 
     await updateCareerFirestore(user.uid, careerId, {
       currency,
+    });
+  },
+
+  updateAcademy: async (
+    careerId: string,
+    academy: AcademyData,
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    await updateCareerFirestore(user.uid, careerId, {
+      academy,
     });
   },
 };

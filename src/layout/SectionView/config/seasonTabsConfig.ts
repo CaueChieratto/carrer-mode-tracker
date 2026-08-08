@@ -29,12 +29,15 @@ export type TabConfig = {
 };
 
 export const getSeasonTabsConfig = (
-  careerId: string,
+  career: Career,
   seasonId: string,
   navigate: NavigateFunction,
   isPlayer: boolean,
-): TabConfig[] =>
-  [
+): TabConfig[] => {
+  const careerId = career.id;
+  const hasAcademySaved = !!career.academy;
+
+  return [
     {
       title: isPlayer ? "Jogador" : "Elenco",
       component: isPlayer ? InfoPlayerTab : SquadTab,
@@ -77,7 +80,18 @@ export const getSeasonTabsConfig = (
     {
       title: isPlayer ? "Total" : "Geral",
       component: isPlayer ? TotalPlayerTab : GeneralTab,
-      actionButton: Buttons.ChangeClubColors,
+      actionButton: hasAcademySaved
+        ? Buttons.EnterAcademy
+        : Buttons.ChangeClubColors,
+      action: hasAcademySaved
+        ? () =>
+            navigate(`/Career/${careerId}/Academy`, {
+              state: {
+                career,
+                seasonId,
+              },
+            })
+        : undefined,
     },
 
     !isPlayer && {
@@ -86,3 +100,4 @@ export const getSeasonTabsConfig = (
       actionButton: Buttons.ChangeClubColors,
     },
   ].filter(Boolean) as TabConfig[];
+};

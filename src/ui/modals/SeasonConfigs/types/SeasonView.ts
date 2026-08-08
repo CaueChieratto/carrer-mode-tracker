@@ -1,1 +1,1 @@
-export type SeasonView = "menu" | "selecting" | "add" | "currency";
+export type SeasonView = "menu" | "selecting" | "add" | "currency" | "base";

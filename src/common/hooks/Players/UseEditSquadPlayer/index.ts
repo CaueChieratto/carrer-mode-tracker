@@ -51,8 +51,9 @@ export const useEditSquadPlayer = ({
     );
 
     if (playerBeingEdited) {
-      updatedPlayerData.loan = playerBeingEdited.loan;
-      updatedPlayerData.sell = playerBeingEdited.sell;
+      updatedPlayerData.loan = playerBeingEdited.loan ?? false;
+      updatedPlayerData.sell = playerBeingEdited.sell ?? false;
+      updatedPlayerData.incomingLoan = playerBeingEdited.incomingLoan ?? false;
     }
 
     delete updatedPlayerData.buy;

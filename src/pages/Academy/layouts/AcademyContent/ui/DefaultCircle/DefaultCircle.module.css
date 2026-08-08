@@ -1,0 +1,16 @@
+.defaultCircle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--club-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.active {
+  background-color: white;
+  color: var(--club-color);
+}

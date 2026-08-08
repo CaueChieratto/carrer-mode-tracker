@@ -1,5 +1,22 @@
 import { Players } from "../../../../../../../common/interfaces/playersInfo/players";
 
+export const SECTOR_ORDER = ["Ataque", "Meia", "Defesa", "Goleiro"];
+
+export const POSITION_GROUP_ORDER: Record<string, number> = {
+  ATA: 0,
+  PD: 1,
+  PE: 1,
+  MEI: 2,
+  MD: 3,
+  ME: 3,
+  MC: 4,
+  VOL: 5,
+  LD: 6,
+  LE: 6,
+  ZAG: 7,
+  GOL: 8,
+};
+
 export const POSITION_ORDER = [
   "ATA",
   "PD",

@@ -1,0 +1,75 @@
+.matchBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blackColor);
+  border-top: 1px solid var(--border-navbar);
+  border-bottom: 1px solid var(--border-navbar);
+  padding: 10px 0;
+  gap: 8px;
+}
+
+.score {
+  display: flex;
+  gap: 8px;
+  background-color: var(--card-background);
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-input);
+  flex-shrink: 0;
+}
+
+.nameWrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: block;
+  max-width: 75px;
+}
+
+.team {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.homeTeam {
+  justify-content: flex-start;
+}
+
+.awayTeam {
+  justify-content: flex-end;
+}
+
+.badge {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.scheduledScore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.scheduledDash {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-tertiary);
+}
+
+.scheduledText {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-tertiary);
+}

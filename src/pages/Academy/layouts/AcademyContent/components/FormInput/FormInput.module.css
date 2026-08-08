@@ -1,0 +1,32 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.inputGroup label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-tertiary);
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--card-background);
+  color: var(--blackColor);
+  border: 1px solid var(--border-input);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  border-color: var(--club-color);
+}

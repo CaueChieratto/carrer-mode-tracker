@@ -1,4 +1,3 @@
-import React from "react";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import InfoCard from "./InfoCard";
 import ProfitDisplay from "./ProfitDisplay";
