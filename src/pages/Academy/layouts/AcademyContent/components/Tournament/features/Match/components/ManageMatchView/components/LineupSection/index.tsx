@@ -37,7 +37,9 @@ export const LineupSection = ({
         <div style={{ flex: 1 }}>
           <SearchableSelect
             name="addPlayerSelect"
-            options={availablePlayerNames}
+            options={availablePlayerNames.filter((name) =>
+              name.toLowerCase().includes(selectedSearchValue.toLowerCase()),
+            )}
             value={selectedSearchValue}
             placeholder="Buscar jogador..."
             onChange={(e) => setSelectedSearchValue(e.target.value)}

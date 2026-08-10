@@ -24,7 +24,18 @@ export const CreateAcademyTournamentForm = ({
       const startYear = getSeasonStartYear(career, seasonId);
       const finalDate = `${day}/${month}/${startYear}`;
 
-      const editionNumber = tournamentsAcademy.length + 1;
+      let totalPreviousEditions = 0;
+      for (const season of career.clubData) {
+        if (season.id === seasonId) break;
+        const prevTournaments = await AcademyService.getTournamentsAcademy(
+          career.id,
+          season.id,
+        );
+        totalPreviousEditions += prevTournaments.length;
+      }
+
+      const editionNumber =
+        totalPreviousEditions + tournamentsAcademy.length + 1;
 
       const tournamentData = {
         name: `${career.academy!.tournament} - ${editionNumber}ª Edição`,

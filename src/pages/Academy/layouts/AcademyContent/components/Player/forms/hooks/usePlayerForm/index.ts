@@ -6,6 +6,9 @@ import { getFormRows } from "../../utils/getFormRows";
 import { getFormattedArrivalDate } from "../../utils/getFormattedArrivalDate";
 import { AcademyPlayersHistory } from "../../../../../interfaces/AcademyPlayers/AcademyPlayersHistory";
 import { useAsyncForm } from "../../../../../hooks/useAsyncForm";
+import { useAcademyContext } from "../../../../../../contexts/AcademyContext/hooks/useAcademyContext";
+import { isEuropeanSeason } from "../../../../../utils/isEuropeanSeason";
+import { getSeasonMonthWeight } from "../../../components/PlayerDevelopment/utils/getSeasonMonthWeight";
 
 type UsePlayerFormProps = {
   texts: PlayerFormTexts;
@@ -22,6 +25,8 @@ export const usePlayerForm = ({
   initialData,
   isEvolution,
 }: UsePlayerFormProps) => {
+  const { career } = useAcademyContext();
+
   const [nationality, setNationality] = useState<string>(
     initialData?.nationality || "",
   );
@@ -91,7 +96,15 @@ export const usePlayerForm = ({
       if (arrDateStr.length === 5 && evDateStr.length === 5) {
         const [arrDay, arrMonth] = arrDateStr.split("/").map(Number);
         const [evDay, evMonth] = evDateStr.split("/").map(Number);
-        if (evMonth < arrMonth || (evMonth === arrMonth && evDay < arrDay)) {
+
+        const isEurope = isEuropeanSeason(career);
+        const arrWeight = getSeasonMonthWeight(arrMonth, isEurope);
+        const evWeight = getSeasonMonthWeight(evMonth, isEurope);
+
+        if (
+          evWeight < arrWeight ||
+          (evWeight === arrWeight && evDay < arrDay)
+        ) {
           alert(
             `A data da evolução não pode ser anterior à data de chegada (${arrDateStr}).`,
           );

@@ -17,8 +17,8 @@ export const TournamentMatchCard = ({
   onEdit,
   onEnterMatch,
 }: TournamentMatchCardProps) => {
-  const { career } = useAcademyContext();
-  const opponentBadge = getOpponentBadge(career, match.opponentTeam);
+  const { career, allCareers } = useAcademyContext();
+  const opponentBadge = getOpponentBadge(allCareers, match.opponentTeam);
 
   return (
     <div className={Styles.matchCard}>

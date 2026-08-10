@@ -1,14 +1,22 @@
 import { Career } from "../../../../../../../../../../../../common/interfaces/Career";
 
 export const getOpponentBadge = (
-  career: Career,
+  allCareers: Career[],
   opponentName: string,
 ): string | null => {
-  for (const season of career.clubData) {
-    if (season.teams) {
-      const team = season.teams.find((t) => t.name === opponentName);
-      if (team?.badge) {
-        return team.badge;
+  if (!opponentName) return null;
+
+  const normalizedOpponent = opponentName.trim().toLowerCase();
+
+  for (const career of allCareers) {
+    for (const season of career.clubData) {
+      if (season.teams) {
+        const team = season.teams.find(
+          (t) => t.name.trim().toLowerCase() === normalizedOpponent,
+        );
+        if (team?.badge) {
+          return team.badge;
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Career } from "../../../../../common/interfaces/Career";
 import { getConfig } from "../../AcademyContent/config";
 import { useAcademyActions } from "../../AcademyContent/hooks/useAcademyActions";
@@ -15,6 +15,9 @@ import {
   useSortedTournaments,
 } from "../../AcademyContent/hooks/Sorts/useSortedTournaments";
 import { useAcademyFeed } from "../../AcademyContent/components/FeedItem/hooks/useAcademyFeed";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../../../../../common/services/Firebase";
+import { getAsyncUser } from "../../AcademyContent/services/AcademyService/helpers";
 
 type ProviderProps = {
   children: ReactNode;
@@ -27,6 +30,26 @@ export const AcademyProvider = ({
   career,
   seasonId,
 }: ProviderProps) => {
+  const [allCareers, setAllCareers] = useState<Career[]>([career]);
+
+  useEffect(() => {
+    const fetchAllCareers = async () => {
+      try {
+        const user = await getAsyncUser();
+
+        const querySnapshot = await getDocs(
+          collection(db, `users/${user.uid}/careers`),
+        );
+        const careers = querySnapshot.docs.map((doc) => doc.data() as Career);
+        setAllCareers(careers);
+      } catch (error) {
+        console.error("Erro ao carregar todas as carreiras:", error);
+      }
+    };
+
+    fetchAllCareers();
+  }, []);
+
   const {
     playersAcademy: rawPlayers,
     allPlayersAcademy,
@@ -125,15 +148,11 @@ export const AcademyProvider = ({
       setTournamentSort(val as TournamentSortOption),
   });
 
-  console.log({
-    allPlayersAcademy,
-    tournamentsAcademy,
-  });
-
   return (
     <AcademyContext.Provider
       value={{
         career,
+        allCareers,
         seasonId,
         playersAcademy,
         allPlayersAcademy,

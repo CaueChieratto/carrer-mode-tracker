@@ -41,8 +41,12 @@ export const useMatchForm = ({
 
   const formRows = getMatchFormRows({
     texts,
-    teamOptions,
-    statusOptions,
+    teamOptions: teamOptions.filter((t) =>
+      t.toLowerCase().includes(opponentTeam.toLowerCase()),
+    ),
+    statusOptions: statusOptions.filter((s) =>
+      s.toLowerCase().includes(status.toLowerCase()),
+    ),
     opponentTeam,
     setOpponentTeam,
     status,

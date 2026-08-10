@@ -75,8 +75,9 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
       rows,
       isEditing,
       isGoalkeeper,
-      onActionClick,
+      isMatch,
       formValues,
+      onActionClick,
       onInputChange,
       onKeyDown,
       onKeyUp,
@@ -108,6 +109,7 @@ const FormSection = forwardRef<HTMLDivElement, FormSectionProps>(
             return (
               <div
                 key={rowIndex}
+                style={isMatch ? { alignItems: "flex-end" } : {}}
                 className={`${fields.length > 1 ? Styles.form_row : ""} ${
                   isNationRow ? Styles.isMatch : ""
                 }`}

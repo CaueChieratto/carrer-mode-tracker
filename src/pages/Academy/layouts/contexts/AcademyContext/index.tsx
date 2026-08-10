@@ -5,6 +5,7 @@ import { AcademyPlayers } from "../../AcademyContent/interfaces/AcademyPlayers/A
 import { AcademyTournaments } from "../../AcademyContent/interfaces/AcademyTournaments/AcademyTournaments";
 
 export type AcademyContextData = {
+  allCareers: Career[];
   career: Career;
   seasonId: string;
   playersAcademy: AcademyPlayers[];

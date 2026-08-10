@@ -22,10 +22,12 @@ export const PromoteAcademyPlayerForm = ({
   const [selectedPlayerName, setSelectedPlayerName] = useState("");
   const [promotionDate, setPromotionDate] = useState("");
 
-  const playerOptions = useMemo(
-    () => playersAcademy.map((p) => p.name),
-    [playersAcademy],
-  );
+  const playerOptions = useMemo(() => {
+    const allNames = playersAcademy.map((p) => p.name);
+    return allNames.filter((name) =>
+      name.toLowerCase().includes(selectedPlayerName.toLowerCase()),
+    );
+  }, [playersAcademy, selectedPlayerName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

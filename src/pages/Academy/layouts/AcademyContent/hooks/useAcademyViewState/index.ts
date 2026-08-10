@@ -93,8 +93,12 @@ export const useAcademyViewState = (careerId: string) => {
 
   const back = () => {
     setIsAnimationDisabled(false);
-    setSelectedPlayerId(null);
-    setSelectedTournamentId(null);
+
+    if (selectedPlayerId !== null || selectedTournamentId !== null) {
+      setSelectedPlayerId(null);
+      setSelectedTournamentId(null);
+      return;
+    }
 
     if (isAddingPlayer) setIsAddingPlayer(false);
     else if (isAddingTournament) setIsAddingTournament(false);

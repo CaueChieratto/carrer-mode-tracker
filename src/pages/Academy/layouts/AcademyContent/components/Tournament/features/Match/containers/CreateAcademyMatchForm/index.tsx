@@ -18,7 +18,7 @@ export const CreateAcademyMatchForm = ({
   onMatchAdded,
   initialData,
 }: CreateAcademyMatchFormProps) => {
-  const { career, selectedTournament, tournamentsAcademy } =
+  const { allCareers, selectedTournament, tournamentsAcademy } =
     useAcademyContext();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -37,7 +37,7 @@ export const CreateAcademyMatchForm = ({
   };
 
   const teamOptions = useMemo(() => {
-    const allTeams = buildTeamOptions(career);
+    const allTeams = buildTeamOptions(allCareers);
     const existingOpponents =
       selectedTournament?.matches?.map((m) => m.opponentTeam) || [];
 
@@ -46,7 +46,7 @@ export const CreateAcademyMatchForm = ({
 
       return !existingOpponents.includes(team);
     });
-  }, [career, selectedTournament, initialData]);
+  }, [allCareers, selectedTournament, initialData]);
 
   const statusOptions = useMemo(() => {
     const defaultPhases = ["Quartas de Final", "Semifinal", "Final"];

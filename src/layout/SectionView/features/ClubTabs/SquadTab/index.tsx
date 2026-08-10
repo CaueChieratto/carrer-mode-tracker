@@ -53,8 +53,6 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
 
   const academyNickname = career?.academy?.nickname;
 
-  console.log({ flatData });
-
   return (
     <ContainerClubContent>
       <ButtonsSwitch

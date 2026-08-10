@@ -62,7 +62,15 @@ export const useEntityWorkspace = <T extends { id: string }>(
         }
       }, 150);
     } else if (entity) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const element = containerRef.current;
+        if (element) {
+          const offset = 13;
+          const top =
+            element.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }, 150);
     }
   }, [activeComponent, entity]);
 
