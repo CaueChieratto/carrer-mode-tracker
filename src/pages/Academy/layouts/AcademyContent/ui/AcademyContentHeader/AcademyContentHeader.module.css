@@ -7,14 +7,14 @@
 }
 
 .headerTitles h1 {
-  font-size: 24px;
+  font-size: 26px;
   color: var(--blackColor);
   margin: 0 0 4px 0;
   text-shadow: 1px 1px 2px var(--text_shadow);
 }
 
 .headerTitles p {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-tertiary);
   margin: 0;
   font-weight: 600;

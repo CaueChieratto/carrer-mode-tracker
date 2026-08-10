@@ -30,14 +30,14 @@
 }
 
 .feedTitle {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--blackColor);
   max-width: none !important;
 }
 
 .feedTime {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--club-color);
   margin-top: 3px;
