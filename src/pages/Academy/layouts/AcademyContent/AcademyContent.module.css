@@ -65,3 +65,45 @@
   background-color: var(--club-color-dark);
   color: white;
 }
+
+.flipCard {
+  animation: smoothCrossfade 0.3s ease-in-out forwards;
+}
+
+@keyframes smoothCrossfade {
+  0% {
+    opacity: 0.6;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.clickableTitleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  margin-left: -8px;
+  width: 100%;
+}
+
+.wrapperSpinIcon {
+  display: flex;
+  justify-content: flex-end;
+  width: 50px;
+}
+
+.spinIcon {
+  color: var(--club-color);
+  transition: transform 0.3s ease;
+}
+
+.wrapperSpinIcon:active .spinIcon {
+  transform: rotate(180deg);
+}

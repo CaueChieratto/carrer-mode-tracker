@@ -13,11 +13,8 @@ export const AcademyContentHeader = ({
   darkClubColor,
 }: AcademyContentHeaderProps) => {
   const navigate = useNavigate();
-  const { career, seasonId, isFocusedViewActive, back } = useAcademyContext();
-
-  const seasonNumber = career.clubData.find(
-    (club) => club.id === seasonId,
-  )?.seasonNumber;
+  const { career, isFocusedViewActive, back, isGeral, seasonNumber } =
+    useAcademyContext();
 
   const handleBack = () => {
     localStorage.removeItem(`@academy_viewState_${career.id}`);
@@ -33,7 +30,7 @@ export const AcademyContentHeader = ({
       <div className={Styles.headerTitles}>
         <h1>{career.clubName}</h1>
         <p>
-          {career.academy!.name} • T{seasonNumber}
+          {career.academy!.name} • {isGeral ? "GERAL" : `T${seasonNumber}`}
         </p>
       </div>
       <Buttons.BackCareerPage

@@ -20,24 +20,27 @@ export const ActiveCardView = () => {
   let activeCard =
     activeCardIndex !== null ? dashboardCards[activeCardIndex] : null;
 
-  if (selectedPlayer) activeCard = dashboardCards[0];
+  if (selectedPlayer) {
+    activeCard = dashboardCards[0];
+  }
   if (selectedTournament) activeCard = dashboardCards[1];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <FocusedCard
-        Icon={selectedPlayer ? dashboardCards[0].Icon : activeCard?.Icon}
-        title={selectedPlayer ? dashboardCards[0].title : activeCard?.title}
+        key={activeCard?.id || "active-card"}
+        Icon={activeCard?.Icon}
+        title={activeCard?.title}
         disableAnimation={isAnimationDisabled}
         sortOptions={activeCard?.sortOptions}
         currentSort={activeCard?.currentSort}
         onSortChange={activeCard?.onSortChange}
+        className={activeCard?.className}
       >
-        {selectedPlayer ? dashboardCards[0].children : activeCard?.children}
+        {activeCard?.children}
       </FocusedCard>
 
       {selectedPlayer && <PlayerWorkspace selectedPlayer={selectedPlayer} />}
-
       {selectedTournament && (
         <TournamentWorkspace selectedTournament={selectedTournament} />
       )}

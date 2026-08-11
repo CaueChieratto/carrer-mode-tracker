@@ -17,6 +17,10 @@ export const ManageMatchView = ({ match, onBack }: ManageMatchViewProps) => {
     setUserGoals,
     opponentGoals,
     setOpponentGoals,
+    userPenalties,
+    setUserPenalties,
+    opponentPenalties,
+    setOpponentPenalties,
     lineupStats,
     selectedSearchValue,
     setSelectedSearchValue,
@@ -42,9 +46,12 @@ export const ManageMatchView = ({ match, onBack }: ManageMatchViewProps) => {
         setUserGoals={setUserGoals}
         opponentGoals={opponentGoals}
         setOpponentGoals={setOpponentGoals}
+        userPenalties={userPenalties}
+        setUserPenalties={setUserPenalties}
+        opponentPenalties={opponentPenalties}
+        setOpponentPenalties={setOpponentPenalties}
         opponentTeam={match.opponentTeam}
       />
-
       <LineupSection
         availablePlayerNames={availablePlayerNames}
         selectedSearchValue={selectedSearchValue}
@@ -57,7 +64,6 @@ export const ManageMatchView = ({ match, onBack }: ManageMatchViewProps) => {
         setSelectedPlayerIdForStats={setSelectedPlayerIdForStats}
         handleRemovePlayer={handleRemovePlayer}
       />
-
       {selectedPlayerIdForStats && selectedStats && (
         <StatsCard
           selectedStats={selectedStats}
@@ -71,7 +77,6 @@ export const ManageMatchView = ({ match, onBack }: ManageMatchViewProps) => {
           }
         />
       )}
-
       <Button
         className={Styles.saveBtn}
         onClick={handleSave}

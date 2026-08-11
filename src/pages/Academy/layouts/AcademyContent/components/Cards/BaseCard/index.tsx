@@ -1,11 +1,12 @@
 import { IconType } from "react-icons";
 import Styles from "./BaseCard.module.css";
 import CustomSelect from "../../../../../../../components/CustomSelect";
+import React from "react";
 
 type BaseCardProps = {
   Icon?: IconType;
   iconNode?: React.ReactNode;
-  title?: string;
+  title?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   sortOptions?: { value: string; label: string }[];
@@ -40,7 +41,7 @@ export const BaseCard = ({
         </h2>
         {hasSelect && (
           <CustomSelect
-            name={`card-sort-${title}`}
+            name={`card-sort-${typeof title === "string" ? title : "card"}`}
             options={sortOptions.map((opt) => opt.label)}
             value={
               sortOptions.find((o) => o.value === currentSort)?.label || ""

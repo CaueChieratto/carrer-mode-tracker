@@ -1,3 +1,4 @@
+import { Career } from "../../../../../../../../../../common/interfaces/Career";
 import { AcademyPlayers } from "../../../../../../interfaces/AcademyPlayers/AcademyPlayers";
 import { AcademyTournaments } from "../../../../../../interfaces/AcademyTournaments/AcademyTournaments";
 import { TotalStats, TournamentStats } from "../../types";
@@ -5,6 +6,9 @@ import { TotalStats, TournamentStats } from "../../types";
 export const calculatePlayerStats = (
   selectedPlayer: AcademyPlayers | undefined,
   tournamentsAcademy: AcademyTournaments[] | undefined,
+  career?: Career,
+  currentSeasonNumber?: number,
+  isGeral?: boolean,
 ): { tournamentStats: TournamentStats[]; totalStats: TotalStats } => {
   const tStats: TournamentStats[] = [];
   let globalMatches = 0;
@@ -28,6 +32,11 @@ export const calculatePlayerStats = (
     };
   }
 
+  const careerStartYear =
+    career && career.createdAt
+      ? new Date(career.createdAt).getFullYear()
+      : new Date().getFullYear();
+
   tournamentsAcademy.forEach((tournament) => {
     let tMatches = 0;
     let tGoals = 0;
@@ -36,11 +45,22 @@ export const calculatePlayerStats = (
     let tRatingCount = 0;
     let playedInTournament = false;
 
+    let calculatedSeasonNum = currentSeasonNumber || 1;
+
+    if (isGeral && tournament.date) {
+      const tournamentYear = parseInt(
+        tournament.date.split("/").pop() || "0",
+        10,
+      );
+      if (tournamentYear >= careerStartYear) {
+        calculatedSeasonNum = tournamentYear - careerStartYear + 1;
+      }
+    }
+
     tournament.matches?.forEach((match) => {
       const playerStat = match.lineup?.find(
         (p) => p.playerId === selectedPlayer.id,
       );
-
       if (playerStat) {
         tMatches++;
         playedInTournament = true;
@@ -69,6 +89,7 @@ export const calculatePlayerStats = (
       tStats.push({
         tournamentId: tournament.id,
         tournamentName: tournament.name,
+        season: String(calculatedSeasonNum),
         matchesPlayed: tMatches,
         goals: tGoals,
         assists: tAssists,

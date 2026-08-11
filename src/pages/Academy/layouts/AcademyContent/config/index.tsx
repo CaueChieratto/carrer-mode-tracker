@@ -1,9 +1,16 @@
-import { FaHistory, FaPlus, FaTrophy, FaUsers } from "react-icons/fa";
+import {
+  FaHistory,
+  FaPlus,
+  FaTrophy,
+  FaUsers,
+  FaSyncAlt,
+} from "react-icons/fa";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Career } from "../../../../../common/interfaces/Career";
 import Button from "../../../../../components/Button";
 import { FeedItem } from "../components/FeedItem";
 import { PlayerItem } from "../components/Player/components/PlayerItem";
+import { PlayerStatusList } from "../components/Player/components/PlayerStatusList";
 import { AcademyPlayers } from "../interfaces/AcademyPlayers/AcademyPlayers";
 import { SkeletonButton, SkeletonItem } from "../ui/SkeletonCard";
 import { IconType } from "react-icons";
@@ -11,10 +18,12 @@ import Styles from "../AcademyContent.module.css";
 import { AcademyTournaments } from "../interfaces/AcademyTournaments/AcademyTournaments";
 import { TournamentListItem } from "../components/Tournament/components/TournamentListItem";
 import { FeedEvent } from "../components/FeedItem/types/FeedEvent";
+import React from "react";
 
 export type configProps = {
   career: Career;
   playersAcademy: AcademyPlayers[];
+  allPlayersAcademy: AcademyPlayers[];
   tournamentsAcademy: AcademyTournaments[];
   feedData: FeedEvent[];
   activeCardIndex: number | null;
@@ -29,11 +38,15 @@ export type configProps = {
   setPlayerSort: (val: string) => void;
   tournamentSort: string;
   setTournamentSort: (val: string) => void;
+  isGeral?: boolean;
+  playerListMode: "academy" | "promoted" | "released";
+  togglePlayerListMode: () => void;
 };
 
 export type DashboardCardConfig = {
+  id?: string;
   Icon: IconType;
-  title: string;
+  title: React.ReactNode;
   actionText?: string;
   skeletonContent: React.ReactNode;
   children: React.ReactNode;
@@ -46,6 +59,7 @@ export type DashboardCardConfig = {
 export const getConfig = ({
   career,
   playersAcademy,
+  allPlayersAcademy,
   feedData,
   activeCardIndex,
   selectedPlayerId,
@@ -60,29 +74,68 @@ export const getConfig = ({
   setPlayerSort,
   tournamentSort,
   setTournamentSort,
-}: configProps) => {
+  isGeral,
+  playerListMode,
+  togglePlayerListMode,
+}: configProps): DashboardCardConfig[] => {
+  let currentPlayersCount = playersAcademy.length;
+  if (playerListMode === "promoted") {
+    currentPlayersCount = allPlayersAcademy.filter(
+      (p) => p.status === "promoted",
+    ).length;
+  } else if (playerListMode === "released") {
+    currentPlayersCount = allPlayersAcademy.filter(
+      (p) => p.status === "released",
+    ).length;
+  }
+
   const playersSkeletonCount =
-    playersAcademy.length > 0
+    currentPlayersCount > 0
       ? activeCardIndex === 0
-        ? playersAcademy.length
-        : Math.min(playersAcademy.length, 3)
+        ? currentPlayersCount
+        : Math.min(currentPlayersCount, 3)
       : 3;
 
   const clubName = career.clubName;
 
-  return [
+  const playerSortOptions = [
+    { value: "arrival-desc", label: "Padrão" },
+    { value: "overall-desc", label: "Por Overall" },
+    { value: "potential-desc", label: "Por Potencial" },
+    { value: "age-asc", label: "Por Idade" },
+  ];
+
+  const cards: DashboardCardConfig[] = [
     {
+      id: `players-card-${playerListMode}`,
       Icon: FaUsers,
-      title: career.academy!.nickname,
+      className: Styles.flipCard,
+      title: (
+        <span className={Styles.clickableTitleWrapper}>
+          <span>
+            {playerListMode === "academy"
+              ? career.academy!.nickname
+              : playerListMode === "promoted"
+                ? "Jogadores Promovidos"
+                : "Jogadores Dispensados"}
+          </span>
+          <span
+            className={Styles.wrapperSpinIcon}
+            onClick={(e) => {
+              e.stopPropagation();
+              togglePlayerListMode();
+            }}
+          >
+            <FaSyncAlt size={14} className={Styles.spinIcon} />
+          </span>
+        </span>
+      ),
       actionText: "Ver todos",
-      sortOptions: [
-        { value: "arrival-desc", label: "Padrão" },
-        { value: "overall-desc", label: "Por Overall" },
-        { value: "potential-desc", label: "Por Potencial" },
-        { value: "age-asc", label: "Por Idade" },
-      ],
+
+      sortOptions: playerSortOptions,
       currentSort: playerSort,
       onSortChange: setPlayerSort,
+
       skeletonContent: (
         <>
           {Array.from({ length: playersSkeletonCount }).map((_, i) => (
@@ -92,29 +145,41 @@ export const getConfig = ({
       ),
       children: (
         <div className={Styles.wrapper}>
-          {playersAcademy.length > 0 ? (
-            (activeCardIndex === 0 || selectedPlayerId !== null
-              ? playersAcademy
-              : playersAcademy.slice(0, 3)
-            ).map((player) => (
-              <PlayerItem
-                key={player.id}
-                playersAcademy={player}
-                onClick={() => onPlayerClick(player.id)}
-                isSelected={player.id === selectedPlayerId}
-              />
-            ))
+          {playerListMode === "academy" ? (
+            playersAcademy.length > 0 ? (
+              (activeCardIndex === 0 || selectedPlayerId !== null
+                ? playersAcademy
+                : playersAcademy.slice(0, 3)
+              ).map((player) => (
+                <PlayerItem
+                  key={player.id}
+                  playersAcademy={player}
+                  onClick={() => onPlayerClick(player.id)}
+                  isSelected={player.id === selectedPlayerId}
+                />
+              ))
+            ) : (
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "var(--color-tertiary)",
+                  textAlign: "center",
+                  margin: "10px 0",
+                }}
+              >
+                Nenhum jogador na base.
+              </p>
+            )
           ) : (
-            <p
-              style={{
-                fontSize: "14px",
-                color: "var(--color-tertiary)",
-                textAlign: "center",
-                margin: "10px 0",
-              }}
-            >
-              Nenhum jogador na base.
-            </p>
+            <PlayerStatusList
+              players={allPlayersAcademy}
+              status={playerListMode as "promoted" | "released"}
+              activeCardIndex={activeCardIndex}
+              cardIndex={0}
+              selectedPlayerId={selectedPlayerId}
+              onPlayerClick={onPlayerClick}
+              currentSort={playerSort}
+            />
           )}
         </div>
       ),
@@ -239,4 +304,9 @@ export const getConfig = ({
       ),
     },
   ];
+
+  if (isGeral) {
+    return cards.filter((card) => card.Icon !== HiOutlineDocumentReport);
+  }
+  return cards;
 };

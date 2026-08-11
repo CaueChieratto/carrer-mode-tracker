@@ -48,3 +48,8 @@
 .container_add_trophies {
   width: 100%;
 }
+
+.selected_card {
+  border-color: var(--club-color) !important;
+  background: color-mix(in srgb, var(--club-color) 10%, transparent) !important;
+}

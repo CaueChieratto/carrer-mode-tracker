@@ -1,18 +1,18 @@
 import { useCallback } from "react";
-import { ServiceSeasons } from "../../../services/ServiceSeasons";
+import { ServiceSeasons } from "../../../../common/services/ServiceSeasons";
 
 export const useSeasons = (careerId: string) => {
   const handleNavigateToSeason = useCallback(
     (seasonId: string) => {
       window.location.href = `/Career/${careerId}/Season/${seasonId}`;
     },
-    [careerId]
+    [careerId],
   );
 
   const handleDeleteSeason = useCallback(
     async (seasonId: string, seasonNumber: number) => {
       const confirmed = window.confirm(
-        `Deseja deletar permanentemente a temporada ${seasonNumber}?`
+        `Deseja deletar permanentemente a temporada ${seasonNumber}?`,
       );
 
       if (!confirmed) return;
@@ -24,7 +24,7 @@ export const useSeasons = (careerId: string) => {
         alert("Falha ao excluir a temporada.");
       }
     },
-    [careerId]
+    [careerId],
   );
 
   const handleNavigateToGeral = useCallback((careerId: string) => {

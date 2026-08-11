@@ -15,17 +15,22 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
   } = useAcademyContext();
 
   const [userGoals, setUserGoals] = useState<number | string>(
-    match.result === "SCHEDULED" ? "" : (match.userGoals ?? 0),
+    match.result === "SCHEDULED" ? "" : (match.userGoals ?? ""),
+  );
+  const [opponentGoals, setOpponentGoals] = useState<number | string>(
+    match.result === "SCHEDULED" ? "" : (match.opponentGoals ?? ""),
   );
 
-  const [opponentGoals, setOpponentGoals] = useState<number | string>(
-    match.result === "SCHEDULED" ? "" : (match.opponentGoals ?? 0),
+  const [userPenalties, setUserPenalties] = useState<number | string>(
+    match.result === "SCHEDULED" ? "" : (match.userPenalties ?? ""),
+  );
+  const [opponentPenalties, setOpponentPenalties] = useState<number | string>(
+    match.result === "SCHEDULED" ? "" : (match.opponentPenalties ?? ""),
   );
 
   const [lineupStats, setLineupStats] = useState<PlayerMatchesStats[]>(
     match.lineup || [],
   );
-
   const [selectedSearchValue, setSelectedSearchValue] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingStats, setIsSavingStats] = useState(false);
@@ -47,16 +52,20 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
     currentLineup: PlayerMatchesStats[],
     currentUGoals: number | string,
     currentOGoals: number | string,
+    currentUPenalties: number | string,
+    currentOPenalties: number | string,
     isFinishing: boolean = false,
   ) => {
     if (!selectedTournament || !onUpdateTournament) return;
-
     setIsSaving(true);
+
     const updatedMatch = buildUpdatedMatch(
       match,
       currentLineup,
       currentUGoals,
       currentOGoals,
+      currentUPenalties,
+      currentOPenalties,
       isFinishing,
       allPlayersAcademy,
     );
@@ -79,12 +88,20 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
       const mStatus = m.status?.trim().toLowerCase() || "";
       const isFinalMatch = mStatus === "final";
       const isGroupStageMatch = mStatus === "fase de grupos";
-
       const uG = Number(m.userGoals) || 0;
       const oG = Number(m.opponentGoals) || 0;
 
-      const isDefeat = uG < oG;
-      const isVictory = uG > oG;
+      let isDefeat = uG < oG;
+      let isVictory = uG > oG;
+
+      if (
+        uG === oG &&
+        m.userPenalties !== undefined &&
+        m.opponentPenalties !== undefined
+      ) {
+        isDefeat = m.userPenalties < m.opponentPenalties;
+        isVictory = m.userPenalties > m.opponentPenalties;
+      }
 
       if (isDefeat && !isGroupStageMatch) {
         isFinished = true;
@@ -132,7 +149,13 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
       const newLineup = [...lineupStats, newPlayerStat];
       setLineupStats(newLineup);
       setSelectedSearchValue("");
-      await saveMatchToDB(newLineup, userGoals, opponentGoals);
+      await saveMatchToDB(
+        newLineup,
+        userGoals,
+        opponentGoals,
+        userPenalties,
+        opponentPenalties,
+      );
     }
   };
 
@@ -143,7 +166,13 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
     if (selectedPlayerIdForStats === id) {
       setSelectedPlayerIdForStats(null);
     }
-    await saveMatchToDB(newLineup, userGoals, opponentGoals);
+    await saveMatchToDB(
+      newLineup,
+      userGoals,
+      opponentGoals,
+      userPenalties,
+      opponentPenalties,
+    );
   };
 
   const handleStatChange = (
@@ -161,7 +190,14 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
   };
 
   const handleSave = async () => {
-    await saveMatchToDB(lineupStats, userGoals, opponentGoals, true);
+    await saveMatchToDB(
+      lineupStats,
+      userGoals,
+      opponentGoals,
+      userPenalties,
+      opponentPenalties,
+      true,
+    );
     onBack();
   };
 
@@ -184,8 +220,15 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
       const updatedLineup = lineupStats.map((p) =>
         p.playerId === playerId ? finalStats : p,
       );
+
       setLineupStats(updatedLineup);
-      await saveMatchToDB(updatedLineup, userGoals, opponentGoals);
+      await saveMatchToDB(
+        updatedLineup,
+        userGoals,
+        opponentGoals,
+        userPenalties,
+        opponentPenalties,
+      );
       setSelectedPlayerIdForStats(null);
     } catch (error) {
       console.error("Erro ao salvar estatísticas do jogador:", error);
@@ -204,6 +247,10 @@ export const useManageMatch = (match: AcademyMatches, onBack: () => void) => {
     setUserGoals,
     opponentGoals,
     setOpponentGoals,
+    userPenalties,
+    setUserPenalties,
+    opponentPenalties,
+    setOpponentPenalties,
     lineupStats,
     selectedSearchValue,
     setSelectedSearchValue,

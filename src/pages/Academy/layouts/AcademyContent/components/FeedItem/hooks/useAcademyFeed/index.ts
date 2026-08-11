@@ -15,6 +15,7 @@ export const useAcademyFeed = (
   return useMemo(() => {
     const feed: FeedEvent[] = [];
     const isEurope = isEuropeanSeason(career);
+
     const academyNickname = career.academy!.nickname;
     const academyName = career.academy!.name;
 
@@ -25,6 +26,7 @@ export const useAcademyFeed = (
           isEurope,
         );
         const type = history.changedAttribute || "default";
+
         const { professional, social } = formatFeedText(
           type,
           history.description,
@@ -42,6 +44,8 @@ export const useAcademyFeed = (
           monthWeight,
           day,
           details: {
+            playerId: player.id,
+            changedAttribute: history.changedAttribute,
             oldValue: history.oldValue,
             newValue: history.newValue,
           },
@@ -52,6 +56,7 @@ export const useAcademyFeed = (
     tournaments.forEach((tourn) => {
       const finishedMatches =
         tourn.matches?.filter((m) => m.result === "FINISHED") || [];
+
       const lastMatchId =
         finishedMatches.length > 0
           ? finishedMatches[finishedMatches.length - 1].id
@@ -62,17 +67,19 @@ export const useAcademyFeed = (
           tourn.date,
           isEurope,
         );
+
         const isChampion = tourn.isChampion;
+
         feed.push({
           id: `${tourn.id}-result`,
           type: "tournament",
           title: tourn.name,
           subtitle: isChampion
-            ? "Conclusão de torneio: Campeão"
+            ? "Conclusão de torneio: Campeão!"
             : `Conclusão de torneio: ${tourn.tournamentResult}.`,
           socialSubtitle: isChampion
             ? "🏆 CAMPEÃO! Conquistou o título do torneio!"
-            : `🏆 Fim de torneio: ${tourn.tournamentResult}.`,
+            : `📉 Fim de torneio: ${tourn.tournamentResult}.`,
           time: formattedDate,
           monthWeight,
           day,
@@ -87,18 +94,33 @@ export const useAcademyFeed = (
           match.date,
           isEurope,
         );
+
         const userG = Number(match.userGoals) || 0;
         const oppG = Number(match.opponentGoals) || 0;
+        const userPen = match.userPenalties;
+        const oppPen = match.opponentPenalties;
 
         let profResult = "Empate";
         let socialResult = "🤝 Empate";
 
-        if (userG > oppG) {
+        if (
+          userG > oppG ||
+          (userG === oppG &&
+            userPen !== undefined &&
+            oppPen !== undefined &&
+            userPen > oppPen)
+        ) {
           profResult = "Vitória";
           socialResult = "🔥 Vitória incrível!";
-        } else if (userG < oppG) {
+        } else if (
+          userG < oppG ||
+          (userG === oppG &&
+            userPen !== undefined &&
+            oppPen !== undefined &&
+            userPen < oppPen)
+        ) {
           profResult = "Derrota";
-          socialResult = "🔻 Derrota";
+          socialResult = "💔 Derrota";
         }
 
         const isDecisiveMatch = tourn.isFinished && match.id === lastMatchId;
@@ -106,8 +128,16 @@ export const useAcademyFeed = (
           ? "Campeão"
           : tourn.tournamentResult;
 
-        let subtitle = `${profResult} — ${userG} x ${oppG} vs ${match.opponentTeam}`;
-        let socialSubtitle = `${socialResult} ${userG} x ${oppG} vs ${match.opponentTeam}!`;
+        let subtitle = `${profResult} | ${userG} x ${oppG}`;
+        let socialSubtitle = `${socialResult} ${userG} x ${oppG}`;
+
+        if (userPen !== undefined && oppPen !== undefined) {
+          subtitle += ` PEN (${userPen} x ${oppPen})`;
+          socialSubtitle += ` PEN (${userPen} x ${oppPen})`;
+        }
+
+        subtitle += ` vs ${match.opponentTeam}`;
+        socialSubtitle += ` vs ${match.opponentTeam}!`;
 
         if (isDecisiveMatch) {
           subtitle += ` (${tournResult})`;
@@ -127,6 +157,8 @@ export const useAcademyFeed = (
             opponentTeam: match.opponentTeam,
             userGoals: userG,
             opponentGoals: oppG,
+            userPenalties: userPen,
+            opponentPenalties: oppPen,
             lineup: match.lineup,
             tournamentResult: isDecisiveMatch ? tournResult : undefined,
           },

@@ -4,12 +4,13 @@ import { getOpponentBadge } from "../../helpers/getOpponentBadge";
 import { TournamentMatchActions } from "../TournamentMatchActions";
 import { TournamentMatchBody } from "../TournamentMatchBody";
 import { TournamentMatchHeader } from "../TournamentMatchHeader";
+import { TournamentMatchLineup } from "../TournamentMatchLineup";
 import Styles from "./TournamentMatchCard.module.css";
 
 type TournamentMatchCardProps = {
   match: AcademyMatches;
   onEdit?: (match: AcademyMatches) => void;
-  onEnterMatch: (match: AcademyMatches) => void;
+  onEnterMatch?: (match: AcademyMatches) => void;
 };
 
 export const TournamentMatchCard = ({
@@ -27,7 +28,6 @@ export const TournamentMatchCard = ({
         status={match.status}
         onEdit={onEdit ? () => onEdit(match) : undefined}
       />
-
       <TournamentMatchBody
         homeTeamName={career.clubName}
         homeTeamBadge={career.teamBadge}
@@ -36,9 +36,16 @@ export const TournamentMatchCard = ({
         result={match.result}
         homeGoals={match.userGoals}
         awayGoals={match.opponentGoals}
+        homePenalties={match.userPenalties}
+        awayPenalties={match.opponentPenalties}
       />
-
-      <TournamentMatchActions onEnterMatch={() => onEnterMatch(match)} />
+      <TournamentMatchLineup lineup={match.lineup} />
+      {onEnterMatch && (
+        <TournamentMatchActions
+          onEnterMatch={() => onEnterMatch(match)}
+          hasLineup={match.lineup.length > 0}
+        />
+      )}
     </div>
   );
 };

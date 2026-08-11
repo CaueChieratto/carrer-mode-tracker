@@ -49,7 +49,10 @@ export const PlayerInfo = ({
             <span className={Styles.data}>{position}</span>
             {isAcademy && nickname && (
               <span className={Styles.academy_badge}>
-                {toSingular(nickname)}
+                <OverflowText
+                  disableDynamicMinWidth={true}
+                  text={toSingular(nickname)}
+                />
               </span>
             )}
             {captain && (

@@ -9,6 +9,8 @@ type TournamentMatchBodyProps = {
   result?: string;
   homeGoals?: number;
   awayGoals?: number;
+  homePenalties?: number;
+  awayPenalties?: number;
 };
 
 export const TournamentMatchBody = ({
@@ -19,6 +21,8 @@ export const TournamentMatchBody = ({
   result,
   homeGoals,
   awayGoals,
+  homePenalties,
+  awayPenalties,
 }: TournamentMatchBodyProps) => {
   return (
     <div className={Styles.matchBody}>
@@ -41,10 +45,17 @@ export const TournamentMatchBody = ({
           <span className={Styles.scheduledText}>Agendado</span>
         </div>
       ) : (
-        <div className={Styles.score}>
-          <span>{homeGoals}</span>
-          <span>-</span>
-          <span>{awayGoals}</span>
+        <div className={Styles.scoreContainer}>
+          <div className={Styles.score}>
+            <span>{homeGoals}</span>
+            <span>-</span>
+            <span>{awayGoals}</span>
+          </div>
+          {homePenalties !== undefined && awayPenalties !== undefined && (
+            <div className={Styles.penalties}>
+              PEN ({homePenalties} x {awayPenalties})
+            </div>
+          )}
         </div>
       )}
 

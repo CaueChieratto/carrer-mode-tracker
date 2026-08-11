@@ -185,22 +185,28 @@ const ModalManager = ({
           />
         </Modal>
       );
+
     case ModalType.SEASON_CONFIGS: {
+      const isGeral = selectedSeason?.id === "geral";
       const formattedSeasonName =
-        selectedSeason && career
+        !isGeral && selectedSeason && career
           ? getSeasonName(
               selectedSeason.seasonNumber,
               career.createdAt,
               career.nation,
             )
-          : "1";
+          : "Visão Geral";
 
       return (
         <Modal
           isOpen
           closeModal={closeModal}
           animationContainer="grow"
-          text={`Temporada ${selectedSeason?.seasonNumber}`}
+          text={
+            isGeral
+              ? "Visão Geral"
+              : `Temporada ${selectedSeason?.seasonNumber}`
+          }
         >
           {selectedSeason && career && (
             <SeasonConfigs
@@ -208,6 +214,7 @@ const ModalManager = ({
               career={career}
               setSelectedCareer={setSelectedCareer}
               seasonName={formattedSeasonName}
+              isGeral={isGeral}
               onNavigate={() => {
                 closeModal();
                 if (onNavigateSeason) onNavigateSeason(selectedSeason.id);
@@ -217,6 +224,7 @@ const ModalManager = ({
         </Modal>
       );
     }
+
     case ModalType.ADD_BADGE_CLUB:
       return (
         <Modal

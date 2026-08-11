@@ -20,6 +20,7 @@ export type FeedItemProps = {
 };
 
 export const FeedItem = ({
+  id,
   subtitle,
   socialSubtitle,
   time,
@@ -48,6 +49,7 @@ export const FeedItem = ({
 
       {isOpen && (
         <FeedItemModal
+          eventId={id}
           title={title}
           type={type}
           subtitle={subtitle}

@@ -1,9 +1,13 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Career } from "../../../common/interfaces/Career";
 import Button from "../../../components/Button";
 import AddTrophies from "./ui/AddTrophies";
 import Styles from "./SeasonConfigs.module.css";
-import { IoOptionsOutline, IoPeopleOutline } from "react-icons/io5";
+import {
+  IoOptionsOutline,
+  IoPeopleOutline,
+  IoBusinessOutline,
+} from "react-icons/io5";
 import { GiTrophiesShelf } from "react-icons/gi";
 import { CardsModal } from "./components/CardsModal";
 import { SelectLeagues } from "./ui/SelectLeagues";
@@ -14,6 +18,7 @@ import { BsCurrencyExchange } from "react-icons/bs";
 import { SelectCurrency } from "./ui/SelectCurrency";
 import { AcademyConfigs } from "./ui/AcademyConfigs";
 import { useAcademyConfigs } from "./ui/AcademyConfigs/hooks/useAcademyConfigs";
+import { useNavigate } from "react-router-dom";
 
 type SeasonConfigsProps = {
   career: Career;
@@ -21,6 +26,7 @@ type SeasonConfigsProps = {
   onNavigate: () => void;
   seasonName: string;
   season: ClubData;
+  isGeral?: boolean;
 };
 
 export const SeasonConfigs = ({
@@ -29,7 +35,11 @@ export const SeasonConfigs = ({
   onNavigate,
   seasonName,
   season,
+  isGeral,
 }: SeasonConfigsProps) => {
+  const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     return () => {
       localStorage.removeItem(`@academy_viewState_${career.id}`);
@@ -52,6 +62,58 @@ export const SeasonConfigs = ({
     career,
     setSelectedCareer,
   });
+
+  if (isGeral) {
+    return (
+      <div className={Styles.container}>
+        <div className={Styles.grid}>
+          <CardsModal
+            icon={<IoPeopleOutline className={Styles.icon} />}
+            label="Visualizar"
+            title="Clube"
+            onClick={() => setSelectedPath(`/Career/${career.id}/Geral`)}
+            clubColor={clubColor}
+            darkClubColor={darkClubColor}
+            className={
+              selectedPath === `/Career/${career.id}/Geral`
+                ? Styles.selected_card
+                : ""
+            }
+          />
+          <CardsModal
+            icon={<IoBusinessOutline className={Styles.icon} />}
+            label="Visualizar"
+            title="Base"
+            onClick={() => setSelectedPath(`/Career/${career.id}/Academy`)}
+            clubColor={clubColor}
+            darkClubColor={darkClubColor}
+            className={
+              selectedPath === `/Career/${career.id}/Academy`
+                ? Styles.selected_card
+                : ""
+            }
+          />
+        </div>
+
+        {selectedPath && (
+          <Button
+            className={Styles.button}
+            onClick={() => {
+              document.body.classList.remove("modal-open");
+
+              navigate(selectedPath, { state: { career } });
+            }}
+            style={{
+              backgroundColor: clubColor,
+              border: `1px solid ${darkClubColor}`,
+            }}
+          >
+            Entrar
+          </Button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -109,7 +171,6 @@ export const SeasonConfigs = ({
           )}
         </div>
       )}
-
       {view === "selecting" && (
         <SelectLeagues
           careerId={career.id}
@@ -123,7 +184,6 @@ export const SeasonConfigs = ({
           setSelectedCareer={setSelectedCareer}
         />
       )}
-
       {view === "add" && (
         <div className={Styles.container_add_trophies}>
           <AddTrophies
@@ -136,7 +196,6 @@ export const SeasonConfigs = ({
           />
         </div>
       )}
-
       {view === "currency" && (
         <SelectCurrency
           careerId={career.id}
@@ -146,7 +205,6 @@ export const SeasonConfigs = ({
           onClose={() => setView("menu")}
         />
       )}
-
       {view === "base" && (
         <AcademyConfigs
           clubColor={clubColor}

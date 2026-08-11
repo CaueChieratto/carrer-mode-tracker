@@ -9,19 +9,34 @@ import { AcademyPlayers } from "../../../../interfaces/AcademyPlayers/AcademyPla
 import { EntityWorkspace } from "../../../EntityWorkspace";
 import { PlayerPerformance } from "../../components/PlayerPerformance";
 import { getPlayerActions } from "./constants/playerActions";
+import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
 
 interface PlayerWorkspaceProps {
   selectedPlayer?: AcademyPlayers;
 }
 
 export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
+  const { isGeral } = useAcademyContext();
+
   if (!selectedPlayer) return null;
 
   const hasAnnotations =
     !!selectedPlayer.annotations &&
     selectedPlayer.annotations.trim() !== "" &&
     selectedPlayer.annotations !== "<br>";
-  const playerActions = getPlayerActions(hasAnnotations);
+
+  const isPromotedOrReleased =
+    selectedPlayer.status === "promoted" ||
+    selectedPlayer.status === "released";
+  const isReadOnlyNote = isGeral || isPromotedOrReleased;
+
+  let playerActions = getPlayerActions(hasAnnotations, isReadOnlyNote);
+
+  if (isGeral) {
+    playerActions = playerActions.filter(
+      (action) => action.id !== "manage-player",
+    );
+  }
 
   return (
     <EntityWorkspace
@@ -42,7 +57,6 @@ export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
               </FocusedCard>
             </div>
           )}
-
           {activeComponent === "add-note" && (
             <div ref={activeContentRef}>
               <FocusedCard
@@ -64,7 +78,7 @@ export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
                       }}
                     />
                   ) : (
-                    <span> </span>
+                    <span>🌍</span>
                   )
                 }
                 title={`${selectedPlayer.name}`}
@@ -74,7 +88,6 @@ export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
               </FocusedCard>
             </div>
           )}
-
           {activeComponent === "development" && (
             <div ref={activeContentRef}>
               <FocusedCard
@@ -86,7 +99,6 @@ export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
               </FocusedCard>
             </div>
           )}
-
           {activeComponent === "performance" && (
             <div ref={activeContentRef}>
               <FocusedCard

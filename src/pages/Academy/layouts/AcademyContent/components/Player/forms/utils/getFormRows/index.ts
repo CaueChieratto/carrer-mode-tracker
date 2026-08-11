@@ -17,6 +17,7 @@ type GetFormRowsParams = {
   setPosition: (position: string) => void;
   nationality: string;
   setNationality: (nationality: string) => void;
+  editingAttribute?: string;
 };
 
 export const getFormRows = ({
@@ -31,9 +32,9 @@ export const getFormRows = ({
   setSector,
   setPosition,
   setNationality,
+  editingAttribute,
 }: GetFormRowsParams): FieldConfig[][] => {
   const allCountries = Object.keys(FIFA_COUNTRY_CODES);
-
   const filteredCountries = nationality
     ? allCountries.filter((code) => code.includes(nationality))
     : allCountries;
@@ -84,14 +85,13 @@ export const getFormRows = ({
         .replace(/[^a-zA-Z]/g, "")
         .toUpperCase()
         .slice(0, 3);
-
       setNationality(formattedValue);
     },
     hideOnEvolution: true,
   };
 
   const sectorField: FieldConfig = {
-    name: "sector_select",
+    name: "sector",
     fieldType: "select",
     label: texts.sectorLabel,
     placeholder: texts.sectorPlaceholder,
@@ -101,7 +101,7 @@ export const getFormRows = ({
   };
 
   const positionField: FieldConfig = {
-    name: "position_select",
+    name: "position",
     fieldType: "select",
     label: texts.positionLabel,
     placeholder: texts.positionPlaceholder,
@@ -190,6 +190,7 @@ export const getFormRows = ({
     type: "text",
     required: true,
     maxLength: 5,
+    defaultValue: initialData?.evolutionDate,
     onInput: (e) => {
       let val = e.currentTarget.value.replace(/\D/g, "");
       if (val.length > 2) {
@@ -198,6 +199,23 @@ export const getFormRows = ({
       e.currentTarget.value = val;
     },
   };
+
+  if (editingAttribute) {
+    const attributeMap: Record<string, FieldConfig> = {
+      overall: overallField,
+      potential: potentialField,
+      age: ageField,
+      height: heightField,
+      weight: weightField,
+      sector: sectorField,
+      position: positionField,
+    };
+
+    const specificField = attributeMap[editingAttribute];
+    if (specificField) {
+      return [[specificField], [evolutionDateField]];
+    }
+  }
 
   if (isEvolution) {
     return [

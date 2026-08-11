@@ -29,8 +29,18 @@ export const useAcademyMatchMutations = (
       const isGroupStageMatch = mStatus === "fase de grupos";
       const uG = Number(m.userGoals) || 0;
       const oG = Number(m.opponentGoals) || 0;
-      const isDefeat = uG < oG;
-      const isVictory = uG > oG;
+
+      let isDefeat = uG < oG;
+      let isVictory = uG > oG;
+
+      if (
+        uG === oG &&
+        m.userPenalties !== undefined &&
+        m.opponentPenalties !== undefined
+      ) {
+        isDefeat = m.userPenalties < m.opponentPenalties;
+        isVictory = m.userPenalties > m.opponentPenalties;
+      }
 
       if (isDefeat && !isGroupStageMatch) {
         isFinished = true;
@@ -46,7 +56,6 @@ export const useAcademyMatchMutations = (
         break;
       }
     }
-
     return { isFinished, isChampion, tournamentResult };
   };
 

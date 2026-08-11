@@ -1,6 +1,8 @@
 import { IconType } from "react-icons";
-import { FaFutbol, FaHandsHelping, FaStar, FaTshirt } from "react-icons/fa";
+import { FaStar, FaTshirt } from "react-icons/fa";
 import { TournamentStats, TotalStats } from "../../types";
+import { GiSoccerBall } from "react-icons/gi";
+import { TbTargetArrow } from "react-icons/tb";
 
 type StringOrNumberKeys<T> = {
   [K in keyof T]: T[K] extends string | number ? K : never;
@@ -21,10 +23,10 @@ export const TOURNAMENT_STATS_CARDS: StatConfig<TournamentStats>[] = [
     dataKey: "matchesPlayed",
     label: "Partidas",
   },
-  { id: "goals", icon: FaFutbol, dataKey: "goals", label: "Gols" },
+  { id: "goals", icon: GiSoccerBall, dataKey: "goals", label: "Gols" },
   {
     id: "assists",
-    icon: FaHandsHelping,
+    icon: TbTargetArrow,
     dataKey: "assists",
     label: "Assistências",
   },
@@ -46,13 +48,13 @@ export const GENERAL_STATS_CARDS: StatConfig<TotalStats>[] = [
   },
   {
     id: "total-goals",
-    icon: FaFutbol,
+    icon: GiSoccerBall,
     dataKey: "totalGoals",
     label: "Gols Totais",
   },
   {
     id: "total-assists",
-    icon: FaHandsHelping,
+    icon: TbTargetArrow,
     dataKey: "totalAssists",
     label: "Assistências Totais",
   },

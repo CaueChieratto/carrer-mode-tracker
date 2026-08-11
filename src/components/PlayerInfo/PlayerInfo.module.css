@@ -31,6 +31,21 @@
   overflow: hidden;
 }
 
+.academy_badge {
+  background-color: var(--highlight-bg);
+  color: var(--blackColor);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 70px;
+  overflow: hidden;
+}
+
 .data_title {
   color: var(--color-quaternary);
   font-size: 16px;
@@ -53,20 +68,6 @@
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1.2;
-}
-
-.academy_badge {
-  background-color: var(--highlight-bg);
-  color: var(--blackColor);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
 .icon_wrapper {

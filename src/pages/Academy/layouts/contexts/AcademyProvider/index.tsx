@@ -4,7 +4,7 @@ import { getConfig } from "../../AcademyContent/config";
 import { useAcademyActions } from "../../AcademyContent/hooks/useAcademyActions";
 import { useAcademyPlayers } from "../../AcademyContent/hooks/useAcademyPlayers";
 import { useAcademyViewState } from "../../AcademyContent/hooks/useAcademyViewState";
-import { AcademyContext } from "../AcademyContext";
+import { AcademyContext, EditingEvolutionEvent } from "../AcademyContext";
 import { useAcademyTournaments } from "../../AcademyContent/hooks/useAcademyTournaments";
 import {
   PlayerSortOption,
@@ -31,12 +31,42 @@ export const AcademyProvider = ({
   seasonId,
 }: ProviderProps) => {
   const [allCareers, setAllCareers] = useState<Career[]>([career]);
+  const [editingEvolutionEvent, setEditingEvolutionEvent] =
+    useState<EditingEvolutionEvent | null>(null);
+
+  const seasonNumber = career.clubData.find(
+    (club) => club.id === seasonId,
+  )?.seasonNumber;
+
+  const isGeral = seasonId === "geral" || !seasonNumber;
+
+  const [playerListMode, setPlayerListMode] = useState<
+    "academy" | "promoted" | "released"
+  >(() => {
+    const saved = localStorage.getItem(`@academy_playerListMode_${career.id}`);
+    if (saved === "promoted" || saved === "released") {
+      return saved as "promoted" | "released";
+    }
+    return "academy";
+  });
+
+  const togglePlayerListMode = () => {
+    setPlayerListMode((prev) => {
+      const next =
+        prev === "academy"
+          ? "promoted"
+          : prev === "promoted"
+            ? "released"
+            : "academy";
+      localStorage.setItem(`@academy_playerListMode_${career.id}`, next);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const fetchAllCareers = async () => {
       try {
         const user = await getAsyncUser();
-
         const querySnapshot = await getDocs(
           collection(db, `users/${user.uid}/careers`),
         );
@@ -46,7 +76,6 @@ export const AcademyProvider = ({
         console.error("Erro ao carregar todas as carreiras:", error);
       }
     };
-
     fetchAllCareers();
   }, []);
 
@@ -56,13 +85,13 @@ export const AcademyProvider = ({
     setPlayersAcademy,
     isLoading,
     refetchPlayers,
-  } = useAcademyPlayers(career.id, seasonId);
+  } = useAcademyPlayers(career, seasonId, isGeral);
 
   const {
     tournamentsAcademy: rawTournaments,
     setTournamentsAcademy,
     refetchTournaments,
-  } = useAcademyTournaments(career.id, seasonId);
+  } = useAcademyTournaments(career, seasonId, isGeral);
 
   const {
     sortedPlayers: playersAcademy,
@@ -95,6 +124,23 @@ export const AcademyProvider = ({
     setSelectedTournamentId,
   } = useAcademyViewState(career.id);
 
+  const backWrapper = () => {
+    setEditingEvolutionEvent(null);
+    back();
+  };
+
+  const playerClickWrapper = (id: string, forceOpen?: boolean) => {
+    if (!forceOpen) {
+      setEditingEvolutionEvent(null);
+    }
+    playerClick(id, forceOpen);
+  };
+
+  const tournamentClickWrapper = (id: string, forceOpen?: boolean) => {
+    setEditingEvolutionEvent(null);
+    tournamentClick(id, forceOpen);
+  };
+
   const {
     handlePlayerClick,
     handleTournamentClick,
@@ -112,9 +158,9 @@ export const AcademyProvider = ({
     refetchTournaments,
     setPlayersAcademy,
     setTournamentsAcademy,
-    playerClick,
-    tournamentClick,
-    back,
+    playerClick: playerClickWrapper,
+    tournamentClick: tournamentClickWrapper,
+    back: backWrapper,
   });
 
   const dynamicFeedData = useAcademyFeed(
@@ -123,7 +169,9 @@ export const AcademyProvider = ({
     tournamentsAcademy,
   );
 
-  const selectedPlayer = playersAcademy.find((p) => p.id === selectedPlayerId);
+  const selectedPlayer = allPlayersAcademy.find(
+    (p) => p.id === selectedPlayerId,
+  );
   const selectedTournament = tournamentsAcademy.find(
     (t) => t.id === selectedTournamentId,
   );
@@ -131,6 +179,7 @@ export const AcademyProvider = ({
   const dashboardCards = getConfig({
     career,
     playersAcademy,
+    allPlayersAcademy,
     tournamentsAcademy,
     feedData: dynamicFeedData,
     activeCardIndex,
@@ -146,11 +195,15 @@ export const AcademyProvider = ({
     setPlayerSort: (val: string) => setPlayerSort(val as PlayerSortOption),
     setTournamentSort: (val: string) =>
       setTournamentSort(val as TournamentSortOption),
+    isGeral,
+    playerListMode,
+    togglePlayerListMode,
   });
 
   return (
     <AcademyContext.Provider
       value={{
+        isGeral,
         career,
         allCareers,
         seasonId,
@@ -166,9 +219,14 @@ export const AcademyProvider = ({
         selectedTournament,
         dashboardCards,
         isAnimationDisabled,
+        seasonNumber,
         selectedTournamentId,
-        setSelectedTournamentId,
         isFocusedViewActive,
+        playerListMode,
+        editingEvolutionEvent,
+        setEditingEvolutionEvent,
+        togglePlayerListMode,
+        setSelectedTournamentId,
         setIsAddingPlayer,
         setIsAddingTournament,
         setIsPromotingPlayer,
@@ -180,7 +238,8 @@ export const AcademyProvider = ({
         onDeleteTournament: deleteTournament,
         refetchTournaments,
         refetchPlayers,
-        back,
+        playerClick: handlePlayerClick,
+        back: backWrapper,
       }}
     >
       {children}

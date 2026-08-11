@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Career } from "../../../interfaces/Career";
-import { ColorsService } from "../../../services/ColorsService";
-import { ServiceSeasons } from "../../../services/ServiceSeasons";
-import { useCareers } from "../../Career/UseCareer";
-import { useClubColors } from "../../Colors/UseClubColors";
+import { Career } from "../../../../common/interfaces/Career";
+import { ColorsService } from "../../../../common/services/ColorsService";
+import { ServiceSeasons } from "../../../../common/services/ServiceSeasons";
+import { useCareers } from "../../../../common/hooks/Career/UseCareer";
+import { useClubColors } from "../../../../common/hooks/Colors/UseClubColors";
 
 export const useAddSeasons = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export const useAddSeasons = () => {
   const career = careers.find((c) => c.id === careerId);
 
   const { clubColor, darkClubColor } = useClubColors(
-    ColorsService.getColorSaved(career?.id || "default") || "#ffffff"
+    ColorsService.getColorSaved(career?.id || "default") || "#ffffff",
   );
 
   const handleAddSeason = async (career: Career) => {

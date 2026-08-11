@@ -1,5 +1,5 @@
 import { useSearchParams, useParams } from "react-router-dom";
-import { useSeasons } from "../../common/hooks/Seasons/UseSeasons";
+import { useSeasons } from "../AddSeasons/hooks/useSeasons";
 import Button from "../../components/Button";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
 import { useSeasonData } from "../../common/hooks/Seasons/UseSeasonData";

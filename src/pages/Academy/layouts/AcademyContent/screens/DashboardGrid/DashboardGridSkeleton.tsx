@@ -12,7 +12,7 @@ export const DashboardGridSkeleton = ({
   return (
     <div className={Styles.dashboardGrid}>
       {dashboardCards.map((card, index) => (
-        <SkeletonCard key={index}>
+        <SkeletonCard key={card.id || index}>
           {card.skeletonContent}
           {card.actionText && (
             <div

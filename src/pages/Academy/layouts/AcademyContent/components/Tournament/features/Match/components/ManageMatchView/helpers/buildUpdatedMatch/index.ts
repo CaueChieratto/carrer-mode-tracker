@@ -14,19 +14,33 @@ export const buildUpdatedMatch = (
   currentLineup: PlayerMatchesStats[],
   currentUGoals: number | string,
   currentOGoals: number | string,
+  currentUPenalties: number | string,
+  currentOPenalties: number | string,
   isFinishing: boolean,
   playersAcademy: AcademyPlayers[],
 ): AcademyMatches => {
+  const userGoalsNum = Number(currentUGoals) || 0;
   const oppGoalsNum = Number(currentOGoals) || 0;
+
+  let finalUPen: number | undefined =
+    currentUPenalties === "" ? undefined : Number(currentUPenalties);
+  let finalOPen: number | undefined =
+    currentOPenalties === "" ? undefined : Number(currentOPenalties);
+
+  if (userGoalsNum !== oppGoalsNum) {
+    finalUPen = undefined;
+    finalOPen = undefined;
+  }
 
   return {
     ...match,
-    userGoals: Number(currentUGoals) || 0,
+    userGoals: userGoalsNum,
     opponentGoals: oppGoalsNum,
+    userPenalties: finalUPen,
+    opponentPenalties: finalOPen,
     lineup: currentLineup.map((p) => {
       const player = playersAcademy.find((acad) => acad.id === p.playerId);
       const isGol = player?.position === "GOL";
-
       return {
         ...p,
         goals: parseStat(p.goals),

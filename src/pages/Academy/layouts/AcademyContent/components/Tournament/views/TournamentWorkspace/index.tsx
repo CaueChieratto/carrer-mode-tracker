@@ -9,6 +9,7 @@ import { AcademyMatches } from "../../../../interfaces/AcademyTournaments/Academ
 import { ManageMatchView } from "../../features/Match/components/ManageMatchView";
 import { TournamentMatchList } from "../../features/Match/components/TournamentMatchList";
 import { CreateAcademyMatchForm } from "../../features/Match/containers/CreateAcademyMatchForm";
+import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
 
 interface TournamentWorkspaceProps {
   selectedTournament?: AcademyTournaments;
@@ -31,13 +32,13 @@ const MatchStateWatcher = ({
       setManagingMatch(undefined);
     }
   }, [activeComponent, setEditingMatch, setManagingMatch]);
-
   return null;
 };
 
 export const TournamentWorkspace = ({
   selectedTournament,
 }: TournamentWorkspaceProps) => {
+  const { isGeral } = useAcademyContext();
   const [editingMatch, setEditingMatch] = useState<
     AcademyMatches | undefined
   >();
@@ -47,11 +48,17 @@ export const TournamentWorkspace = ({
 
   if (!selectedTournament) return null;
 
-  const availableActions = tournamentActions.filter(
+  let availableActions = tournamentActions.filter(
     (action) =>
       action.id !== "view-matches" ||
       (selectedTournament.matches && selectedTournament.matches.length >= 1),
   );
+
+  if (isGeral) {
+    availableActions = availableActions.filter(
+      (action) => action.id === "view-matches",
+    );
+  }
 
   return (
     <EntityWorkspace
@@ -120,14 +127,22 @@ export const TournamentWorkspace = ({
               >
                 <TournamentMatchList
                   matches={selectedTournament.matches}
-                  onEdit={(match) => {
-                    setEditingMatch(match);
-                    setActiveComponent("add-matches");
-                  }}
-                  onEnterMatch={(match) => {
-                    setManagingMatch(match);
-                    setActiveComponent("manage-match");
-                  }}
+                  onEdit={
+                    isGeral
+                      ? undefined
+                      : (match) => {
+                          setEditingMatch(match);
+                          setActiveComponent("add-matches");
+                        }
+                  }
+                  onEnterMatch={
+                    isGeral
+                      ? undefined
+                      : (match) => {
+                          setManagingMatch(match);
+                          setActiveComponent("manage-match");
+                        }
+                  }
                 />
               </FocusedCard>
             </div>

@@ -1,4 +1,6 @@
 export const SINGULAR_MAP: Record<string, string> = {
+  jovens: "jovem",
+  promessas: "promessa",
   jogadores: "jogador",
   clubes: "clube",
   partidas: "partida",

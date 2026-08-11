@@ -17,6 +17,7 @@ type UsePlayerFormProps = {
     evolutionHistory?: AcademyPlayersHistory[];
   };
   isEvolution?: boolean;
+  editingAttribute?: string;
 };
 
 export const usePlayerForm = ({
@@ -24,6 +25,7 @@ export const usePlayerForm = ({
   onSubmitData,
   initialData,
   isEvolution,
+  editingAttribute,
 }: UsePlayerFormProps) => {
   const { career } = useAcademyContext();
 
@@ -47,6 +49,7 @@ export const usePlayerForm = ({
 
   const parsePlayerData = (formData: FormData): Partial<PlayerDataPayload> => {
     const playerData: Partial<PlayerDataPayload> = {};
+
     if (formData.has("name")) playerData.name = formData.get("name") as string;
     if (formData.has("nationality"))
       playerData.nationality = formData.get("nationality") as string;
@@ -56,7 +59,6 @@ export const usePlayerForm = ({
     if (shirtValue && shirtValue.toString().trim() !== "") {
       playerData.shirtNumber = Number(shirtValue);
     }
-
     if (formData.has("height"))
       playerData.height = Number(formData.get("height"));
     if (formData.has("weight"))
@@ -93,6 +95,7 @@ export const usePlayerForm = ({
     ) {
       const arrDateStr = getFormattedArrivalDate(initialData.arrivalDate);
       const evDateStr = parsedData.evolutionDate;
+
       if (arrDateStr.length === 5 && evDateStr.length === 5) {
         const [arrDay, arrMonth] = arrDateStr.split("/").map(Number);
         const [evDay, evMonth] = evDateStr.split("/").map(Number);
@@ -112,6 +115,7 @@ export const usePlayerForm = ({
         }
       }
     }
+
     await onSubmitData(parsedData as PlayerDataPayload);
   };
 
@@ -132,6 +136,7 @@ export const usePlayerForm = ({
     isEvolution,
     nationality,
     setNationality,
+    editingAttribute,
   });
 
   return { isLoading, sector, position, submit, formRows };

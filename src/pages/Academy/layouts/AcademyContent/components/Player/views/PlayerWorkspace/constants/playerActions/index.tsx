@@ -6,11 +6,18 @@ import {
 } from "react-icons/fa";
 import { EntityAction } from "../../../../../EntityActionLink";
 
-export const getPlayerActions = (hasAnnotations: boolean): EntityAction[] => [
+export const getPlayerActions = (
+  hasAnnotations: boolean,
+  isReadOnlyNote?: boolean,
+): EntityAction[] => [
   { id: "manage-player", label: "Gerenciar Jogador", icon: <FaUserEdit /> },
   {
     id: "add-note",
-    label: hasAnnotations ? "Ver Anotações" : "Adicionar Anotação",
+    label: isReadOnlyNote
+      ? "Ver Anotações"
+      : hasAnnotations
+        ? "Ver Anotações"
+        : "Adicionar Anotação",
     icon: <FaStickyNote />,
   },
   {

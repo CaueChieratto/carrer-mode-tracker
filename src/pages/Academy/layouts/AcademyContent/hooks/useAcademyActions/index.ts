@@ -9,7 +9,7 @@ type UseAcademyActionsProps = {
   selectedPlayerId: string | null;
   selectedTournamentId: string | null;
   refetchPlayers: (isSilentUpdate?: boolean) => void;
-  refetchTournaments?: () => void;
+  refetchTournaments?: (isSilentUpdate?: boolean) => void;
   playerClick: (id: string, forceOpen?: boolean) => void;
   tournamentClick: (id: string, forceOpen?: boolean) => void;
   setPlayersAcademy: Dispatch<SetStateAction<AcademyPlayers[]>>;
@@ -30,16 +30,16 @@ export const useAcademyActions = ({
   setTournamentsAcademy,
   back,
 }: UseAcademyActionsProps) => {
-  const handleTournamentClick = (id: string) => {
-    tournamentClick(id);
-    if (selectedTournamentId === id) {
+  const handleTournamentClick = (id: string, forceOpen?: boolean) => {
+    tournamentClick(id, forceOpen);
+    if (selectedTournamentId === id && !forceOpen) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const handlePlayerClick = (id: string) => {
-    playerClick(id);
-    if (selectedPlayerId === id) {
+  const handlePlayerClick = (id: string, forceOpen?: boolean) => {
+    playerClick(id, forceOpen);
+    if (selectedPlayerId === id && !forceOpen) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -58,6 +58,8 @@ export const useAcademyActions = ({
         seasonId,
         updatedPlayer,
       );
+      refetchPlayers(true);
+
       if (!isSilent) {
         back();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -79,6 +81,7 @@ export const useAcademyActions = ({
         player,
         releaseDate,
       );
+      refetchPlayers(true);
       back();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
@@ -93,6 +96,7 @@ export const useAcademyActions = ({
 
     try {
       await AcademyService.deletePlayerAcademy(careerId, seasonId, playerId);
+      refetchPlayers(true);
       back();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
@@ -116,6 +120,8 @@ export const useAcademyActions = ({
         seasonId,
         updatedTournament,
       );
+      if (refetchTournaments) refetchTournaments(true);
+
       if (!isSilent) {
         back();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -135,6 +141,8 @@ export const useAcademyActions = ({
         seasonId,
         tournamentId,
       );
+      if (refetchTournaments) refetchTournaments(true);
+
       back();
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {

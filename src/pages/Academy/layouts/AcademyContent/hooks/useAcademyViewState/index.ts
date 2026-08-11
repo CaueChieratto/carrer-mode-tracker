@@ -93,7 +93,6 @@ export const useAcademyViewState = (careerId: string) => {
 
   const back = () => {
     setIsAnimationDisabled(false);
-
     if (selectedPlayerId !== null || selectedTournamentId !== null) {
       setSelectedPlayerId(null);
       setSelectedTournamentId(null);
@@ -106,7 +105,7 @@ export const useAcademyViewState = (careerId: string) => {
     else if (activeCardIndex !== null) setActiveCardIndex(null);
   };
 
-  const openCard = (index: number) => {
+  const openCard = (index: number | null) => {
     setIsAnimationDisabled(false);
     setActiveCardIndex(index);
   };

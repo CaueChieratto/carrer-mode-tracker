@@ -15,7 +15,7 @@ export const DashboardGridView = ({
     <div className={Styles.dashboardGrid}>
       {dashboardCards.map((card, index) => (
         <DashboardCard
-          key={index}
+          key={card.id || index}
           Icon={card.Icon}
           title={card.title}
           actionText={card.actionText}

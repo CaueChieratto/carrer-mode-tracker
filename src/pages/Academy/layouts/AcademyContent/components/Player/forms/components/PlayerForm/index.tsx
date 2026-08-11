@@ -12,6 +12,7 @@ type PlayerFormProps = {
   onSubmitData: (data: PlayerDataPayload) => Promise<void>;
   initialData?: Partial<PlayerDataPayload>;
   isEvolution?: boolean;
+  editingAttribute?: string;
 };
 
 export const PlayerForm = (props: PlayerFormProps) => {

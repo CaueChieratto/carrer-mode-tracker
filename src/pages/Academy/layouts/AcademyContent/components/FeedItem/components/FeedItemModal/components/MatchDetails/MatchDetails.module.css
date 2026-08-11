@@ -1,0 +1,94 @@
+.matchDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.scoreBoardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+}
+
+.scoreBoard {
+  display: flex;
+  justify-content: space-around;
+  font-weight: bold;
+  background-color: var(--border-navbar);
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.penaltiesScore {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-tertiary);
+}
+
+.lineupList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.lineupItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border-input);
+}
+
+.playerStats {
+  display: flex;
+  gap: 10px;
+}
+
+.rating {
+  font-weight: 600;
+  color: var(--club-color);
+}
+
+.socialCard {
+  background: linear-gradient(
+    145deg,
+    var(--highlight-bg),
+    var(--card-background)
+  );
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.goldCard {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.1),
+    var(--card-background)
+  );
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.bigIcon {
+  font-size: 64px;
+  color: #d4af37;
+  margin-bottom: 12px;
+}
+
+.tournResult {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--blackColor);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

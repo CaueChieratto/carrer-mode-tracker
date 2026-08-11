@@ -5,7 +5,7 @@ import Styles from "./TournamentMatchList.module.css";
 type TournamentMatchListProps = {
   matches?: AcademyMatches[];
   onEdit?: (match: AcademyMatches) => void;
-  onEnterMatch: (match: AcademyMatches) => void;
+  onEnterMatch?: (match: AcademyMatches) => void;
 };
 
 export const TournamentMatchList = ({

@@ -1,1 +1,1 @@
-export type EditMode = "evolution" | "correction";
+export type EditMode = "evolution" | "correction" | "edit-evolution";

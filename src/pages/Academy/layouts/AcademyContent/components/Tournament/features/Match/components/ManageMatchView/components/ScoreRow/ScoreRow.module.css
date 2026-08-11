@@ -1,5 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .scoreRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-tertiary);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dashed var(--border-input);
+}
+
+.divider:not(:empty)::before {
+  margin-right: 0.5em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 0.5em;
 }

@@ -2,9 +2,9 @@ import { useState } from "react";
 import Styles from "./SeasonCard.module.css";
 import { TbHandClick } from "react-icons/tb";
 import { IoMdCloseCircle } from "react-icons/io";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import Card from "../Card";
-import Load from "../../components/Load";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
+import Load from "../../../../components/Load";
+import Card from "../../../../ui/Card";
 
 type SeasonCardProps = {
   season: ClubData;

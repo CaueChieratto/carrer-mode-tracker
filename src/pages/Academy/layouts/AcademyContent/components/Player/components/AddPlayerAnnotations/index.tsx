@@ -5,16 +5,23 @@ import Button from "../../../../../../../../components/Button";
 import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
 
 export const AddPlayerAnnotations = () => {
-  const { selectedPlayer, onUpdatePlayer } = useAcademyContext();
+  const { selectedPlayer, onUpdatePlayer, isGeral } = useAcademyContext();
 
   const hasAnnotations =
     !!selectedPlayer?.annotations &&
     selectedPlayer.annotations.trim() !== "" &&
     selectedPlayer.annotations !== "<br>";
 
+  const isPromotedOrReleased =
+    selectedPlayer?.status === "promoted" ||
+    selectedPlayer?.status === "released";
+
+  const isReadOnly = isGeral || isPromotedOrReleased;
+
   const editorRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(!hasAnnotations);
+
+  const [isEditing, setIsEditing] = useState(!hasAnnotations && !isReadOnly);
 
   useEffect(() => {
     if (editorRef.current && selectedPlayer?.annotations) {
@@ -39,15 +46,14 @@ export const AddPlayerAnnotations = () => {
     }
 
     if (!editorRef.current) return;
-    setIsLoading(true);
 
+    setIsLoading(true);
     try {
       const updatedContent = editorRef.current.innerHTML;
       const updatedPlayer = {
         ...selectedPlayer,
         annotations: updatedContent,
       };
-
       await onUpdatePlayer(updatedPlayer, true);
       setIsEditing(false);
     } catch (error) {
@@ -98,21 +104,23 @@ export const AddPlayerAnnotations = () => {
         }
       />
 
-      <Button
-        className={Styles.saveBtn}
-        onClick={handleAction}
-        disabled={isLoading}
-      >
-        {!isEditing ? (
-          <>
-            <FaEdit /> Editar Anotações
-          </>
-        ) : (
-          <>
-            <FaSave /> {isLoading ? "Salvando..." : "Salvar Anotações"}
-          </>
-        )}
-      </Button>
+      {!isReadOnly && (
+        <Button
+          className={Styles.saveBtn}
+          onClick={handleAction}
+          disabled={isLoading}
+        >
+          {!isEditing ? (
+            <>
+              <FaEdit /> Editar Anotação
+            </>
+          ) : (
+            <>
+              <FaSave /> {isLoading ? "Salvando..." : "Salvar Anotações"}
+            </>
+          )}
+        </Button>
+      )}
     </div>
   );
 };

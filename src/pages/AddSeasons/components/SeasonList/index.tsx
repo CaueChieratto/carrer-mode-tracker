@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { TbHandClick } from "react-icons/tb";
-import { useSeasons } from "../../common/hooks/Seasons/UseSeasons";
-import { ClubData } from "../../common/interfaces/club/clubData";
-import SeasonCard from "../../ui/SeasonCard";
+import { useSeasons } from "../../hooks/useSeasons";
+import { ClubData } from "../../../../common/interfaces/club/clubData";
 import Styles from "./SeasonList.module.css";
-import { sortSeasonsByNumber } from "../../common/utils/Sorts";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
-import { ModalType } from "../../common/types/enums/ModalType";
-import ModalManager from "../../common/constants/ModalManager";
-import { Career } from "../../common/interfaces/Career";
+import { sortSeasonsByNumber } from "../../../../common/utils/Sorts";
+import { useModalManager } from "../../../../common/hooks/Modal/UseModalManager";
+import { ModalType } from "../../../../common/types/enums/ModalType";
+import ModalManager from "../../../../common/constants/ModalManager";
+import { Career } from "../../../../common/interfaces/Career";
+import SeasonCard from "../../ui/SeasonCard";
 
 type SeasonListProps = {
   clubData: ClubData[];
@@ -17,8 +17,7 @@ type SeasonListProps = {
 };
 
 const SeasonList = ({ clubData, careerId, career }: SeasonListProps) => {
-  const { handleNavigateToSeason, handleDeleteSeason, handleNavigateToGeral } =
-    useSeasons(careerId);
+  const { handleNavigateToSeason, handleDeleteSeason } = useSeasons(careerId);
 
   const {
     activeModal,
@@ -59,7 +58,12 @@ const SeasonList = ({ clubData, careerId, career }: SeasonListProps) => {
 
       <div
         className={Styles.card}
-        onClick={() => handleNavigateToGeral(careerId)}
+        onClick={() =>
+          openModal(ModalType.SEASON_CONFIGS, undefined, {
+            id: "geral",
+            seasonNumber: 0,
+          } as unknown as ClubData)
+        }
       >
         <h1 className={Styles.general}>Geral</h1>
         <TbHandClick />

@@ -8,15 +8,21 @@ import { useActiveStatCard } from "../../contexts/useActiveStatCard";
 
 type GeneralStatsFooterProps = {
   totalStats: TotalStats;
+  isGeral: boolean;
 };
 
-export const GeneralStatsFooter = ({ totalStats }: GeneralStatsFooterProps) => {
+export const GeneralStatsFooter = ({
+  totalStats,
+  isGeral,
+}: GeneralStatsFooterProps) => {
   const globalRatingColor = UseRatingColor(totalStats.ratingRawNumber);
   const { activeCardId, toggleActiveCard } = useActiveStatCard();
 
   return (
     <div className={Styles.footerSection}>
-      <h2 className={Styles.footerTitle}>Estatísticas Gerais da Temporada</h2>
+      <h2 className={Styles.footerTitle}>
+        {isGeral ? "Estatísticas Gerais" : "Estatísticas Gerais da Temporada"}
+      </h2>
 
       <div className={Styles.statsGrid}>
         {GENERAL_STATS_CARDS.map(
@@ -38,7 +44,7 @@ export const GeneralStatsFooter = ({ totalStats }: GeneralStatsFooterProps) => {
         variant="title"
         icon={<FaTrophy />}
         value={totalStats.tournamentsWon}
-        label="Total de Títulos na Temporada"
+        label={isGeral ? "Total de Títulos" : "Total de Títulos na Temporada"}
         isActive={activeCardId === "general-titles"}
         onClick={() => toggleActiveCard("general-titles")}
       />

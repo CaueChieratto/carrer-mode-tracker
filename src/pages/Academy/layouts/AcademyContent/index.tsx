@@ -39,7 +39,7 @@ export const AcademyContent = ({ career, seasonId }: AcademyContentProps) => {
         <AcademyContentView />
       </div>
 
-      <BottomMenu changeClubColor={colorChange} />
+      <BottomMenu noHavePlayers changeClubColor={colorChange} />
     </AcademyProvider>
   );
 };

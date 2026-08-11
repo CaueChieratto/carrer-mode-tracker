@@ -9,16 +9,21 @@ export const ActiveCardSkeleton = () => {
   const { activeCardIndex, dashboardCards, selectedPlayer } =
     useAcademyContext();
 
-  const activeCard =
+  let activeCard =
     activeCardIndex !== null
       ? dashboardCards[activeCardIndex]
       : dashboardCards[0];
+
+  if (selectedPlayer) {
+    activeCard = dashboardCards[0];
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <SkeletonCard>{activeCard?.skeletonContent}</SkeletonCard>
       </div>
+
       {selectedPlayer && (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <SkeletonCard>

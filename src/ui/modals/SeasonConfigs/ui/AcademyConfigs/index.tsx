@@ -13,7 +13,7 @@ type AcademyConfigsProps = {
     academyName: string,
     tournamentName: string,
     youthNickname: string,
-  ) => void;
+  ) => Promise<void> | void;
   isSaving: boolean;
   initialData?: { name: string; tournament: string; nickname: string };
 };
@@ -32,13 +32,17 @@ export const AcademyConfigs = ({
   const [youthNickname, setYouthNickname] = useState(
     initialData?.nickname || "",
   );
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const finalAcademy = academyName.trim() || "Elenco da base";
     const finalTournament = tournamentName.trim() || "Torneio da base";
     const finalNickname = youthNickname.trim() || "Jovens promessas";
 
-    onSave(finalAcademy, finalTournament, finalNickname);
+    await onSave(finalAcademy, finalTournament, finalNickname);
+    setShowSuccess(true);
+
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   return (
@@ -108,6 +112,12 @@ export const AcademyConfigs = ({
           </div>
         </div>
       </div>
+
+      {showSuccess && (
+        <div className={Styles.success_message}>
+          Acesse a base pela aba "Geral" da temporada.
+        </div>
+      )}
 
       <div className={Styles.footer}>
         <button

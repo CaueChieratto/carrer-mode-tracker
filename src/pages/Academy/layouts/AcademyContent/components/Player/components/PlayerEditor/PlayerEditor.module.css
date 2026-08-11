@@ -83,3 +83,40 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.saveBtn {
+  background-color: var(--club-color);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.saveBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.undoBtn {
+  margin-top: -4px;
+  background-color: transparent;
+  color: var(--club-color);
+  border: 1px solid var(--club-color);
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.undoBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -3,10 +3,11 @@ import { FaChevronRight } from "react-icons/fa";
 import { BaseCard } from "../BaseCard";
 import Styles from "./DashboardCard.module.css";
 import Button from "../../../../../../../components/Button";
+import React from "react";
 
 type DashboardCardProps = {
   Icon: IconType;
-  title: string;
+  title: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   actionText?: string;
@@ -37,7 +38,6 @@ export const DashboardCard = ({
       onSortChange={onSortChange}
     >
       {children}
-
       {actionText && onActionClick && (
         <Button className={Styles.viewAllBtn} onClick={onActionClick}>
           {actionText} <FaChevronRight size={12} />

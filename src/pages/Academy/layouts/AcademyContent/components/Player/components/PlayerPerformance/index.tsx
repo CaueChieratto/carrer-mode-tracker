@@ -6,10 +6,22 @@ import { GeneralStatsFooter } from "./components/GeneralStatsFooter";
 import { ActiveStatCardProvider } from "./contexts/ActiveStatCardContext";
 
 export const PlayerPerformance: React.FC = () => {
-  const { selectedPlayer, tournamentStats, totalStats } =
+  const { selectedPlayer, tournamentStats, totalStats, isGeral } =
     usePlayerPerformance();
 
   if (!selectedPlayer) return null;
+
+  const tournamentsBySeason = tournamentStats.reduce(
+    (acc, stat) => {
+      const season = stat.season || "Geral";
+      if (!acc[season]) {
+        acc[season] = [];
+      }
+      acc[season].push(stat);
+      return acc;
+    },
+    {} as Record<string, typeof tournamentStats>,
+  );
 
   return (
     <div className={Styles.container}>
@@ -20,12 +32,31 @@ export const PlayerPerformance: React.FC = () => {
           </p>
         ) : (
           <>
-            <div className={Styles.tournamentsContainer}>
-              {tournamentStats.map((stat) => (
-                <TournamentStatItem key={stat.tournamentId} stat={stat} />
-              ))}
-            </div>
-            <GeneralStatsFooter totalStats={totalStats} />
+            {isGeral ? (
+              Object.entries(tournamentsBySeason).map(([season, stats]) => (
+                <div key={season} className={Styles.seasonSection}>
+                  <div className={Styles.seasonHeader}>
+                    <h2 className={Styles.seasonTitle}>
+                      <span className={Styles.seasonLabel}>Temporada</span>
+                      <span className={Styles.seasonNumber}>{season}</span>
+                    </h2>
+                  </div>
+                  <div className={Styles.tournamentsContainer}>
+                    {stats.map((stat) => (
+                      <TournamentStatItem key={stat.tournamentId} stat={stat} />
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={Styles.tournamentsContainer}>
+                {tournamentStats.map((stat) => (
+                  <TournamentStatItem key={stat.tournamentId} stat={stat} />
+                ))}
+              </div>
+            )}
+
+            <GeneralStatsFooter totalStats={totalStats} isGeral={isGeral} />
           </>
         )}
       </ActiveStatCardProvider>
