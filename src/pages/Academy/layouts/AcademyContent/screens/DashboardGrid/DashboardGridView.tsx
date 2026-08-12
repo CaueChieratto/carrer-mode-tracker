@@ -24,6 +24,7 @@ export const DashboardGridView = ({
           sortOptions={card.sortOptions}
           currentSort={card.currentSort}
           onSortChange={card.onSortChange}
+          itemCount={card.itemCount}
         >
           {card.children}
         </DashboardCard>

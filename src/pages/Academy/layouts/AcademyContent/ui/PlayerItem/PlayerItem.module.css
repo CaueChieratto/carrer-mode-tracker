@@ -1,0 +1,12 @@
+.playerItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  border-top: 1px solid var(--border-input);
+  padding: 6px 0;
+}
+
+.playerItem:first-of-type {
+  border-top: none;
+}

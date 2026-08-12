@@ -126,6 +126,7 @@ export const useAcademyViewState = (careerId: string) => {
     isPromotingPlayer,
     setIsPromotingPlayer,
     selectedPlayerId,
+    setSelectedPlayerId,
     selectedTournamentId,
     setSelectedTournamentId,
     playerClick,

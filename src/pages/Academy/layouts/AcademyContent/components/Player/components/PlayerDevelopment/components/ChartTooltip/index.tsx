@@ -42,7 +42,7 @@ export const ChartTooltip = ({
 
   return (
     <div className={Styles.overlay} onClick={onClose}>
-      <div className={Styles.modalCard} onClick={(e) => e.stopPropagation()}>
+      <div className={Styles.modalCard}>
         <span className={Styles.ttTitle}>{data.title}</span>
         <span className={Styles.ttValue}>{getFormattedValue()}</span>
         <span className={Styles.ttDesc}>{data.desc}</span>

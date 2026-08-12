@@ -107,3 +107,54 @@
 .wrapperSpinIcon:active .spinIcon {
   transform: rotate(180deg);
 }
+
+.seasonSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 2px dashed var(--border-input);
+  margin-top: 16px;
+}
+
+.seasonSection:first-child {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.seasonHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.seasonTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.seasonTitle::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 22px;
+  background-color: var(--club-color);
+  border-radius: 4px;
+}
+
+.seasonLabel {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.seasonNumber {
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--blackColor);
+}

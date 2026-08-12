@@ -8,6 +8,7 @@ export type FeedEvent = {
   time: string;
   monthWeight: number;
   day: number;
+  season?: string;
   details?: {
     playerId?: string;
     changedAttribute?: string;
@@ -18,6 +19,7 @@ export type FeedEvent = {
     opponentGoals?: number;
     userPenalties?: number;
     opponentPenalties?: number;
+    status?: string;
     lineup?: Array<{
       playerName: string;
       rating: number | null;

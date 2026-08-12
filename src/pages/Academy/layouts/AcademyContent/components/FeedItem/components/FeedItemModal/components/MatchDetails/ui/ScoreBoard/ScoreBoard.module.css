@@ -1,0 +1,67 @@
+.scoreBoardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+}
+
+.scoreBoard {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  font-weight: bold;
+  background-color: var(--border-navbar);
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.scoreBoard > .team:first-child {
+  justify-content: flex-start;
+}
+
+.scoreBoard > .team:last-child {
+  justify-content: flex-end;
+}
+
+.wrapperScore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.penaltiesScore {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-tertiary);
+}
+
+.clubs {
+  width: 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.nameWrapper {
+  min-width: 0;
+  overflow: hidden;
+  display: block;
+  max-width: 65px;
+}
+
+.badge {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}

@@ -71,6 +71,7 @@ export const ScoreRow = ({
           </div>
           <div className={Styles.scoreRow}>
             <FormInput
+              isLarge
               label="Pênaltis (Seus)"
               type="number"
               placeholder="Ex: 5"
@@ -83,6 +84,7 @@ export const ScoreRow = ({
               }
             />
             <FormInput
+              isLarge
               label={`Pênaltis (${opponentTeam})`}
               type="number"
               placeholder="Ex: 4"

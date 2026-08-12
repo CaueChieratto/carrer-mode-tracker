@@ -7,6 +7,13 @@
   flex-direction: column;
   gap: 16px;
   position: relative;
+  margin-bottom: 0px;
+  transition: margin-bottom 0.3s ease-in-out;
+}
+
+.card[data-few-items="true"][data-select-open="true"],
+.card[data-few-items="true"]:focus-within {
+  margin-bottom: 66px;
 }
 
 .cardHeader {

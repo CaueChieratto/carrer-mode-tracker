@@ -50,19 +50,6 @@ export const AcademyProvider = ({
     return "academy";
   });
 
-  const togglePlayerListMode = () => {
-    setPlayerListMode((prev) => {
-      const next =
-        prev === "academy"
-          ? "promoted"
-          : prev === "promoted"
-            ? "released"
-            : "academy";
-      localStorage.setItem(`@academy_playerListMode_${career.id}`, next);
-      return next;
-    });
-  };
-
   useEffect(() => {
     const fetchAllCareers = async () => {
       try {
@@ -103,7 +90,7 @@ export const AcademyProvider = ({
     sortedTournaments: tournamentsAcademy,
     tournamentSort,
     setTournamentSort,
-  } = useSortedTournaments(rawTournaments);
+  } = useSortedTournaments(rawTournaments, career);
 
   const {
     activeCardIndex,
@@ -115,6 +102,7 @@ export const AcademyProvider = ({
     isPromotingPlayer,
     setIsPromotingPlayer,
     selectedPlayerId,
+    setSelectedPlayerId,
     playerClick,
     tournamentClick,
     back,
@@ -123,6 +111,21 @@ export const AcademyProvider = ({
     selectedTournamentId,
     setSelectedTournamentId,
   } = useAcademyViewState(career.id);
+
+  const togglePlayerListMode = () => {
+    setPlayerListMode((prev) => {
+      const next =
+        prev === "academy"
+          ? "promoted"
+          : prev === "promoted"
+            ? "released"
+            : "academy";
+      localStorage.setItem(`@academy_playerListMode_${career.id}`, next);
+      return next;
+    });
+
+    setSelectedPlayerId(null);
+  };
 
   const backWrapper = () => {
     setEditingEvolutionEvent(null);
@@ -198,6 +201,10 @@ export const AcademyProvider = ({
     isGeral,
     playerListMode,
     togglePlayerListMode,
+  });
+
+  console.log({
+    allPlayersAcademy,
   });
 
   return (

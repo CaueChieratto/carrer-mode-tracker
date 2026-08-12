@@ -15,6 +15,7 @@ type DashboardCardProps = {
   sortOptions?: { value: string; label: string }[];
   currentSort?: string;
   onSortChange?: (value: string) => void;
+  itemCount?: number;
 };
 
 export const DashboardCard = ({
@@ -25,6 +26,7 @@ export const DashboardCard = ({
   className,
   currentSort,
   sortOptions,
+  itemCount,
   onSortChange,
   onActionClick,
 }: DashboardCardProps) => {
@@ -36,6 +38,7 @@ export const DashboardCard = ({
       sortOptions={sortOptions}
       currentSort={currentSort}
       onSortChange={onSortChange}
+      itemCount={itemCount}
     >
       {children}
       {actionText && onActionClick && (

@@ -1,6 +1,8 @@
 import { Career } from "../../../../../../../../../../common/interfaces/Career";
 import { AcademyPlayers } from "../../../../../../interfaces/AcademyPlayers/AcademyPlayers";
 import { AcademyTournaments } from "../../../../../../interfaces/AcademyTournaments/AcademyTournaments";
+import { isEuropeanSeason } from "../../../../../../utils/isEuropeanSeason";
+import { extractDateInfo } from "../../../../../FeedItem/helpers/extractDateInfo";
 import { TotalStats, TournamentStats } from "../../types";
 
 export const calculatePlayerStats = (
@@ -37,6 +39,8 @@ export const calculatePlayerStats = (
       ? new Date(career.createdAt).getFullYear()
       : new Date().getFullYear();
 
+  const isEurope = career ? isEuropeanSeason(career) : false;
+
   tournamentsAcademy.forEach((tournament) => {
     let tMatches = 0;
     let tGoals = 0;
@@ -44,17 +48,18 @@ export const calculatePlayerStats = (
     let tTotalRating = 0;
     let tRatingCount = 0;
     let playedInTournament = false;
-
     let calculatedSeasonNum = currentSeasonNumber || 1;
 
     if (isGeral && tournament.date) {
-      const tournamentYear = parseInt(
-        tournament.date.split("/").pop() || "0",
-        10,
-      );
-      if (tournamentYear >= careerStartYear) {
-        calculatedSeasonNum = tournamentYear - careerStartYear + 1;
+      const { month, year } = extractDateInfo(tournament.date, isEurope);
+      let eventBaseYear = year;
+
+      if (isEurope && month < 7) {
+        eventBaseYear = year - 1;
       }
+
+      calculatedSeasonNum = eventBaseYear - careerStartYear + 1;
+      if (calculatedSeasonNum < 1) calculatedSeasonNum = 1;
     }
 
     tournament.matches?.forEach((match) => {

@@ -10,6 +10,7 @@ import { PositionDetails } from "./components/PositionDetails";
 import { StatsDetails } from "./components/StatsDetails";
 import { GenericDetails } from "./components/GenericDetails";
 import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
+import { OverflowText } from "../../../../../../../../components/OverflowText";
 
 export type FeedItemModalProps = {
   eventId: string | number;
@@ -35,6 +36,8 @@ export const FeedItemModal = ({
   onClose,
 }: FeedItemModalProps) => {
   const {
+    allCareers,
+    career,
     setEditingEvolutionEvent,
     playerClick,
     setActiveCardIndex,
@@ -43,20 +46,33 @@ export const FeedItemModal = ({
   } = useAcademyContext();
 
   const modalText = socialSubtitle || subtitle;
+  const matchStatus = details?.status;
+  const teamBadge = career.teamBadge;
 
   const renderDynamicContent = () => {
     if (type === "match" && details?.lineup) {
-      return <MatchDetails details={details} clubName={clubName} />;
+      return (
+        <MatchDetails
+          details={details}
+          clubName={clubName}
+          allCareers={allCareers}
+          teamBadge={teamBadge}
+        />
+      );
     }
+
     if (type === "tournament" && details) {
       return <TournamentDetails details={details} />;
     }
+
     if (type === "status" && details) {
       return <StatusDetails details={details} />;
     }
+
     if (type === "position" && details?.oldValue && details?.newValue) {
       return <PositionDetails details={details} modalText={modalText} />;
     }
+
     if (
       ["overall", "potential", "age", "height", "weight"].includes(type) &&
       details?.oldValue !== undefined &&
@@ -64,6 +80,7 @@ export const FeedItemModal = ({
     ) {
       return <StatsDetails details={details} type={type} />;
     }
+
     return <GenericDetails modalText={modalText} />;
   };
 
@@ -114,7 +131,10 @@ export const FeedItemModal = ({
             </button>
           )}
           <span className={Styles.ttTitle}>{getModalTitle(type)}</span>
-          <span className={Styles.ttValue}>{title}</span>
+          <div className={Styles.overflow}>
+            <OverflowText text={title} className={Styles.ttValue} />
+          </div>
+          <span className={Styles.ttTitle}>{matchStatus}</span>
         </div>
         <div className={Styles.dynamicContent}>{renderDynamicContent()}</div>
         <span className={Styles.ttDate}>{time}</span>

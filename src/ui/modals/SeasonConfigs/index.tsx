@@ -108,7 +108,7 @@ export const SeasonConfigs = ({
               border: `1px solid ${darkClubColor}`,
             }}
           >
-            Entrar
+            Entrar {selectedPath.endsWith("/Academy") ? "na Base" : "no Clube"}
           </Button>
         )}
       </div>

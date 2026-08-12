@@ -11,6 +11,7 @@ import ReturnLoanConfirmModal from "../../../../../../../../ui/modals/ReturnLoan
 import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
 import { getSeasonStartYear } from "../../../../utils/getSeasonStartYear";
 import { FormInput } from "../../../FormInput";
+import { isEuropeanSeason } from "../../../../utils/isEuropeanSeason";
 
 export const PlayerEditor = () => {
   const {
@@ -210,8 +211,14 @@ export const PlayerEditor = () => {
                   isAcademy
                   onConfirm={(date) => {
                     const [day, month] = date.split("/");
-                    const startYear = getSeasonStartYear(career, seasonId);
-                    const finalReleaseDate = `${day}/${month}/${startYear}`;
+                    let year = getSeasonStartYear(career, seasonId);
+                    const isEurope = isEuropeanSeason(career);
+
+                    if (isEurope && Number(month) < 7) {
+                      year += 1;
+                    }
+
+                    const finalReleaseDate = `${day}/${month}/${year}`;
                     onReleasePlayer(selectedPlayer, finalReleaseDate);
                     handleCloseModal();
                   }}

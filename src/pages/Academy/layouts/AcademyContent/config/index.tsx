@@ -19,6 +19,10 @@ import { AcademyTournaments } from "../interfaces/AcademyTournaments/AcademyTour
 import { TournamentListItem } from "../components/Tournament/components/TournamentListItem";
 import { FeedEvent } from "../components/FeedItem/types/FeedEvent";
 import React from "react";
+import {
+  PLAYER_SORT_OPTIONS,
+  TOURNAMENT_SORT_OPTIONS,
+} from "../constants/Sorts";
 
 export type configProps = {
   career: Career;
@@ -54,6 +58,7 @@ export type DashboardCardConfig = {
   sortOptions?: { value: string; label: string }[];
   currentSort?: string;
   onSortChange?: (value: string) => void;
+  itemCount?: number;
 };
 
 export const getConfig = ({
@@ -98,17 +103,26 @@ export const getConfig = ({
 
   const clubName = career.clubName;
 
-  const playerSortOptions = [
-    { value: "arrival-desc", label: "Padrão" },
-    { value: "overall-desc", label: "Por Overall" },
-    { value: "potential-desc", label: "Por Potencial" },
-    { value: "age-asc", label: "Por Idade" },
-  ];
+  const isFeedExpanded = activeCardIndex === 2;
+  const visibleFeed = isFeedExpanded ? feedData : feedData.slice(0, 3);
+
+  const feedBySeason = visibleFeed.reduce(
+    (acc, event) => {
+      const season = event.season || "1";
+      if (!acc[season]) {
+        acc[season] = [];
+      }
+      acc[season].push(event);
+      return acc;
+    },
+    {} as Record<string, FeedEvent[]>,
+  );
 
   const cards: DashboardCardConfig[] = [
     {
       id: `players-card-${playerListMode}`,
       Icon: FaUsers,
+      itemCount: currentPlayersCount,
       className: Styles.flipCard,
       title: (
         <span className={Styles.clickableTitleWrapper}>
@@ -131,11 +145,9 @@ export const getConfig = ({
         </span>
       ),
       actionText: "Ver todos",
-
-      sortOptions: playerSortOptions,
+      sortOptions: PLAYER_SORT_OPTIONS,
       currentSort: playerSort,
       onSortChange: setPlayerSort,
-
       skeletonContent: (
         <>
           {Array.from({ length: playersSkeletonCount }).map((_, i) => (
@@ -188,10 +200,8 @@ export const getConfig = ({
       Icon: FaTrophy,
       title: career.academy!.tournament,
       actionText: "Ver todos",
-      sortOptions: [
-        { value: "date-asc", label: "Padrão" },
-        { value: "matches-desc", label: "Por Partidas" },
-      ],
+      itemCount: tournamentsAcademy.length,
+      sortOptions: TOURNAMENT_SORT_OPTIONS,
       currentSort: tournamentSort,
       onSortChange: setTournamentSort,
       skeletonContent: (
@@ -242,11 +252,38 @@ export const getConfig = ({
         </>
       ),
       children: (
-        <div className={Styles.wrapperFeed}>
+        <div>
           {feedData.length > 0 ? (
-            (activeCardIndex === 2 ? feedData : feedData.slice(0, 3)).map(
-              (update) => {
-                return (
+            isGeral && isFeedExpanded ? (
+              Object.entries(feedBySeason)
+                .sort(([a], [b]) => Number(b) - Number(a))
+                .map(([season, events]) => (
+                  <div key={season} className={Styles.seasonSection}>
+                    <div className={Styles.seasonHeader}>
+                      <h2 className={Styles.seasonTitle}>
+                        <span className={Styles.seasonLabel}>Temporada</span>
+                        <span className={Styles.seasonNumber}>{season}</span>
+                      </h2>
+                    </div>
+                    <div className={Styles.wrapperFeed}>
+                      {events.map((update) => (
+                        <FeedItem
+                          key={update.id}
+                          id={update.id}
+                          title={update.title}
+                          subtitle={update.subtitle}
+                          type={update.type}
+                          time={update.time}
+                          details={update.details}
+                          clubName={clubName}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))
+            ) : (
+              <div className={Styles.wrapperFeed}>
+                {visibleFeed.map((update) => (
                   <FeedItem
                     key={update.id}
                     id={update.id}
@@ -257,8 +294,8 @@ export const getConfig = ({
                     details={update.details}
                     clubName={clubName}
                   />
-                );
-              },
+                ))}
+              </div>
             )
           ) : (
             <p
@@ -308,5 +345,6 @@ export const getConfig = ({
   if (isGeral) {
     return cards.filter((card) => card.Icon !== HiOutlineDocumentReport);
   }
+
   return cards;
 };

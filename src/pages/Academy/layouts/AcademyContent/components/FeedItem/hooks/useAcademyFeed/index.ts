@@ -7,26 +7,38 @@ import { extractDateInfo } from "../../helpers/extractDateInfo";
 import { formatFeedText } from "../../helpers/formatFeedText";
 import { FeedEvent } from "../../types/FeedEvent";
 
+type ExtendedFeedEvent = FeedEvent & { _matchIndex?: number };
+
 export const useAcademyFeed = (
   career: Career,
   players: AcademyPlayers[],
   tournaments: AcademyTournaments[],
 ) => {
   return useMemo(() => {
-    const feed: FeedEvent[] = [];
+    const feed: ExtendedFeedEvent[] = [];
     const isEurope = isEuropeanSeason(career);
-
     const academyNickname = career.academy!.nickname;
     const academyName = career.academy!.name;
+    const careerStartYear =
+      career && career.createdAt
+        ? new Date(career.createdAt).getFullYear()
+        : new Date().getFullYear();
+
+    const getSeasonString = (year: number, month: number) => {
+      let eventBaseYear = year;
+      if (isEurope && month < 7) {
+        eventBaseYear = year - 1;
+      }
+      const seasonNum = eventBaseYear - careerStartYear + 1;
+      return String(seasonNum < 1 ? 1 : seasonNum);
+    };
 
     players.forEach((player) => {
       player.evolutionHistory?.forEach((history) => {
-        const { day, monthWeight, formattedDate } = extractDateInfo(
-          history.date,
-          isEurope,
-        );
+        const { day, month, monthWeight, formattedDate, year } =
+          extractDateInfo(history.date, isEurope);
+        const season = getSeasonString(year, month);
         const type = history.changedAttribute || "default";
-
         const { professional, social } = formatFeedText(
           type,
           history.description,
@@ -43,6 +55,7 @@ export const useAcademyFeed = (
           time: formattedDate,
           monthWeight,
           day,
+          season,
           details: {
             playerId: player.id,
             changedAttribute: history.changedAttribute,
@@ -56,18 +69,15 @@ export const useAcademyFeed = (
     tournaments.forEach((tourn) => {
       const finishedMatches =
         tourn.matches?.filter((m) => m.result === "FINISHED") || [];
-
       const lastMatchId =
         finishedMatches.length > 0
           ? finishedMatches[finishedMatches.length - 1].id
           : null;
 
       if (tourn.isFinished && finishedMatches.length === 0) {
-        const { day, monthWeight, formattedDate } = extractDateInfo(
-          tourn.date,
-          isEurope,
-        );
-
+        const { day, month, monthWeight, formattedDate, year } =
+          extractDateInfo(tourn.date, isEurope);
+        const season = getSeasonString(year, month);
         const isChampion = tourn.isChampion;
 
         feed.push({
@@ -75,31 +85,29 @@ export const useAcademyFeed = (
           type: "tournament",
           title: tourn.name,
           subtitle: isChampion
-            ? "Conclusão de torneio: Campeão!"
+            ? "Conclusão de torneio: Campeão."
             : `Conclusão de torneio: ${tourn.tournamentResult}.`,
           socialSubtitle: isChampion
             ? "🏆 CAMPEÃO! Conquistou o título do torneio!"
-            : `📉 Fim de torneio: ${tourn.tournamentResult}.`,
+            : `🔚 Fim de torneio: ${tourn.tournamentResult}.`,
           time: formattedDate,
           monthWeight,
           day,
+          season,
           details: {
             tournamentResult: tourn.tournamentResult,
           },
         });
       }
 
-      finishedMatches.forEach((match) => {
-        const { day, monthWeight, formattedDate } = extractDateInfo(
-          match.date,
-          isEurope,
-        );
-
+      finishedMatches.forEach((match, index) => {
+        const { day, month, monthWeight, formattedDate, year } =
+          extractDateInfo(match.date, isEurope);
+        const season = getSeasonString(year, month);
         const userG = Number(match.userGoals) || 0;
         const oppG = Number(match.opponentGoals) || 0;
         const userPen = match.userPenalties;
         const oppPen = match.opponentPenalties;
-
         let profResult = "Empate";
         let socialResult = "🤝 Empate";
 
@@ -127,7 +135,6 @@ export const useAcademyFeed = (
         const tournResult = tourn.isChampion
           ? "Campeão"
           : tourn.tournamentResult;
-
         let subtitle = `${profResult} | ${userG} x ${oppG}`;
         let socialSubtitle = `${socialResult} ${userG} x ${oppG}`;
 
@@ -135,7 +142,6 @@ export const useAcademyFeed = (
           subtitle += ` PEN (${userPen} x ${oppPen})`;
           socialSubtitle += ` PEN (${userPen} x ${oppPen})`;
         }
-
         subtitle += ` vs ${match.opponentTeam}`;
         socialSubtitle += ` vs ${match.opponentTeam}!`;
 
@@ -153,6 +159,8 @@ export const useAcademyFeed = (
           time: formattedDate,
           monthWeight,
           day,
+          season,
+          _matchIndex: index,
           details: {
             opponentTeam: match.opponentTeam,
             userGoals: userG,
@@ -161,6 +169,7 @@ export const useAcademyFeed = (
             opponentPenalties: oppPen,
             lineup: match.lineup,
             tournamentResult: isDecisiveMatch ? tournResult : undefined,
+            status: match.status,
           },
         });
       });
@@ -170,7 +179,13 @@ export const useAcademyFeed = (
       if (a.monthWeight !== b.monthWeight) {
         return b.monthWeight - a.monthWeight;
       }
-      return b.day - a.day;
-    });
+      if (a.day !== b.day) {
+        return b.day - a.day;
+      }
+      if (a.type === "match" && b.type === "match" && a.title === b.title) {
+        return (b._matchIndex || 0) - (a._matchIndex || 0);
+      }
+      return 0;
+    }) as FeedEvent[];
   }, [career, players, tournaments]);
 };

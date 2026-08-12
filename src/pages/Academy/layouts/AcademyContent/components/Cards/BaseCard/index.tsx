@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 import Styles from "./BaseCard.module.css";
 import CustomSelect from "../../../../../../../components/CustomSelect";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type BaseCardProps = {
   Icon?: IconType;
@@ -12,6 +12,7 @@ type BaseCardProps = {
   sortOptions?: { value: string; label: string }[];
   currentSort?: string;
   onSortChange?: (value: string) => void;
+  itemCount?: number;
 };
 
 export const BaseCard = ({
@@ -22,12 +23,36 @@ export const BaseCard = ({
   className,
   sortOptions,
   currentSort,
+  itemCount,
   onSortChange,
 }: BaseCardProps) => {
   const hasSelect = sortOptions && onSortChange && currentSort;
 
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isSelectOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        selectWrapperRef.current &&
+        !selectWrapperRef.current.contains(e.target as Node)
+      ) {
+        setIsSelectOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isSelectOpen]);
+
   return (
-    <div className={`${Styles.card} ${className || ""}`.trim()}>
+    <div
+      className={`${Styles.card} ${className || ""}`.trim()}
+      data-few-items={
+        itemCount !== undefined && itemCount < 2 ? "true" : "false"
+      }
+      data-select-open={isSelectOpen ? "true" : "false"}
+    >
       <div
         className={`${Styles.cardHeader} ${hasSelect ? Styles.cardHeaderWithSelect : ""}`}
       >
@@ -40,22 +65,28 @@ export const BaseCard = ({
           {title}
         </h2>
         {hasSelect && (
-          <CustomSelect
-            name={`card-sort-${typeof title === "string" ? title : "card"}`}
-            options={sortOptions.map((opt) => opt.label)}
-            value={
-              sortOptions.find((o) => o.value === currentSort)?.label || ""
-            }
-            onChange={(e) => {
-              const selectedOption = sortOptions.find(
-                (o) => o.label === e.target.value,
-              );
-              if (selectedOption) {
-                onSortChange(selectedOption.value);
+          <div
+            ref={selectWrapperRef}
+            onClick={() => setIsSelectOpen((prev) => !prev)}
+          >
+            <CustomSelect
+              name={`card-sort-${typeof title === "string" ? title : "card"}`}
+              options={sortOptions.map((opt) => opt.label)}
+              value={
+                sortOptions.find((o) => o.value === currentSort)?.label || ""
               }
-            }}
-            containerClassName={Styles.selectCompact}
-          />
+              onChange={(e) => {
+                const selectedOption = sortOptions.find(
+                  (o) => o.label === e.target.value,
+                );
+                if (selectedOption) {
+                  onSortChange(selectedOption.value);
+                }
+                setIsSelectOpen(false);
+              }}
+              containerClassName={Styles.selectCompact}
+            />
+          </div>
         )}
       </div>
       {children}

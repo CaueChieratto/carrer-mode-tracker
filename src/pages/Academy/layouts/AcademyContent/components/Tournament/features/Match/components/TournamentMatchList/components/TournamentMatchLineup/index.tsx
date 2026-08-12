@@ -5,6 +5,11 @@ import { PlayerMatchesStats } from "../../../../../../../../interfaces/AcademyTo
 import Styles from "./TournamentMatchLineup.module.css";
 import { MdSportsHandball } from "react-icons/md";
 import { useTheme } from "../../../../../../../../../../../../contexts/LightThemeContext";
+import { RatingBackground } from "../../../../../../../../ui/PlayerItem/components/RatingBackground";
+import { PlayerStats } from "../../../../../../../../ui/PlayerItem/components/PlayerStats";
+import { PlayerName } from "../../../../../../../../ui/PlayerItem/components/PlayerName";
+import { PlayerItem } from "../../../../../../../../ui/PlayerItem";
+import { StatsGroup } from "../../../../../../../../ui/PlayerItem/components/StatsGroup";
 
 type TournamentMatchLineupProps = {
   lineup?: PlayerMatchesStats[];
@@ -15,6 +20,8 @@ export const TournamentMatchLineup = ({
 }: TournamentMatchLineupProps) => {
   const { theme } = useTheme();
   if (!lineup || lineup.length === 0) return null;
+
+  const BootIcon = () => <Boot isWhite={theme === "dark"} />;
 
   return (
     <div className={Styles.lineupContainer}>
@@ -29,30 +36,23 @@ export const TournamentMatchLineup = ({
           const defesas = player.defesas || 0;
 
           return (
-            <div key={player.playerId} className={Styles.playerItem}>
-              <span className={Styles.playerName}>{player.playerName}</span>
-              <div className={Styles.statsGroup}>
-                <span className={Styles.rating} style={{ color: ratingColor }}>
-                  Nota: {rating}
-                </span>
-                {goals > 0 && (
-                  <span className={Styles.statBadge}>
-                    <GiSoccerBall size={16} /> {goals}
-                  </span>
+            <PlayerItem key={player.playerId}>
+              <PlayerName playerName={player.playerName} />
+
+              <StatsGroup>
+                <PlayerStats>
+                  <RatingBackground colorRating={ratingColor} rating={rating} />
+                </PlayerStats>
+
+                {defesas ? (
+                  <PlayerStats icon={MdSportsHandball} stat={defesas} />
+                ) : (
+                  <PlayerStats icon={GiSoccerBall} stat={goals} />
                 )}
-                {assists > 0 && (
-                  <span className={Styles.statBadge}>
-                    <Boot isWhite={theme === "dark"} />
-                    {assists}
-                  </span>
-                )}
-                {defesas > 0 && (
-                  <span className={Styles.statBadge}>
-                    <MdSportsHandball /> {defesas}
-                  </span>
-                )}
-              </div>
-            </div>
+
+                <PlayerStats icon={BootIcon} stat={assists} />
+              </StatsGroup>
+            </PlayerItem>
           );
         })}
       </div>

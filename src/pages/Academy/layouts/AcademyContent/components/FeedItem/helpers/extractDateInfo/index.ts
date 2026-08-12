@@ -1,8 +1,14 @@
 import { getSeasonMonthWeight } from "../../../Player/components/PlayerDevelopment/utils/getSeasonMonthWeight";
 
 export const extractDateInfo = (dateStr: string, isEurope: boolean) => {
-  if (!dateStr) return { day: 0, monthWeight: 0, formattedDate: "" };
-
+  if (!dateStr)
+    return {
+      day: 0,
+      month: 1,
+      monthWeight: 0,
+      formattedDate: "",
+      year: new Date().getFullYear(),
+    };
   try {
     let dayStr = "";
     let monthStr = "";
@@ -13,7 +19,6 @@ export const extractDateInfo = (dateStr: string, isEurope: boolean) => {
       const [d, m] = datePart.split("/");
       dayStr = d;
       monthStr = m;
-
       if (seasonPart.includes("/")) {
         const [startYY, endYY] = seasonPart.split("/");
         const monthNum = parseInt(m, 10);
@@ -33,16 +38,27 @@ export const extractDateInfo = (dateStr: string, isEurope: boolean) => {
     const month = parseInt(monthStr, 10) || 1;
     const monthWeight = getSeasonMonthWeight(month, isEurope);
 
-    const finalYear = yearStr.slice(-2);
+    let rawYear = parseInt(yearStr, 10) || new Date().getFullYear();
+    if (rawYear < 100) rawYear += 2000;
+
+    const finalYear = String(rawYear).slice(-2);
     const formattedDay = String(day).padStart(2, "0");
     const formattedMonth = String(month).padStart(2, "0");
 
     return {
       day,
+      month,
       monthWeight,
       formattedDate: `${formattedDay}/${formattedMonth}/${finalYear}`,
+      year: rawYear,
     };
   } catch {
-    return { day: 0, monthWeight: 0, formattedDate: dateStr };
+    return {
+      day: 0,
+      month: 1,
+      monthWeight: 0,
+      formattedDate: dateStr,
+      year: new Date().getFullYear(),
+    };
   }
 };

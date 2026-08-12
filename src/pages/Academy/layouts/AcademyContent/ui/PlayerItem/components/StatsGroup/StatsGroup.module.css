@@ -1,0 +1,6 @@
+.statsGroup {
+  display: grid;
+  grid-template-columns: 40px 40px 40px;
+  align-items: center;
+  gap: 8px;
+}
