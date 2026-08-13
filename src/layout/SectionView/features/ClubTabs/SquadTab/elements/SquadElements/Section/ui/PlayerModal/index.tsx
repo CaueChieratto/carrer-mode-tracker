@@ -25,7 +25,7 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
     ColorsService.getColorSaved(careerId || "") || "#ffffff",
   );
 
-  const viewPath = `/Career/${careerId}/Geral/Player/${id}`;
+  const viewPath = `/Career/${careerId}/Season/${seasonId}/Player/${id}`;
   const editPath = `/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`;
 
   const modalContent = (

@@ -54,6 +54,7 @@ const CareersPage = () => {
               Nova Carreira
             </Button>
           </PrimaryHeader>
+
           <main className={Styles.main}>
             {careers.map((career) => (
               <CareerCard

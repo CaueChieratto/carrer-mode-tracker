@@ -203,10 +203,6 @@ export const AcademyProvider = ({
     togglePlayerListMode,
   });
 
-  console.log({
-    allPlayersAcademy,
-  });
-
   return (
     <AcademyContext.Provider
       value={{

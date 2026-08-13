@@ -33,6 +33,14 @@
   gap: 8px;
   display: flex;
   align-items: center;
+  margin: 0;
+}
+
+.titleWrapper {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: block;
 }
 
 .selectCompact {

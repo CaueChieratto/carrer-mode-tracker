@@ -2,6 +2,7 @@ import { IconType } from "react-icons";
 import Styles from "./BaseCard.module.css";
 import CustomSelect from "../../../../../../../components/CustomSelect";
 import React, { useEffect, useRef, useState } from "react";
+import { OverflowText } from "../../../../../../../components/OverflowText";
 
 type BaseCardProps = {
   Icon?: IconType;
@@ -62,7 +63,14 @@ export const BaseCard = ({
           ) : (
             <>{Icon && <Icon className={Styles.icon} />}</>
           )}
-          {title}
+
+          {typeof title === "string" ? (
+            <div className={Styles.titleWrapper}>
+              <OverflowText text={title} />
+            </div>
+          ) : (
+            title
+          )}
         </h2>
         {hasSelect && (
           <div

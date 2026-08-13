@@ -38,13 +38,11 @@ export const useStatistics = ({
         label: "Jogos",
         getValue: () => (total ? totalStats?.games : leagueStats?.stats.games),
       },
-
       {
         label: "Minutos",
         getValue: () =>
           total ? totalStats?.minutesPlayed : leagueStats?.stats.minutesPlayed,
       },
-
       {
         label: "Gols + Assistências",
         getValue: () =>
@@ -54,33 +52,28 @@ export const useStatistics = ({
               (leagueStats?.stats.assists ?? 0),
         hideForGoalkeeper: true,
       },
-
       {
         label: "Jogos Sem Sofrer Gols",
         getValue: () =>
           total ? totalStats?.cleanSheets : leagueStats?.stats.cleanSheets,
         showForGoalkeeper: true,
       },
-
       {
         label: "Gols",
         getValue: () => (total ? totalStats?.goals : leagueStats?.stats.goals),
         hideForGoalkeeper: true,
       },
-
       {
         label: "Defesas",
         getValue: () =>
           total ? totalStats?.defenses : leagueStats?.stats.defenses,
         showForGoalkeeper: true,
       },
-
       {
         label: "Assistências",
         getValue: () =>
           total ? totalStats?.assists : leagueStats?.stats.assists,
       },
-
       {
         label: "Média",
         getValue: () =>
@@ -88,7 +81,6 @@ export const useStatistics = ({
         className: !league ? Styles.rating : Styles.ratingLeague,
         getColor: true,
       },
-
       {
         label: "Bola de Ouro",
         getValue: () => player?.ballonDor,
@@ -118,7 +110,12 @@ export const useStatistics = ({
     () =>
       statsData.filter((stat) => {
         if (isPlayer && stat.label === "Bola de Ouro") return false;
-        if (isGeralPage && stat.label === "Deletar") return false;
+        if (
+          stat.label === "Deletar" &&
+          (isGeralPage || isPlayer || !handleDeleteLeague)
+        )
+          return false;
+
         if (isGeralPage && stat.hideInGeralPage) return false;
         if (stat.showOnlyForLeague && !league) return false;
         if (stat.showOnlyForTotal && !total) return false;
@@ -128,7 +125,15 @@ export const useStatistics = ({
           return !stat.showForGoalkeeper;
         }
       }),
-    [statsData, isGeralPage, league, total, isGoalkeeper, isPlayer],
+    [
+      statsData,
+      isGeralPage,
+      league,
+      total,
+      isGoalkeeper,
+      isPlayer,
+      handleDeleteLeague,
+    ],
   );
 
   return { filteredStats };

@@ -49,6 +49,10 @@ export default function App({ career }: AppProps) {
     { path: "/Career/:careerId/Academy", element: <Academy /> },
     { path: "/Career/:careerId/Geral", element: <Geral /> },
     { path: "/Career/:careerId/Geral/Player/:playerId", element: <Players /> },
+    {
+      path: "/Career/:careerId/Season/:seasonId/Player/:playerId",
+      element: <Players />,
+    },
     { path: "/Career/:careerId", element: <AddSeasons /> },
     { path: "/Career/:careerId/Season/:seasonId", element: <Season /> },
     {

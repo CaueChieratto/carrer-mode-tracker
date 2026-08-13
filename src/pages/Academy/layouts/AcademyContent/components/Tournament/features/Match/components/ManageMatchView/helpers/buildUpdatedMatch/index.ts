@@ -32,15 +32,14 @@ export const buildUpdatedMatch = (
     finalOPen = undefined;
   }
 
-  return {
+  const updatedMatch: AcademyMatches = {
     ...match,
     userGoals: userGoalsNum,
     opponentGoals: oppGoalsNum,
-    userPenalties: finalUPen,
-    opponentPenalties: finalOPen,
     lineup: currentLineup.map((p) => {
       const player = playersAcademy.find((acad) => acad.id === p.playerId);
       const isGol = player?.position === "GOL";
+
       return {
         ...p,
         goals: parseStat(p.goals),
@@ -52,4 +51,18 @@ export const buildUpdatedMatch = (
     }),
     ...(isFinishing ? { result: "FINISHED" } : {}),
   };
+
+  if (finalUPen !== undefined) {
+    updatedMatch.userPenalties = finalUPen;
+  } else {
+    delete updatedMatch.userPenalties;
+  }
+
+  if (finalOPen !== undefined) {
+    updatedMatch.opponentPenalties = finalOPen;
+  } else {
+    delete updatedMatch.opponentPenalties;
+  }
+
+  return updatedMatch;
 };

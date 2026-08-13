@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 type UseMatchNavigationParams = {
   seasonId: string;
@@ -15,6 +15,7 @@ export const useMatchNavigation = ({
 }: UseMatchNavigationParams) => {
   const { careerId, seasonId: paramSeasonId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const currentSeasonId = paramSeasonId || seasonId;
 
@@ -23,7 +24,13 @@ export const useMatchNavigation = ({
     const params = new URLSearchParams();
 
     if (isGeralPage) params.append("fromGeral", "true");
-    if (playerId) params.append("playerId", playerId);
+
+    if (playerId) {
+      params.append("playerId", playerId);
+      if (!location.pathname.includes("/Geral")) {
+        params.append("fromSeasonPlayer", "true");
+      }
+    }
 
     const qs = params.toString();
     return qs ? `${base}?${qs}` : base;

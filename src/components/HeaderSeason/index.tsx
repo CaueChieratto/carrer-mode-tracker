@@ -34,12 +34,12 @@ const HeaderSeason = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { seasonId } = useParams<{ seasonId?: string }>();
-
   const { clubColor, darkClubColor } = useSeasonTheme();
 
   const searchParams = new URLSearchParams(location.search);
   const fromPlayerId = searchParams.get("playerId");
   const isFromGeral = searchParams.get("fromGeral") === "true";
+  const isFromSeasonPlayer = searchParams.get("fromSeasonPlayer") === "true";
 
   const leagueLogo = career.clubData
     ?.flatMap((club) => club.leagues)
@@ -62,7 +62,6 @@ const HeaderSeason = ({
                   <h1 className={match ? Styles.h1 : Styles.h1_player}>
                     {player?.name}
                   </h1>
-
                   {titleText && <p className={Styles.season}>{titleText}</p>}
                 </div>
               </div>
@@ -75,7 +74,6 @@ const HeaderSeason = ({
                 ) : (
                   <img src={career.teamBadge} className={Styles.img} />
                 )}
-
                 <div
                   className={Styles.container}
                   style={
@@ -111,10 +109,15 @@ const HeaderSeason = ({
           </>
         )}
       </div>
+
       <Button
         onClick={() => {
           if (fromPlayerId) {
-            if (isFromGeral) {
+            if (isFromSeasonPlayer && seasonId) {
+              navigate(
+                `/Career/${careerId}/Season/${seasonId}/Player/${fromPlayerId}`,
+              );
+            } else if (isFromGeral) {
               navigate(`/Career/${careerId}/Geral/Player/${fromPlayerId}`);
             } else if (seasonId) {
               navigate(

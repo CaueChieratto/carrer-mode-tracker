@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
@@ -25,9 +25,10 @@ export const AllMatchesTab = ({
   player,
 }: AllMatchesTabProps) => {
   const location = useLocation();
-  const isGeralPage = location.pathname.includes("/Geral");
 
-  const storageKeySuffix = isGeralPage ? "geral" : season.id;
+  const isGeralUrl = location.pathname.includes("/Geral");
+  const isGeralPage = isGeralUrl || !!player;
+  const storageKeySuffix = isGeralUrl ? "geral" : season.id;
 
   const [activeTab, setActiveTab] = useState<MatchStatus | string>(() => {
     return (
@@ -57,10 +58,23 @@ export const AllMatchesTab = ({
     );
   }, [activeTab, selectedMonth, selectedSeasonLabel, storageKeySuffix]);
 
-  const seasonOptions = [
-    "Todas",
-    ...(career.clubData?.map((s) => `Temporada ${s.seasonNumber}`) || []),
-  ];
+  const seasonOptions = useMemo(() => {
+    const availableSeasons =
+      career.clubData?.filter((s) => {
+        if (!player) return true;
+
+        return s.matches?.some((m) =>
+          m.playerStats?.some(
+            (ps) => ps.playerId === player.id && (ps.minutesPlayed ?? 0) > 0,
+          ),
+        );
+      }) || [];
+
+    return [
+      "Todas",
+      ...availableSeasons.map((s) => `Temporada ${s.seasonNumber}`),
+    ];
+  }, [career.clubData, player]);
 
   const selectedSeasonId =
     selectedSeasonLabel === "Todas"
@@ -69,13 +83,15 @@ export const AllMatchesTab = ({
           (s) => `Temporada ${s.seasonNumber}` === selectedSeasonLabel,
         )?.id;
 
+  const effectiveSeasonId = isGeralUrl ? selectedSeasonId : season.id;
+
   const matches = processMatches({
     season,
     career,
     isGeralPage,
     activeTab,
     selectedMonth,
-    selectedSeasonId,
+    selectedSeasonId: effectiveSeasonId,
     playerId: player?.id,
   });
 
@@ -90,9 +106,9 @@ export const AllMatchesTab = ({
           onSelectChange={setSelectedMonth}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          seasonOptions={seasonOptions}
-          seasonValue={selectedSeasonLabel}
-          onSeasonChange={setSelectedSeasonLabel}
+          seasonOptions={isGeralUrl ? seasonOptions : undefined}
+          seasonValue={isGeralUrl ? selectedSeasonLabel : undefined}
+          onSeasonChange={isGeralUrl ? setSelectedSeasonLabel : undefined}
         />
         {!matches.length ? (
           <NoStatsMessage
@@ -111,7 +127,6 @@ export const AllMatchesTab = ({
               season,
               isGeralPage,
             );
-
             const playerStat = player?.id
               ? match.playerStats?.find((p) => p.playerId === player.id)
               : undefined;

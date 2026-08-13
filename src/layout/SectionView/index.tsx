@@ -140,6 +140,7 @@ const SectionView = ({
                 isPlayer={isPlayer}
                 player={augmentedPlayer}
                 onAddBadge={opemAddBadge}
+                notSeason={notSeason}
               />
             </div>
           </SwiperSlide>

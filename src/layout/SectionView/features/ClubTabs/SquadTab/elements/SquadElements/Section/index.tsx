@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import FooterSection_Player from "./components/FooterSection_Player";
 import HeaderSection_Player from "./components/HeaderSection_Player";
 import Data from "./Section.module.css";
 import { Match } from "../../../../../../../../common/interfaces/Match";
 import { Contract } from "../../../../../../../../common/interfaces/playersInfo/contract";
+import { PlayerModal } from "./ui/PlayerModal";
 
 type SectionProps = {
   id: string;
@@ -42,15 +44,17 @@ export const Section = ({
   isAcademy,
   academyNickname,
 }: SectionProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
-  const { careerId, seasonId } = useParams();
   const location = useLocation();
+  const { careerId } = useParams();
 
   const handleNavigate = () => {
     if (location.pathname.includes("/Geral")) {
       navigate(`/Career/${careerId}/Geral/Player/${id}`);
     } else {
-      navigate(`/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`);
+      setIsModalOpen(true);
     }
   };
 
@@ -65,24 +69,34 @@ export const Section = ({
   const finalNickname = isAcademy ? academyNickname : undefined;
 
   return (
-    <section className={Data.player} onClick={handleNavigate}>
-      <HeaderSection_Player
-        age={age}
-        name={name}
-        nation={nation}
-        position={position}
-        shirtNumber={shirtNumber}
-        captain={captain}
-        isAcademy={isAcademy}
-        nickname={finalNickname}
-      />
-      <FooterSection_Player
-        contractTime={contractTime}
-        salary={displaySalary}
-        playerValue={playerValue}
-        matches={matches}
-        currency={currency}
-      />
-    </section>
+    <>
+      <section className={Data.player} onClick={handleNavigate}>
+        <HeaderSection_Player
+          age={age}
+          name={name}
+          nation={nation}
+          position={position}
+          shirtNumber={shirtNumber}
+          captain={captain}
+          isAcademy={isAcademy}
+          nickname={finalNickname}
+        />
+        <FooterSection_Player
+          contractTime={contractTime}
+          salary={displaySalary}
+          playerValue={playerValue}
+          matches={matches}
+          currency={currency}
+        />
+      </section>
+
+      {isModalOpen && (
+        <PlayerModal
+          id={id}
+          playerName={name}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+    </>
   );
 };
