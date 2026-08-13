@@ -1,15 +1,14 @@
 .titles {
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
   gap: 15px;
   padding: 12px;
 }
 
 .container_season {
-  display: flex;
-  flex: 1 1;
-  flex-wrap: wrap;
-  gap: 6px 8px;
-  justify-content: flex-start;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  justify-items: center;
 }

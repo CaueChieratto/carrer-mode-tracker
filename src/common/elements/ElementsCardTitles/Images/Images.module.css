@@ -1,8 +1,6 @@
 .img {
   background-color: var(--image-trophy-league);
   border-radius: 12px;
-  height: 100px;
   object-fit: cover;
   padding: 10px;
-  width: 100px;
 }
