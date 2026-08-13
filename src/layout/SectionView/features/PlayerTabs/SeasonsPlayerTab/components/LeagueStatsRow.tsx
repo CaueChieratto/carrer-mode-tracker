@@ -1,3 +1,4 @@
+import { ElementsCardTitles } from "../../../../../../common/elements/ElementsCardTitles";
 import { Trophy } from "../../../../../../common/interfaces/club/trophy";
 import Styles from "../SeasonsPlayerTab.module.css";
 
@@ -22,7 +23,7 @@ const LeagueStatsRow = ({
     <section
       className={!seasonTitle ? Styles.container : Styles.containerSeason}
     >
-      <img src={leagueImage} alt={leagueName} className={Styles.card_img} />
+      <ElementsCardTitles.Images trophyImage={leagueImage} />
 
       <h1
         className={!seasonTitle ? Styles.leagueName : Styles.leagueNameTitles}

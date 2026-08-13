@@ -21,24 +21,25 @@ const LeagueTrophyCard = ({
 }: LeagueTrophyCardProps) => {
   const sortedSeasons = useMemo(
     () => sortTrophySeasons(trophy.seasons),
-    [trophy.seasons]
+    [trophy.seasons],
   );
 
   return (
     <div className={Styles.titles}>
       <ElementsCardTitles.Images trophyImage={trophy.leagueImage} />
+
       <div className={Styles.container_season}>
         {sortedSeasons.map((season, index) => {
           const deleteSeason = async () => {
             const ok = confirm(
-              `Deseja excluir permanentemente a temporada ${season}?`
+              `Deseja excluir permanentemente a temporada ${season}?`,
             );
             if (!ok) return;
 
             const updatedTrophies = await ServiceCareer.removeSeason(
               selectedCareer.id,
               trophy.leagueName,
-              season
+              season,
             );
 
             setSelectedCareer({

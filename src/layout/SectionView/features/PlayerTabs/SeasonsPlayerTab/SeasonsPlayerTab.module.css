@@ -49,14 +49,6 @@
   text-align: center;
 }
 
-.card_img {
-  margin-left: 12px;
-  background-color: var(--image-trophy-league);
-  border-radius: 12px;
-  padding: 10px;
-  object-fit: cover;
-}
-
 .ballonDor {
   margin-left: 12px;
   background-color: var(--image-trophy-league);
