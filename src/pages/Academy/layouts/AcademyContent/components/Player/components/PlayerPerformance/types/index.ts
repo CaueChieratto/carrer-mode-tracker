@@ -8,6 +8,8 @@ export interface TournamentStats {
   averageRating: string;
   ratingRawNumber: number;
   isChampion: boolean;
+  defesas: number;
+  isGoleiro: boolean;
 }
 
 export interface TotalStats {
@@ -17,4 +19,6 @@ export interface TotalStats {
   averageRating: string;
   tournamentsWon: number;
   ratingRawNumber: number;
+  totalDefesas: number;
+  isGoleiro: boolean;
 }

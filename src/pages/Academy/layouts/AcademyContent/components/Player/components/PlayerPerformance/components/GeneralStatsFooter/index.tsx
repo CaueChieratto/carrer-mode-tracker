@@ -1,4 +1,5 @@
 import { FaTrophy } from "react-icons/fa";
+import { MdSportsHandball } from "react-icons/md";
 import { UseRatingColor } from "../../../../../../../../../../common/hooks/Colors/GetOverallColor";
 import { TotalStats } from "../../types";
 import { StatCard } from "../StatCard";
@@ -23,23 +24,33 @@ export const GeneralStatsFooter = ({
       <h2 className={Styles.footerTitle}>
         {isGeral ? "Estatísticas Gerais" : "Estatísticas Gerais da Temporada"}
       </h2>
-
       <div className={Styles.statsGrid}>
         {GENERAL_STATS_CARDS.map(
-          ({ id, icon: Icon, dataKey, label, useColor }) => (
-            <StatCard
-              key={id}
-              icon={<Icon />}
-              value={totalStats[dataKey]}
-              label={label}
-              customColor={useColor ? globalRatingColor : undefined}
-              isActive={activeCardId === `general-${id}`}
-              onClick={() => toggleActiveCard(`general-${id}`)}
-            />
-          ),
+          ({ id, icon: Icon, dataKey, label, useColor }) => {
+            let displayIcon = <Icon />;
+            let displayValue = totalStats[dataKey as keyof TotalStats];
+            let displayLabel = label;
+
+            if (id === "total-goals" && totalStats.isGoleiro) {
+              displayIcon = <MdSportsHandball />;
+              displayValue = totalStats.totalDefesas;
+              displayLabel = "Defesas Totais";
+            }
+
+            return (
+              <StatCard
+                key={id}
+                icon={displayIcon}
+                value={displayValue as string | number}
+                label={displayLabel}
+                customColor={useColor ? globalRatingColor : undefined}
+                isActive={activeCardId === `general-${id}`}
+                onClick={() => toggleActiveCard(`general-${id}`)}
+              />
+            );
+          },
         )}
       </div>
-
       <StatCard
         variant="title"
         icon={<FaTrophy />}

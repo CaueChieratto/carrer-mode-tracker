@@ -4,6 +4,7 @@ import { useAcademyContext } from "../../../../../../../../../contexts/AcademyCo
 import { AcademyMatches } from "../../../../../../../../interfaces/AcademyTournaments/AcademyMatches/AcademyMatches";
 import { getSeasonStartYear } from "../../../../../../../../utils/getSeasonStartYear";
 import { MatchDataPayload } from "../../../../forms/types/MatchDataPayload";
+import { isEuropeanSeason } from "../../../../../../../../utils/isEuropeanSeason";
 
 export const useAcademyMatchMutations = (
   initialData?: Partial<AcademyMatches>,
@@ -68,9 +69,14 @@ export const useAcademyMatchMutations = (
 
     try {
       const [day, month] = data.date.split("/");
-      const startYear = getSeasonStartYear(career, seasonId);
-      const finalDate = `${day}/${month}/${startYear}`;
+      let year = getSeasonStartYear(career, seasonId);
+      const isEurope = isEuropeanSeason(career);
 
+      if (isEurope && Number(month) < 7) {
+        year += 1;
+      }
+
+      const finalDate = `${day}/${month}/${year}`;
       let updatedMatches = [...(selectedTournament.matches || [])];
 
       if (initialData?.id) {

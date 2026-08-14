@@ -283,18 +283,20 @@ export const getConfig = ({
                 ))
             ) : (
               <div className={Styles.wrapperFeed}>
-                {visibleFeed.map((update) => (
-                  <FeedItem
-                    key={update.id}
-                    id={update.id}
-                    title={update.title}
-                    subtitle={update.subtitle}
-                    type={update.type}
-                    time={update.time}
-                    details={update.details}
-                    clubName={clubName}
-                  />
-                ))}
+                {visibleFeed.map((update) => {
+                  return (
+                    <FeedItem
+                      key={update.id}
+                      id={update.id}
+                      title={update.title}
+                      subtitle={update.subtitle}
+                      type={update.type}
+                      time={update.time}
+                      details={update.details}
+                      clubName={clubName}
+                    />
+                  );
+                })}
               </div>
             )
           ) : (

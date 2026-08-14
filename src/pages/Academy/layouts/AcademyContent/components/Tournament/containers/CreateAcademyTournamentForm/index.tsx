@@ -3,6 +3,7 @@ import { TournamentForm } from "../../forms/components/TournamentForm";
 import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/useAcademyContext";
 import { getTournamentTexts } from "./constants/TEXTS";
 import { getSeasonStartYear } from "../../../../utils/getSeasonStartYear";
+import { isEuropeanSeason } from "../../../../utils/isEuropeanSeason";
 import { TournamentDataPayload } from "../../forms/types/TournamentDataPayload";
 
 type CreateAcademyTournamentFormProps = {
@@ -15,14 +16,19 @@ export const CreateAcademyTournamentForm = ({
   const { career, seasonId, tournamentsAcademy } = useAcademyContext();
 
   const tournamentName = career.academy!.tournament;
-
   const texts = getTournamentTexts(tournamentName);
 
   const addTournament = async (data: TournamentDataPayload) => {
     try {
       const [day, month] = data.date.split("/");
-      const startYear = getSeasonStartYear(career, seasonId);
-      const finalDate = `${day}/${month}/${startYear}`;
+      let year = getSeasonStartYear(career, seasonId);
+
+      const isEurope = isEuropeanSeason(career);
+      if (isEurope && Number(month) < 7) {
+        year += 1;
+      }
+
+      const finalDate = `${day}/${month}/${year}`;
 
       let totalPreviousEditions = 0;
       for (const season of career.clubData) {

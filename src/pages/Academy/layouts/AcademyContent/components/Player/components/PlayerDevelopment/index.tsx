@@ -8,17 +8,19 @@ import { buildChartData } from "./helpers/buildChartData";
 import { DevelopmentChart } from "./components/DevelopmentChart";
 
 export const PlayerDevelopment = () => {
-  const { selectedPlayer } = useAcademyContext() as {
-    selectedPlayer: PlayerData;
-  };
+  const { selectedPlayer, career } = useAcademyContext();
   const [selectedMetric, setSelectedMetric] = useState("Overall");
 
   const currentAttribute = ATTRIBUTE_MAP[selectedMetric];
   const isNumeric = NUMERIC_ATTRIBUTES.includes(currentAttribute);
 
   const chartData = useMemo(() => {
-    return buildChartData(selectedPlayer, currentAttribute);
-  }, [selectedPlayer, currentAttribute]);
+    return buildChartData(
+      selectedPlayer as unknown as PlayerData,
+      currentAttribute,
+      career,
+    );
+  }, [selectedPlayer, currentAttribute, career]);
 
   return (
     <div className={Styles.mobileContainer}>

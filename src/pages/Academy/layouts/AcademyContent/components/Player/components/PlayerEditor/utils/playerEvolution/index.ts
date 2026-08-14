@@ -3,6 +3,7 @@ import { AcademyPlayers } from "../../../../../../interfaces/AcademyPlayers/Acad
 import { AcademyPlayersHistory } from "../../../../../../interfaces/AcademyPlayers/AcademyPlayersHistory";
 import { PlayerDataPayload } from "../../../../forms/types/PlayerDataPayload";
 import { getSeasonStartYear } from "../../../../../../utils/getSeasonStartYear";
+import { isEuropeanSeason } from "../../../../../../utils/isEuropeanSeason";
 
 export const generateEvolutionHistory = (
   player: AcademyPlayers,
@@ -15,9 +16,14 @@ export const generateEvolutionHistory = (
 
   if (newData.evolutionDate) {
     const [day, month] = newData.evolutionDate.split("/");
-    const startYear = getSeasonStartYear(career, seasonId);
+    let year = getSeasonStartYear(career, seasonId);
 
-    evolutionDateFinal = `${day}/${month}/${startYear}`;
+    const isEurope = isEuropeanSeason(career);
+    if (isEurope && Number(month) < 7) {
+      year += 1;
+    }
+
+    evolutionDateFinal = `${day}/${month}/${year}`;
   }
 
   const attributesToTrack: (keyof PlayerDataPayload)[] = [

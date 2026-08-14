@@ -1,4 +1,5 @@
 export interface EvolutionHistoryItem {
+  id?: string;
   changedAttribute: string;
   date: string;
   description: string;
@@ -7,6 +8,7 @@ export interface EvolutionHistoryItem {
 }
 
 export interface PlayerData {
+  id?: string;
   arrivalDate: string;
   evolutionHistory?: EvolutionHistoryItem[];
 }

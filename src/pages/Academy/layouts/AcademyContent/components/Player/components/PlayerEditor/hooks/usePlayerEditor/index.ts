@@ -73,7 +73,33 @@ export const usePlayerEditor = ({
         seasonId,
       );
     } else {
-      updatedPlayer = { ...player, ...newData };
+      let finalArrivalDate = player.arrivalDate;
+
+      if (newData.arrivalDate && newData.arrivalDate.length === 5) {
+        const [day, month] = newData.arrivalDate.split("/");
+        let year = getSeasonStartYear(career, seasonId);
+        const isEurope = isEuropeanSeason(career);
+
+        if (isEurope && Number(month) < 7) {
+          year += 1;
+        }
+        finalArrivalDate = `${day}/${month}/${year}`;
+      }
+
+      const updatedHistory =
+        player.evolutionHistory?.map((h) => {
+          if (h.description === "Jogador recrutado para a categoria de base.") {
+            return { ...h, date: finalArrivalDate };
+          }
+          return h;
+        }) || [];
+
+      updatedPlayer = {
+        ...player,
+        ...newData,
+        arrivalDate: finalArrivalDate,
+        evolutionHistory: updatedHistory,
+      };
     }
 
     await onUpdatePlayer(updatedPlayer);

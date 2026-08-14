@@ -19,6 +19,9 @@ export const calculatePlayerStats = (
   let globalTotalRating = 0;
   let globalRatingCount = 0;
   let globalTournamentsWon = 0;
+  let globalDefesas = 0;
+
+  const isGoleiro = selectedPlayer?.position === "GOL";
 
   if (!selectedPlayer || !tournamentsAcademy) {
     return {
@@ -30,6 +33,8 @@ export const calculatePlayerStats = (
         averageRating: "0.0",
         tournamentsWon: 0,
         ratingRawNumber: 0,
+        totalDefesas: 0,
+        isGoleiro: false,
       },
     };
   }
@@ -45,6 +50,7 @@ export const calculatePlayerStats = (
     let tMatches = 0;
     let tGoals = 0;
     let tAssists = 0;
+    let tDefesas = 0;
     let tTotalRating = 0;
     let tRatingCount = 0;
     let playedInTournament = false;
@@ -53,11 +59,9 @@ export const calculatePlayerStats = (
     if (isGeral && tournament.date) {
       const { month, year } = extractDateInfo(tournament.date, isEurope);
       let eventBaseYear = year;
-
       if (isEurope && month < 7) {
         eventBaseYear = year - 1;
       }
-
       calculatedSeasonNum = eventBaseYear - careerStartYear + 1;
       if (calculatedSeasonNum < 1) calculatedSeasonNum = 1;
     }
@@ -66,11 +70,14 @@ export const calculatePlayerStats = (
       const playerStat = match.lineup?.find(
         (p) => p.playerId === selectedPlayer.id,
       );
+
       if (playerStat) {
         tMatches++;
         playedInTournament = true;
         tGoals += playerStat.goals ?? 0;
         tAssists += playerStat.assists ?? 0;
+        tDefesas += playerStat.defesas ?? 0;
+
         if (playerStat.rating !== null && playerStat.rating !== undefined) {
           tTotalRating += playerStat.rating;
           tRatingCount++;
@@ -85,6 +92,7 @@ export const calculatePlayerStats = (
       globalMatches += tMatches;
       globalGoals += tGoals;
       globalAssists += tAssists;
+      globalDefesas += tDefesas;
       globalTotalRating += tTotalRating;
       globalRatingCount += tRatingCount;
 
@@ -101,6 +109,8 @@ export const calculatePlayerStats = (
         averageRating: tAverageStr,
         ratingRawNumber: Number(tAverageStr),
         isChampion: tournament.isChampion ?? false,
+        defesas: tDefesas,
+        isGoleiro: isGoleiro,
       });
     }
   });
@@ -119,6 +129,8 @@ export const calculatePlayerStats = (
       averageRating: globalAverageStr,
       tournamentsWon: globalTournamentsWon,
       ratingRawNumber: Number(globalAverageStr),
+      totalDefesas: globalDefesas,
+      isGoleiro: isGoleiro,
     },
   };
 };

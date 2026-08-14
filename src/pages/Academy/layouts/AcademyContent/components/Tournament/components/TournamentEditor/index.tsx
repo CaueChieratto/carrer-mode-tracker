@@ -7,6 +7,7 @@ import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/
 import { useState } from "react";
 import { TournamentDataPayload } from "../../forms/types/TournamentDataPayload";
 import { getSeasonStartYear } from "../../../../utils/getSeasonStartYear";
+import { isEuropeanSeason } from "../../../../utils/isEuropeanSeason";
 
 export const TournamentEditor = () => {
   const {
@@ -28,8 +29,14 @@ export const TournamentEditor = () => {
 
     if (data.date) {
       const [day, month] = data.date.split("/");
-      const startYear = getSeasonStartYear(career, seasonId);
-      finalDate = `${day}/${month}/${startYear}`;
+      let year = getSeasonStartYear(career, seasonId);
+      const isEurope = isEuropeanSeason(career);
+
+      // Checagem Europeia adicionada
+      if (isEurope && Number(month) < 7) {
+        year += 1;
+      }
+      finalDate = `${day}/${month}/${year}`;
     }
 
     const updatedTournament = {
