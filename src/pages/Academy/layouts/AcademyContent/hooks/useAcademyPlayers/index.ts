@@ -19,6 +19,7 @@ export const useAcademyPlayers = (
       if (!isSilentUpdate) {
         setIsLoading(true);
       }
+
       try {
         if (isGeral) {
           const promises = career.clubData.map((season) =>
@@ -27,8 +28,30 @@ export const useAcademyPlayers = (
           const results = await Promise.all(promises);
 
           const allPlayersMap = new Map<string, AcademyPlayers>();
+
           results.forEach((data) => {
-            data.forEach((player) => allPlayersMap.set(player.id, player));
+            data.forEach((player) => {
+              if (allPlayersMap.has(player.id)) {
+                const existingPlayer = allPlayersMap.get(player.id)!;
+                const combinedHistory = [
+                  ...(existingPlayer.evolutionHistory || []),
+                  ...(player.evolutionHistory || []),
+                ];
+
+                const uniqueHistory = Array.from(
+                  new Map(
+                    combinedHistory.map((item) => [item.id, item]),
+                  ).values(),
+                );
+
+                allPlayersMap.set(player.id, {
+                  ...player,
+                  evolutionHistory: uniqueHistory,
+                });
+              } else {
+                allPlayersMap.set(player.id, player);
+              }
+            });
           });
 
           const aggregatedPlayers = Array.from(allPlayersMap.values());
@@ -45,6 +68,7 @@ export const useAcademyPlayers = (
             seasonId,
           );
           setAllPlayersAcademy(data);
+
           const activePlayers = data.filter(
             (player) =>
               player.status !== "released" && player.status !== "promoted",

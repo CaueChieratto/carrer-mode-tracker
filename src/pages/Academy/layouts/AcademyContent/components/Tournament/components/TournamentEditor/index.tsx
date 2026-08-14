@@ -32,7 +32,6 @@ export const TournamentEditor = () => {
       let year = getSeasonStartYear(career, seasonId);
       const isEurope = isEuropeanSeason(career);
 
-      // Checagem Europeia adicionada
       if (isEurope && Number(month) < 7) {
         year += 1;
       }

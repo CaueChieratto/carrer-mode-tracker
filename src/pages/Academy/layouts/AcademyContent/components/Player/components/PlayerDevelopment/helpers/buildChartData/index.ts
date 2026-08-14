@@ -3,13 +3,18 @@ import { Career } from "../../../../../../../../../../common/interfaces/Career";
 import { isEuropeanSeason } from "../../../../../../utils/isEuropeanSeason";
 import { getSeasonMonthWeight } from "../../utils/getSeasonMonthWeight";
 
-const formatToDDMMYY = (dateStr: string, isEurope: boolean) => {
+const formatToDDMMYY = (
+  dateStr: string,
+  isEurope: boolean,
+  fallbackYear: number,
+) => {
   if (!dateStr) return "";
 
   if (dateStr.includes(" - ")) {
     const [datePart, seasonPart] = dateStr.split(" - ");
     const [d, m] = datePart.split("/");
     let yearStr = "";
+
     if (seasonPart.includes("/")) {
       const [startYY, endYY] = seasonPart.split("/");
       yearStr = isEurope && Number(m) < 7 ? endYY : startYY;
@@ -23,7 +28,7 @@ const formatToDDMMYY = (dateStr: string, isEurope: boolean) => {
     const parts = dateStr.split("/");
     const d = parts[0].padStart(2, "0");
     const m = parts[1].padStart(2, "0");
-    let y = parts[2] || new Date().getFullYear().toString();
+    let y = parts[2] || fallbackYear.toString();
     if (y.length === 4) y = y.slice(-2);
     return `${d}/${m}/${y}`;
   }
@@ -45,6 +50,9 @@ export const buildChartData = (
   if (history.length === 0) return [];
 
   const isEurope = isEuropeanSeason(career);
+  const fallbackYear = career.createdAt
+    ? new Date(career.createdAt).getFullYear()
+    : new Date().getFullYear();
 
   const getSortingValues = (dateStr: string) => {
     let day = 1,
@@ -56,6 +64,7 @@ export const buildChartData = (
       const [d, m] = datePart.split("/");
       day = Number(d);
       month = Number(m);
+
       if (seasonPart.includes("/")) {
         const [startYY, endYY] = seasonPart.split("/");
         year =
@@ -67,13 +76,12 @@ export const buildChartData = (
       const parts = dateStr.split("/");
       day = Number(parts[0]);
       month = Number(parts[1]);
-      year = Number(parts[2] || new Date().getFullYear());
+      year = Number(parts[2] || fallbackYear);
       if (year < 100) year += 2000;
     }
 
     const seasonYear = isEurope && month < 7 ? year - 1 : year;
     const weight = getSeasonMonthWeight(month, isEurope);
-
     return { seasonYear, weight, day };
   };
 
@@ -91,23 +99,26 @@ export const buildChartData = (
   });
 
   const dataPoints: ChartDataPoint[] = [];
-  const hasRecruitmentEvent = player.evolutionHistory.some(
+
+  const recruitmentEvent = player.evolutionHistory.find(
     ({ description }) =>
       description === "Jogador recrutado para a categoria de base.",
   );
 
+  const initialDateToUse = recruitmentEvent?.date || player.arrivalDate;
+
   dataPoints.push({
-    label: formatToDDMMYY(player.arrivalDate, isEurope),
+    label: formatToDDMMYY(initialDateToUse, isEurope, fallbackYear),
     value: sortedHistory[0].oldValue,
     title: "Valor Inicial",
-    desc: hasRecruitmentEvent
+    desc: recruitmentEvent
       ? "Registrado na chegada do atleta."
       : "Iniciou com este valor.",
   });
 
   sortedHistory.forEach((item) => {
     dataPoints.push({
-      label: formatToDDMMYY(item.date, isEurope),
+      label: formatToDDMMYY(item.date, isEurope, fallbackYear),
       value: item.newValue,
       title: "Evolução",
       desc: `Mudou de ${item.oldValue || "--"} para ${item.newValue}`,

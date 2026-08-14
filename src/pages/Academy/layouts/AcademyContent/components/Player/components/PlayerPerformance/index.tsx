@@ -33,29 +33,35 @@ export const PlayerPerformance: React.FC = () => {
         ) : (
           <>
             {isGeral ? (
-              Object.entries(tournamentsBySeason).map(([season, stats]) => (
-                <div key={season} className={Styles.seasonSection}>
-                  <div className={Styles.seasonHeader}>
-                    <h2 className={Styles.seasonTitle}>
-                      <span className={Styles.seasonLabel}>Temporada</span>
-                      <span className={Styles.seasonNumber}>{season}</span>
-                    </h2>
+              Object.entries(tournamentsBySeason)
+                .sort(
+                  ([seasonA], [seasonB]) => Number(seasonB) - Number(seasonA),
+                )
+                .map(([season, stats]) => (
+                  <div key={season} className={Styles.seasonSection}>
+                    <div className={Styles.seasonHeader}>
+                      <h2 className={Styles.seasonTitle}>
+                        <span className={Styles.seasonLabel}>Temporada</span>
+                        <span className={Styles.seasonNumber}>{season}</span>
+                      </h2>
+                    </div>
+                    <div className={Styles.tournamentsContainer}>
+                      {[...stats].reverse().map((stat) => (
+                        <TournamentStatItem
+                          key={stat.tournamentId}
+                          stat={stat}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div className={Styles.tournamentsContainer}>
-                    {stats.map((stat) => (
-                      <TournamentStatItem key={stat.tournamentId} stat={stat} />
-                    ))}
-                  </div>
-                </div>
-              ))
+                ))
             ) : (
               <div className={Styles.tournamentsContainer}>
-                {tournamentStats.map((stat) => (
+                {[...tournamentStats].reverse().map((stat) => (
                   <TournamentStatItem key={stat.tournamentId} stat={stat} />
                 ))}
               </div>
             )}
-
             <GeneralStatsFooter totalStats={totalStats} isGeral={isGeral} />
           </>
         )}
