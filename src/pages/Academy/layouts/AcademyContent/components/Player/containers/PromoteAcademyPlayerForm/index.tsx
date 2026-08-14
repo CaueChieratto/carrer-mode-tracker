@@ -49,7 +49,7 @@ export const PromoteAcademyPlayerForm = ({
       const finalDate = `${day}/${month}/${year}`;
 
       await AcademyService.promotePlayerToProfessional(
-        career.id,
+        career,
         seasonId,
         playerToPromote,
         finalDate,

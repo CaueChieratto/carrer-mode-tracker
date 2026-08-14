@@ -11,6 +11,7 @@ import {
   getAcademyDoc,
 } from "./helpers";
 import { PlayerMatchesStats } from "../../interfaces/AcademyTournaments/AcademyMatches/PlayerMatchesStats";
+import { Career } from "../../../../../../common/interfaces/Career";
 
 export const AcademyService = {
   async getPlayersAcademy(
@@ -125,13 +126,14 @@ export const AcademyService = {
   },
 
   promotePlayerToProfessional: async (
-    careerId: string,
+    career: Career,
     seasonId: string,
     academyPlayer: AcademyPlayers,
     promotionDate?: string,
   ): Promise<void> => {
     const user = requireUser();
     const pDate = promotionDate || new Date().toLocaleDateString("pt-BR");
+    const careerId = career.id;
 
     const promotedAcademyPlayer: AcademyPlayers = {
       ...academyPlayer,
@@ -174,30 +176,77 @@ export const AcademyService = {
       }
     }
 
-    const allTournaments = await AcademyService.getTournamentsAcademy(
-      careerId,
-      seasonId,
+    const promises = career.clubData.map((season) =>
+      AcademyService.getTournamentsAcademy(careerId, season.id),
     );
+    const results = await Promise.all(promises);
 
-    const playerTournaments = allTournaments
-      .map((t) => {
-        const matchesWithPlayer =
+    const playerTournaments = results
+      .flat()
+      .reduce<AcademyTournaments[]>((acc, t) => {
+        const playerMatches =
           t.matches?.filter((m) =>
             m.lineup?.some((l) => l.playerId === academyPlayer.id),
           ) || [];
 
-        if (matchesWithPlayer.length > 0) {
-          return {
-            ...t,
-            matches: matchesWithPlayer.map((m) => ({
-              ...m,
-              lineup: m.lineup.filter((l) => l.playerId === academyPlayer.id),
-            })),
-          };
+        if (playerMatches.length > 0) {
+          acc.push({
+            id: t.id,
+            name: t.name,
+            date: t.date,
+            totalMatches: playerMatches.length,
+            isChampion: t.isChampion,
+            tournamentResult: t.tournamentResult,
+            matches: playerMatches.map((m) => {
+              const pStat = m.lineup.find(
+                (l) => l.playerId === academyPlayer.id,
+              );
+
+              const cleanStats: Partial<PlayerMatchesStats> = {};
+
+              if (pStat) {
+                if (pStat.goals) cleanStats.goals = pStat.goals;
+                if (pStat.assists) cleanStats.assists = pStat.assists;
+                if (pStat.rating) cleanStats.rating = pStat.rating;
+                if (pStat.defesas) cleanStats.defesas = pStat.defesas;
+                if (pStat.cleanSheets)
+                  cleanStats.cleanSheets = pStat.cleanSheets;
+              }
+
+              return {
+                id: m.id,
+                date: m.date,
+                opponentTeam: m.opponentTeam,
+                status: m.status,
+                result: m.result,
+                userGoals: m.userGoals,
+                opponentGoals: m.opponentGoals,
+                ...(m.userPenalties !== undefined
+                  ? { userPenalties: m.userPenalties }
+                  : {}),
+                ...(m.opponentPenalties !== undefined
+                  ? { opponentPenalties: m.opponentPenalties }
+                  : {}),
+                lineup: [cleanStats as PlayerMatchesStats],
+              };
+            }),
+          });
         }
-        return null;
-      })
-      .filter((t): t is AcademyTournaments => t !== null);
+        return acc;
+      }, []);
+
+    const compactAcademyData: Partial<AcademyPlayers> = {
+      ...promotedAcademyPlayer,
+    };
+
+    delete compactAcademyData.name;
+    delete compactAcademyData.nationality;
+    delete compactAcademyData.age;
+    delete compactAcademyData.position;
+    delete compactAcademyData.sector;
+    delete compactAcademyData.overall;
+    delete compactAcademyData.shirtNumber;
+    delete compactAcademyData.evolutionHistory;
 
     const newProPlayer: Omit<Players, "id"> = {
       name: academyPlayer.name,
@@ -227,9 +276,8 @@ export const AcademyService = {
       ],
       statsLeagues: [],
       ballonDor: 0,
-
       isAcademy: true,
-      academyData: academyPlayer,
+      academyData: compactAcademyData as AcademyPlayers,
       academyHistory: promotedAcademyPlayer.evolutionHistory,
       academyTournaments: playerTournaments,
     };
