@@ -27,6 +27,7 @@
   --bg-overlay: #0000000a;
   --border-overlay: #00000014;
   --text-placeholder: #0000004d;
+  --groupCard: #fafafa;
 }
 
 :root[data-theme="dark"] {
@@ -56,6 +57,7 @@
   --bg-overlay: #ffffff0a;
   --border-overlay: #ffffff14;
   --text-placeholder: #ffffff4d;
+  --groupCard: #262a31;
 }
 
 * {

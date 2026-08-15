@@ -1,0 +1,48 @@
+.ghost {
+  position: fixed;
+  z-index: 9999999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--card-background, #ffffff);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 8px 16px;
+  box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.3);
+  transform: rotate(-3deg);
+}
+
+.ghostImgContainer {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ghostImg {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.ghostInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.ghostClub {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--blackColor);
+  white-space: nowrap;
+}
+
+.ghostManager {
+  font-size: 13px;
+  color: var(--blackColor);
+  opacity: 0.7;
+}
