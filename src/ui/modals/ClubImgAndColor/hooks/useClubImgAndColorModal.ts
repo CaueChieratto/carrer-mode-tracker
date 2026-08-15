@@ -2,6 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { Career } from "../../../../common/interfaces/Career";
 import { useClubImgAndColor } from "../../../../common/hooks/Modal/UseClubImgAndColors";
 import { SaveEditClub } from "../../../../common/services/SaveEditClub";
+import { CloudinaryService } from "../../AddBadgeClub/services/CloudinaryService";
 
 type UseClubImgAndColorModalProps = {
   selectedCareer: Career;
@@ -29,7 +30,7 @@ export const useClubImgAndColorModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [clubName, setClubName] = useState(selectedCareer.clubName || "");
   const [managerName, setManagerName] = useState(
-    selectedCareer.managerName || ""
+    selectedCareer.managerName || "",
   );
 
   useEffect(() => {
@@ -42,15 +43,23 @@ export const useClubImgAndColorModal = ({
   const handleSave = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
+      let finalImageUrl = fileDataUrl ?? undefined;
+
+      if (file) {
+        finalImageUrl = await CloudinaryService.uploadImage(file);
+      }
+
       const updatedCareer = await SaveEditClub(
         selectedCareer,
         primaryColor,
         secondaryColor,
-        fileDataUrl ?? undefined,
+        finalImageUrl,
         clubName,
-        managerName
+        managerName,
       );
+
       setSelectedCareer(updatedCareer);
       closeModal();
     } catch (error) {

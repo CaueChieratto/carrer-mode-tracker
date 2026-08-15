@@ -31,23 +31,17 @@
   background-color: var(--card-background);
 }
 
-@media (min-width: 768px) {
-  .main {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
+.toastError {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #d32f2f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 99999999;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
-
-@media (min-width: 1024px) {
-  .main {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
-@media (min-width: 2500px) {
-  .main {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
-}
-
-/* ------------------------------------- */

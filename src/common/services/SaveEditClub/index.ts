@@ -5,24 +5,24 @@ export async function SaveEditClub(
   career: Career,
   primaryColor: string,
   secondaryColor: string,
-  fileDataUrl?: string,
+  imageUrl?: string,
   clubName?: string,
-  managerName?: string
+  managerName?: string,
 ) {
   const colorsTeams = [primaryColor, secondaryColor];
 
   await ServiceCareer.editCareer(
     career.id,
     colorsTeams,
-    fileDataUrl,
+    imageUrl,
     clubName,
-    managerName
+    managerName,
   );
 
   const updatedCareer = {
     ...career,
     colorsTeams,
-    teamBadge: fileDataUrl ?? career.teamBadge,
+    teamBadge: imageUrl ?? career.teamBadge,
     clubName: clubName ?? career.clubName,
     managerName: managerName ?? career.managerName,
   };

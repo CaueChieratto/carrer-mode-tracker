@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "../../../../components/Button";
 import { Career } from "../../../interfaces/Career";
 import { ModalType } from "../../../types/enums/ModalType";
-import { ButtonConfig } from "../../../constants/CareerCardButtons";
+import { ButtonConfig } from "../../../../pages/CareersPage/constants/CareerCardButtons";
 
 type CareerCardButtonsProps = {
   button: ButtonConfig;

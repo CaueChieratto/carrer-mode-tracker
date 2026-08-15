@@ -34,7 +34,7 @@ const GeneralTab = ({ season, onOpenTransfers, career }: GeneralTabProps) => {
       )}
 
       {season.leagues && season.leagues?.length > 0 && (
-        <CompetitionsCard season={season} />
+        <CompetitionsCard careerId={career.id} season={season} />
       )}
     </>
   );

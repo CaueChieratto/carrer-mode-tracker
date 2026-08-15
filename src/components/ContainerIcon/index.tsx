@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, MouseEvent, ReactNode } from "react";
 import Styles from "./ContainerIcon.module.css";
 import classNames from "classnames";
 
@@ -7,6 +7,7 @@ type ContainerIconProps = {
   className?: string;
   color?: "default" | "black";
   onClick?: () => void;
+  onClickEvent?: (e: MouseEvent<HTMLDivElement>) => void;
   style?: CSSProperties;
 };
 
@@ -16,11 +17,12 @@ const ContainerIcon = ({
   color = "default",
   style,
   onClick,
+  onClickEvent,
 }: ContainerIconProps) => {
   return (
     <div
       className={classNames(className ?? Styles.icon, Styles[color])}
-      onClick={onClick}
+      onClick={onClickEvent ?? onClick}
       style={style ?? undefined}
     >
       {children}
