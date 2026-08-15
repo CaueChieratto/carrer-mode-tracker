@@ -144,7 +144,6 @@ const CareersPage = () => {
       )}
 
       {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
-
       <ModalManager
         saveClick={saveClick}
         setSelectedCareer={setSelectedCareer}
