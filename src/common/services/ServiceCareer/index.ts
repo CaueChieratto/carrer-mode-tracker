@@ -1,4 +1,4 @@
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, writeBatch } from "firebase/firestore";
 import { Career } from "../../interfaces/Career";
 import { auth, db } from "../Firebase";
 import { Trophy } from "../../interfaces/club/trophy";
@@ -14,6 +14,7 @@ import {
   updateCareerTrophies,
 } from "../../helpers/Setters";
 import { mergeTrophies } from "../../helpers/Mergers";
+import { CareerGroup } from "../../interfaces/CareerGroup";
 
 export const ServiceCareer = {
   getAll: (callback: (careers: Career[]) => void) => {
@@ -48,7 +49,7 @@ export const ServiceCareer = {
     colorsTeams?: string[],
     fileDataUrl?: string,
     clubName?: string,
-    managerName?: string
+    managerName?: string,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -71,7 +72,7 @@ export const ServiceCareer = {
   saveClubTrophie: async (
     careerId: string,
     leagueName: string,
-    seasons: string[]
+    seasons: string[],
   ): Promise<Trophy[]> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -86,7 +87,7 @@ export const ServiceCareer = {
   removeSeason: async (
     careerId: string,
     leagueName: string,
-    seasonToRemove: string
+    seasonToRemove: string,
   ): Promise<Trophy[]> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -95,11 +96,73 @@ export const ServiceCareer = {
     const updatedTrophies = deleteSeasonFromTrophies(
       career,
       leagueName,
-      seasonToRemove
+      seasonToRemove,
     );
 
     await updateCareerTrophies(user.uid, careerId, updatedTrophies);
 
     return updatedTrophies;
+  },
+
+  saveCareerGroup: async (careerGroup: CareerGroup): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const batch = writeBatch(db);
+
+    const groupRef = doc(db, `users/${user.uid}/careerGroups`, careerGroup.id);
+
+    const careerIds = careerGroup.careers.map((c) => c.id);
+    const groupDataToSave = {
+      id: careerGroup.id,
+      managerName: careerGroup.managerName,
+      careerIds: careerIds,
+      createdAt: careerGroup.createdAt,
+      updatedAt: careerGroup.updatedAt || Date.now(),
+    };
+
+    batch.set(groupRef, groupDataToSave);
+
+    careerGroup.careers.forEach((career) => {
+      const careerRef = doc(db, `users/${user.uid}/careers`, career.id);
+      batch.update(careerRef, { groupId: careerGroup.id });
+    });
+
+    await batch.commit();
+  },
+
+  removeCareerFromGroup: async (
+    careerId: string,
+    groupId: string,
+    remainingCareersIds: string[],
+  ): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const batch = writeBatch(db);
+
+    const careerRef = doc(db, `users/${user.uid}/careers`, careerId);
+    batch.update(careerRef, { groupId: null });
+
+    const groupRef = doc(db, `users/${user.uid}/careerGroups`, groupId);
+
+    if (remainingCareersIds.length <= 1) {
+      batch.delete(groupRef);
+      if (remainingCareersIds.length === 1) {
+        const lastCareerRef = doc(
+          db,
+          `users/${user.uid}/careers`,
+          remainingCareersIds[0],
+        );
+        batch.update(lastCareerRef, { groupId: null });
+      }
+    } else {
+      batch.update(groupRef, {
+        careerIds: remainingCareersIds,
+        updatedAt: Date.now(),
+      });
+    }
+
+    await batch.commit();
   },
 };

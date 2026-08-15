@@ -9,10 +9,16 @@ import { Career } from "../../common/interfaces/Career";
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import { useSaveClick } from "../../common/hooks/UseSaveClick";
 import Load from "../../components/Load";
-import CareerCard from "../../ui/CareerCard";
+import CareerCard from "./components/CareerCard";
 import { useCareers } from "../../common/hooks/Career/UseCareer";
-import { CareerCardButtons } from "../../common/constants/CareerCardButtons";
+import { CareerCardButtons } from "./constants/CareerCardButtons";
 import BottomMenu from "../../ui/BottomMenu";
+import { useDragAndDrop } from "./hooks/DragAndDrop/useDragAndDrop";
+import { DragGhost } from "./ui/DragGhost";
+import { useCareerBoard } from "./hooks/CareerBoard/useCareerBoard";
+import { CareerGroupCard } from "./components/CareerGroupCard";
+import { ConfirmModal } from "./ui/ConfirmModal";
+import { CareerPageContext } from "./contexts/CareerPageContext";
 
 const CareersPage = () => {
   const { careers, loading } = useCareers();
@@ -27,6 +33,25 @@ const CareersPage = () => {
 
   const { saveClick, setSaveClick } = useSaveClick();
 
+  const {
+    boardItems,
+    requestMerge,
+    pendingMerge,
+    confirmMerge,
+    cancelMerge,
+    requestRemoval,
+    pendingRemoval,
+    confirmRemoval,
+    cancelRemoval,
+    toastError,
+    isProcessing,
+  } = useCareerBoard(careers);
+
+  const { dragId, dragSource, dragPos, overId, dragInfoRef, handleDragStart } =
+    useDragAndDrop((sourceId, targetId) => {
+      requestMerge(sourceId, targetId);
+    });
+
   const onOpenModal = (modalType: ModalType, career?: Career) => {
     setSaveClick(window.scrollY);
     if (career) setSelectedCareer(career);
@@ -38,10 +63,18 @@ const CareersPage = () => {
     activeModal !== ModalType.SLIDE_UP_PANEL &&
     Styles.hidden;
 
-  if (loading) return <Load />;
+  if (loading || isProcessing) return <Load />;
+
+  const contextValue = {
+    onOpenModal,
+    setSelectedCareer,
+    onDragStart: handleDragStart,
+    buttons: CareerCardButtons,
+    requestRemoval,
+  };
 
   return (
-    <>
+    <CareerPageContext.Provider value={contextValue}>
       {careers.length > 0 ? (
         <div className={classNames(Styles.container, hidden)}>
           <PrimaryHeader text="Minhas Carreiras">
@@ -56,21 +89,62 @@ const CareersPage = () => {
           </PrimaryHeader>
 
           <main className={Styles.main}>
-            {careers.map((career) => (
-              <CareerCard
-                key={career.id}
-                career={career}
-                onOpenModal={onOpenModal}
-                setSelectedCareer={setSelectedCareer}
-                buttons={CareerCardButtons}
-              />
+            {boardItems.map((item) => (
+              <div
+                key={item.id}
+                data-drop-id={item.id}
+                className={classNames(
+                  Styles.cardWrapper,
+                  dragId === item.id && Styles.isDragging,
+                  overId === item.id && Styles.isOver,
+                )}
+              >
+                {item.type === "single" ? (
+                  <CareerCard career={item.data} />
+                ) : (
+                  <CareerGroupCard save={item.data} />
+                )}
+              </div>
             ))}
           </main>
         </div>
       ) : (
         <EmptyCareers onOpenModal={onOpenModal} />
       )}
+
+      {dragSource && dragPos && (
+        <DragGhost
+          dragSource={dragSource}
+          dragPos={dragPos}
+          offsetX={dragInfoRef.current?.offsetX ?? 20}
+          offsetY={dragInfoRef.current?.offsetY ?? 20}
+        />
+      )}
+
+      {toastError && <div className={Styles.toastError}>{toastError}</div>}
+
+      {pendingMerge && (
+        <ConfirmModal
+          title="Agrupar carreiras?"
+          description={`"${pendingMerge.sourceLabel}" será movido para "${pendingMerge.targetLabel}".`}
+          confirmText="Agrupar"
+          onCancel={cancelMerge}
+          onConfirm={confirmMerge}
+        />
+      )}
+
+      {pendingRemoval && (
+        <ConfirmModal
+          title="Remover da save?"
+          description={`"${pendingRemoval.clubName}" voltará a ser uma carreira separada, fora da save de ${pendingRemoval.managerName}.`}
+          confirmText="Remover"
+          onCancel={cancelRemoval}
+          onConfirm={confirmRemoval}
+        />
+      )}
+
       {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
+
       <ModalManager
         saveClick={saveClick}
         setSelectedCareer={setSelectedCareer}
@@ -78,7 +152,7 @@ const CareersPage = () => {
         activeModal={activeModal}
         onClose={closeModal}
       />
-    </>
+    </CareerPageContext.Provider>
   );
 };
 

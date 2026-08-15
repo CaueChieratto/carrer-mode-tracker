@@ -4,4 +4,5 @@ export type League = {
   logo: string;
   league?: boolean;
   isFirstDivision?: boolean;
+  order?: number;
 };

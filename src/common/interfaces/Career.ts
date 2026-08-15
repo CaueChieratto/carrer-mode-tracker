@@ -12,6 +12,7 @@ export interface Career {
   currency?: string;
   updatedAt?: number;
   academy?: AcademyData;
+  groupId?: string | null;
   colorsTeams: string[];
   trophies: Trophy[];
   clubData: ClubData[];

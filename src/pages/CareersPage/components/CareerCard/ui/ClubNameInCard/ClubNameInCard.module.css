@@ -1,0 +1,134 @@
+.container_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0 10px 0;
+}
+
+.container_info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.h2 {
+  font-size: 24px;
+  color: var(--blackColor);
+  max-width: 230px;
+  max-height: 28px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.h2::-webkit-scrollbar {
+  display: none;
+}
+
+.p {
+  font-size: 14px;
+  color: var(--blackColor);
+  font-weight: 400;
+}
+
+.container_img {
+  background-color: #f0f0f0;
+  width: 53px;
+  height: 53px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  position: relative;
+}
+
+.img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.icon {
+  cursor: pointer;
+  display: flex;
+  color: #2b5842;
+}
+
+.group_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 6px 0;
+}
+
+.group_info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.group_title_row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.group_team_name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--blackColor);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group_player_sub {
+  font-size: 12.5px;
+  color: #666;
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #999;
+  transition: transform 0.2s ease;
+}
+
+.chevron_open {
+  transform: rotate(180deg);
+}
+
+.unlink_btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+  margin-left: 8px;
+}
+
+.unlink_btn:hover {
+  color: #e0687a;
+  border-color: rgba(224, 104, 122, 0.4);
+  background: rgba(224, 104, 122, 0.14);
+}
