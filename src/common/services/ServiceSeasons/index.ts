@@ -22,7 +22,6 @@ export const ServiceSeasons = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
-
     const existingNumbers = career.clubData.map((s) => s.seasonNumber);
     let seasonNumber = 1;
     while (existingNumbers.includes(seasonNumber)) {
@@ -93,26 +92,29 @@ export const ServiceSeasons = {
               : contract,
           );
         }
+
         return updatedPlayer;
       });
 
     const newSeasonId = uuidv4();
-
     let academyPlayersToCopy: AcademyPlayers[] = [];
+
     if (previousSeason) {
       const previousAcademyRef = collection(
         db,
         `users/${user.uid}/careers/${careerId}/seasons/${previousSeason.id}/academyPlayers`,
       );
-      const snapshot = await getDocs(previousAcademyRef);
 
-      academyPlayersToCopy = snapshot.docs.map((doc) => {
-        const player = doc.data() as AcademyPlayers;
-        return {
-          ...player,
-          evolutionHistory: [],
-        };
-      });
+      const snapshot = await getDocs(previousAcademyRef);
+      academyPlayersToCopy = snapshot.docs
+        .map((doc) => doc.data() as AcademyPlayers)
+        .filter((player) => player.status === "academy")
+        .map((player) => {
+          return {
+            ...player,
+            evolutionHistory: [],
+          };
+        });
     }
 
     const newSeason: ClubData = {
