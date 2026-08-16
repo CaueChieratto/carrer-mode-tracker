@@ -78,7 +78,38 @@
 .editor,
 .editor * {
   font-family: "Arimo", sans-serif !important;
+  font-size: 18px !important;
 }
+
+.editor font[size="1"],
+.editor font[size="1"] * {
+  font-size: 12px !important;
+} /* Muito Pequena */
+
+.editor font[size="2"],
+.editor font[size="2"] * {
+  font-size: 14px !important;
+} /* Pequena */
+
+.editor font[size="3"],
+.editor font[size="3"] * {
+  font-size: 18px !important;
+} /* Normal */
+
+.editor font[size="4"],
+.editor font[size="4"] * {
+  font-size: 24px !important;
+} /* Grande */
+
+.editor font[size="5"],
+.editor font[size="5"] * {
+  font-size: 32px !important;
+} /* Muito Grande */
+
+.editor font[size="6"],
+.editor font[size="6"] * {
+  font-size: 42px !important;
+} /* Gigante */
 
 .editor:focus {
   border-color: var(--club-color);
