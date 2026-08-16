@@ -75,6 +75,11 @@
     border-radius 0.2s ease;
 }
 
+.editor,
+.editor * {
+  font-family: "Arimo", sans-serif !important;
+}
+
 .editor:focus {
   border-color: var(--club-color);
 }

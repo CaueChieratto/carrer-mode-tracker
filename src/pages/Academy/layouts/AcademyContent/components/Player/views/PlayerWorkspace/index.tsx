@@ -25,10 +25,7 @@ export const PlayerWorkspace = ({ selectedPlayer }: PlayerWorkspaceProps) => {
     selectedPlayer.annotations.trim() !== "" &&
     selectedPlayer.annotations !== "<br>";
 
-  const isPromotedOrReleased =
-    selectedPlayer.status === "promoted" ||
-    selectedPlayer.status === "released";
-  const isReadOnlyNote = isGeral || isPromotedOrReleased;
+  const isReadOnlyNote = false;
 
   let playerActions = getPlayerActions(hasAnnotations, isReadOnlyNote);
 
