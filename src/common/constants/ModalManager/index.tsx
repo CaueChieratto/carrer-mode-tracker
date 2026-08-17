@@ -8,7 +8,6 @@ import { ModalType } from "../../types/enums/ModalType";
 import SlideUpModal from "../../../ui/modals/SlideUpModal";
 import { UseCloseModal } from "../../hooks/Modal/UseCloseModal";
 import { Players } from "../../interfaces/playersInfo/players";
-import SellPlayerModal from "../../../ui/modals/SellPlayerModal";
 import TrophiesPanel from "../../../components/TrophiesPanel";
 import { ClubData } from "../../interfaces/club/clubData";
 import { SeasonConfigs } from "../../../ui/modals/SeasonConfigs";
@@ -46,12 +45,8 @@ const ModalManager = ({
   selectedCareer,
   setSelectedCareer,
   onConfirm,
-  onSellConfirm,
   onReturnLoanConfirm,
   saveClick,
-  player,
-  clubColor,
-  darkClubColor,
   onNavigateSeason,
   selectedSeason,
   career,
@@ -147,30 +142,6 @@ const ModalManager = ({
           <DeleteConfirmModal onConfirm={onConfirm!} closeModal={closeModal} />
         </Modal>
       );
-    case ModalType.SELL_PLAYER:
-    case ModalType.LOAN_PLAYER: {
-      const isLoan = activeModal === ModalType.LOAN_PLAYER;
-      return (
-        <Modal
-          isOpen
-          sellPlayer={isLoan ? "loan" : "sell"}
-          closeModal={closeModal}
-          animationContainer="left"
-          text={
-            isLoan ? `Emprestar ${player?.name}?` : `Vender ${player?.name}?`
-          }
-        >
-          <SellPlayerModal
-            player={player!}
-            closeModal={closeModal}
-            onConfirm={onSellConfirm!}
-            clubColor={clubColor!}
-            darkClubColor={darkClubColor!}
-            isLoan={isLoan}
-          />
-        </Modal>
-      );
-    }
     case ModalType.RETURN_LOAN_CONFIRM:
       return (
         <Modal
@@ -185,7 +156,6 @@ const ModalManager = ({
           />
         </Modal>
       );
-
     case ModalType.SEASON_CONFIGS: {
       const isGeral = selectedSeason?.id === "geral";
       const formattedSeasonName =
@@ -224,7 +194,6 @@ const ModalManager = ({
         </Modal>
       );
     }
-
     case ModalType.ADD_BADGE_CLUB:
       return (
         <Modal

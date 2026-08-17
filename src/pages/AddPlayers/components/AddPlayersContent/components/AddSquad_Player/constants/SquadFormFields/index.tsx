@@ -4,10 +4,9 @@ import {
   FaTshirt,
   FaSignature,
   FaHandHoldingUsd,
-  FaUndo,
 } from "react-icons/fa";
 import { GiPodium, GiSoccerField } from "react-icons/gi";
-import { MdAttachMoney, MdNumbers, MdSell } from "react-icons/md";
+import { MdAttachMoney, MdNumbers } from "react-icons/md";
 import { BsCalendar } from "react-icons/bs";
 import { RxLapTimer } from "react-icons/rx";
 import CaptainArmbandIcon from "../../../../../../../../ui/CaptainArmbandIcon";
@@ -32,40 +31,6 @@ export const getSquadFormFields = (nationValue: string = "") => {
     : allCountries;
 
   return [
-    {
-      title: "Ações",
-      editOnly: true,
-      fields: [
-        [
-          {
-            id: "sell",
-            name: "Vender jogador?",
-            icon: <MdSell />,
-            checkbox: true,
-            action: ModalType.SELL_PLAYER,
-            hideOnIncomingLoanPlayer: true,
-          },
-          {
-            id: "loan",
-            name: "Emprestar jogador?",
-            icon: <MdSell />,
-            checkbox: true,
-            action: ModalType.LOAN_PLAYER,
-            hideOnIncomingLoanPlayer: true,
-          },
-        ],
-        [
-          {
-            id: "back",
-            name: "Encerrou o empréstimo?",
-            icon: <FaUndo />,
-            checkbox: true,
-            action: ModalType.RETURN_LOAN_CONFIRM,
-            loanOnly: true,
-          },
-        ],
-      ],
-    },
     {
       title: "Status",
       fields: [
