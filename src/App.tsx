@@ -18,6 +18,7 @@ import { useIsMobile } from "./common/hooks/useIsMobile";
 import { ComparePlayers } from "./pages/ComparePlayers";
 import { AddTeamsToTable } from "./pages/AddTeamsToTable";
 import { Academy } from "./pages/Academy";
+import TransferPlayer from "./pages/TransferPlayer";
 
 type AppProps = {
   career?: Career;
@@ -52,6 +53,10 @@ export default function App({ career }: AppProps) {
     {
       path: "/Career/:careerId/Season/:seasonId/Player/:playerId",
       element: <Players />,
+    },
+    {
+      path: "/Career/:careerId/Season/:seasonId/TransferPlayer/:playerId",
+      element: <TransferPlayer />,
     },
     { path: "/Career/:careerId", element: <AddSeasons /> },
     { path: "/Career/:careerId/Season/:seasonId", element: <Season /> },
