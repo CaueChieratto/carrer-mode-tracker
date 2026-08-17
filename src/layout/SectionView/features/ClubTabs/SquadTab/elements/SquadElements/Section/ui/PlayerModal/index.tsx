@@ -27,6 +27,8 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
 
   const viewPath = `/Career/${careerId}/Season/${seasonId}/Player/${id}`;
   const editPath = `/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`;
+  const transferPath = `/Career/${careerId}/Season/${seasonId}/TransferPlayer/${id}?mode=transfer`;
+  const loanPath = `/Career/${careerId}/Season/${seasonId}/TransferPlayer/${id}?mode=loan`;
 
   const modalContent = (
     <Modal
@@ -40,7 +42,7 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
           <CardsModal
             icon={<IoPersonOutline className={Styles.icon} />}
             label="Visualizar"
-            title="Jogador"
+            title={playerName}
             onClick={() => setSelectedPath(viewPath)}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
@@ -49,11 +51,31 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
           <CardsModal
             icon={<IoCreateOutline className={Styles.icon} />}
             label="Editar"
-            title="Jogador"
+            title={playerName}
             onClick={() => setSelectedPath(editPath)}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
             className={selectedPath === editPath ? Styles.selected_card : ""}
+          />
+          <CardsModal
+            icon={<IoPersonOutline className={Styles.icon} />}
+            label="Vender"
+            title={playerName}
+            onClick={() => setSelectedPath(transferPath)}
+            clubColor={clubColor}
+            darkClubColor={darkClubColor}
+            className={
+              selectedPath === transferPath ? Styles.selected_card : ""
+            }
+          />
+          <CardsModal
+            icon={<IoCreateOutline className={Styles.icon} />}
+            label="Emprestar"
+            title={playerName}
+            onClick={() => setSelectedPath(loanPath)}
+            clubColor={clubColor}
+            darkClubColor={darkClubColor}
+            className={selectedPath === loanPath ? Styles.selected_card : ""}
           />
         </div>
 
@@ -70,7 +92,13 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
             }}
           >
             Entrar{" "}
-            {selectedPath.includes("Edit") ? "na Edição" : "na Visualização"}
+            {selectedPath.includes("mode=transfer")
+              ? "em Venda"
+              : selectedPath.includes("mode=loan")
+                ? "em Empréstimo"
+                : selectedPath.includes("Edit")
+                  ? "na Edição"
+                  : "na Visualização"}
           </Button>
         )}
       </div>

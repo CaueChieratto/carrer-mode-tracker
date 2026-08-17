@@ -1,6 +1,6 @@
 import Styles from "./ClubNameInCard.module.css";
-import { FaPlus, FaChevronDown } from "react-icons/fa6";
-import { FaUnlink } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa6";
+import { FaImage, FaUnlink } from "react-icons/fa";
 import ContainerIcon from "../../../../../../components/ContainerIcon";
 import { ModalType } from "../../../../../../common/types/enums/ModalType";
 import { Career } from "../../../../../../common/interfaces/Career";
@@ -68,7 +68,7 @@ export const ClubNameInCard = ({
             onOpenModal(ModalType.ADD_CLUB_IMG, selectedCareer);
           }}
         >
-          <FaPlus size={23} />
+          <FaImage size={26} color={"#fff"} />
         </ContainerIcon>
       )}
     </div>
