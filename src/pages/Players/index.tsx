@@ -1,7 +1,7 @@
 import Load from "../../components/Load";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
 import { useSeasonView } from "../../common/hooks/Seasons/UseSeasonView";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import { ModalType } from "../../common/types/enums/ModalType";
 import BottomMenu from "../../ui/BottomMenu";
@@ -9,15 +9,17 @@ import { calculateTotalStats } from "../../layout/SectionView/features/ClubTabs/
 import SectionView from "../../layout/SectionView";
 import { useMemo } from "react";
 import { augmentCareerWithMatchStats } from "../../layout/SectionView/helpers/mergeMatchStats";
-
+import { getSeasonTabsConfig } from "../../layout/SectionView/config/seasonTabsConfig";
 const Player = () => {
-  const { loading, career, season, tabsConfig } = useSeasonView(true, true);
+  const { loading, career, season } = useSeasonView(true, true);
   const { playerId, seasonId } = useParams<{
     playerId: string;
     seasonId: string;
   }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const { activeModal } = useModalManager();
+
   const isNotSeason = location.pathname.includes("/Geral") || !seasonId;
 
   const augmentedCareer = useMemo(() => {
@@ -72,8 +74,22 @@ const Player = () => {
     );
 
     newClubData[latestIndex] = latestSeason;
+
     return { ...career, clubData: newClubData };
   }, [career, player, isNotSeason, playerId]);
+
+  const playerTabsConfig = useMemo(() => {
+    if (!spoofedCareer || !actualSeason) return [];
+
+    return getSeasonTabsConfig(
+      spoofedCareer,
+      actualSeason.id,
+      navigate,
+      true,
+      isNotSeason,
+      player,
+    );
+  }, [spoofedCareer, actualSeason, navigate, isNotSeason, player]);
 
   if (loading) return <Load />;
   if (!career || !season || !actualSeason) return <NotFoundDisplay />;
@@ -84,8 +100,11 @@ const Player = () => {
         p.name.trim().toLowerCase() === player?.name.trim().toLowerCase() &&
         p.nation.trim().toLowerCase() === player?.nation.trim().toLowerCase(),
     );
+
     if (!playerInSeason) return false;
+
     const totalStats = calculateTotalStats(playerInSeason);
+
     return (
       (totalStats.minutesPlayed ?? 0) > 0 ||
       totalStats.games > 0 ||
@@ -110,7 +129,7 @@ const Player = () => {
         }
         career={spoofedCareer!}
         season={actualSeason}
-        tabsConfig={tabsConfig}
+        tabsConfig={playerTabsConfig}
       />
       {activeModal === ModalType.NONE && <BottomMenu />}
     </>

@@ -1,0 +1,52 @@
+.container_p__label_img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.label_img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--color-border-subtle);
+  background: var(--color-background-subtle);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.plus_badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #4ade80;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--blackColorInverted);
+  border: 2px solid var(--card-background-modal);
+}
+
+.span {
+  color: #888;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.hiddenInput {
+  display: none;
+}

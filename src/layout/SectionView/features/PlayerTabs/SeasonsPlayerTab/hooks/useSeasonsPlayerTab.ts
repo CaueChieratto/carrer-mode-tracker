@@ -1,13 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LeagueLevels } from "../../../../../../common/constants/LeagueLevels";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { getContinentByCountry } from "../../../../../../common/services/GetContinentByCountry";
 import { League } from "../../../../../../common/interfaces/League";
 import { leaguesByContinent } from "../../../../../../common/utils/league";
+import { SeasonCareerData } from "./useRenderableSeasons";
+import { PlayersGroupService } from "../../../../../../common/services/ServicePlayers/PlayersGroupService";
 
-export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
+export const useSeasonsPlayerTab = (
+  career: Career,
+  player?: Players,
+  isNotSeason?: boolean,
+) => {
   const [expand, setExpand] = useState<Record<string, boolean>>({});
+  const [allSeasonsData, setAllSeasonsData] = useState<SeasonCareerData[]>([]);
+  const [isLoadingSeasons, setIsLoadingSeasons] = useState(!!isNotSeason);
+
+  useEffect(() => {
+    if (isNotSeason && career?.groupId) {
+      setIsLoadingSeasons(true);
+      PlayersGroupService.getGroupSeasonsData(career.groupId, career.createdAt)
+        .then((data) => {
+          setAllSeasonsData(
+            data.map((d) => ({ season: d.season, career: d.career })),
+          );
+        })
+        .catch((err) =>
+          console.error("Erro ao buscar temporadas do grupo:", err),
+        )
+        .finally(() => setIsLoadingSeasons(false));
+    } else if (career) {
+      setAllSeasonsData(career.clubData.map((s) => ({ season: s, career })));
+      setIsLoadingSeasons(false);
+    }
+  }, [isNotSeason, career]);
 
   const toggleExpand = (seasonId: string) => {
     setExpand((prev) => ({
@@ -17,22 +44,31 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
   };
 
   const playerId = player?.id;
-
   const normalizedName = player?.name.trim().toLowerCase();
   const normalizedNation = player?.nation.trim().toLowerCase();
 
-  const seasonsPlayerPlayed = career.clubData.filter((s) =>
-    s.players.some(
+  const seasonsPlayerPlayed = allSeasonsData.filter(({ season }) =>
+    season.players.some(
       (p) =>
         p.name.trim().toLowerCase() === normalizedName &&
         p.nation.trim().toLowerCase() === normalizedNation,
     ),
   );
 
-  const getSeasonString = (seasonNumber: number): string => {
-    const startYear =
-      new Date(career.createdAt).getFullYear() + seasonNumber - 1;
-    const continent = getContinentByCountry(career.nation);
+  const getSeasonString = (
+    seasonNumber: number,
+    specificCareer: Career,
+  ): string => {
+    const dateVal: unknown = specificCareer.createdAt;
+    let createdDate = new Date();
+    if (dateVal && typeof dateVal === "object" && "seconds" in dateVal) {
+      createdDate = new Date((dateVal as { seconds: number }).seconds * 1000);
+    } else if (dateVal) {
+      createdDate = new Date(dateVal as string | Date | number);
+    }
+
+    const startYear = createdDate.getFullYear() + seasonNumber - 1;
+    const continent = getContinentByCountry(specificCareer.nation);
 
     if (continent === "Europa") {
       const endYear = (startYear + 1).toString().slice(-2);
@@ -46,8 +82,11 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
     .flatMap((countryLeagues) => Object.values(countryLeagues))
     .flat();
 
-  const getTrophiesWonInSeason = (seasonString: string) => {
-    return career.trophies
+  const getTrophiesWonInSeason = (
+    seasonString: string,
+    specificCareer: Career,
+  ) => {
+    return specificCareer.trophies
       .filter((trophy) => trophy.seasons.includes(seasonString))
       .sort(
         (a, b) =>
@@ -64,5 +103,6 @@ export const useSeasonsPlayerTab = (career: Career, player?: Players) => {
     allLeagues,
     getTrophiesWonInSeason,
     playerId,
+    isLoadingSeasons,
   };
 };

@@ -4,6 +4,7 @@ import {
   FaTshirt,
   FaSignature,
   FaHandHoldingUsd,
+  FaHistory,
 } from "react-icons/fa";
 import { GiPodium, GiSoccerField } from "react-icons/gi";
 import { MdAttachMoney, MdNumbers } from "react-icons/md";
@@ -23,7 +24,10 @@ export const positionOptionsBySector = {
   Goleiro: ["GOL"],
 } as const;
 
-export const getSquadFormFields = (nationValue: string = "") => {
+export const getSquadFormFields = (
+  nationValue: string = "",
+  pastPlayerOptions: string[] = [],
+) => {
   const allCountries = Object.keys(FIFA_COUNTRY_CODES);
 
   const filteredCountries = nationValue
@@ -57,6 +61,32 @@ export const getSquadFormFields = (nationValue: string = "") => {
             icon: <CaptainArmbandIcon />,
             checkbox: true,
             note: "Você pode selecionar até 5 capitães.",
+          },
+        ],
+        [
+          {
+            id: "isKnownPlayer",
+            name: "Já treinou o jogador?",
+            icon: <FaHistory />,
+            checkbox: true,
+            addOnly: true,
+            showOnJoin: true,
+          },
+        ],
+      ],
+    },
+    {
+      title: "Buscar Jogador",
+      fields: [
+        [
+          {
+            id: "selectedPastPlayer",
+            name: "Selecione o Jogador",
+            placeholder: "Busque pelo nome...",
+            icon: <FaUser />,
+            inputType: "searchable-select",
+            options: pastPlayerOptions,
+            isKnownPlayerOnly: true,
           },
         ],
       ],

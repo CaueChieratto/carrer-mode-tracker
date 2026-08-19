@@ -22,9 +22,14 @@ export const useAcademyPlayers = (
 
       try {
         if (isGeral) {
-          const promises = career.clubData.map((season) =>
-            AcademyService.getPlayersAcademy(career.id, season.id),
-          );
+          const promises = career.clubData.map(async (season) => {
+            const players = await AcademyService.getPlayersAcademy(
+              career.id,
+              season.id,
+            );
+            return players.map((p) => ({ ...p, seasonId: season.id }));
+          });
+
           const results = await Promise.all(promises);
 
           const allPlayersMap = new Map<string, AcademyPlayers>();

@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { PlayerStatsAccumulator } from "../../../../../../common/interfaces/PlayerStatsAccumulator/PlayerStatsAccumulator";
-import { getAggregatedPlayersForCareer } from "../../../../helpers/mergeMatchStats";
 import { AggregatedPlayerStats } from "../../../../../../common/interfaces/AggregatedPlayerStats/AggregatedPlayerStats";
+import { augmentSeasonWithMatchStats } from "../../../../helpers/mergeMatchStats";
 
 export const useBestPlayersStats = (
   season: ClubData,
@@ -11,67 +11,108 @@ export const useBestPlayersStats = (
   isGeralPage: boolean,
   minPercentage: number = 0.2,
 ): AggregatedPlayerStats[] => {
+  const [careerSeasonsData, setCareerSeasonsData] = useState<
+    { clubName: string; season: ClubData }[]
+  >([]);
+
+  useEffect(() => {
+    if (!isGeralPage) return;
+
+    const localData = (career.clubData || []).map((s) => ({
+      clubName: career.clubName,
+      season: s,
+    }));
+    setCareerSeasonsData(localData);
+  }, [career, isGeralPage]);
+
   return useMemo(() => {
+    const rawSeasonsToProcess: { clubName: string; season: ClubData }[] =
+      isGeralPage ? careerSeasonsData : [{ clubName: career.clubName, season }];
+
+    const seasonsToProcess = rawSeasonsToProcess.map(
+      ({ clubName, season: s }) => ({
+        clubName,
+        season: augmentSeasonWithMatchStats(s, clubName),
+      }),
+    );
+
     const playerStatsMap = new Map<string, PlayerStatsAccumulator>();
 
-    const playersToProcess = isGeralPage
-      ? getAggregatedPlayersForCareer(career)
-      : season.players;
+    seasonsToProcess.forEach(({ season: s }) => {
+      s.players.forEach((p) => {
+        const normalizedName = p.name.trim().toLowerCase();
+        const normalizedNation = p.nation.trim().toLowerCase();
 
-    playersToProcess.forEach((p) => {
-      const normalizedName = p.name.trim().toLowerCase();
-      const normalizedNation = p.nation.trim().toLowerCase();
-      const key = isGeralPage ? `${normalizedName}-${normalizedNation}` : p.id;
+        const key = isGeralPage
+          ? `${normalizedName}-${normalizedNation}`
+          : p.id;
 
-      let baseGames = 0,
-        baseRatingSum = 0,
-        baseGoals = 0,
-        baseAssists = 0,
-        baseMinutes = 0;
+        let baseGames = 0,
+          baseRatingSum = 0,
+          baseGoals = 0,
+          baseAssists = 0,
+          baseMinutes = 0;
 
-      (p.statsLeagues || []).forEach((l) => {
-        baseGames += l.stats.games || 0;
-        baseRatingSum += (l.stats.rating || 0) * (l.stats.games || 0);
-        baseGoals += l.stats.goals || 0;
-        baseAssists += l.stats.assists || 0;
-        baseMinutes += l.stats.minutesPlayed || 0;
-      });
-
-      if (!playerStatsMap.has(key)) {
-        playerStatsMap.set(key, {
-          player: p,
-          games: baseGames,
-          ratingSum: baseRatingSum,
-          goals: baseGoals,
-          assists: baseAssists,
-          minutesPlayed: baseMinutes,
-          totalFinishings: 0,
-          finishingsMissed: 0,
-          totalPasses: 0,
-          passesMissed: 0,
-          keyPasses: 0,
-          totalDribbles: 0,
-          dribblesMissed: 0,
-          ballsRecovered: 0,
-          ballsLost: 0,
-          yellowCards: 0,
-          redCards: 0,
-          distanceKm: 0,
-          maxDistanceKmInGame: 0,
+        (p.statsLeagues || []).forEach((l) => {
+          baseGames += l.stats.games || 0;
+          baseRatingSum += (l.stats.rating || 0) * (l.stats.games || 0);
+          baseGoals += l.stats.goals || 0;
+          baseAssists += l.stats.assists || 0;
+          baseMinutes += l.stats.minutesPlayed || 0;
         });
-      }
+
+        if (!playerStatsMap.has(key)) {
+          playerStatsMap.set(key, {
+            player: p,
+            games: baseGames,
+            ratingSum: baseRatingSum,
+            goals: baseGoals,
+            assists: baseAssists,
+            minutesPlayed: baseMinutes,
+            totalFinishings: 0,
+            finishingsMissed: 0,
+            totalPasses: 0,
+            passesMissed: 0,
+            keyPasses: 0,
+            totalDribbles: 0,
+            dribblesMissed: 0,
+            ballsRecovered: 0,
+            ballsLost: 0,
+            yellowCards: 0,
+            redCards: 0,
+            distanceKm: 0,
+            maxDistanceKmInGame: 0,
+          });
+        } else {
+          const acc = playerStatsMap.get(key)!;
+          acc.games += baseGames;
+          acc.ratingSum += baseRatingSum;
+          acc.goals += baseGoals;
+          acc.assists += baseAssists;
+          acc.minutesPlayed += baseMinutes;
+
+          if ((p.overall || 0) > (acc.player.overall || 0)) {
+            acc.player = { ...acc.player, overall: p.overall };
+          }
+        }
+      });
     });
 
-    const seasonsToProcess = isGeralPage ? career.clubData : [season];
-
-    const totalTeamMatches = seasonsToProcess.reduce((total, s) => {
+    const totalTeamMatches = seasonsToProcess.reduce((total, { season: s }) => {
+      const uniqueMatches = Array.from(
+        new Map((s.matches || []).map((m) => [m.matchesId, m])).values(),
+      );
       const finishedMatchesCount =
-        s.matches?.filter((m) => m.status === "FINISHED").length || 0;
+        uniqueMatches.filter((m) => m.status === "FINISHED").length || 0;
       return total + finishedMatchesCount;
     }, 0);
 
-    seasonsToProcess.forEach((s) => {
-      s.matches?.forEach((match) => {
+    seasonsToProcess.forEach(({ season: s }) => {
+      const uniqueMatches = Array.from(
+        new Map((s.matches || []).map((m) => [m.matchesId, m])).values(),
+      );
+
+      uniqueMatches.forEach((match) => {
         if (match.status !== "FINISHED") return;
 
         match.playerStats?.forEach((pStat) => {
@@ -101,7 +142,6 @@ export const useBestPlayersStats = (
 
           const matchDistance = pStat.distanceKm || 0;
           acc.distanceKm += matchDistance;
-
           if (matchDistance > acc.maxDistanceKmInGame) {
             acc.maxDistanceKmInGame = matchDistance;
           }
@@ -126,7 +166,6 @@ export const useBestPlayersStats = (
           acc.goals + acc.assists > 0
             ? acc.minutesPlayed / (acc.goals + acc.assists)
             : 0,
-
         totalFinishings: acc.totalFinishings,
         finishingsPer90: acc.totalFinishings * multiplier90,
         finishingsOnTarget: acc.totalFinishings - acc.finishingsMissed,
@@ -134,7 +173,6 @@ export const useBestPlayersStats = (
           (acc.totalFinishings - acc.finishingsMissed) * multiplier90,
         finishingsMissed: acc.finishingsMissed,
         finishingsMissedPer90: acc.finishingsMissed * multiplier90,
-
         totalPasses: acc.totalPasses,
         passesPer90: acc.totalPasses * multiplier90,
         passesCompleted: acc.totalPasses - acc.passesMissed,
@@ -142,10 +180,8 @@ export const useBestPlayersStats = (
           (acc.totalPasses - acc.passesMissed) * multiplier90,
         passesMissed: acc.passesMissed,
         passesMissedPer90: acc.passesMissed * multiplier90,
-
         keyPasses: acc.keyPasses,
         keyPassesPer90: acc.keyPasses * multiplier90,
-
         totalDribbles: acc.totalDribbles,
         dribblesPer90: acc.totalDribbles * multiplier90,
         dribblesCompleted: acc.totalDribbles - acc.dribblesMissed,
@@ -153,18 +189,14 @@ export const useBestPlayersStats = (
           (acc.totalDribbles - acc.dribblesMissed) * multiplier90,
         dribblesMissed: acc.dribblesMissed,
         dribblesMissedPer90: acc.dribblesMissed * multiplier90,
-
         ballsRecovered: acc.ballsRecovered,
         ballsRecoveredPer90: acc.ballsRecovered * multiplier90,
-
         ballsLost: acc.ballsLost,
         ballsLostPer90: acc.ballsLost * multiplier90,
-
         yellowCards: acc.yellowCards,
         yellowCardsPer90: acc.yellowCards * multiplier90,
         redCards: acc.redCards,
         redCardsPer90: acc.redCards * multiplier90,
-
         distanceKm: acc.distanceKm,
         distanceKmPer90: acc.distanceKm * multiplier90,
         maxDistanceKmInGame: acc.maxDistanceKmInGame,
@@ -181,12 +213,10 @@ export const useBestPlayersStats = (
       (max, stat) => Math.max(max, stat.games),
       0,
     );
-
     const referenceGames =
       totalTeamMatches > 0 ? totalTeamMatches : maxPlayerGames;
-
     const minGamesRequired = Math.ceil(referenceGames * minPercentage);
 
     return aggregated.filter((stat) => stat.games >= minGamesRequired);
-  }, [season, career, isGeralPage, minPercentage]);
+  }, [season, career, isGeralPage, minPercentage, careerSeasonsData]);
 };

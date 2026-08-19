@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 import Modal from "../../../components/Modal";
-import ClubImgAndColor from "../../../ui/modals/ClubImgAndColor";
 import DeleteConfirmModal from "../../../ui/modals/DeleteConfirmModal";
 import NewCareerModal from "../../../ui/modals/NewCareerModal";
 import { Career } from "../../interfaces/Career";
@@ -14,6 +13,8 @@ import { SeasonConfigs } from "../../../ui/modals/SeasonConfigs";
 import { getSeasonName } from "../../utils/GetSeasonName";
 import ReturnLoanConfirmModal from "../../../ui/modals/ReturnLoanConfirmModal";
 import { AddBadgeClub } from "../../../ui/modals/AddBadgeClub";
+import { EditCareerModal } from "../../../ui/modals/EditCareerModal";
+import { EditTeams } from "../../../ui/modals/EditTeams";
 
 type ModalManagerProps = {
   activeModal: ModalType;
@@ -68,6 +69,18 @@ const ModalManager = ({
           <NewCareerModal closeModal={closeModal}></NewCareerModal>
         </Modal>
       );
+    case ModalType.EDIT_TEAMS:
+      return (
+        <Modal
+          isOpen
+          isNormalTop
+          closeModal={closeModal}
+          animationContainer="right"
+          text="Editar Times"
+        >
+          <EditTeams />
+        </Modal>
+      );
     case ModalType.DELETE_CONFIRM:
       return (
         <Modal
@@ -90,28 +103,29 @@ const ModalManager = ({
           text="Estilizar Clube"
           animationContainer="right"
         >
-          <ClubImgAndColor
+          <EditCareerModal
             closeModal={closeModal}
             edit={false}
             setSelectedCareer={setSelectedCareer}
             selectedCareer={selectedCareer!}
-          ></ClubImgAndColor>
+          ></EditCareerModal>
         </Modal>
       );
     case ModalType.EDIT_CLUB:
       return (
         <Modal
           isOpen
+          isNormalTop
           closeModal={closeModal}
           text="Editar Clube"
           animationContainer="left"
         >
-          <ClubImgAndColor
+          <EditCareerModal
             closeModal={closeModal}
             edit
             setSelectedCareer={setSelectedCareer}
             selectedCareer={selectedCareer!}
-          ></ClubImgAndColor>
+          ></EditCareerModal>
         </Modal>
       );
     case ModalType.SLIDE_UP_PANEL:

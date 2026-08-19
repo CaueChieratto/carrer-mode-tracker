@@ -68,7 +68,7 @@ export const ClubNameInCard = ({
             onOpenModal(ModalType.ADD_CLUB_IMG, selectedCareer);
           }}
         >
-          <FaImage size={26} color={"#fff"} />
+          <FaImage size={26} color={"#000"} />
         </ContainerIcon>
       )}
     </div>

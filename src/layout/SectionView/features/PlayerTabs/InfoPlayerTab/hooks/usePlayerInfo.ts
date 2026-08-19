@@ -130,6 +130,10 @@ export const usePlayerInfo = (player?: Players, career?: Career) => {
           arrivalTitle = "Informações da contratação";
           arrivalValueLabel = "Tipo de transação";
           arrivalValueDisplay = "Custo Zero";
+        } else if (contract.fromClub === "Base") {
+          arrivalTitle = "Informações da promoção";
+          arrivalValueLabel = "Tipo de transação";
+          arrivalValueDisplay = "Promovido da Base";
         } else if (contract.fromClub) {
           arrivalTitle = "Informações do retorno";
           arrivalValueLabel = "Tipo de transação";

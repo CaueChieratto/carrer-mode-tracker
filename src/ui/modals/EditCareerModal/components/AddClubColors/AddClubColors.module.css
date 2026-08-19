@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.section_title {
+  font-size: 12px;
+  font-weight: bold;
+  color: #888;
+}
+
+.container_colors {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.color_item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.label_text {
+  font-size: 12px;
+  color: #888;
+}
+
+.color_picker_wrapper {
+  position: relative;
+  height: 52px;
+  border-radius: 12px;
+  background: #4fbf93;
+  border: 0.5px solid var(--color-background-subtle);
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 10px;
+}
+
+.hex_value {
+  font-size: 11.5px;
+  font-weight: 500;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.color_input {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  padding: 0 !important;
+  border: none !important;
+}

@@ -182,6 +182,33 @@ export const usePlayerEditor = ({
       };
 
       await onUpdatePlayer(updatedPlayer);
+
+      if (player.status === "promoted") {
+        const proPlayers = await ServicePlayers.getPlayersBySeason(
+          career.id,
+          seasonId,
+        );
+        const proPlayer = proPlayers.find(
+          (p) => p.isAcademy && p.academyData?.id === player.id,
+        );
+
+        if (proPlayer && proPlayer.contract && proPlayer.contract.length > 0) {
+          const updatedContract = [...proPlayer.contract];
+
+          updatedContract[0].dataArrival = new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+          );
+
+          await ServicePlayers.editPlayerInSeason(
+            career.id,
+            seasonId,
+            proPlayer.id,
+            { contract: updatedContract },
+          );
+        }
+      }
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar data.");

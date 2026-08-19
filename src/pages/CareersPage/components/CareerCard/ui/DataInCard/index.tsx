@@ -9,7 +9,7 @@ type DataInCardProps = {
 const DataInCard = ({ createdAt }: DataInCardProps) => {
   return (
     <div className={Styles.container_date}>
-      Criado em{" "}
+      Data de início:{" "}
       <span>
         {format(
           createdAt,

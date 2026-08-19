@@ -40,9 +40,7 @@ export const BestPlayersTab = ({ season, career }: BestPlayersTabProps) => {
   }, [availableConfigs, selectedStat]);
 
   const hasAnyMatches = isGeralPage
-    ? career.clubData.some((s) =>
-        s.matches?.some((m) => m.status === "FINISHED"),
-      )
+    ? statsData.length > 0
     : season.matches?.some((m) => m.status === "FINISHED");
 
   if (!hasAnyMatches || statsData.length === 0) {
@@ -53,7 +51,9 @@ export const BestPlayersTab = ({ season, career }: BestPlayersTabProps) => {
           textTwo={
             hasAnyMatches
               ? "Nenhum jogador atingiu a porcentagem mínima de partidas."
-              : "Adicione partidas nesta temporada para gerar o ranking de jogadores."
+              : isGeralPage
+                ? "Jogue partidas para gerar o ranking global dos seus jogadores."
+                : "Adicione partidas nesta temporada para gerar o ranking de jogadores."
           }
         />
       </ContainerClubContent>

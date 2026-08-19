@@ -1,5 +1,7 @@
 import { Career } from "../../../../common/interfaces/Career";
+import { ColorsService } from "../../../../common/services/ColorsService";
 import Styles from "./DragGhost.module.css";
+import { FaImage } from "react-icons/fa";
 
 interface DragGhostProps {
   dragSource: Career;
@@ -14,6 +16,11 @@ export const DragGhost = ({
   offsetX,
   offsetY,
 }: DragGhostProps) => {
+  const bgColor =
+    ColorsService.getColorSaved(dragSource.id) ||
+    dragSource.colorsTeams?.[0] ||
+    "#f0f0f0";
+
   return (
     <div
       className={Styles.ghost}
@@ -24,14 +31,16 @@ export const DragGhost = ({
     >
       <div
         className={Styles.ghostImgContainer}
-        style={{ backgroundColor: dragSource.colorsTeams?.[0] || "#f0f0f0" }}
+        style={{ backgroundColor: bgColor }}
       >
-        {dragSource.teamBadge && (
+        {dragSource.teamBadge ? (
           <img
             className={Styles.ghostImg}
             src={dragSource.teamBadge}
             alt="badge"
           />
+        ) : (
+          <FaImage size={24} color={"#000"} />
         )}
       </div>
       <div className={Styles.ghostInfo}>

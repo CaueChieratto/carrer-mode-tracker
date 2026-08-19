@@ -8,9 +8,15 @@ type SeasonRowProps = {
   seasonString: string;
   player?: Players;
   onClickCopy?: () => void;
+  teamBadge?: string;
 };
 
-const SeasonRow = ({ seasonString, player, onClickCopy }: SeasonRowProps) => {
+const SeasonRow = ({
+  seasonString,
+  player,
+  onClickCopy,
+  teamBadge,
+}: SeasonRowProps) => {
   const isGoalkeeper = player?.position === "GOL";
 
   return (
@@ -18,7 +24,12 @@ const SeasonRow = ({ seasonString, player, onClickCopy }: SeasonRowProps) => {
       <div className={Styles.copy} onClick={onClickCopy}>
         <BsCopy size={25} />
       </div>
-      <StatisticsTable_Title isPlayer type="info" playerName={seasonString} />
+      <StatisticsTable_Title
+        isPlayer
+        type="info"
+        playerName={seasonString}
+        teamBadge={teamBadge}
+      />
       <CalculatedStatistics
         info
         total

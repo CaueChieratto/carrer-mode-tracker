@@ -5,12 +5,16 @@ type EditClubNameProps = {
   clubName: string;
   className: string;
   setClubName: Dispatch<SetStateAction<string>>;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 export const EditClubName = ({
   clubName,
   setClubName,
   className,
+  onFocus,
+  onBlur,
 }: EditClubNameProps) => (
   <Input
     className={className}
@@ -19,5 +23,7 @@ export const EditClubName = ({
     value={clubName}
     onChange={(e) => setClubName(e.target.value)}
     placeholder={clubName}
+    onFocus={onFocus}
+    onBlur={onBlur}
   />
 );

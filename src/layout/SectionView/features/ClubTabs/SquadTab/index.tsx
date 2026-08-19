@@ -81,7 +81,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
                   matches={season.matches || []}
                   key={player.id}
                   currency={currency}
-                  academyNickname={academyNickname}
+                  academyNickname={player.academyNickname || academyNickname}
                 />
               ))}
             </Card>

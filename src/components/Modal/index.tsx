@@ -13,6 +13,7 @@ type ModalProps = {
   children: ReactNode;
   animationContainer?: "normal" | "left" | "right" | "grow";
   slideUp?: boolean;
+  isNormalTop?: boolean;
   closeModal: () => void;
   clubColor?: string;
 };
@@ -26,6 +27,7 @@ const Modal = ({
   animationContainer = "normal",
   children,
   slideUp,
+  isNormalTop,
   clubColor,
 }: ModalProps) => {
   const {
@@ -84,7 +86,13 @@ const Modal = ({
       onClick={handleClose}
     >
       <div
-        className={!slideUp ? Styles.card_modal : Styles.slide_up_card}
+        className={
+          isNormalTop
+            ? Styles.normal_top
+            : slideUp
+              ? Styles.slide_up_card
+              : Styles.card_modal
+        }
         onClick={(e) => e.stopPropagation()}
         style={
           slideUp

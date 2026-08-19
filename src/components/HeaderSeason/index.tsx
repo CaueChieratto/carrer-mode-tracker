@@ -53,59 +53,55 @@ const HeaderSeason = ({
       }}
     >
       <div className={Styles.container_club}>
-        {career.teamBadge && (
+        {isPlayer ? (
+          <div className={Styles.container_player}>
+            <PlayerCircle shirtNumber={player?.shirtNumber} />
+            <div className={Styles.container}>
+              <h1 className={match ? Styles.h1 : Styles.h1_player}>
+                {player?.name}
+              </h1>
+              {titleText && <p className={Styles.season}>{titleText}</p>}
+            </div>
+          </div>
+        ) : (
           <>
-            {isPlayer ? (
-              <div className={Styles.container_player}>
-                <PlayerCircle shirtNumber={player?.shirtNumber} />
-                <div className={Styles.container}>
-                  <h1 className={match ? Styles.h1 : Styles.h1_player}>
-                    {player?.name}
-                  </h1>
-                  {titleText && <p className={Styles.season}>{titleText}</p>}
-                </div>
+            {match ? (
+              <div className={Styles.img_card}>
+                <img src={leagueLogo} className={Styles.img_league} />
               </div>
             ) : (
-              <>
-                {match ? (
-                  <div className={Styles.img_card}>
-                    <img src={leagueLogo} className={Styles.img_league} />
-                  </div>
-                ) : (
-                  <img src={career.teamBadge} className={Styles.img} />
-                )}
-                <div
-                  className={Styles.container}
-                  style={
-                    titleTextMatch
-                      ? { alignItems: "center" }
-                      : { alignItems: "flex-start" }
-                  }
-                >
-                  {match ? (
-                    <h1 className={Styles.h1}>
-                      <OverflowText text={match.league || ""} />
-                    </h1>
-                  ) : (
-                    <h1 className={Styles.h1}>{career.clubName}</h1>
-                  )}
-                  {season && (
-                    <p className={Styles.season}>Temporada {season}</p>
-                  )}
-                  {(titleTextMatch || titleText) && (
-                    <span className={Styles.season}>
-                      {titleTextMatch ? (
-                        <p className={Styles.p}>
-                          <OverflowText text={titleTextMatch} />
-                        </p>
-                      ) : (
-                        titleText
-                      )}
-                    </span>
-                  )}
-                </div>
-              </>
+              career.teamBadge && (
+                <img src={career.teamBadge} className={Styles.img} />
+              )
             )}
+            <div
+              className={Styles.container}
+              style={
+                titleTextMatch
+                  ? { alignItems: "center" }
+                  : { alignItems: "flex-start" }
+              }
+            >
+              {match ? (
+                <h1 className={Styles.h1}>
+                  <OverflowText text={match.league || ""} />
+                </h1>
+              ) : (
+                <h1 className={Styles.h1}>{career.clubName}</h1>
+              )}
+              {season && <p className={Styles.season}>Temporada {season}</p>}
+              {(titleTextMatch || titleText) && (
+                <span className={Styles.season}>
+                  {titleTextMatch ? (
+                    <p className={Styles.p}>
+                      <OverflowText text={titleTextMatch} />
+                    </p>
+                  ) : (
+                    titleText
+                  )}
+                </span>
+              )}
+            </div>
           </>
         )}
       </div>

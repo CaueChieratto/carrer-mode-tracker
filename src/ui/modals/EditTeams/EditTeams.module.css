@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+  max-height: 440px;
+  overflow-y: auto;
+  border-radius: 12px;
+  color: var(--blackColor);
+  position: relative;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.searchContainer {
+  margin-bottom: 8px;
+  position: sticky;
+  top: -24px;
+  z-index: 20;
+  background: var(--card-background-modal);
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border-overlay);
+}
+
+.searchContainer > div {
+  width: 100%;
+}
+
+.headerGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--border-overlay);
+  padding-bottom: 12px;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--blackColor);
+  margin: 0;
+}
+
+.teamCount {
+  background: var(--color-secondary);
+  color: var(--blackColorInverted);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.empty {
+  color: var(--color);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 32px 0;
+  background: var(--background-color-soft);
+  border-radius: 8px;
+  border: 1px dashed var(--border-overlay);
+}
+
+.teamList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  color: var(--color);
+  font-size: 1.1rem;
+  gap: 16px;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border-subtle);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerLarge {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+  border-top-color: var(--colorSpan);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

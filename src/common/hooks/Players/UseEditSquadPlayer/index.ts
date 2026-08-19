@@ -56,6 +56,29 @@ export const useEditSquadPlayer = ({
       updatedPlayerData.incomingLoan = playerBeingEdited.incomingLoan ?? false;
     }
 
+    const isAcademy = formData.get("isAcademy") === "true";
+    if (isAcademy) {
+      updatedPlayerData.isAcademy = true;
+      updatedPlayerData.academyNickname =
+        (formData.get("academyNickname") as string) || undefined;
+
+      const academyDataStr = formData.get("academyData") as string;
+      if (academyDataStr)
+        updatedPlayerData.academyData = JSON.parse(academyDataStr);
+
+      const academyHistoryStr = formData.get("academyHistory") as string;
+      if (academyHistoryStr)
+        updatedPlayerData.academyHistory = JSON.parse(academyHistoryStr);
+
+      const academyTournamentsStr = formData.get(
+        "academyTournaments",
+      ) as string;
+      if (academyTournamentsStr)
+        updatedPlayerData.academyTournaments = JSON.parse(
+          academyTournamentsStr,
+        );
+    }
+
     delete updatedPlayerData.buy;
     delete updatedPlayerData.statsLeagues;
     delete updatedPlayerData.ballonDor;

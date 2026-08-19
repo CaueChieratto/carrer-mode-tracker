@@ -1,96 +1,49 @@
-import { useState } from "react";
 import { Career } from "../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
+import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import Card from "../../../../../ui/Card";
 import SeasonRow from "../components/SeasonRow";
 import SeasonTotalStats from "../components/SeasonTotalStats";
+import { PlayerSeasonSkeleton } from "../ui/PlayerSeasonSkeleton";
 import LeagueStatsRowTotal from "./components/LeagueStatsRowTotal";
-import { useTotalPlayerTab } from "./hooks/useTotalPlayerTab";
+import { useTotalPlayerData } from "./hooks/useTotalPlayerData";
 import Styles from "./TotalPlayerTab.module.css";
-import NoStatsMessage from "../../../../../components/NoStatsMessage";
-import { Copy } from "../../../../../common/utils/Copy";
-import { buildPlayerTabCopyText } from "../helpers/buildPlayerTabCopyText";
-import { useLocation } from "react-router-dom";
-import { ClubData } from "../../../../../common/interfaces/club/clubData";
 
-type TotalPlayerTabProps = {
+export type TotalPlayerTabProps = {
   player?: Players;
   career: Career;
   season?: ClubData;
 };
 
-const TotalPlayerTab = ({ player, career, season }: TotalPlayerTabProps) => {
-  const location = useLocation();
-  const isNotSeason = location.pathname.includes("/Geral");
+const TotalPlayerTab = ({
+  player: propPlayer,
+  career,
+  season,
+}: TotalPlayerTabProps) => {
+  const {
+    isLoadingGroup,
+    isNotSeason,
+    player,
+    playerForTotalCalc,
+    playerWithAcademyTotal,
+    displayTrophies,
+    displayTrophiesWithBase,
+    hasAcademyStats,
+    expand,
+    toggleExpand,
+    handleCopyTotalLeague,
+    handleCopyTotal,
+    handleCopyTotalBase,
+  } = useTotalPlayerData({ career, propPlayer, season });
 
-  const { allTrophiesWon, seasonsCount } = useTotalPlayerTab(career, player);
-
-  const [expand, setExpand] = useState<Record<string, boolean>>({});
-
-  const toggleExpand = (leagueName: string) => {
-    setExpand((prev) => ({
-      ...prev,
-      [leagueName]: !prev[leagueName],
-    }));
-  };
-
-  if (!player) return null;
-
-  let displayTrophies = allTrophiesWon;
-  let displayIdentifier: string | number = seasonsCount;
-  let playerForTotalCalc = player;
-
-  if (!isNotSeason && season) {
-    const startYear =
-      new Date(career.createdAt).getFullYear() + season.seasonNumber - 1;
-    const endYear = (startYear + 1).toString().slice(-2);
-    const seasonString =
-      career.nation === "Brasil" ||
-      career.nation === "EUA" ||
-      career.nation === "Argentina"
-        ? startYear.toString()
-        : `${startYear.toString().slice(-2)}/${endYear}`;
-
-    displayTrophies = career.trophies.filter((t) =>
-      t.seasons.includes(seasonString),
-    );
-    displayIdentifier = seasonString;
-
-    const normalizedName = player.name.trim().toLowerCase();
-    const normalizedNation = player.nation.trim().toLowerCase();
-
-    const playerInThisSeason = season.players.find(
-      (p) =>
-        p.name.trim().toLowerCase() === normalizedName &&
-        p.nation.trim().toLowerCase() === normalizedNation,
-    );
-
-    if (playerInThisSeason) {
-      playerForTotalCalc = playerInThisSeason;
-    }
+  if (isLoadingGroup) {
+    return <PlayerSeasonSkeleton count={isNotSeason ? 2 : 1} />;
   }
 
-  const copyTotalLeague = async () => {
-    const text = buildPlayerTabCopyText(
-      "TOTAL_LEAGUE",
-      player,
-      displayTrophies,
-      displayIdentifier,
-    );
-    await Copy(text, "Estatísticas por liga copiadas com sucesso!");
-  };
+  if (!player || !playerForTotalCalc) return null;
 
-  const copyTotal = async () => {
-    const text = buildPlayerTabCopyText(
-      "TOTAL",
-      playerForTotalCalc,
-      displayTrophies,
-      displayIdentifier,
-    );
-    await Copy(text, "Estatísticas totais copiadas com sucesso!");
-  };
-
-  if (player?.statsLeagues.length === 0) {
+  if (player.statsLeagues.length === 0 && !hasAcademyStats) {
     return (
       <NoStatsMessage
         textOne="Nenhuma estatística encontrada"
@@ -101,14 +54,14 @@ const TotalPlayerTab = ({ player, career, season }: TotalPlayerTabProps) => {
 
   return (
     <>
-      {isNotSeason && (
+      {isNotSeason && player.statsLeagues.length > 0 && (
         <Card className={Styles.card}>
           <SeasonRow
             seasonString="Total por Liga"
             player={player}
-            onClickCopy={copyTotalLeague}
+            onClickCopy={handleCopyTotalLeague}
           />
-          {player?.statsLeagues.map((league) => {
+          {player.statsLeagues.map((league) => {
             const trophy = displayTrophies.find(
               (t) => t.leagueName === league.leagueName,
             );
@@ -130,7 +83,7 @@ const TotalPlayerTab = ({ player, career, season }: TotalPlayerTabProps) => {
         <SeasonRow
           seasonString="Total"
           player={playerForTotalCalc}
-          onClickCopy={copyTotal}
+          onClickCopy={handleCopyTotal}
         />
         <SeasonTotalStats
           isTotal
@@ -138,6 +91,21 @@ const TotalPlayerTab = ({ player, career, season }: TotalPlayerTabProps) => {
           trophiesWonInSeason={displayTrophies}
         />
       </Card>
+
+      {hasAcademyStats && playerWithAcademyTotal && (
+        <Card className={Styles.card}>
+          <SeasonRow
+            seasonString="Total (com a base)"
+            player={playerWithAcademyTotal}
+            onClickCopy={handleCopyTotalBase}
+          />
+          <SeasonTotalStats
+            isTotal
+            playerInSeason={playerWithAcademyTotal}
+            trophiesWonInSeason={displayTrophiesWithBase}
+          />
+        </Card>
+      )}
     </>
   );
 };

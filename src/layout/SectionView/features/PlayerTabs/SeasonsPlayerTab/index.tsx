@@ -6,6 +6,9 @@ import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import { useLocation } from "react-router-dom";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
+import { useMemo } from "react";
+import { useGroupAggregatedPlayers } from "../../../../../common/hooks/Players/useGroupAggregatedPlayers";
+import { PlayerSeasonSkeleton } from "../ui/PlayerSeasonSkeleton";
 
 type SeasonsPlayerTabProps = {
   career: Career;
@@ -14,25 +17,61 @@ type SeasonsPlayerTabProps = {
 };
 
 const SeasonsPlayerTab = ({
-  player,
+  player: propPlayer,
   career,
   season,
 }: SeasonsPlayerTabProps) => {
+  const location = useLocation();
+  const isNotSeason = location.pathname.includes("/Geral");
+
+  const { groupPlayers, isLoadingGroup } = useGroupAggregatedPlayers(
+    career,
+    isNotSeason,
+  );
+
+  const player = useMemo(() => {
+    if (!isNotSeason || !propPlayer) return propPlayer;
+    const normalizedName = propPlayer.name.trim().toLowerCase();
+    const normalizedNation = propPlayer.nation.trim().toLowerCase();
+
+    return (
+      groupPlayers.find(
+        (p) =>
+          p.name.trim().toLowerCase() === normalizedName &&
+          p.nation.trim().toLowerCase() === normalizedNation,
+      ) || propPlayer
+    );
+  }, [isNotSeason, propPlayer, groupPlayers]);
+
   const {
     expand,
     toggleExpand,
     seasonsPlayerPlayed,
     getSeasonString,
     getTrophiesWonInSeason,
-  } = useSeasonsPlayerTab(career, player);
-
-  const location = useLocation();
-  const isNotSeason = location.pathname.includes("/Geral");
+    isLoadingSeasons,
+  } = useSeasonsPlayerTab(career, player, isNotSeason);
 
   let renderableSeasons = useRenderableSeasons(seasonsPlayerPlayed, player);
 
   if (!isNotSeason && season) {
-    renderableSeasons = renderableSeasons.filter((s) => s.id === season.id);
+    renderableSeasons = renderableSeasons.filter(
+      (s) => s.season.id === season.id,
+    );
+  }
+
+  const uniqueSeasonsCount = useMemo(() => {
+    if (!career?.clubData) return 1;
+    const ids = new Set(career.clubData.map((c) => c.id));
+    return ids.size;
+  }, [career]);
+
+  if (isLoadingGroup) {
+    return <PlayerSeasonSkeleton count={uniqueSeasonsCount} />;
+  }
+
+  if (isLoadingSeasons) {
+    return null;
   }
 
   if (renderableSeasons.length === 0) {
@@ -47,16 +86,24 @@ const SeasonsPlayerTab = ({
   return (
     <>
       {renderableSeasons.map((renderableSeason) => {
-        const seasonString = getSeasonString(renderableSeason.seasonNumber);
-        const trophiesWonInSeason = getTrophiesWonInSeason(seasonString);
+        const seasonString = getSeasonString(
+          renderableSeason.season.seasonNumber,
+          renderableSeason.career,
+        );
+        const trophiesWonInSeason = getTrophiesWonInSeason(
+          seasonString,
+          renderableSeason.career,
+        );
+
         return (
           <PlayerSeason
-            key={renderableSeason.id}
-            season={renderableSeason}
+            key={renderableSeason.season.id}
+            season={renderableSeason.season}
             player={player}
             seasonString={seasonString}
             trophiesWonInSeason={trophiesWonInSeason}
             isExpanded={(key) => !!expand[key]}
+            teamBadge={renderableSeason.career.teamBadge}
             toggleExpand={toggleExpand}
           />
         );

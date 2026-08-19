@@ -14,7 +14,11 @@ export const getUnifiedPlayerLeagueStats = (
   const manualStats = player.statsLeagues || [];
   const matchStatsMap: Record<string, LeagueStats & { ratingSum: number }> = {};
 
-  matches.forEach((match) => {
+  const uniqueMatches = Array.from(
+    new Map(matches.map((m) => [m.matchesId, m])).values(),
+  );
+
+  uniqueMatches.forEach((match) => {
     if (match.status !== "FINISHED") return;
     const pStat = match.playerStats?.find((p) => p.playerId === player.id);
     if (!pStat) return;
@@ -32,7 +36,6 @@ export const getUnifiedPlayerLeagueStats = (
           assists: 0,
           cleanSheets: 0,
           rating: 0,
-          // 👇 1. Adicionado o minutesPlayed: 0 na inicialização
           minutesPlayed: 0,
           defenses: 0,
         },
@@ -49,7 +52,6 @@ export const getUnifiedPlayerLeagueStats = (
     ms.stats.goals += pStat.goals || 0;
     ms.stats.assists += pStat.assists || 0;
     ms.stats.cleanSheets += earnedCleanSheet;
-    // 👇 2. Somando os minutos jogados vindos da partida
     ms.stats.minutesPlayed =
       (ms.stats.minutesPlayed || 0) + (pStat.minutesPlayed || 0);
     ms.stats.defenses = (ms.stats.defenses || 0) + (pStat.defenses || 0);
@@ -62,7 +64,6 @@ export const getUnifiedPlayerLeagueStats = (
     mergedMap[m.leagueName] = {
       ...m,
       ratingSum: m.stats.rating * m.stats.games,
-      // 👇 3. Garantindo que os dados manuais antigos não quebrem por falta do campo
       stats: {
         ...m.stats,
         minutesPlayed: m.stats.minutesPlayed || 0,
@@ -78,7 +79,6 @@ export const getUnifiedPlayerLeagueStats = (
       s.goals += m.stats.goals;
       s.assists += m.stats.assists;
       s.cleanSheets += m.stats.cleanSheets;
-      // 👇 4. Somando as partidas com os dados manuais
       s.minutesPlayed = (s.minutesPlayed || 0) + (m.stats.minutesPlayed || 0);
       s.defenses = (s.defenses || 0) + (m.stats.defenses || 0);
       mergedMap[m.leagueName].ratingSum += m.ratingSum;
@@ -96,20 +96,38 @@ export const getUnifiedPlayerLeagueStats = (
   });
 };
 
+type AugmentedClubData = ClubData & { _isAugmented?: boolean };
+type AugmentedPlayer = Players & { _isAugmented?: boolean };
+
 export const augmentSeasonWithMatchStats = (
   season: ClubData,
   clubName: string,
 ): ClubData => {
-  const augmentedPlayers = season.players.map((player) => ({
-    ...player,
-    statsLeagues: getUnifiedPlayerLeagueStats(
-      player,
-      season.matches || [],
-      season.leagues || [],
-      clubName,
-    ),
-  }));
-  return { ...season, players: augmentedPlayers };
+  const currentSeason = season as AugmentedClubData;
+
+  if (currentSeason._isAugmented) return season;
+
+  const augmentedPlayers = season.players.map((player) => {
+    const currentPlayer = player as AugmentedPlayer;
+    if (currentPlayer._isAugmented) return player;
+
+    return {
+      ...player,
+      statsLeagues: getUnifiedPlayerLeagueStats(
+        player,
+        season.matches || [],
+        season.leagues || [],
+        clubName,
+      ),
+      _isAugmented: true,
+    };
+  });
+
+  return {
+    ...season,
+    players: augmentedPlayers,
+    _isAugmented: true,
+  } as ClubData;
 };
 
 export const augmentCareerWithMatchStats = (career: Career): Career => {

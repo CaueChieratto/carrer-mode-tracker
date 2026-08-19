@@ -1,29 +1,36 @@
 import Styles from "./GroupHeader.module.css";
 import { FaTrophy, FaPencilAlt } from "react-icons/fa";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { CrestStack } from "../CrestStack";
 
 type GroupHeaderProps = {
   managerName: string;
+  careers: Career[];
   careersCount: number;
   startYear: number;
   endYear: number;
   totalTrophies: number;
-  onOpenTrophies: () => void;
   onOpenEdit: () => void;
+  onOpenTrophies: () => void;
 };
 
 export const GroupHeader = ({
   managerName,
+  careers,
   careersCount,
   startYear,
   endYear,
   totalTrophies,
-  onOpenTrophies,
   onOpenEdit,
+  onOpenTrophies,
 }: GroupHeaderProps) => {
   return (
     <header className={Styles.header}>
       <div className={Styles.managerInfo}>
-        <h2 className={Styles.managerName}>{managerName}</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <CrestStack careers={careers} />
+          <h2 className={Styles.managerName}>{managerName}</h2>
+        </div>
         <span className={Styles.metaInfo}>
           {careersCount} Carreiras • {startYear} - {endYear}
         </span>

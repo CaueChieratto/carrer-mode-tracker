@@ -17,6 +17,7 @@ type PlayerSeasonProps = {
   trophiesWonInSeason: Trophy[];
   isExpanded: (key: string) => boolean;
   toggleExpand: (key: string) => void;
+  teamBadge?: string;
 };
 
 const PlayerSeason = ({
@@ -26,6 +27,7 @@ const PlayerSeason = ({
   trophiesWonInSeason,
   isExpanded,
   toggleExpand,
+  teamBadge,
 }: PlayerSeasonProps) => {
   const normalizedName = player?.name.trim().toLowerCase();
   const normalizedNation = player?.nation.trim().toLowerCase();
@@ -55,6 +57,7 @@ const PlayerSeason = ({
         seasonString={seasonString}
         player={player}
         onClickCopy={copySeason}
+        teamBadge={teamBadge}
       />
       {sortedLeagues.map((leagueStats) => {
         const trophy = trophiesWonInSeason.find(

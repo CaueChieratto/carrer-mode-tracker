@@ -19,27 +19,15 @@ type CareerGroupCardProps = {
 export const CareerGroupCard = ({ save }: CareerGroupCardProps) => {
   const { sortedCareers, currentId, totalTrophies, startYear, endYear } =
     useCareerGroupData(save);
+
   const [expandedId, setExpandedId] = useState<string | null>(
     currentId ?? null,
   );
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
   const { onOpenModal, setSelectedCareer } = useCareerPage();
 
   const handleToggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
-  };
-
-  const handleOpenGroupTrophies = () => {
-    if (save.careers.length === 0) return;
-    const groupCareer = {
-      ...save.careers[0],
-      id: save.id,
-      groupedCareers: save.careers,
-    } as Career & { groupedCareers?: Career[] };
-    setSelectedCareer(groupCareer);
-    onOpenModal(ModalType.SLIDE_UP_PANEL, groupCareer);
   };
 
   const handleEditCareer = (career: Career) => {
@@ -48,17 +36,31 @@ export const CareerGroupCard = ({ save }: CareerGroupCardProps) => {
     setIsEditModalOpen(false);
   };
 
+  const handleOpenGroupTrophies = () => {
+    if (save.careers.length === 0) return;
+    const latestCareer = save.careers[save.careers.length - 1];
+    const groupCareer = {
+      ...latestCareer,
+      id: save.id,
+      groupedCareers: save.careers,
+    } as Career & { groupedCareers?: Career[] };
+
+    setSelectedCareer(groupCareer);
+    onOpenModal(ModalType.SLIDE_UP_PANEL, groupCareer);
+  };
+
   return (
     <CareerGroupContext.Provider value={save.id}>
       <div className={Styles.groupContainer}>
         <GroupHeader
           managerName={save.managerName}
           careersCount={save.careers.length}
+          careers={save.careers}
           startYear={startYear}
           endYear={endYear}
           totalTrophies={totalTrophies}
-          onOpenTrophies={handleOpenGroupTrophies}
           onOpenEdit={() => setIsEditModalOpen(true)}
+          onOpenTrophies={handleOpenGroupTrophies}
         />
         <GroupTimeline
           sortedCareers={sortedCareers}

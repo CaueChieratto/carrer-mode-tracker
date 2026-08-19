@@ -1,0 +1,22 @@
+.form {
+  padding: 22px 12px;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  border-top: 0.5px solid var(--color-border-subtle);
+}
+
+.form_container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  padding: 10px 16px 24px 16px;
+  box-sizing: border-box;
+
+  overflow-y: auto;
+  max-height: 440px;
+}

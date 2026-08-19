@@ -23,7 +23,7 @@ export const PlayerDevelopment = () => {
   }, [selectedPlayer, currentAttribute, career]);
 
   return (
-    <div className={Styles.mobileContainer}>
+    <div className={`${Styles.mobileContainer} swiper-no-swiping`}>
       <div className={Styles.filterSection}>
         <CustomSelect
           name="metric-select"

@@ -2,6 +2,7 @@
 
 :root {
   --blackColor: #010127;
+  --blackColorInverted: #ffffff;
   --color: #919191;
   --navbar-color: #999;
   --colorSpan: #323232;
@@ -28,10 +29,14 @@
   --border-overlay: #00000014;
   --text-placeholder: #0000004d;
   --groupCard: #fafafa;
+  --color-border-subtle: #1a1a1a26;
+  --color-background-subtle: #1a1a1a0a;
+  --background-color-soft: #0000000d;
 }
 
 :root[data-theme="dark"] {
   --blackColor: #ffffff;
+  --blackColorInverted: #010127;
   --color: #a3a3a3;
   --navbar-color: #ffffff;
   --colorSpan: #c2c2c2;
@@ -58,6 +63,9 @@
   --border-overlay: #ffffff14;
   --text-placeholder: #ffffff4d;
   --groupCard: #262a31;
+  --color-border-subtle: #ffffff47;
+  --color-background-subtle: #ffffff0a;
+  --background-color-soft: #ffffff0d;
 }
 
 * {

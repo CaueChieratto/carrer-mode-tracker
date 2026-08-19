@@ -22,7 +22,7 @@ export const GeneralStatsFooter = ({
   return (
     <div className={Styles.footerSection}>
       <h2 className={Styles.footerTitle}>
-        {isGeral ? "Estatísticas Gerais" : "Estatísticas Gerais da Temporada"}
+        {isGeral ? "Estatísticas Totais" : "Estatísticas Totais da Temporada"}
       </h2>
       <div className={Styles.statsGrid}>
         {GENERAL_STATS_CARDS.map(

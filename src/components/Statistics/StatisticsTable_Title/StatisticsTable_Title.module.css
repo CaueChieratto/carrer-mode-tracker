@@ -102,11 +102,31 @@
   justify-content: center;
 }
 
+.season,
+.name_season {
+  color: var(--color-tertiary);
+}
+
 .season {
   font-size: 15px;
   display: flex;
   align-items: center;
-  color: var(--color-tertiary);
+}
+
+.positon,
+.name_season {
+  position: absolute;
+}
+
+.positon {
+  bottom: -3px;
+  left: 16px;
+}
+
+.name_season {
+  font-size: 14px;
+  bottom: 5px;
+  left: 60px;
 }
 
 .league_image_container {
@@ -138,10 +158,12 @@
 .expand_container {
   align-items: center;
   display: flex;
+  justify-content: space-evenly;
   font-size: 14px;
-  gap: 10px;
   height: 100%;
   text-align: center;
+  min-width: 100px;
+  position: relative;
 }
 
 .league_image {

@@ -29,29 +29,56 @@ export const useAddSquadPlayer = ({
   const addPlayer = async (formData: FormData) => {
     validateMonetaryInput(
       formData.get("playerValue") as string,
-      "Valor do Jogador"
+      "Valor do Jogador",
     );
     validateMonetaryInput(
       formData.get("buyValue") as string,
-      "Valor da Compra"
+      "Valor da Compra",
     );
     validateMonetaryInput(
       formData.get("salary") as string,
-      "Salário (Semanal)"
+      "Salário (Semanal)",
     );
     validateRequiredFields(formData);
 
     const isBecomingCaptain = (formData.get("isCaptain") as string) === "true";
     validateCaptainLimit(isBecomingCaptain, undefined, currentPlayers);
 
+    const globalId = formData.get("globalId") as string | null;
+
     const playerData = mapFormDataToPlayerData(
       formData,
       career,
-      season
+      season,
     ) as Omit<Players, "id">;
 
+    const isAcademy = formData.get("isAcademy") === "true";
+    if (isAcademy) {
+      playerData.isAcademy = true;
+      playerData.academyNickname =
+        (formData.get("academyNickname") as string) || undefined;
+
+      const academyDataStr = formData.get("academyData") as string;
+      if (academyDataStr) playerData.academyData = JSON.parse(academyDataStr);
+
+      const academyHistoryStr = formData.get("academyHistory") as string;
+      if (academyHistoryStr)
+        playerData.academyHistory = JSON.parse(academyHistoryStr);
+
+      const academyTournamentsStr = formData.get(
+        "academyTournaments",
+      ) as string;
+      if (academyTournamentsStr)
+        playerData.academyTournaments = JSON.parse(academyTournamentsStr);
+    }
+
     try {
-      await ServicePlayers.addPlayerToSeason(careerId, seasonId, playerData);
+      await ServicePlayers.addPlayerToSeason(
+        careerId,
+        seasonId,
+        playerData,
+        globalId || undefined,
+      );
       onPlayerAdded();
     } catch (error) {
       console.error("Erro ao adicionar jogador:", error);

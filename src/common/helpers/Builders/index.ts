@@ -5,11 +5,13 @@ export const buildCareerUpdates = (updates: {
   fileDataUrl?: string;
   clubName?: string;
   managerName?: string;
+  createdAt?: Date;
 }): Partial<Career> => {
   const updateObj: Partial<Career> = {};
   if (updates.colorsTeams) updateObj.colorsTeams = updates.colorsTeams;
   if (updates.fileDataUrl) updateObj.teamBadge = updates.fileDataUrl;
   if (updates.clubName) updateObj.clubName = updates.clubName;
   if (updates.managerName) updateObj.managerName = updates.managerName;
+  if (updates.createdAt) updateObj.createdAt = updates.createdAt;
   return updateObj;
 };

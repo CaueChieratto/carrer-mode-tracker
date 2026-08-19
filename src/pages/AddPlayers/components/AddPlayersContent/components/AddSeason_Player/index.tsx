@@ -40,6 +40,12 @@ const AddSeason_Player = forwardRef<HTMLFormElement, AddSeason_PlayerProps>(
     return (
       <>
         <Form className={Styles.form} ref={ref}>
+          <input
+            type="hidden"
+            name="draftedLeagues"
+            value={JSON.stringify(leagues)}
+          />
+
           {finalFormItems.map((item, index) => (
             <div key={index}>
               <FormSection

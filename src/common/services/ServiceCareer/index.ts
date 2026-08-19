@@ -50,6 +50,7 @@ export const ServiceCareer = {
     fileDataUrl?: string,
     clubName?: string,
     managerName?: string,
+    createdAt?: Date,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
@@ -59,6 +60,7 @@ export const ServiceCareer = {
       fileDataUrl,
       clubName,
       managerName,
+      createdAt,
     });
 
     try {
@@ -93,6 +95,7 @@ export const ServiceCareer = {
     if (!user) throw new Error("Usuário não autenticado");
 
     const career = await getCareerById(user.uid, careerId);
+
     const updatedTrophies = deleteSeasonFromTrophies(
       career,
       leagueName,

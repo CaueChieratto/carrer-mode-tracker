@@ -3,6 +3,7 @@ import Styles from "./BaseCard.module.css";
 import CustomSelect from "../../../../../../../components/CustomSelect";
 import React, { useEffect, useRef, useState } from "react";
 import { OverflowText } from "../../../../../../../components/OverflowText";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 type BaseCardProps = {
   Icon?: IconType;
@@ -14,6 +15,9 @@ type BaseCardProps = {
   currentSort?: string;
   onSortChange?: (value: string) => void;
   itemCount?: number;
+  isCollapsible?: boolean;
+  isExpanded?: boolean;
+  onToggle?: () => void;
 };
 
 export const BaseCard = ({
@@ -26,9 +30,11 @@ export const BaseCard = ({
   currentSort,
   itemCount,
   onSortChange,
+  isCollapsible,
+  isExpanded = true,
+  onToggle,
 }: BaseCardProps) => {
   const hasSelect = sortOptions && onSortChange && currentSort;
-
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const selectWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -56,6 +62,7 @@ export const BaseCard = ({
     >
       <div
         className={`${Styles.cardHeader} ${hasSelect ? Styles.cardHeaderWithSelect : ""}`}
+        style={isCollapsible ? { height: "28px" } : {}}
       >
         <h2 className={Styles.h2}>
           {iconNode ? (
@@ -63,13 +70,37 @@ export const BaseCard = ({
           ) : (
             <>{Icon && <Icon className={Styles.icon} />}</>
           )}
-
           {typeof title === "string" ? (
             <div className={Styles.titleWrapper}>
               <OverflowText text={title} />
             </div>
           ) : (
             title
+          )}
+          {isCollapsible && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onToggle) onToggle();
+              }}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "var(--club-color)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                padding: "4px",
+                marginLeft: "auto",
+              }}
+            >
+              {isExpanded ? (
+                <FaChevronUp size={20} />
+              ) : (
+                <FaChevronDown size={20} />
+              )}
+            </button>
           )}
         </h2>
         {hasSelect && (
@@ -97,7 +128,7 @@ export const BaseCard = ({
           </div>
         )}
       </div>
-      {children}
+      {(!isCollapsible || isExpanded) && children}
     </div>
   );
 };

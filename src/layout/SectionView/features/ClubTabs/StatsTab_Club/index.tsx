@@ -6,13 +6,14 @@ import { useSortedPlayersWithStats } from "./hooks/UseSortedPlayersWithStats";
 import PlayerStatsList from "./components/PlayerStatsList";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
-import { getAggregatedPlayersForCareer } from "../../../helpers/mergeMatchStats";
 import { ButtonsSwitch } from "../../../../../components/ButtonsSwitch";
 import { buildPlayersCopyText } from "./helpers/buildPlayersCopyText";
 import { sortPlayersList } from "./helpers/sortPlayersList";
 import { usePersistedSortOption } from "./hooks/usePersistedSortOption";
 import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 import { Copy } from "../../../../../common/utils/Copy";
+import { useAggregatedPlayers } from "../../../../../common/hooks/Players/UseAggregatedPlayers";
+import { augmentSeasonWithMatchStats } from "../../../helpers/mergeMatchStats";
 
 type StatsTab_ClubProps = {
   season: ClubData;
@@ -22,15 +23,17 @@ type StatsTab_ClubProps = {
 export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
-
   const storageKeySuffix = isGeralPage ? "geral" : season.id;
-
   const { sortOption, setSortOption, isReversed } =
     usePersistedSortOption(storageKeySuffix);
 
+  const careerAggregatedPlayers = useAggregatedPlayers(career);
+
   const playersToDisplay = useMemo(() => {
-    return isGeralPage ? getAggregatedPlayersForCareer(career) : season.players;
-  }, [isGeralPage, career, season.players]);
+    return isGeralPage
+      ? careerAggregatedPlayers
+      : augmentSeasonWithMatchStats(season, career.clubName).players;
+  }, [isGeralPage, careerAggregatedPlayers, season, career.clubName]);
 
   const playersWithStats = useSortedPlayersWithStats(playersToDisplay);
 
@@ -46,7 +49,6 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
   const copyList = async () => {
     if (!sortedPlayerList.length) return;
     const text = buildPlayersCopyText(sortedPlayerList);
-
     await Copy(text, "Lista copiada com sucesso!");
   };
 
@@ -58,7 +60,6 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
         onSelectChange={setSortOption}
         onClickCopy={copyList}
       />
-
       {playersWithStats.length > 0 ? (
         <PlayerStatsList
           players={sortedPlayerList}
@@ -69,7 +70,11 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
         <NoStatsMessage
           isStats
           textOne="Nenhuma estatística encontrada"
-          textTwo="Primeiro, adicione jogadores ao elenco para poder registrar suas estatísticas."
+          textTwo={
+            isGeralPage
+              ? "Jogue partidas para registrar o histórico global dos seus jogadores."
+              : "Primeiro, adicione jogadores ao elenco para poder registrar suas estatísticas."
+          }
         />
       )}
     </ContainerClubContent>

@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 16px;
   border-top: 2px dashed var(--border-input);
-  padding-top: 32px;
+  padding-top: 24px;
 }
 
 .footerTitle {

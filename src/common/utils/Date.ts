@@ -1,10 +1,13 @@
 export function formatDateInput(value: string) {
   const digits = value.replace(/\D/g, "");
-  const limited = digits.slice(0, 6);
+  const limited = digits.slice(0, 8);
 
   if (limited.length <= 2) return limited;
-  if (limited.length <= 4) return `${limited.slice(0, 2)}/${limited.slice(2)}`;
-  return `${limited.slice(0, 2)}/${limited.slice(2, 4)}/${limited.slice(4, 6)}`;
+  if (limited.length <= 4) {
+    return `${limited.slice(0, 2)}/${limited.slice(2)}`;
+  }
+
+  return `${limited.slice(0, 2)}/${limited.slice(2, 4)}/${limited.slice(4, 8)}`;
 }
 
 export function formatDateInputShort(value: string) {

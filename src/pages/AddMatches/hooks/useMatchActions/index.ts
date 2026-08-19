@@ -7,6 +7,7 @@ import { validateMatchForm } from "../../validators/validateMatchForm";
 import { MONTH_TO_NUM } from "../../../../layout/SectionView/features/ClubTabs/AllMatchesTab/constants/MONTH_OPTIONS";
 import { buildTeamData } from "../../helpers/buildTeamData";
 import { Teams } from "../../../../common/interfaces/Teams";
+import { auth } from "../../../../common/services/Firebase";
 
 interface UseMatchActionsParams {
   careerId: string;
@@ -76,12 +77,40 @@ export function useMatchActions({
           badge: teamFromUserHistory.badge,
         };
       } else {
-        newTeamData = await buildTeamData({
-          opponentTeam: formValues.opponentTeam,
-        });
+        const specialUserId = import.meta.env.VITE_SPECIAL_USER_ID;
+        const isSpecialUser = auth.currentUser?.uid === specialUserId;
+
+        if (isSpecialUser) {
+          newTeamData = await buildTeamData({
+            opponentTeam: formValues.opponentTeam,
+          });
+        } else if (specialUserId) {
+          const teamFromSpecialUser =
+            await ServiceMatches.findTeamInSpecialUserCareers(
+              specialUserId,
+              formValues.opponentTeam,
+            );
+
+          if (teamFromSpecialUser && teamFromSpecialUser.badge) {
+            newTeamData = {
+              name: formValues.opponentTeam,
+              badge: teamFromSpecialUser.badge,
+            };
+          } else {
+            newTeamData = {
+              name: formValues.opponentTeam,
+              badge: "",
+            };
+          }
+        } else {
+          newTeamData = {
+            name: formValues.opponentTeam,
+            badge: "",
+          };
+        }
       }
 
-      if (formValues.league) {
+      if (newTeamData && formValues.league) {
         newTeamData.leagueName = formValues.league;
       }
     }

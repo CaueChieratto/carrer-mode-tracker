@@ -123,7 +123,7 @@ const CustomSelect = ({
     <div
       className={`${Styles.custom_select_container} ${
         disabled ? Styles.disabled : ""
-      }`}
+      } swiper-no-swiping`}
       ref={selectRef}
     >
       <div

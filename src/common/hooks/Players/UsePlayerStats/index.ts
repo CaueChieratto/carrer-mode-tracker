@@ -2,14 +2,17 @@ import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { ServicePlayers } from "../../../services/ServicePlayers";
+import { Career } from "../../../interfaces/Career";
 
 type UsePlayerStatsProps = {
+  career: Career;
   careerId: string;
   currentPlayers?: Players[];
   handleGoBack: () => void;
 };
 
 export const usePlayerStats = ({
+  career,
   careerId,
   currentPlayers,
   handleGoBack,
@@ -23,10 +26,11 @@ export const usePlayerStats = ({
       try {
         const ballonDorValue = formData.get("ballonDor") === "true" ? 1 : 0;
         const playerNameValue = formData.get("playerName") as string;
+        const draftedLeaguesStr = formData.get("draftedLeagues") as string;
 
         if (playerNameValue) {
           const playerToUpdate = currentPlayers?.find(
-            (p) => p.name === playerNameValue
+            (p) => p.name === playerNameValue,
           );
 
           if (playerToUpdate) {
@@ -34,19 +38,33 @@ export const usePlayerStats = ({
               careerId,
               seasonId!,
               playerToUpdate.id,
-              ballonDorValue
+              ballonDorValue,
             );
+
+            if (draftedLeaguesStr) {
+              const leaguesToSave = JSON.parse(draftedLeaguesStr);
+              await ServicePlayers.updatePlayerStatsLeagues(
+                career,
+                seasonId!,
+                playerToUpdate.id,
+                leaguesToSave,
+              );
+
+              localStorage.removeItem(
+                `stats_backup_${career.id}_${seasonId}_${playerToUpdate.id}`,
+              );
+            }
           }
         }
       } catch (error) {
-        console.error("Falha ao atualizar a Bola de Ouro:", error);
-        alert("Falha ao atualizar a Bola de Ouro.");
+        console.error("Falha ao salvar o desempenho:", error);
+        alert("Falha ao salvar o desempenho.");
       } finally {
         setIsLoading(false);
         handleGoBack();
       }
     },
-    [careerId, seasonId, currentPlayers, handleGoBack]
+    [career, careerId, seasonId, currentPlayers, handleGoBack],
   );
 
   return { handleStatsSave, isStatsLoading };

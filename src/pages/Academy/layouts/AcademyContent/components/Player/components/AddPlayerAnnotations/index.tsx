@@ -6,17 +6,13 @@ import { useAcademyContext } from "../../../../../contexts/AcademyContext/hooks/
 
 export const AddPlayerAnnotations = () => {
   const { selectedPlayer, onUpdatePlayer } = useAcademyContext();
-
   const hasAnnotations =
     !!selectedPlayer?.annotations &&
     selectedPlayer.annotations.trim() !== "" &&
     selectedPlayer.annotations !== "<br>";
-
   const isReadOnly = false;
-
   const editorRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const [isEditing, setIsEditing] = useState(!hasAnnotations && !isReadOnly);
 
   useEffect(() => {
@@ -40,9 +36,7 @@ export const AddPlayerAnnotations = () => {
       setTimeout(() => editorRef.current?.focus(), 0);
       return;
     }
-
     if (!editorRef.current) return;
-
     setIsLoading(true);
     try {
       const updatedContent = editorRef.current.innerHTML;
@@ -61,30 +55,32 @@ export const AddPlayerAnnotations = () => {
 
   return (
     <div className={Styles.container}>
-      <div className={Styles.toolbar}>
-        <button
-          type="button"
-          className={Styles.toolButton}
-          onClick={() => handleFormat("bold")}
-          title="Negrito (Peso da Fonte)"
-        >
-          <FaBold />
-        </button>
-        <div className={Styles.divider} />
-        <select
-          className={Styles.toolSelect}
-          onChange={(e) => handleFormat("fontSize", e.target.value)}
-          defaultValue="3"
-          title="Tamanho da Fonte"
-        >
-          <option value="1">Muito Pequena</option>
-          <option value="2">Pequena</option>
-          <option value="3">Normal</option>
-          <option value="4">Grande</option>
-          <option value="5">Muito Grande</option>
-          <option value="6">Gigante</option>
-        </select>
-      </div>
+      {isEditing && (
+        <div className={Styles.toolbar}>
+          <button
+            type="button"
+            className={Styles.toolButton}
+            onClick={() => handleFormat("bold")}
+            title="Negrito (Peso da Fonte)"
+          >
+            <FaBold />
+          </button>
+          <div className={Styles.divider} />
+          <select
+            className={Styles.toolSelect}
+            onChange={(e) => handleFormat("fontSize", e.target.value)}
+            defaultValue="3"
+            title="Tamanho da Fonte"
+          >
+            <option value="1">Muito Pequena</option>
+            <option value="2">Pequena</option>
+            <option value="3">Normal</option>
+            <option value="4">Grande</option>
+            <option value="5">Muito Grande</option>
+            <option value="6">Gigante</option>
+          </select>
+        </div>
+      )}
 
       <div
         ref={editorRef}
@@ -105,7 +101,7 @@ export const AddPlayerAnnotations = () => {
         >
           {!isEditing ? (
             <>
-              <FaEdit /> Editar Anotação
+              <FaEdit /> Editar Anotações
             </>
           ) : (
             <>

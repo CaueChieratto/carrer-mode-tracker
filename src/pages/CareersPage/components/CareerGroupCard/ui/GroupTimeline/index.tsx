@@ -21,6 +21,7 @@ export const GroupTimeline = ({
         const isExpanded = expandedId === career.id;
         const isCurrent = career.id === currentId;
         const isLast = index === sortedCareers.length - 1;
+
         return (
           <div key={career.id} className={Styles.timelineRow}>
             <div className={Styles.timelineRail}>

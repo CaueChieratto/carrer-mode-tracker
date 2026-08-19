@@ -29,4 +29,5 @@ export interface Players {
   academyData?: AcademyPlayers;
   academyHistory?: AcademyPlayersHistory[];
   academyTournaments?: AcademyTournaments[];
+  academyNickname?: string;
 }

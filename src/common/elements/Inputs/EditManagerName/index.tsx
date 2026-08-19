@@ -5,12 +5,16 @@ type EditManagerNameProps = {
   managerName: string;
   className: string;
   setManagerName: Dispatch<SetStateAction<string>>;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 export const EditManagerName = ({
   managerName,
   className,
   setManagerName,
+  onFocus,
+  onBlur,
 }: EditManagerNameProps) => (
   <Input
     className={className}
@@ -19,5 +23,7 @@ export const EditManagerName = ({
     value={managerName}
     onChange={(e) => setManagerName(e.target.value)}
     placeholder={managerName}
+    onFocus={onFocus}
+    onBlur={onBlur}
   />
 );

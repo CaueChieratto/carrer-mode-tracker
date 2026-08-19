@@ -13,6 +13,9 @@ type FocusedCardProps = {
   currentSort?: string;
   onSortChange?: (value: string) => void;
   className?: string;
+  isCollapsible?: boolean;
+  isExpanded?: boolean;
+  onToggle?: () => void;
 };
 
 export const FocusedCard = ({
@@ -25,6 +28,9 @@ export const FocusedCard = ({
   onSortChange,
   sortOptions,
   className,
+  isCollapsible,
+  isExpanded,
+  onToggle,
 }: FocusedCardProps) => {
   return (
     <div
@@ -37,6 +43,9 @@ export const FocusedCard = ({
         sortOptions={sortOptions}
         currentSort={currentSort}
         onSortChange={onSortChange}
+        isCollapsible={isCollapsible}
+        isExpanded={isExpanded}
+        onToggle={onToggle}
       >
         {children}
       </BaseCard>

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Career } from "../../../interfaces/Career";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
+import { augmentSeasonWithMatchStats } from "../../../../layout/SectionView/helpers/mergeMatchStats";
 
 export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
   const aggregatedPlayers = useMemo(() => {
@@ -10,12 +11,16 @@ export const useAggregatedPlayers = (career: Career | undefined): Players[] => {
     }
 
     const playerHistoryMap = new Map<string, Players[]>();
-
     career.clubData.forEach((season) => {
-      season.players.forEach((player) => {
-        const key = player.id;
-        const history = playerHistoryMap.get(key) || [];
-        playerHistoryMap.set(key, [...history, player]);
+      const augmentedSeason = augmentSeasonWithMatchStats(
+        season,
+        career.clubName,
+      );
+
+      augmentedSeason.players.forEach((player) => {
+        const uniqueKey = `${player.name.trim().toLowerCase()}-${player.nation.trim().toLowerCase()}`;
+        const history = playerHistoryMap.get(uniqueKey) || [];
+        playerHistoryMap.set(uniqueKey, [...history, player]);
       });
     });
 

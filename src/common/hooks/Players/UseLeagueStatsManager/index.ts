@@ -3,7 +3,6 @@ import { Career } from "../../../interfaces/Career";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
 import { Stats } from "../../../interfaces/playersStats/stats";
-import { ServicePlayers } from "../../../services/ServicePlayers";
 import { leaguesByContinent } from "../../../utils/league";
 
 type UseLeagueStatsManagerProps = {
@@ -28,8 +27,29 @@ export const useLeagueStatsManager = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setLeagues(initialLeagues);
-  }, [initialLeagues]);
+    const selectedPlayerName = formValues.playerName;
+    const selectedPlayer = season.players.find(
+      (p) => p.name === selectedPlayerName && !p.sell,
+    );
+
+    if (selectedPlayer) {
+      const backupKey = `stats_backup_${career.id}_${season.id}_${selectedPlayer.id}`;
+      const backup = localStorage.getItem(backupKey);
+      if (backup) {
+        setLeagues(JSON.parse(backup));
+      } else {
+        setLeagues(initialLeagues);
+      }
+    } else {
+      setLeagues(initialLeagues);
+    }
+  }, [
+    initialLeagues,
+    formValues.playerName,
+    career.id,
+    season.id,
+    season.players,
+  ]);
 
   const handleAddOrEditLeague = async () => {
     setIsLoading(true);
@@ -104,16 +124,11 @@ export const useLeagueStatsManager = ({
     }
 
     try {
-      await ServicePlayers.updatePlayerStatsLeagues(
-        career,
-        season.id,
-        selectedPlayer.id,
-        updatedLeagues,
-      );
       setLeagues(updatedLeagues);
+      const backupKey = `stats_backup_${career.id}_${season.id}_${selectedPlayer.id}`;
+      localStorage.setItem(backupKey, JSON.stringify(updatedLeagues));
     } catch (error) {
-      console.error("Falha ao salvar estatísticas da liga:", error);
-      alert("Falha ao salvar estatísticas da liga.");
+      console.error("Falha ao salvar backup das estatísticas:", error);
     } finally {
       setFormValues((prev) => ({
         ...prev,

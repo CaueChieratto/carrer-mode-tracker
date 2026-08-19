@@ -15,6 +15,63 @@ import { Teams } from "../../../../common/interfaces/Teams";
 import { PlayerMatchStat } from "../../../../common/interfaces/PlayerMatchStat";
 
 export const ServiceMatches = {
+  findTeamInSpecialUserCareers: async (
+    specialUserId: string,
+    teamName: string,
+  ): Promise<Teams | null> => {
+    if (!specialUserId) return null;
+    const careersRef = collection(db, `users/${specialUserId}/careers`);
+    const snapshot = await getDocs(careersRef);
+    const searchName = teamName.toLowerCase().trim();
+
+    for (const careerDoc of snapshot.docs) {
+      const careerData = careerDoc.data() as Career;
+      if (!careerData.clubData) continue;
+      for (const season of careerData.clubData) {
+        const foundTeam = season.teams?.find(
+          (t) => t.name.toLowerCase().trim() === searchName,
+        );
+        if (foundTeam && foundTeam.badge) {
+          return foundTeam;
+        }
+      }
+    }
+    return null;
+  },
+
+  getMatchesBySeason: async (
+    careerId: string,
+    seasonId: string,
+  ): Promise<Match[]> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const matchesCollectionRef = collection(
+      db,
+      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
+    );
+    const snapshot = await getDocs(matchesCollectionRef);
+
+    return Promise.all(
+      snapshot.docs.map(async (matchDoc) => {
+        const match = matchDoc.data() as Match;
+
+        const statsSnap = await getDocs(
+          collection(matchDoc.ref, "playerStats"),
+        );
+        if (statsSnap.empty) return match;
+
+        const statsMap = new Map<string, PlayerMatchStat>();
+        (match.playerStats || []).forEach((s) => statsMap.set(s.playerId, s));
+        statsSnap.docs.forEach((d) =>
+          statsMap.set(d.id, d.data() as PlayerMatchStat),
+        );
+
+        return { ...match, playerStats: Array.from(statsMap.values()) };
+      }),
+    );
+  },
+
   addMatchToSeason: async (
     careerId: string,
     seasonId: string,
@@ -161,22 +218,6 @@ export const ServiceMatches = {
     await deleteDoc(matchRef);
 
     await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
-  },
-
-  getMatchesBySeason: async (
-    careerId: string,
-    seasonId: string,
-  ): Promise<Match[]> => {
-    const user = auth.currentUser;
-    if (!user) throw new Error("Usuário não autenticado");
-
-    const matchesCollectionRef = collection(
-      db,
-      `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/matches`,
-    );
-    const snapshot = await getDocs(matchesCollectionRef);
-
-    return snapshot.docs.map((doc) => doc.data() as Match);
   },
 
   savePlayerStatToSubcollection: async (

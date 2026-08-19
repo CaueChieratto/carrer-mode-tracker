@@ -49,6 +49,7 @@ export const useAddPlayersContent = ({
   });
 
   const { handleStatsSave, isStatsLoading } = usePlayerStats({
+    career,
     careerId,
     currentPlayers,
     handleGoBack,

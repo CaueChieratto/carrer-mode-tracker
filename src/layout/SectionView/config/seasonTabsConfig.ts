@@ -13,6 +13,8 @@ import { StatsTab_Club } from "../features/ClubTabs/StatsTab_Club";
 import { BestPlayersTab } from "../features/ClubTabs/BestPlayersTab";
 import { CuriositiesTab } from "../features/ClubTabs/CuriositiesTab";
 import { TableTab } from "../features/ClubTabs/TableTab";
+import AcademyPlayerTab from "../features/PlayerTabs/AcademyPlayerTab";
+import PlayerDetailedStatsTab from "../features/PlayerTabs/PlayerDetailedStatsTab";
 
 export type TabConfig = {
   title: string;
@@ -35,9 +37,16 @@ export const getSeasonTabsConfig = (
   navigate: NavigateFunction,
   isPlayer: boolean,
   notSeason?: boolean,
+  player?: Players,
 ): TabConfig[] => {
   const careerId = career.id;
   const hasAcademySaved = !!career.academy;
+  const isSpecialCareer = career.id === "d10554e8-da4f-4489-84b9-c513f414884b";
+
+  const hasAcademyData =
+    isPlayer &&
+    player?.isAcademy &&
+    (player?.academyNickname === career.academy?.nickname || isSpecialCareer);
 
   return [
     {
@@ -67,6 +76,10 @@ export const getSeasonTabsConfig = (
       action: () =>
         navigate(`/Career/${careerId}/Season/${seasonId}/AddTeamsToTable`),
     },
+    hasAcademyData && {
+      title: "Base",
+      component: AcademyPlayerTab,
+    },
     {
       title: isPlayer ? "Temporadas" : "Estatísticas",
       component: isPlayer ? SeasonsPlayerTab : StatsTab_Club,
@@ -80,10 +93,10 @@ export const getSeasonTabsConfig = (
                 `/Career/${careerId}/Season/${seasonId}/AddPlayer?from=stats`,
               ),
     },
-    !isPlayer && {
-      title: "Melhores Jogadores",
-      component: BestPlayersTab,
-      actionButton: Buttons.ChangeClubColors,
+    {
+      title: isPlayer ? "Estatísticas" : "Melhores Jogadores",
+      component: isPlayer ? PlayerDetailedStatsTab : BestPlayersTab,
+      actionButton: !isPlayer ? Buttons.ChangeClubColors : undefined,
     },
     {
       title: isPlayer ? "Total" : "Geral",

@@ -1,3 +1,4 @@
+import { FaTrophy } from "react-icons/fa";
 import Styles from "./Images.module.css";
 
 type ImagesProps = {
@@ -7,7 +8,11 @@ type ImagesProps = {
 export const Images = ({ trophyImage }: ImagesProps) => {
   return (
     <div className={Styles.imgWrapper}>
-      <img className={Styles.img} src={trophyImage} />
+      {trophyImage === "/images/leagues/default.png" ? (
+        <FaTrophy className={Styles.img} size={48} color="#FFD700" />
+      ) : (
+        <img className={Styles.img} src={trophyImage} alt="Troféu" />
+      )}
     </div>
   );
 };

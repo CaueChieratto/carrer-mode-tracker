@@ -1,0 +1,154 @@
+.teamRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--card-background-modal);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-overlay);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.teamRow:hover {
+  box-shadow: 0 4px 12px var(--bg-overlay);
+  border-color: var(--highlight-border);
+}
+
+.badgeContainer {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-input);
+  position: relative;
+  overflow: hidden;
+}
+
+.badgeLabel {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.badgeLabel:hover {
+  border-color: var(--colorSpan);
+  box-shadow: 0 0 0 2px var(--bg-overlay);
+  opacity: 0.8;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.uploadPlaceholder {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-tertiary);
+}
+
+.badge {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-input);
+  background-color: var(--background-color);
+  color: var(--blackColor);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--colorSpan);
+  box-shadow: 0 0 0 2px var(--bg-overlay);
+}
+
+.input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.rowActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.iconBtn {
+  background: var(--background-color-soft);
+  border: 1px solid transparent;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.saveBtn {
+  color: #10b981;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #10b981;
+  color: white;
+}
+
+.saveBtn:disabled {
+  color: var(--color-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.deleteBtn {
+  color: #ef4444;
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background: #ef4444;
+  color: white;
+}
+
+.deleteBtn:disabled {
+  color: var(--color-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border-subtle);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

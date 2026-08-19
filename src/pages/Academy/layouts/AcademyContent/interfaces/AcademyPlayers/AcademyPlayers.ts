@@ -18,4 +18,5 @@ export interface AcademyPlayers {
   exitDate?: string;
   status: AcademyPlayersStatus;
   evolutionHistory: AcademyPlayersHistory[];
+  seasonId?: string;
 }

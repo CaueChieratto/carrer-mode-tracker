@@ -19,9 +19,13 @@ import { useCareerBoard } from "./hooks/CareerBoard/useCareerBoard";
 import { CareerGroupCard } from "./components/CareerGroupCard";
 import { ConfirmModal } from "./ui/ConfirmModal";
 import { CareerPageContext } from "./contexts/CareerPageContext";
+import { auth } from "../../common/services/Firebase";
 
 const CareersPage = () => {
   const { careers, loading } = useCareers();
+
+  const currentUserId = auth.currentUser?.uid;
+  const isSpecialUser = currentUserId === import.meta.env.VITE_SPECIAL_USER_ID;
 
   const {
     activeModal,
@@ -78,14 +82,27 @@ const CareersPage = () => {
       {careers.length > 0 ? (
         <div className={classNames(Styles.container, hidden)}>
           <PrimaryHeader text="Minhas Carreiras">
-            <Button
-              isActive
-              fontSize="large"
-              fontWeight="bold"
-              onClick={() => onOpenModal(ModalType.NEW_CAREER)}
-            >
-              Nova Carreira
-            </Button>
+            <div className={Styles.wrapperBtns}>
+              <Button
+                isActive
+                fontSize="large"
+                fontWeight="bold"
+                onClick={() => onOpenModal(ModalType.NEW_CAREER)}
+              >
+                Nova Carreira
+              </Button>
+              {isSpecialUser && (
+                <Button
+                  isActive
+                  fontSize="large"
+                  fontWeight="bold"
+                  onClick={() => onOpenModal(ModalType.EDIT_TEAMS)}
+                  style={{ width: "100%" }}
+                >
+                  Editar Times
+                </Button>
+              )}
+            </div>
           </PrimaryHeader>
 
           <main className={Styles.main}>

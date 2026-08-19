@@ -1,8 +1,6 @@
 import Styles from "./StatisticsTable_Title.module.css";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { UseOverallColor } from "../../../common/hooks/Colors/GetOverallColor";
-import { GrExpand } from "react-icons/gr";
-import { GrContract } from "react-icons/gr";
 import {
   Dispatch,
   ReactNode,
@@ -12,6 +10,7 @@ import {
   useState,
 } from "react";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
 type StatisticsTable_TitleProps = {
   type: "info" | "expand" | "league";
@@ -23,6 +22,7 @@ type StatisticsTable_TitleProps = {
   leagueName?: string;
   leagueImage?: string;
   icon?: ReactNode;
+  teamBadge?: string;
 };
 
 const StatisticsTable_Title = ({
@@ -34,6 +34,7 @@ const StatisticsTable_Title = ({
   leagueName,
   leagueImage,
   icon,
+  teamBadge,
 }: StatisticsTable_TitleProps) => {
   const nameRef = useRef<HTMLHeadingElement>(null);
   const leagueRef = useRef<HTMLDivElement>(null);
@@ -90,11 +91,12 @@ const StatisticsTable_Title = ({
       name: playerName,
       overall: overall,
       icon: <RiCloseCircleLine />,
+      badge: teamBadge,
     },
     expand: {
       name: "Expandir",
-      iconExpand: <GrExpand />,
-      iconClose: <GrContract />,
+      iconExpand: <MdExpandLess />,
+      iconClose: <MdExpandMore />,
       leagueImage: leagueImage,
       leagueName: leagueName,
     },
@@ -107,8 +109,20 @@ const StatisticsTable_Title = ({
   const renderContent = () => {
     switch (type) {
       case "info": {
-        const { name, overall } = content.info;
-        return (
+        const { name, badge, overall } = content.info;
+        return badge ? (
+          <div
+            className={Styles.expand_container}
+            onTouchMove={(e) => e.stopPropagation()}
+          >
+            <div className={`${Styles.logo_container} ${Styles.positon}`}>
+              <img src={badge} className={Styles.logo} />
+            </div>
+            <h3 ref={nameRef} className={Styles.season_number}>
+              <span className={Styles.name_season}>{name}</span>
+            </h3>
+          </div>
+        ) : (
           <div
             className={
               !isPlayer ? Styles.container_name_over : Styles.container_season

@@ -51,11 +51,16 @@ export const useAcademyActions = ({
     setPlayersAcademy((prev) =>
       prev.map((p) => (p.id === updatedPlayer.id ? updatedPlayer : p)),
     );
-
     try {
+      const targetSeasonId = updatedPlayer.seasonId || seasonId;
+
+      if (!targetSeasonId || targetSeasonId === "geral") {
+        throw new Error("Season ID não encontrado para atualização.");
+      }
+
       await AcademyService.updatePlayerAcademy(
         careerId,
-        seasonId,
+        targetSeasonId,
         updatedPlayer,
       );
       refetchPlayers(true);
