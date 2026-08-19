@@ -1,14 +1,14 @@
-import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
 import { Career } from "../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../common/interfaces/club/clubData";
 import { Players } from "../../../../../common/interfaces/playersInfo/players";
 import { ContainerClubContent } from "../../../../../components/ContainerClubContent";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
-import { useBestPlayersStats } from "../../ClubTabs/BestPlayersTab/hooks/useBestPlayersStats";
 import { statConfigs } from "../../ClubTabs/BestPlayersTab/constants/statConfigs";
 import { UseRatingColor } from "../../../../../common/hooks/Colors/GetOverallColor";
 import Card from "../../../../../ui/Card";
+import { PlayerSeasonSkeleton } from "../ui/PlayerSeasonSkeleton";
+import { usePlayerStats } from "./hooks/usePlayerStats";
+
 import Styles from "./PlayerDetailedStatsTab.module.css";
 
 export type PlayerDetailedStatsTabProps = {
@@ -17,31 +17,24 @@ export type PlayerDetailedStatsTabProps = {
   player?: Players;
 };
 
-export const PlayerDetailedStatsTab = ({
+const PlayerDetailedStatsTab = ({
   season,
   career,
   player,
 }: PlayerDetailedStatsTabProps) => {
-  const location = useLocation();
-  const isGeralPage = location.pathname.includes("/Geral");
+  const { playerStats, isLoadingGroup, isGeralPage } = usePlayerStats({
+    season,
+    career,
+    player,
+  });
 
-  const statsData = useBestPlayersStats(season, career, isGeralPage, 0);
-
-  const playerStats = useMemo(() => {
-    if (!player) return null;
-    const normalizedName = player.name.trim().toLowerCase();
-    const normalizedNation = player.nation.trim().toLowerCase();
-
-    return statsData.find((d) => {
-      if (isGeralPage) {
-        return (
-          d.player.name.trim().toLowerCase() === normalizedName &&
-          d.player.nation.trim().toLowerCase() === normalizedNation
-        );
-      }
-      return d.player.id === player.id;
-    });
-  }, [statsData, player, isGeralPage]);
+  if (isLoadingGroup) {
+    return (
+      <ContainerClubContent>
+        <PlayerSeasonSkeleton count={1} />
+      </ContainerClubContent>
+    );
+  }
 
   if (!playerStats || playerStats.games === 0) {
     return (
@@ -62,29 +55,18 @@ export const PlayerDetailedStatsTab = ({
     <ContainerClubContent>
       <Card className={Styles.card}>
         <h2 className={Styles.title}>Estatísticas Detalhadas</h2>
-
         <div className={Styles.grid}>
           {statConfigs.map((config) => {
             const rawValue = playerStats[config.key] as number;
 
             if (
-              config.title.includes("Frequência") &&
-              playerStats.goals === 0 &&
-              config.key === "goalFrequency"
-            )
+              rawValue === 0 ||
+              rawValue === null ||
+              rawValue === undefined ||
+              Number.isNaN(rawValue)
+            ) {
               return null;
-            if (
-              config.title.includes("Frequência") &&
-              playerStats.assists === 0 &&
-              config.key === "assistFrequency"
-            )
-              return null;
-            if (
-              config.title.includes("Frequência") &&
-              playerStats.goals + playerStats.assists === 0 &&
-              config.key === "participationFrequency"
-            )
-              return null;
+            }
 
             const displayValue = config.format
               ? config.format(rawValue)
