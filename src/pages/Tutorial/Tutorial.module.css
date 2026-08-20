@@ -12,7 +12,8 @@
   --ornament-color: #ff0000;
   --snowflake-color: #ffffff;
   --background-color: #000000;
-  --_c: var(--tree-color), var(--background-color) 1deg 79deg,
+  --_c:
+    var(--tree-color), var(--background-color) 1deg 79deg,
     var(--background-color) 81deg;
   --g0: conic-gradient(from 140deg at 50% 87.5%, var(--_c));
   --g1: conic-gradient(from 140deg at 50% 81.25%, var(--_c));
@@ -23,9 +24,12 @@
     var(--ornament-color) 0 25%,
     #fff 0 50%
   );
-  background: var(--g0) 0 calc(var(--s) / -4),
-    var(--g0) var(--s) calc(3 * var(--s) / 4), var(--g1),
-    var(--g1) var(--s) var(--s), var(--g2) 0 calc(var(--s) / 4),
+  background:
+    var(--g0) 0 calc(var(--s) / -4),
+    var(--g0) var(--s) calc(3 * var(--s) / 4),
+    var(--g1),
+    var(--g1) var(--s) var(--s),
+    var(--g2) 0 calc(var(--s) / 4),
     var(--g2) var(--s) calc(5 * var(--s) / 4),
     var(--g3) calc(var(--s) / -10) var(--s),
     var(--g3) calc(9 * var(--s) / 10) calc(2 * var(--s)),
@@ -104,4 +108,27 @@
 .closeButton:active {
   transform: scale(0.95);
   background-color: #313131;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85svh;
+  overflow-y: auto;
+  padding: 10px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.grid::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.icon {
+  font-size: 20px;
+  color: var(--club-color, #ffffff);
 }
