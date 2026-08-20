@@ -11,6 +11,7 @@ export interface SquadFormField {
   isIncomingLoanOnly?: boolean;
   showOnJoin?: boolean;
   hideOnIncomingLoan?: boolean;
+  requiresGroupId?: boolean;
   isKnownPlayerOnly?: boolean;
   hideOnSell?: boolean;
   addOnly?: boolean;
@@ -39,6 +40,7 @@ export interface FieldConditionContext {
   isSigning: boolean;
   isIncomingLoan: boolean;
   isKnownPlayer: boolean;
+  hasGroupId: boolean;
 }
 
 export const filterFormSections = <T extends SquadFormField>(
@@ -71,6 +73,7 @@ export const filterFormSections = <T extends SquadFormField>(
             if (field.hideOnIncomingLoan && context.isIncomingLoan)
               return false;
             if (field.isKnownPlayerOnly && !context.isKnownPlayer) return false;
+            if (field.requiresGroupId && !context.hasGroupId) return false;
 
             return true;
           }),

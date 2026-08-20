@@ -27,6 +27,7 @@ export const positionOptionsBySector = {
 export const getSquadFormFields = (
   nationValue: string = "",
   pastPlayerOptions: string[] = [],
+  teamOptions: string[] = [],
 ) => {
   const allCountries = Object.keys(FIFA_COUNTRY_CODES);
 
@@ -71,6 +72,7 @@ export const getSquadFormFields = (
             checkbox: true,
             addOnly: true,
             showOnJoin: true,
+            requiresGroupId: true,
           },
         ],
       ],
@@ -166,9 +168,10 @@ export const getSquadFormFields = (
           {
             id: "fromClub",
             name: "Clube de Origem",
-            inputType: "text",
+            inputType: "searchable-select",
             placeholder: "Ex: Barcelona",
             icon: <GiPodium />,
+            options: teamOptions,
             showOnJoin: true,
             hideOnSell: true,
           },

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Players } from "../../../interfaces/playersInfo/players";
-import { useAddSquadPlayer } from "../UseAddSquadPlayer";
-import { useEditSquadPlayer } from "../UseEditSquadPlayer";
-import { Career } from "../../../interfaces/Career";
-import { ClubData } from "../../../interfaces/club/clubData";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { useAddSquadPlayer } from "../../../../../../common/hooks/Players/UseAddSquadPlayer";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import { Teams } from "../../../../../../common/interfaces/Teams";
+import { useEditSquadPlayer } from "../useEditSquadPlayer";
+import { ServiceMatches } from "../../../../../AddMatches/services/ServiceMatches";
 
-type UsePlayerActionsProps = {
+type usePlayerActionsProps = {
   careerId: string;
   seasonId: string;
   player?: Players;
@@ -23,13 +25,13 @@ export const usePlayerActions = ({
   onSuccess,
   career,
   season,
-}: UsePlayerActionsProps) => {
+}: usePlayerActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { addPlayer } = useAddSquadPlayer({
     careerId,
     seasonId,
-    onPlayerAdded: onSuccess,
+    onPlayerAdded: () => {},
     currentPlayers,
     career,
     season,
@@ -40,7 +42,7 @@ export const usePlayerActions = ({
       careerId,
       seasonId,
       playerId: player?.id ?? "",
-      onPlayerEdited: onSuccess,
+      onPlayerEdited: () => {},
       currentPlayers,
       career,
       season,
@@ -49,11 +51,30 @@ export const usePlayerActions = ({
   const handleAddOrEditPlayer = async (formData: FormData) => {
     setIsLoading(true);
     try {
+      const fromClubName = (formData.get("fromClub") as string)?.trim();
+
+      if (fromClubName) {
+        const teamAlreadyExists = season.teams?.some(
+          (t) => t.name.toLowerCase() === fromClubName.toLowerCase(),
+        );
+
+        if (!teamAlreadyExists) {
+          const newTeam: Teams = {
+            name: fromClubName,
+            showMatch: false,
+          };
+
+          await ServiceMatches.addTeamToSeason(careerId, seasonId, newTeam);
+        }
+      }
+
       if (player) {
         await editPlayer(formData);
       } else {
         await addPlayer(formData);
       }
+
+      onSuccess();
     } catch (error: unknown) {
       alert(
         error instanceof Error ? error.message : "Ocorreu um erro inesperado.",

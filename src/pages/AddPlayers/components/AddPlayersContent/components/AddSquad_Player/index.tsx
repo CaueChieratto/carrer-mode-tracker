@@ -1,7 +1,7 @@
 import Styles from "./AddSquad_Player.module.css";
 import Form from "../../../../../../components/Form";
 import FormSection from "../../../../../../components/FormSection";
-import { forwardRef } from "react";
+import { forwardRef, useMemo } from "react";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { ModalType } from "../../../../../../common/types/enums/ModalType";
@@ -39,9 +39,35 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
       isIncomingLoan,
     } = useSquadPlayerForm(player, career, season);
 
+    const filteredTeamOptions = useMemo(() => {
+      if (!career?.clubData) return [];
+
+      const teams = new Set<string>();
+      career.clubData.forEach((s) => {
+        s.teams?.forEach((t) => {
+          if (t.name) teams.add(t.name);
+        });
+      });
+
+      const allTeams = Array.from(teams).sort();
+
+      const searchValue = (formValues.fromClub || "")
+        .toLowerCase()
+        .replace(/\s/g, "");
+
+      if (searchValue) {
+        return allTeams.filter((teamName) =>
+          teamName.toLowerCase().replace(/\s/g, "").includes(searchValue),
+        );
+      }
+
+      return allTeams;
+    }, [career, formValues.fromClub]);
+
     const dynamicFields = getSquadFormFields(
       formValues.nation || "",
       pastPlayerOptions,
+      filteredTeamOptions,
     ) as SquadFormSection<SquadFormField>[];
 
     const activeSections = filterFormSections(dynamicFields, {
@@ -51,6 +77,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
       isSigning,
       isIncomingLoan,
       isKnownPlayer,
+      hasGroupId: !!career?.groupId,
     });
 
     const mergedFormValues = {

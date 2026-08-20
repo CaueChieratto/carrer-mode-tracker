@@ -132,12 +132,10 @@ export function useTableTeamActions({
       } else {
         await ServiceTable.addTeamToTable(careerId, seasonId, tableTeamData);
       }
-
       onSuccess();
     } catch (error) {
       console.error("Erro ao salvar time na tabela: ", error);
       alert("Ocorreu um erro ao salvar os dados. Tente novamente.");
-    } finally {
       setIsSaving(false);
     }
   }, [careerId, seasonId, teamId, formValues, season, career, onSuccess]);

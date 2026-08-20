@@ -8,7 +8,7 @@ import Load from "../../../../components/Load";
 import ModalManager from "../../../../common/constants/ModalManager";
 import { useSeasonTheme } from "../../../../common/hooks/Seasons/UseSeasonTheme";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
-import { useAddPlayersContent } from "./hooks/UseAddPlayersContent";
+import { useAddPlayersContent } from "./hooks/useAddPlayersContent";
 
 type AddPlayersContentProps = {
   origin: string | null;

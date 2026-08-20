@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect, useState } from "react";
-import { Form, useParams, useLocation } from "react-router-dom";
+import { Form, useParams, useLocation, useNavigate } from "react-router-dom";
 import Styles from "./AddTeamsToTable.module.css";
 import { useTableTeamForm } from "./hooks/useTableTeamForm/index.ts";
 import { useTableTeamActions } from "./hooks/useTableTeamActions/index.ts";
@@ -20,6 +20,7 @@ export const AddTeamsToTable = () => {
   }>();
 
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   const formRef = useRef<HTMLFormElement>(null);
   const { career, season } = useSeasonData(careerId, seasonId);
@@ -88,8 +89,8 @@ export const AddTeamsToTable = () => {
   }, [state?.teamToEdit, setFormValues]);
 
   const back = useCallback(() => {
-    window.location.href = `/Career/${careerId}/Season/${seasonId}`;
-  }, [careerId, seasonId]);
+    navigate(`/Career/${careerId}/Season/${seasonId}`);
+  }, [careerId, seasonId, navigate]);
 
   const { formFields } = useTableTeamForm({
     career,

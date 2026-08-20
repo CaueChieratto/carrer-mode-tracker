@@ -40,6 +40,7 @@ const TransferPlayerContent = ({
     handleSave,
     handleCustomInputChange,
     handleBooleanChangeWrapper,
+    filteredTeamOptions,
   } = useTransferForm({
     careerId,
     season,
@@ -51,9 +52,8 @@ const TransferPlayerContent = ({
 
   const sections =
     activeTab === 1
-      ? buildTransferSections(booleanValues)
-      : buildLoanSections(booleanValues, player);
-
+      ? buildTransferSections(booleanValues, filteredTeamOptions)
+      : buildLoanSections(booleanValues, player, filteredTeamOptions);
   return (
     <>
       <HeaderSeason

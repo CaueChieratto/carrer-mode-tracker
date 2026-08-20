@@ -9,6 +9,7 @@ import { BooleanValues } from "../../types";
 export const buildLoanSections = (
   booleanValues: BooleanValues,
   player: Players,
+  teamOptions: string[] = [],
 ) => {
   return [
     ...(player.loan
@@ -39,6 +40,8 @@ export const buildLoanSections = (
                   name: "Clube de destino",
                   icon: <GiPoliceBadge />,
                   placeholder: "Ex: Barcelona",
+                  inputType: "searchable-select",
+                  options: teamOptions,
                 },
               ],
               [

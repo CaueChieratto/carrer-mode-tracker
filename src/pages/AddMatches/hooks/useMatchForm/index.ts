@@ -74,18 +74,17 @@ export function useMatchForm({
 
   const allTeams = useMemo(() => {
     if (!career?.clubData) return [];
-
     const teamMap = new Map<string, Teams>();
-
     career.clubData.forEach((season) => {
       season.teams?.forEach((t) => {
+        if (t.showMatch === false) return;
+
         const key = `${t.name.toLowerCase().replace(/\s/g, "")}-${t.leagueName || ""}`;
         if (!teamMap.has(key)) {
           teamMap.set(key, t);
         }
       });
     });
-
     return Array.from(teamMap.values());
   }, [career]);
 

@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { getAddPlayerConfig } from "../../constants/AddPlayerConfig";
 import { Players } from "../../../../../../common/interfaces/playersInfo/players";
 import { useModalManager } from "../../../../../../common/hooks/Modal/UseModalManager";
-import { usePlayerActions } from "../../../../../../common/hooks/Players/UsePlayerActions";
+import { usePlayerActions } from "../usePlayerActions";
 import { usePlayerStats } from "../../../../../../common/hooks/Players/UsePlayerStats";
 import { Career } from "../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../common/interfaces/club/clubData";

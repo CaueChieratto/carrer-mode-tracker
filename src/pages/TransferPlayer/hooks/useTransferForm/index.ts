@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useEditSquadPlayer } from "../../../../common/hooks/Players/UseEditSquadPlayer";
 import { useForm } from "../../../../common/hooks/UseForm";
 import { Career } from "../../../../common/interfaces/Career";
 import { ClubData } from "../../../../common/interfaces/club/clubData";
@@ -11,6 +10,9 @@ import { Field } from "../../../../components/FormSection";
 import { BooleanValues, FormValues } from "../../types";
 import { validateTransfer } from "../../validators/transferValidator";
 import { validateLoan } from "../../validators/loanValidator";
+import { Teams } from "../../../../common/interfaces/Teams";
+import { useEditSquadPlayer } from "../../../AddPlayers/components/AddPlayersContent/hooks/useEditSquadPlayer";
+import { ServiceMatches } from "../../../AddMatches/services/ServiceMatches";
 
 type UseTransferFormProps = {
   careerId: string;
@@ -31,7 +33,6 @@ export const useTransferForm = ({
 }: UseTransferFormProps) => {
   const [searchParams] = useSearchParams();
   const initialMode = searchParams.get("mode") === "loan" ? 2 : 1;
-
   const [activeTab] = useState<number>(initialMode);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,10 +48,35 @@ export const useTransferForm = ({
     seasonId: season.id,
     playerId: player.id,
     currentPlayers,
-    onPlayerEdited: handleGoBack,
+    onPlayerEdited: () => {},
     career,
     season,
   });
+
+  const filteredTeamOptions = useMemo(() => {
+    if (!career?.clubData) return [];
+
+    const teams = new Set<string>();
+    career.clubData.forEach((s) => {
+      s.teams?.forEach((t) => {
+        if (t.name) teams.add(t.name);
+      });
+    });
+
+    const allTeams = Array.from(teams).sort();
+
+    const searchValue = (formValues.toClub || "")
+      .toLowerCase()
+      .replace(/\s/g, "");
+
+    if (searchValue) {
+      return allTeams.filter((teamName) =>
+        teamName.toLowerCase().replace(/\s/g, "").includes(searchValue),
+      );
+    }
+
+    return allTeams;
+  }, [career, formValues.toClub]);
 
   useEffect(() => {
     if (player?.loan) {
@@ -92,6 +118,28 @@ export const useTransferForm = ({
     handleInputChange(e, field);
   };
 
+  const saveDestinationTeamIfNew = async (toClubName: string) => {
+    if (
+      !toClubName ||
+      toClubName === "Aposentadoria" ||
+      toClubName === "Fim de Contrato"
+    )
+      return;
+
+    const teamNameCleaned = toClubName.trim();
+    const teamAlreadyExists = season.teams?.some(
+      (t) => t.name.toLowerCase() === teamNameCleaned.toLowerCase(),
+    );
+
+    if (!teamAlreadyExists) {
+      const newTeam: Teams = {
+        name: teamNameCleaned,
+        showMatch: false,
+      };
+      await ServiceMatches.addTeamToSeason(careerId, season.id, newTeam);
+    }
+  };
+
   const processTransfer = async () => {
     const { isValid, error, data } = validateTransfer(
       formValues as FormValues,
@@ -101,6 +149,9 @@ export const useTransferForm = ({
       alert(error);
       return;
     }
+
+    await saveDestinationTeamIfNew(data.toClub);
+
     await sellPlayer(data.sellValue, data.toClub, data.dateExit);
   };
 
@@ -117,6 +168,8 @@ export const useTransferForm = ({
     if (data.isReturning) {
       await returnLoanPlayer(data.dateLoan);
     } else {
+      await saveDestinationTeamIfNew(data.toClub!);
+
       await loanPlayer(
         data.buyOption || "",
         data.toClub!,
@@ -135,6 +188,7 @@ export const useTransferForm = ({
       } else {
         await processLoan();
       }
+      handleGoBack();
     } catch (error) {
       alert("Ocorreu um erro ao processar a negociação.");
       console.error("Erro: ", error);
@@ -161,5 +215,6 @@ export const useTransferForm = ({
     handleSave,
     handleCustomInputChange,
     handleBooleanChangeWrapper,
+    filteredTeamOptions,
   };
 };

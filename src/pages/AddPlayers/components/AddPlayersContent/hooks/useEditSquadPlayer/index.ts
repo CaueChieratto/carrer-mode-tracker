@@ -1,13 +1,13 @@
-import { mapFormDataToPlayerData } from "../../../helpers/Mappers";
+import { mapFormDataToPlayerData } from "../../../../../../common/helpers/Mappers";
 import {
   validateCaptainLimit,
   validateMonetaryInput,
   validateRequiredFields,
-} from "../../../helpers/Validators";
-import { Career } from "../../../interfaces/Career";
-import { ClubData } from "../../../interfaces/club/clubData";
-import { Players } from "../../../interfaces/playersInfo/players";
-import { ServicePlayers } from "../../../services/ServicePlayers";
+} from "../../../../../../common/helpers/Validators";
+import { Career } from "../../../../../../common/interfaces/Career";
+import { ClubData } from "../../../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../../../common/interfaces/playersInfo/players";
+import { ServicePlayers } from "../../../../../../common/services/ServicePlayers";
 
 type UseEditSquadPlayerProps = {
   careerId: string;

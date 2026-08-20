@@ -4,7 +4,10 @@ import { GiPoliceBadge } from "react-icons/gi";
 import { FaUserClock, FaFileInvoice } from "react-icons/fa";
 import { BooleanValues } from "../../types";
 
-export const buildTransferSections = (booleanValues: BooleanValues) => {
+export const buildTransferSections = (
+  booleanValues: BooleanValues,
+  teamOptions: string[] = [],
+) => {
   const isSpecialExit =
     booleanValues.isRetirement || booleanValues.isEndContract;
 
@@ -39,6 +42,8 @@ export const buildTransferSections = (booleanValues: BooleanValues) => {
                   name: "Clube de destino",
                   icon: <GiPoliceBadge />,
                   placeholder: "Ex: Barcelona",
+                  inputType: "searchable-select",
+                  options: teamOptions,
                 },
               ],
             ]
