@@ -10,8 +10,12 @@ import SectionView from "../../layout/SectionView";
 import { useMemo } from "react";
 import { augmentCareerWithMatchStats } from "../../layout/SectionView/helpers/mergeMatchStats";
 import { getSeasonTabsConfig } from "../../layout/SectionView/config/seasonTabsConfig";
+import { useCareers } from "../../common/hooks/Career/UseCareer";
+import { Career } from "../../common/interfaces/Career";
+
 const Player = () => {
   const { loading, career, season } = useSeasonView(true, true);
+  const { careers: allCareers } = useCareers();
   const { playerId, seasonId } = useParams<{
     playerId: string;
     seasonId: string;
@@ -21,11 +25,6 @@ const Player = () => {
   const { activeModal } = useModalManager();
 
   const isNotSeason = location.pathname.includes("/Geral") || !seasonId;
-
-  const augmentedCareer = useMemo(() => {
-    if (!career) return null;
-    return augmentCareerWithMatchStats(career);
-  }, [career]);
 
   const actualSeason = isNotSeason
     ? season
@@ -91,32 +90,63 @@ const Player = () => {
     );
   }, [spoofedCareer, actualSeason, navigate, isNotSeason, player]);
 
+  const groupCareers = useMemo((): Career[] => {
+    if (!career) return [];
+    if (!career.groupId) return [career];
+
+    const siblings = allCareers.filter((c) => c.groupId === career.groupId);
+    return siblings.length > 0 ? siblings : [career];
+  }, [career, allCareers]);
+
+  const { totalSeasons, totalClubs } = useMemo(() => {
+    if (!player) return { totalSeasons: 0, totalClubs: 0 };
+
+    let seasons = 0;
+    let clubs = 0;
+
+    groupCareers.forEach((c) => {
+      const augmented = augmentCareerWithMatchStats(c);
+      let playedAtThisClub = false;
+
+      augmented.clubData.forEach((s) => {
+        const playerInSeason = s.players.find(
+          (p) =>
+            p.name.trim().toLowerCase() === player.name.trim().toLowerCase() &&
+            p.nation.trim().toLowerCase() ===
+              player.nation.trim().toLowerCase(),
+        );
+
+        if (!playerInSeason) return;
+
+        const totalStats = calculateTotalStats(playerInSeason);
+        const hasPlayed =
+          (totalStats.minutesPlayed ?? 0) > 0 ||
+          totalStats.games > 0 ||
+          totalStats.goals > 0 ||
+          totalStats.assists > 0 ||
+          totalStats.cleanSheets > 0;
+
+        if (hasPlayed) {
+          seasons += 1;
+          playedAtThisClub = true;
+        }
+      });
+
+      if (playedAtThisClub) clubs += 1;
+    });
+
+    return { totalSeasons: seasons, totalClubs: clubs };
+  }, [groupCareers, player]);
+
   if (loading) return <Load />;
   if (!career || !season || !actualSeason) return <NotFoundDisplay />;
 
-  const seasonsPlayerPlayed = augmentedCareer?.clubData.filter((s) => {
-    const playerInSeason = s.players.find(
-      (p) =>
-        p.name.trim().toLowerCase() === player?.name.trim().toLowerCase() &&
-        p.nation.trim().toLowerCase() === player?.nation.trim().toLowerCase(),
-    );
+  const seasonLabel = totalSeasons === 1 ? "Temporada" : "Temporadas";
 
-    if (!playerInSeason) return false;
-
-    const totalStats = calculateTotalStats(playerInSeason);
-
-    return (
-      (totalStats.minutesPlayed ?? 0) > 0 ||
-      totalStats.games > 0 ||
-      totalStats.goals > 0 ||
-      totalStats.assists > 0 ||
-      totalStats.cleanSheets > 0
-    );
-  }).length;
-
-  const titleText = `${seasonsPlayerPlayed} ${
-    seasonsPlayerPlayed === 1 ? "Temporada" : "Temporadas"
-  } no clube`;
+  const titleText =
+    totalClubs > 1
+      ? `${totalSeasons} ${seasonLabel} e ${totalClubs} Clubes`
+      : `${totalSeasons} ${seasonLabel} no clube`;
 
   return (
     <>

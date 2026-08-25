@@ -39,6 +39,19 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
       isIncomingLoan,
     } = useSquadPlayerForm(player, career, season);
 
+    const filteredPastPlayerOptions = useMemo(() => {
+      const searchValue = (formValues.selectedPastPlayer || "")
+        .toLowerCase()
+        .replace(/\s/g, "");
+
+      if (searchValue) {
+        return pastPlayerOptions.filter((playerName) =>
+          playerName.toLowerCase().replace(/\s/g, "").includes(searchValue),
+        );
+      }
+      return pastPlayerOptions;
+    }, [pastPlayerOptions, formValues.selectedPastPlayer]);
+
     const filteredTeamOptions = useMemo(() => {
       if (!career?.clubData) return [];
 
@@ -66,7 +79,7 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
 
     const dynamicFields = getSquadFormFields(
       formValues.nation || "",
-      pastPlayerOptions,
+      filteredPastPlayerOptions,
       filteredTeamOptions,
     ) as SquadFormSection<SquadFormField>[];
 
