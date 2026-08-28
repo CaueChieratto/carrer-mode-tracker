@@ -19,6 +19,7 @@ import { ComparePlayers } from "./pages/ComparePlayers";
 import { AddTeamsToTable } from "./pages/AddTeamsToTable";
 import { Academy } from "./pages/Academy";
 import TransferPlayer from "./pages/TransferPlayer";
+import { GroupCareerPage } from "./pages/GroupCareerPage";
 
 type AppProps = {
   career?: Career;
@@ -63,6 +64,10 @@ export default function App({ career }: AppProps) {
     {
       path: "/CareersPage",
       element: createElement(CareersPage, { career }),
+    },
+    {
+      path: "/CareerGroup/:groupId/Geral",
+      element: <GroupCareerPage />,
     },
     {
       path: "/Career/:careerId/Season/:seasonId/Compare",

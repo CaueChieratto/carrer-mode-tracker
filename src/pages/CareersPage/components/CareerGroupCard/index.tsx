@@ -11,12 +11,15 @@ import {
 import { Career } from "../../../../common/interfaces/Career";
 import { ModalType } from "../../../../common/types/enums/ModalType";
 import { GroupEditModal } from "./ui/GroupEditModal";
+import { useNavigate } from "react-router-dom";
 
 type CareerGroupCardProps = {
   save: CareerGroup;
 };
 
 export const CareerGroupCard = ({ save }: CareerGroupCardProps) => {
+  const navigate = useNavigate();
+
   const { sortedCareers, currentId, totalTrophies, startYear, endYear } =
     useCareerGroupData(save);
 
@@ -61,6 +64,9 @@ export const CareerGroupCard = ({ save }: CareerGroupCardProps) => {
           totalTrophies={totalTrophies}
           onOpenEdit={() => setIsEditModalOpen(true)}
           onOpenTrophies={handleOpenGroupTrophies}
+          onNavigate={() =>
+            navigate(`/CareerGroup/${save.id}/Geral`, { state: { save } })
+          }
         />
         <GroupTimeline
           sortedCareers={sortedCareers}

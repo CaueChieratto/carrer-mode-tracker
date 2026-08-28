@@ -1,0 +1,86 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clubCard {
+  padding: 0;
+  overflow: hidden;
+  background: var(--card-background);
+  box-shadow: 0 4px 12px #0003;
+  border-radius: 12px;
+}
+
+.clubCardHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  border: none;
+  padding: 16px;
+}
+
+.clubBadgeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backgroundImg {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  position: relative;
+}
+
+.clubBadge {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.clubTitleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.clubName {
+  font-size: 24px;
+  color: var(--blackColor);
+  font-weight: 600;
+}
+
+.careerDates {
+  font-size: 12px;
+  color: var(--colorSpan);
+  font-weight: 600;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  color: var(--color-add-player);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.clubCardBody {
+  padding: 0 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background-color: var(--groupCard);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 12px 0;
+}

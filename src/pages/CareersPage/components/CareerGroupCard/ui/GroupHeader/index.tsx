@@ -12,6 +12,7 @@ type GroupHeaderProps = {
   totalTrophies: number;
   onOpenEdit: () => void;
   onOpenTrophies: () => void;
+  onNavigate: () => void;
 };
 
 export const GroupHeader = ({
@@ -23,10 +24,11 @@ export const GroupHeader = ({
   totalTrophies,
   onOpenEdit,
   onOpenTrophies,
+  onNavigate,
 }: GroupHeaderProps) => {
   return (
     <header className={Styles.header}>
-      <div className={Styles.managerInfo}>
+      <div className={Styles.managerInfo} onClick={onNavigate}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <CrestStack careers={careers} />
           <h2 className={Styles.managerName}>{managerName}</h2>

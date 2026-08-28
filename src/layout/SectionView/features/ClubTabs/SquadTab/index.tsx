@@ -63,23 +63,23 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
       />
 
       {isGrouped ? (
-        POSITION_DATA.map((group) => {
+        POSITION_DATA.map((group, i) => {
           const players = groupedData.get(group.key) || [];
 
           if (group.key === "loaned" && players.length === 0) return null;
 
           return (
-            <Card key={group.name} className={Styles.card}>
+            <Card key={`${group.name}-${i}`} className={Styles.card}>
               <SquadElements.Header
                 name={group.name}
                 color={group.color}
                 quantity={players.length}
               />
-              {players.map((player) => (
+              {players.map((player, y) => (
                 <SquadElements.Section
                   {...player}
                   matches={season.matches || []}
-                  key={player.id}
+                  key={`${player.id}-${y}`}
                   currency={currency}
                   academyNickname={player.academyNickname || academyNickname}
                 />
@@ -90,11 +90,11 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
       ) : (
         <Card className={Styles.card}>
           <SquadElements.Header name={sortOption} color={clubColor} />
-          {flatData.map((player) => (
+          {flatData.map((player, x) => (
             <SquadElements.Section
               {...player}
               matches={season.matches || []}
-              key={player.id}
+              key={`${player.id}-${x}`}
               currency={currency}
               academyNickname={academyNickname}
             />
