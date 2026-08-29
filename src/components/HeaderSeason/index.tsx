@@ -1,17 +1,17 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Career } from "../../common/interfaces/Career";
-import Styles from "./HeaderSeason.module.css";
-import Button from "../Button";
-import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
 import { Players } from "../../common/interfaces/playersInfo/players";
 import { Match } from "../../common/interfaces/Match";
-import { OverflowText } from "../OverflowText";
-import { PlayerCircle } from "../../pages/Match/components/LineupTab/layouts/Section/components/SlotButton/components/PlayerDetails/PlayerCircle";
+import { useSeasonTheme } from "../../common/hooks/Seasons/UseSeasonTheme";
+import Button from "../Button";
+import { PlayerHeaderInfo } from "./components/PlayerHeaderInfo";
+import { ClubHeaderInfo } from "./components/ClubHeaderInfo";
+import { useHeaderNavigation } from "./hooks/useHeaderNavigation";
+import Styles from "./HeaderSeason.module.css";
 
-type HeaderSeasonProps = {
+export type HeaderSeasonProps = {
   career: Career;
-  season?: number;
   careerId: string;
+  season?: number;
   titleText?: string;
   titleTextMatch?: string;
   backSeasons?: () => void;
@@ -31,19 +31,12 @@ const HeaderSeason = ({
   isPlayer,
   match,
 }: HeaderSeasonProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { seasonId } = useParams<{ seasonId?: string }>();
   const { clubColor, darkClubColor } = useSeasonTheme();
-
-  const searchParams = new URLSearchParams(location.search);
-  const fromPlayerId = searchParams.get("playerId");
-  const isFromGeral = searchParams.get("fromGeral") === "true";
-  const isFromSeasonPlayer = searchParams.get("fromSeasonPlayer") === "true";
-
-  const leagueLogo = career.clubData
-    ?.flatMap((club) => club.leagues)
-    ?.find((league) => league?.name === match?.league)?.logo;
+  const { handleGoBack } = useHeaderNavigation({
+    careerId,
+    backSeasons,
+    isPlayer,
+  });
 
   return (
     <header
@@ -54,97 +47,22 @@ const HeaderSeason = ({
     >
       <div className={Styles.container_club}>
         {isPlayer ? (
-          <div className={Styles.container_player}>
-            <PlayerCircle shirtNumber={player?.shirtNumber} />
-            <div className={Styles.container}>
-              <h1 className={match ? Styles.h1 : Styles.h1_player}>
-                {player?.name}
-              </h1>
-              {titleText && <p className={Styles.season}>{titleText}</p>}
-            </div>
-          </div>
+          <PlayerHeaderInfo
+            player={player}
+            match={match}
+            titleText={titleText}
+          />
         ) : (
-          <>
-            {match ? (
-              <div className={Styles.img_card}>
-                <img src={leagueLogo} className={Styles.img_league} />
-              </div>
-            ) : (
-              career.teamBadge && (
-                <img src={career.teamBadge} className={Styles.img} />
-              )
-            )}
-            <div
-              className={Styles.container}
-              style={
-                titleTextMatch
-                  ? { alignItems: "center" }
-                  : { alignItems: "flex-start" }
-              }
-            >
-              {match ? (
-                <h1 className={Styles.h1}>
-                  <OverflowText text={match.league || ""} />
-                </h1>
-              ) : (
-                <h1 className={Styles.h1}>{career.clubName}</h1>
-              )}
-              {season && <p className={Styles.season}>Temporada {season}</p>}
-              {(titleTextMatch || titleText) && (
-                <span className={Styles.season}>
-                  {titleTextMatch ? (
-                    <p className={Styles.p}>
-                      <OverflowText text={titleTextMatch} />
-                    </p>
-                  ) : (
-                    titleText
-                  )}
-                </span>
-              )}
-            </div>
-          </>
+          <ClubHeaderInfo
+            career={career}
+            match={match}
+            season={season}
+            titleText={titleText}
+            titleTextMatch={titleTextMatch}
+          />
         )}
       </div>
-
-      <Button
-        onClick={() => {
-          if (fromPlayerId) {
-            if (isFromSeasonPlayer && seasonId) {
-              navigate(
-                `/Career/${careerId}/Season/${seasonId}/Player/${fromPlayerId}`,
-              );
-            } else if (isFromGeral) {
-              navigate(`/Career/${careerId}/Geral/Player/${fromPlayerId}`);
-            } else if (seasonId) {
-              navigate(
-                `/Career/${careerId}/Season/${seasonId}/EditPlayer/${fromPlayerId}`,
-              );
-            } else {
-              navigate(`/Career/${careerId}`);
-            }
-            return;
-          }
-
-          if (backSeasons) {
-            backSeasons();
-            return;
-          }
-
-          if (isPlayer) {
-            if (location.pathname.includes("/Geral")) {
-              navigate(`/Career/${careerId}/Geral`);
-            } else if (seasonId) {
-              navigate(`/Career/${careerId}/Season/${seasonId}`);
-            } else {
-              navigate(`/Career/${careerId}`);
-            }
-            return;
-          }
-
-          navigate(`/Career/${careerId}`);
-        }}
-        className={Styles.button}
-      >
+      <Button onClick={handleGoBack} className={Styles.button}>
         Voltar
       </Button>
     </header>

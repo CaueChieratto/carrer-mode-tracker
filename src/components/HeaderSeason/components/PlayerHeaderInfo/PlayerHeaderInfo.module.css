@@ -1,0 +1,31 @@
+.container_player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.h1_player {
+  color: #eaeaea;
+  font-size: 28px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.h1 {
+  color: #eaeaea;
+  font-size: 28px;
+  font-weight: 600;
+  max-width: 200px;
+  overflow: hidden;
+}
+
+.season {
+  max-width: 170px;
+  overflow: hidden;
+}

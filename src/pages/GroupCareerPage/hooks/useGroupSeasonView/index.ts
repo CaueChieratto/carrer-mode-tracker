@@ -70,7 +70,7 @@ export const useGroupSeasonView = (save: CareerGroup) => {
     if (!latestCareer) return undefined;
     return {
       ...latestCareer,
-      id: `group-${save.id}`,
+      id: latestCareer.id,
       clubName: save.managerName,
       clubData: seasonsByCareer.map((s) => s.season),
     };

@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.img {
+  width: 50px;
+}
+
+.img_card {
+  background-color: #fff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+.img_league {
+  width: 40px;
+}
+
+.h1 {
+  color: #eaeaea;
+  font-size: 28px;
+  font-weight: 600;
+  max-width: 200px;
+  overflow: hidden;
+}
+
+.p {
+  max-width: 170px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.season {
+  max-width: 170px;
+  overflow: hidden;
+}

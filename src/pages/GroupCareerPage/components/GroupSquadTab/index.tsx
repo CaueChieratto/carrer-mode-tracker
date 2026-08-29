@@ -10,9 +10,11 @@ import { ColorsService } from "../../../../common/services/ColorsService";
 import { format } from "date-fns";
 import { FormatDate } from "../../../../common/types/enums/FormatDate";
 import { getValidDate } from "../../helper/getValidDate";
+import { useParams } from "react-router-dom";
 
 const GroupSquadTab = () => {
   const { seasonsByCareer } = useGroupCareerContext();
+  const { groupId } = useParams<{ groupId: string }>();
   const [openId, setOpenId] = useState<string | null>(null);
 
   const latestSeasonPerCareer = useMemo(() => {
@@ -109,6 +111,8 @@ const GroupSquadTab = () => {
                           matches={season.matches || []}
                           key={player.id}
                           currency={career.currency || "€"}
+                          careerId={career.id}
+                          groupId={groupId}
                         />
                       ))}
                     </Card>

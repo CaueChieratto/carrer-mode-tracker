@@ -30,6 +30,7 @@ const PlayerStats = ({
   const { careerId, seasonId } = useParams<{
     careerId: string;
     seasonId: string;
+    groupId: string;
   }>();
   const leagueFormRef = useRef(null);
 
@@ -46,13 +47,29 @@ const PlayerStats = ({
   );
 
   const navigatePlayer = () => {
+    const isGroup = location.pathname.includes("/CareerGroup");
+    const targetCareerId = careerId || career.id;
+
     if (location.pathname.includes("/Geral")) {
-      navigate(`/Career/${careerId}/Geral/Player/${player.id}`);
-    } else {
-      navigate(
-        `/Career/${careerId}/Season/${seasonId}/EditPlayer/${player.id}?from=stats`,
-      );
+      if (isGroup) {
+        const groupMatch = location.pathname.match(/\/CareerGroup\/([^/]+)/);
+
+        if (groupMatch) {
+          navigate(
+            `/Career/${targetCareerId}/Geral/Player/${player.id}?fromGroup=true&groupId=${groupMatch[1]}`,
+          );
+          return;
+        }
+      }
+
+      navigate(`/Career/${targetCareerId}/Geral/Player/${player.id}`);
+
+      return;
     }
+
+    navigate(
+      `/Career/${targetCareerId}/Season/${seasonId}/EditPlayer/${player.id}?from=stats`,
+    );
   };
 
   return (

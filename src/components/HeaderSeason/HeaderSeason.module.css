@@ -17,57 +17,8 @@
   position: relative;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.container_player {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.img {
-  width: 50px;
-}
-
-.img_card {
-  background-color: #fff;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-}
-
-.img_league {
-  width: 40px;
-}
-
-.h1_player {
-  color: #eaeaea;
-  font-size: 28px;
-  font-weight: 600;
-  overflow: hidden;
-}
-
-.h1 {
-  color: #eaeaea;
-  font-size: 28px;
-  font-weight: 600;
-  max-width: 200px;
-  overflow: hidden;
-}
-
-.p {
-  max-width: 170px;
-  overflow: hidden;
-}
-
 .button {
-  background: #0000;
+  background: transparent;
   border: 1px solid #eaeaea;
   border-radius: 8px;
   color: #eaeaea;
