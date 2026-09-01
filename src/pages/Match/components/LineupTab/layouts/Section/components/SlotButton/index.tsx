@@ -1,6 +1,6 @@
 import { UseMatchRatingColor } from "../../../../../../../../common/hooks/Colors/GetOverallColor";
 import { PlayerMatchStat } from "../../../../../../../../common/interfaces/PlayerMatchStat";
-import { LineupSlot } from "../../../../hooks/useLineup";
+import { LineupSlot } from "../../../../types";
 import { PlayerDetails } from "./components/PlayerDetails";
 import { useSlotDrag } from "./hooks/useSlotDrag";
 import Styles from "./SlotButton.module.css";

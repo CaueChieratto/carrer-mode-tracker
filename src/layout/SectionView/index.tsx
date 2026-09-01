@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useTabView } from "../../common/hooks/UseTabView";
@@ -18,6 +18,15 @@ import {
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import { ModalType } from "../../common/types/enums/ModalType";
 import ModalManager from "../../common/constants/ModalManager";
+import { useScreenStack } from "./navigation/useScreenStack";
+import { SectionScreen } from "./config/screens";
+import AddMatchesScreen from "./features/ClubTabs/AllMatchesTab/views/AddMatches";
+import AddTeamsToTable from "./features/ClubTabs/TableTab/views/AddTeamsToTable";
+import AddSquad_PlayerScreen from "./features/ClubTabs/SquadTab/views/AddSquad_Player/screens/AddSquad_PlayerScreen";
+import TransferPlayer from "./features/ClubTabs/SquadTab/views/TransferPlayer";
+import AddSeason_Player from "./features/ClubTabs/StatsTab_Club/views/AddSeason_Player";
+import { ServicePlayers } from "../../common/services/ServicePlayers";
+import { ServiceMatches } from "./features/ClubTabs/AllMatchesTab/views/AddMatches/services/ServiceMatches";
 
 const SectionView = ({
   career,
@@ -28,6 +37,7 @@ const SectionView = ({
   notSeason,
   isPlayer,
   player,
+  onScreenChange,
 }: {
   career: Career;
   season: ClubData;
@@ -37,6 +47,7 @@ const SectionView = ({
   notSeason?: boolean;
   isPlayer?: boolean;
   player?: Players;
+  onScreenChange?: (hasOpenScreen: boolean) => void;
 }) => {
   const {
     activeModal,
@@ -47,6 +58,55 @@ const SectionView = ({
     setSelectedCareer,
   } = useModalManager();
 
+  const {
+    current: screen,
+    push: openScreen,
+    pop: closeScreen,
+  } = useScreenStack<SectionScreen>();
+
+  const [localCareer, setLocalCareer] = useState<Career>(career);
+
+  useEffect(() => {
+    setLocalCareer(career);
+  }, [career]);
+
+  useEffect(() => {
+    onScreenChange?.(!!screen);
+  }, [screen, onScreenChange]);
+
+  const forceRefreshSeason = useCallback(async () => {
+    try {
+      const [matches, players] = await Promise.all([
+        ServiceMatches.getMatchesBySeason(localCareer.id, season.id),
+        ServicePlayers.getPlayersBySeason(localCareer.id, season.id),
+      ]);
+      setLocalCareer((prev) => {
+        const newCareer = { ...prev };
+        const sIndex = newCareer.clubData.findIndex((s) => s.id === season.id);
+        if (sIndex !== -1) {
+          newCareer.clubData[sIndex] = {
+            ...newCareer.clubData[sIndex],
+            matches,
+            players,
+          };
+        }
+        return newCareer;
+      });
+    } catch (e) {
+      console.error("Erro ao sincronizar cache local:", e);
+    }
+  }, [localCareer.id, season.id]);
+
+  const handleCloseScreen = useCallback(() => {
+    closeScreen();
+    forceRefreshSeason();
+  }, [closeScreen, forceRefreshSeason]);
+
+  const handleCloseModal = useCallback(() => {
+    closeModal();
+    forceRefreshSeason();
+  }, [closeModal, forceRefreshSeason]);
+
   const [teamForBadge, setTeamForBadge] = useState<string>("");
 
   const opemAddBadge = (teamName: string) => {
@@ -55,8 +115,8 @@ const SectionView = ({
   };
 
   const augmentedCareer = useMemo(
-    () => augmentCareerWithMatchStats(career),
-    [career],
+    () => augmentCareerWithMatchStats(localCareer),
+    [localCareer],
   );
 
   const augmentedSeason = useMemo(
@@ -92,8 +152,123 @@ const SectionView = ({
   const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
     useTabView(storageKey);
 
-  const ActionButton = tabsConfig[activeIndex]?.actionButton;
-  const handleActionClick = tabsConfig[activeIndex]?.action;
+  const activeTabConfig = tabsConfig[activeIndex];
+  const ActionButton = activeTabConfig?.actionButton;
+
+  const handleActionButtonClick = () => {
+    if (activeTabConfig?.screen) {
+      openScreen(activeTabConfig.screen);
+    } else {
+      activeTabConfig?.action?.();
+    }
+  };
+
+  if (screen?.key === "addMatches") {
+    const targetSeason = screen.seasonId
+      ? (augmentedCareer.clubData.find((s) => s.id === screen.seasonId) ??
+        augmentedSeason)
+      : augmentedSeason;
+
+    return (
+      <SeasonThemeProvider
+        careerId={augmentedCareer.id}
+        career={augmentedCareer}
+      >
+        <AddMatchesScreen
+          career={augmentedCareer}
+          season={targetSeason}
+          matchesId={screen.matchesId}
+          onClose={handleCloseScreen}
+        />
+      </SeasonThemeProvider>
+    );
+  }
+
+  if (screen?.key === "addTeamsToTable") {
+    const targetSeason = screen.seasonId
+      ? (augmentedCareer.clubData.find((s) => s.id === screen.seasonId) ??
+        augmentedSeason)
+      : augmentedSeason;
+
+    return (
+      <SeasonThemeProvider
+        careerId={augmentedCareer.id}
+        career={augmentedCareer}
+      >
+        <AddTeamsToTable
+          career={augmentedCareer}
+          season={targetSeason}
+          teamId={screen.teamId}
+          teamToEdit={screen.teamToEdit}
+          onClose={handleCloseScreen}
+        />
+      </SeasonThemeProvider>
+    );
+  }
+
+  if (screen?.key === "addSquadPlayer") {
+    const targetSeason = screen.seasonId
+      ? (augmentedCareer.clubData.find((s) => s.id === screen.seasonId) ??
+        augmentedSeason)
+      : augmentedSeason;
+
+    return (
+      <SeasonThemeProvider
+        careerId={augmentedCareer.id}
+        career={augmentedCareer}
+      >
+        <AddSquad_PlayerScreen
+          career={augmentedCareer}
+          season={targetSeason}
+          playerId={screen.playerId}
+          onClose={handleCloseScreen}
+        />
+      </SeasonThemeProvider>
+    );
+  }
+
+  if (screen?.key === "transferPlayer") {
+    const targetSeason = screen.seasonId
+      ? (augmentedCareer.clubData.find((s) => s.id === screen.seasonId) ??
+        augmentedSeason)
+      : augmentedSeason;
+
+    return (
+      <SeasonThemeProvider
+        careerId={augmentedCareer.id}
+        career={augmentedCareer}
+      >
+        <TransferPlayer
+          career={augmentedCareer}
+          season={targetSeason}
+          playerId={screen.playerId}
+          mode={screen.mode}
+          onClose={handleCloseScreen}
+        />
+      </SeasonThemeProvider>
+    );
+  }
+
+  if (screen?.key === "addSeasonPlayer") {
+    const targetSeason = screen.seasonId
+      ? (augmentedCareer.clubData.find((s) => s.id === screen.seasonId) ??
+        augmentedSeason)
+      : augmentedSeason;
+
+    return (
+      <SeasonThemeProvider
+        careerId={augmentedCareer.id}
+        career={augmentedCareer}
+      >
+        <AddSeason_Player
+          career={augmentedCareer}
+          season={targetSeason}
+          playerId={screen.playerId}
+          onClose={handleCloseScreen}
+        />
+      </SeasonThemeProvider>
+    );
+  }
 
   return (
     <SeasonThemeProvider careerId={augmentedCareer.id} career={augmentedCareer}>
@@ -114,7 +289,7 @@ const SectionView = ({
         <>
           {!notSeason && (
             <ContainerButton className={Styles.container_button}>
-              <ActionButton onClick={handleActionClick} />
+              <ActionButton onClick={handleActionButtonClick} />
             </ContainerButton>
           )}
         </>
@@ -141,6 +316,7 @@ const SectionView = ({
                 player={augmentedPlayer}
                 onAddBadge={opemAddBadge}
                 notSeason={notSeason}
+                onOpenScreen={openScreen}
               />
             </div>
           </SwiperSlide>
@@ -152,7 +328,7 @@ const SectionView = ({
           selectedCareer={selectedCareer || augmentedCareer}
           setSelectedCareer={setSelectedCareer}
           selectedSeason={selectedSeason || augmentedSeason}
-          onClose={closeModal}
+          onClose={handleCloseModal}
           career={augmentedCareer}
           teamName={teamForBadge}
         />

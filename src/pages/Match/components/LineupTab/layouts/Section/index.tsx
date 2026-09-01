@@ -1,8 +1,8 @@
 import { FieldMarkings } from "./components/FieldMarkings";
-import { LineupState } from "../../hooks/useLineup";
 import { SlotButton } from "./components/SlotButton";
 import Styles from "./Section.module.css";
 import { PlayerMatchStat } from "../../../../../../common/interfaces/PlayerMatchStat";
+import { LineupState } from "../../types";
 
 type SectionProps = {
   lineup: LineupState;

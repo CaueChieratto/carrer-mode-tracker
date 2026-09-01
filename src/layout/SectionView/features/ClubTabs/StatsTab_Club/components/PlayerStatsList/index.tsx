@@ -8,9 +8,15 @@ type PlayerStatsListProps = {
   players: Players[];
   career: Career;
   season: ClubData;
+  onEditPlayerStats: (playerId: string) => void;
 };
 
-const PlayerStatsList = ({ players, career, season }: PlayerStatsListProps) => {
+const PlayerStatsList = ({
+  players,
+  career,
+  season,
+  onEditPlayerStats,
+}: PlayerStatsListProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
@@ -23,6 +29,7 @@ const PlayerStatsList = ({ players, career, season }: PlayerStatsListProps) => {
           career={career}
           season={season}
           isGeralPage={isGeralPage}
+          onEditPlayerStats={onEditPlayerStats}
         />
       ))}
     </>

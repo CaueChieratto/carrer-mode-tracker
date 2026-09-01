@@ -1,4 +1,4 @@
-import { LineupState } from "../../../../hooks/useLineup";
+import { LineupState } from "../../../../types";
 
 export type BenchSlot = LineupState["bench"][number];
 

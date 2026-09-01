@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { positionOptionsBySector } from "../../pages/AddPlayers/components/AddPlayersContent/components/AddSquad_Player/constants/SquadFormFields";
 import { ModalType } from "../../common/types/enums/ModalType";
 import FormField from "../FormField";
 import { Field, FormSectionProps } from "../FormSection";
 import FormSegmentedControl from "../FormSegmentedControl";
 import FormSelect from "../FormSelect";
 import SearchableSelect from "../SearchableSelect";
+import { positionOptionsBySector } from "../../layout/SectionView/features/ClubTabs/SquadTab/views/AddSquad_Player/constants/SquadFormFields";
 
 type RendererProps = FieldRendererProps & {
   onChange: (

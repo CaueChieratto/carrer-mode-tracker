@@ -6,6 +6,7 @@ import Data from "./Section.module.css";
 import { Match } from "../../../../../../../../common/interfaces/Match";
 import { Contract } from "../../../../../../../../common/interfaces/playersInfo/contract";
 import { PlayerModal } from "./ui/PlayerModal";
+import { SectionScreen } from "../../../../../../config/screens";
 
 type SectionProps = {
   id: string;
@@ -26,6 +27,7 @@ type SectionProps = {
   academyNickname?: string;
   careerId?: string;
   groupId?: string;
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
 export const Section = ({
@@ -47,6 +49,7 @@ export const Section = ({
   academyNickname,
   careerId: propsCareerId,
   groupId: propsGroupId,
+  onOpenScreen,
 }: SectionProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -118,6 +121,7 @@ export const Section = ({
           id={id}
           playerName={name}
           onClose={() => setIsModalOpen(false)}
+          onOpenScreen={onOpenScreen}
         />
       )}
     </>

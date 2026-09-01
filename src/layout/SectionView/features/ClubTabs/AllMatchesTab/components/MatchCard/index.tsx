@@ -5,28 +5,19 @@ import { PlayerMatchStat } from "../../../../../../../common/interfaces/PlayerMa
 import Styles from "./MatchCard.module.css";
 import { MatchBody } from "./components/MatchBody";
 import { MatchHeader } from "./components/MatchHeader";
-import { Career } from "../../../../../../../common/interfaces/Career";
 import { useMatchNavigation } from "./hooks/useMatchNavigation";
 import { buildMatchCopyText } from "./helpers/buildCopyText";
 import { Copy } from "../../../../../../../common/utils/Copy";
+import { useMatchesContext } from "../../contexts/MatchesContext";
 
 type MatchCardProps = {
-  career: Career;
   match: Match;
   season: ClubData;
-  isGeralPage: boolean;
-  onAddBadge?: (teamName: string) => void;
   playerStat?: PlayerMatchStat;
 };
 
-export const MatchCard = ({
-  career,
-  match,
-  season,
-  isGeralPage,
-  onAddBadge,
-  playerStat,
-}: MatchCardProps) => {
+export const MatchCard = ({ match, season, playerStat }: MatchCardProps) => {
+  const { career, isGeralPage, onOpenScreen } = useMatchesContext();
   const teams = season.teams || [];
 
   const leagueData = season.leagues?.find((l) => l.name === match.league);
@@ -37,6 +28,15 @@ export const MatchCard = ({
     isGeralPage,
     playerId: playerStat?.playerId,
   });
+
+  const handleEdit = onOpenScreen
+    ? () =>
+        onOpenScreen({
+          key: "addMatches",
+          matchesId: match.matchesId,
+          seasonId: season.id,
+        })
+    : goToEdit;
 
   const copyText = async () => {
     const text = buildMatchCopyText({ match, career });
@@ -61,8 +61,7 @@ export const MatchCard = ({
         <MatchHeader
           leagueName={match.league}
           leagueData={leagueData}
-          onEdit={goToEdit}
-          isGeralPage={isGeralPage}
+          onEdit={handleEdit}
           match={match}
           onClick={copyText}
         />
@@ -72,7 +71,6 @@ export const MatchCard = ({
           onClick={goToMatch}
           homeBadge={homeBadge}
           awayBadge={awayBadge}
-          onAddBadge={onAddBadge}
           playerStat={playerStat}
           isHomeCareerTeam={isHomeCareerTeam}
         />

@@ -15,6 +15,7 @@ import { CuriositiesTab } from "../features/ClubTabs/CuriositiesTab";
 import { TableTab } from "../features/ClubTabs/TableTab";
 import AcademyPlayerTab from "../features/PlayerTabs/AcademyPlayerTab";
 import PlayerDetailedStatsTab from "../features/PlayerTabs/PlayerDetailedStatsTab";
+import { SectionScreen } from "./screens";
 
 export type TabConfig = {
   title: string;
@@ -26,9 +27,11 @@ export type TabConfig = {
     player?: Players;
     onAddBadge?: (teamName: string) => void;
     notSeason?: boolean;
+    onOpenScreen?: (screen: SectionScreen) => void;
   }>;
   actionButton?: React.FC<{ onClick?: () => void }>;
   action?: () => void;
+  screen?: SectionScreen;
 };
 
 export const getSeasonTabsConfig = (
@@ -53,51 +56,42 @@ export const getSeasonTabsConfig = (
       title: isPlayer ? "Jogador" : "Elenco",
       component: isPlayer ? InfoPlayerTab : SquadTab,
       actionButton: isPlayer && !notSeason ? undefined : Buttons.AddSquadPlayer,
-      action:
-        isPlayer && !notSeason
-          ? undefined
-          : () =>
-              navigate(
-                `/Career/${careerId}/Season/${seasonId}/AddPlayer?from=squad`,
-              ),
+      screen: isPlayer && !notSeason ? undefined : { key: "addSquadPlayer" },
     },
+
     {
       title: "Partidas",
       component: AllMatchesTab,
       actionButton: !isPlayer ? Buttons.AddMatches : undefined,
-      action: !isPlayer
-        ? () => navigate(`/Career/${careerId}/Season/${seasonId}/AddMatches`)
-        : undefined,
+      screen: !isPlayer ? { key: "addMatches" } : undefined,
     },
+
     !isPlayer && {
       title: "Classificação",
       component: TableTab,
       actionButton: Buttons.AddTeamsToTable,
-      action: () =>
-        navigate(`/Career/${careerId}/Season/${seasonId}/AddTeamsToTable`),
+      screen: { key: "addTeamsToTable" },
     },
+
     hasAcademyData && {
       title: "Base",
       component: AcademyPlayerTab,
     },
+
     {
       title: isPlayer ? "Temporadas" : "Estatísticas",
       component: isPlayer ? SeasonsPlayerTab : StatsTab_Club,
       actionButton:
         isPlayer && !notSeason ? undefined : Buttons.AddPlayerSeason,
-      action:
-        isPlayer && !notSeason
-          ? undefined
-          : () =>
-              navigate(
-                `/Career/${careerId}/Season/${seasonId}/AddPlayer?from=stats`,
-              ),
+      screen: isPlayer && !notSeason ? undefined : { key: "addSeasonPlayer" },
     },
+
     {
       title: isPlayer ? "Estatísticas" : "Melhores Jogadores",
       component: isPlayer ? PlayerDetailedStatsTab : BestPlayersTab,
       actionButton: !isPlayer ? Buttons.ChangeClubColors : undefined,
     },
+
     {
       title: isPlayer ? "Total" : "Geral",
       component: isPlayer ? TotalPlayerTab : GeneralTab,
@@ -118,6 +112,7 @@ export const getSeasonTabsConfig = (
               })
           : undefined,
     },
+
     !isPlayer && {
       title: "Curiosidades",
       component: CuriositiesTab,

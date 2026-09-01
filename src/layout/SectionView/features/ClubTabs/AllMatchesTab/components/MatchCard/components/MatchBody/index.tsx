@@ -8,13 +8,13 @@ import Styles from "./MatchBody.module.css";
 import { Boot } from "../../../../../../../../../ui/IconsSVG/Boot";
 import { OwnGoal } from "../../../../../../../../../ui/IconsSVG/OwnGoal";
 import { RefereeCard } from "../../../../../../../../../ui/IconsSVG/RefereeCard";
+import { useMatchesContext } from "../../../../contexts/MatchesContext";
 
 type MatchBodyProps = {
   match: Match;
   onClick: () => void;
   homeBadge: string;
   awayBadge: string;
-  onAddBadge?: (teamName: string) => void;
   playerStat?: PlayerMatchStat;
   isHomeCareerTeam?: boolean;
 };
@@ -24,10 +24,11 @@ export const MatchBody = ({
   onClick,
   homeBadge,
   awayBadge,
-  onAddBadge,
   playerStat,
   isHomeCareerTeam,
 }: MatchBodyProps) => {
+  const { onAddBadge } = useMatchesContext();
+
   const displayRating = playerStat
     ? playerStat.rating % 1 === 0
       ? playerStat.rating.toString()

@@ -2,33 +2,85 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoPersonOutline, IoCreateOutline } from "react-icons/io5";
+
 import Modal from "../../../../../../../../../../components/Modal";
 import Button from "../../../../../../../../../../components/Button";
 import { CardsModal } from "../../../../../../../../../../ui/modals/SeasonConfigs/components/CardsModal";
 import { useClubColors } from "../../../../../../../../../../common/hooks/Colors/UseClubColors";
 import { ColorsService } from "../../../../../../../../../../common/services/ColorsService";
-
 import Styles from "./PlayerModal.module.css";
+import { SectionScreen } from "../../../../../../../../config/screens";
 
 type PlayerModalProps = {
   id: string;
   playerName: string;
   onClose: () => void;
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
-export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
-  const [selectedPath, setSelectedPath] = useState<string | null>(null);
+type ModalAction = "view" | "edit" | "transfer" | "loan";
+
+export const PlayerModal = ({
+  id,
+  playerName,
+  onClose,
+  onOpenScreen,
+}: PlayerModalProps) => {
+  const [selectedAction, setSelectedAction] = useState<ModalAction | null>(
+    null,
+  );
   const navigate = useNavigate();
   const { careerId, seasonId } = useParams();
-
   const { clubColor, darkClubColor } = useClubColors(
     ColorsService.getColorSaved(careerId || "") || "#ffffff",
   );
 
   const viewPath = `/Career/${careerId}/Season/${seasonId}/Player/${id}`;
-  const editPath = `/Career/${careerId}/Season/${seasonId}/EditPlayer/${id}`;
-  const transferPath = `/Career/${careerId}/Season/${seasonId}/TransferPlayer/${id}?mode=transfer`;
-  const loanPath = `/Career/${careerId}/Season/${seasonId}/TransferPlayer/${id}?mode=loan`;
+
+  const handleConfirm = () => {
+    document.body.classList.remove("modal-open");
+
+    if (selectedAction === "view") {
+      navigate(viewPath);
+      onClose();
+      return;
+    }
+
+    if (onOpenScreen) {
+      if (selectedAction === "edit") {
+        onOpenScreen({ key: "addSquadPlayer", playerId: id } as SectionScreen);
+      } else if (selectedAction === "transfer") {
+        onOpenScreen({
+          key: "transferPlayer",
+          playerId: id,
+          mode: "transfer",
+        } as SectionScreen);
+      } else if (selectedAction === "loan") {
+        onOpenScreen({
+          key: "transferPlayer",
+          playerId: id,
+          mode: "loan",
+        } as SectionScreen);
+      }
+    }
+
+    onClose();
+  };
+
+  const getButtonText = () => {
+    switch (selectedAction) {
+      case "transfer":
+        return "em Venda";
+      case "loan":
+        return "em Empréstimo";
+      case "edit":
+        return "na Edição";
+      case "view":
+        return "na Visualização";
+      default:
+        return "";
+    }
+  };
 
   const modalContent = (
     <Modal
@@ -43,62 +95,51 @@ export const PlayerModal = ({ id, playerName, onClose }: PlayerModalProps) => {
             icon={<IoPersonOutline className={Styles.icon} />}
             label="Visualizar"
             title={playerName}
-            onClick={() => setSelectedPath(viewPath)}
+            onClick={() => setSelectedAction("view")}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
-            className={selectedPath === viewPath ? Styles.selected_card : ""}
+            className={selectedAction === "view" ? Styles.selected_card : ""}
           />
           <CardsModal
             icon={<IoCreateOutline className={Styles.icon} />}
             label="Editar"
             title={playerName}
-            onClick={() => setSelectedPath(editPath)}
+            onClick={() => setSelectedAction("edit")}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
-            className={selectedPath === editPath ? Styles.selected_card : ""}
+            className={selectedAction === "edit" ? Styles.selected_card : ""}
           />
           <CardsModal
             icon={<IoPersonOutline className={Styles.icon} />}
             label="Vender"
             title={playerName}
-            onClick={() => setSelectedPath(transferPath)}
+            onClick={() => setSelectedAction("transfer")}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
             className={
-              selectedPath === transferPath ? Styles.selected_card : ""
+              selectedAction === "transfer" ? Styles.selected_card : ""
             }
           />
           <CardsModal
             icon={<IoCreateOutline className={Styles.icon} />}
             label="Emprestar"
             title={playerName}
-            onClick={() => setSelectedPath(loanPath)}
+            onClick={() => setSelectedAction("loan")}
             clubColor={clubColor}
             darkClubColor={darkClubColor}
-            className={selectedPath === loanPath ? Styles.selected_card : ""}
+            className={selectedAction === "loan" ? Styles.selected_card : ""}
           />
         </div>
-
-        {selectedPath && (
+        {selectedAction && (
           <Button
             className={Styles.button}
-            onClick={() => {
-              document.body.classList.remove("modal-open");
-              navigate(selectedPath);
-            }}
+            onClick={handleConfirm}
             style={{
               backgroundColor: clubColor,
               border: `1px solid ${darkClubColor}`,
             }}
           >
-            Entrar{" "}
-            {selectedPath.includes("mode=transfer")
-              ? "em Venda"
-              : selectedPath.includes("mode=loan")
-                ? "em Empréstimo"
-                : selectedPath.includes("Edit")
-                  ? "na Edição"
-                  : "na Visualização"}
+            Entrar {getButtonText()}
           </Button>
         )}
       </div>

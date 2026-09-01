@@ -14,13 +14,19 @@ import { SORTS_OPTIONS } from "./constants/SORTS_OPTIONS";
 import { Copy } from "../../../../../common/utils/Copy";
 import { useAggregatedPlayers } from "../../../../../common/hooks/Players/UseAggregatedPlayers";
 import { augmentSeasonWithMatchStats } from "../../../helpers/mergeMatchStats";
+import { SectionScreen } from "../../../config/screens";
 
 type StatsTab_ClubProps = {
   season: ClubData;
   career: Career;
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
-export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
+export const StatsTab_Club = ({
+  season,
+  career,
+  onOpenScreen,
+}: StatsTab_ClubProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
   const storageKeySuffix = isGeralPage ? "geral" : season.id;
@@ -52,6 +58,16 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
     await Copy(text, "Lista copiada com sucesso!");
   };
 
+  const handleEditPlayerStats = (playerId: string) => {
+    if (onOpenScreen) {
+      onOpenScreen({
+        key: "addSeasonPlayer",
+        playerId: playerId,
+        seasonId: season.id,
+      });
+    }
+  };
+
   return (
     <ContainerClubContent>
       <ButtonsSwitch
@@ -65,6 +81,7 @@ export const StatsTab_Club = ({ season, career }: StatsTab_ClubProps) => {
           players={sortedPlayerList}
           career={career}
           season={season}
+          onEditPlayerStats={handleEditPlayerStats}
         />
       ) : (
         <NoStatsMessage

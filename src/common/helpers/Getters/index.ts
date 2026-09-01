@@ -1,4 +1,4 @@
-import { ServiceMatches } from "../../../pages/AddMatches/services/ServiceMatches";
+import { ServiceMatches } from "../../../layout/SectionView/features/ClubTabs/AllMatchesTab/views/AddMatches/services/ServiceMatches";
 import { ServicePlayers } from "../../services/ServicePlayers";
 import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
 import { db } from "../../services/Firebase";
@@ -35,26 +35,18 @@ export const getAllCareers = (
                   await ServicePlayers.getPlayersBySeason(career.id, season.id);
 
                 const oldMatches = season.matches || [];
-                const subMatchesIds = new Set(
-                  subcollectionMatches.map((m) => m.matchesId),
-                );
-                const combinedMatches = [
-                  ...subcollectionMatches,
-                  ...oldMatches.filter(
-                    (m: Match) => !subMatchesIds.has(m.matchesId),
-                  ),
-                ];
+
+                const combinedMatches =
+                  subcollectionMatches.length > 0 || oldMatches.length === 0
+                    ? subcollectionMatches
+                    : oldMatches;
 
                 const oldPlayers = season.players || [];
-                const subPlayersIds = new Set(
-                  subcollectionPlayers.map((p) => p.id),
-                );
-                const combinedPlayers = [
-                  ...subcollectionPlayers,
-                  ...oldPlayers.filter(
-                    (p: Players) => !subPlayersIds.has(p.id),
-                  ),
-                ];
+
+                const combinedPlayers =
+                  subcollectionPlayers.length > 0 || oldPlayers.length === 0
+                    ? subcollectionPlayers
+                    : oldPlayers;
 
                 return {
                   ...season,

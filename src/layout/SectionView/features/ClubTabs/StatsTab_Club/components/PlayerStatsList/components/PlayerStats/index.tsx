@@ -15,6 +15,7 @@ type PlayerStatsProps = {
   career: Career;
   season: ClubData;
   isGeralPage: boolean;
+  onEditPlayerStats: (playerId: string) => void;
 };
 
 const PlayerStats = ({
@@ -22,14 +23,14 @@ const PlayerStats = ({
   season,
   player,
   isGeralPage,
+  onEditPlayerStats,
 }: PlayerStatsProps) => {
   const [expand, setExpand] = useState(false);
   const isGoalkeeper = player.position === "GOL";
   const navigate = useNavigate();
   const location = useLocation();
-  const { careerId, seasonId } = useParams<{
+  const { careerId } = useParams<{
     careerId: string;
-    seasonId: string;
     groupId: string;
   }>();
   const leagueFormRef = useRef(null);
@@ -67,9 +68,7 @@ const PlayerStats = ({
       return;
     }
 
-    navigate(
-      `/Career/${targetCareerId}/Season/${seasonId}/EditPlayer/${player.id}?from=stats`,
-    );
+    onEditPlayerStats(player.id);
   };
 
   return (

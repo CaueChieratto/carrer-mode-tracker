@@ -18,13 +18,15 @@ import { buildTableCopyText } from "./helpers/buildTableCopyText";
 import NoStatsMessage from "../../../../../components/NoStatsMessage";
 import CustomSelect from "../../../../../components/CustomSelect";
 import { leaguesByContinent } from "../../../../../common/utils/league";
+import { SectionScreen } from "../../../config/screens";
 
 type TableTabProps = {
   season: ClubData;
   career: Career & { clubData?: ClubData[] };
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
-export const TableTab = ({ season, career }: TableTabProps) => {
+export const TableTab = ({ season, career, onOpenScreen }: TableTabProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isGeralPage = location.pathname.includes("/Geral");
@@ -59,6 +61,7 @@ export const TableTab = ({ season, career }: TableTabProps) => {
     career,
     selectedSeasonData,
   );
+
   const columns = buildTableColumns(activeMode);
 
   const mainLeague = useMemo(() => {
@@ -68,7 +71,6 @@ export const TableTab = ({ season, career }: TableTabProps) => {
     ) {
       return undefined;
     }
-
     const allKnownCompetitions = Object.values(leaguesByContinent).flatMap(
       (continent) => Object.values(continent).flat(),
     );
@@ -80,35 +82,40 @@ export const TableTab = ({ season, career }: TableTabProps) => {
       );
       return knownComp?.league === true;
     });
-
     return trueLeague || selectedSeasonData.leagues[0];
   }, [selectedSeasonData.leagues]);
 
   const rowClick = (row: TableRowData) => {
     if (isGeralPage) return;
 
-    navigate(
-      `/Career/${career.id}/Season/${selectedSeasonData.id}/AddTeamsToTable/${row.id}`,
-      {
-        state: { teamToEdit: row },
-      },
-    );
+    if (onOpenScreen) {
+      onOpenScreen({
+        key: "addTeamsToTable",
+        teamId: row.id,
+        seasonId: selectedSeasonData.id,
+        teamToEdit: row,
+      });
+    } else {
+      navigate(
+        `/Career/${career.id}/Season/${selectedSeasonData.id}/AddTeamsToTable/${row.id}`,
+        {
+          state: { teamToEdit: row },
+        },
+      );
+    }
   };
 
   const copyClick = async () => {
     if (!tableData.length) return;
+
     let text = buildTableCopyText(tableData, activeMode);
-
     let headerText = "";
-
     if (mainLeague?.name) {
       headerText += `${mainLeague.name}\n`;
     }
-
     if (isGeralPage && selectedSeasonLabel) {
       headerText += `${selectedSeasonLabel}\n`;
     }
-
     if (headerText) {
       text = `${headerText}\n${text}`;
     }
@@ -146,7 +153,7 @@ export const TableTab = ({ season, career }: TableTabProps) => {
         <NoStatsMessage
           isStats={true}
           textOne="Nenhum dado na tabela"
-          textTwo="Adicione times para visualizar a classificação."
+          textTwo="Adicione times para visualizar a classificação"
         />
       ) : (
         <>
@@ -178,7 +185,6 @@ export const TableTab = ({ season, career }: TableTabProps) => {
                 <span className={Styles.league_name}>{mainLeague.name}</span>
               </div>
             )}
-
             <table className={Styles.table}>
               <TableHeader columns={columns} />
               <TableBody

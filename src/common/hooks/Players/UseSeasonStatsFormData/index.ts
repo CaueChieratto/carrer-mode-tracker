@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { seasonsFormFields } from "../../../../pages/AddPlayers/components/AddPlayersContent/components/AddSeason_Player/constants/SeasonsFormFields";
 import { ClubData } from "../../../interfaces/club/clubData";
 import { Players } from "../../../interfaces/playersInfo/players";
 import { LeagueStats } from "../../../interfaces/playersStats/leagueStats";
 import { sortPlayersByPosition } from "../../../utils/Sorts";
+import { seasonsFormFields } from "../../../../layout/SectionView/features/ClubTabs/StatsTab_Club/views/AddSeason_Player/constants/SeasonsFormFields";
 
 type UseSeasonStatsFormDataProps = {
   season: ClubData;

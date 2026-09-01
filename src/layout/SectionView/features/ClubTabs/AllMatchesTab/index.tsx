@@ -10,12 +10,15 @@ import { MatchCard } from "./components/MatchCard";
 import { MatchStatus } from "../../../../../common/interfaces/MatchStatus";
 import { MONTH_OPTIONS } from "./constants/MONTH_OPTIONS";
 import { getMatchSeason, processMatches } from "./helpers/processMatches";
+import { SectionScreen } from "../../../config/screens";
+import { MatchesContext } from "./contexts/MatchesContext";
 
 type AllMatchesTabProps = {
   season: ClubData;
   career: Career;
   onAddBadge?: (teamName: string) => void;
   player?: Players;
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
 export const AllMatchesTab = ({
@@ -23,6 +26,7 @@ export const AllMatchesTab = ({
   career,
   onAddBadge,
   player,
+  onOpenScreen,
 }: AllMatchesTabProps) => {
   const location = useLocation();
 
@@ -96,7 +100,9 @@ export const AllMatchesTab = ({
   });
 
   return (
-    <>
+    <MatchesContext.Provider
+      value={{ career, isGeralPage, onAddBadge, onOpenScreen }}
+    >
       <ContainerClubContent isMatch>
         <ButtonsSwitch
           isMatches
@@ -136,15 +142,12 @@ export const AllMatchesTab = ({
                 key={`${match.date}-${match.homeTeam}-${match.awayTeam}`}
                 match={match}
                 season={matchSeason}
-                isGeralPage={isGeralPage}
-                career={career}
-                onAddBadge={onAddBadge}
                 playerStat={playerStat}
               />
             );
           })
         )}
       </ContainerClubContent>
-    </>
+    </MatchesContext.Provider>
   );
 };

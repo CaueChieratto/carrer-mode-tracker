@@ -15,13 +15,15 @@ import { useClubColors } from "../../../../../common/hooks/Colors/UseClubColors"
 import { ColorsService } from "../../../../../common/services/ColorsService";
 import { Copy } from "../../../../../common/utils/Copy";
 import { useLocation } from "react-router-dom";
+import { SectionScreen } from "../../../config/screens";
 
 type SquadTabProps = {
   season: ClubData;
   career: Career;
+  onOpenScreen?: (screen: SectionScreen) => void;
 };
 
-const SquadTab = ({ season, career }: SquadTabProps) => {
+const SquadTab = ({ season, career, onOpenScreen }: SquadTabProps) => {
   const location = useLocation();
   const isGeralPage = location.pathname.includes("/Geral");
 
@@ -82,6 +84,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
                   key={`${player.id}-${y}`}
                   currency={currency}
                   academyNickname={player.academyNickname || academyNickname}
+                  onOpenScreen={onOpenScreen}
                 />
               ))}
             </Card>
@@ -97,6 +100,7 @@ const SquadTab = ({ season, career }: SquadTabProps) => {
               key={`${player.id}-${x}`}
               currency={currency}
               academyNickname={academyNickname}
+              onOpenScreen={onOpenScreen}
             />
           ))}
         </Card>

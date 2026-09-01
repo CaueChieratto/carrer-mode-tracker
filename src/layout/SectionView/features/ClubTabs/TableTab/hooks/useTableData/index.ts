@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Career } from "../../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
-import { ServiceTable } from "../../../../../../../pages/AddTeamsToTable/services/ServiceTable";
+import { ServiceTable } from "../../views/AddTeamsToTable/services/ServiceTable";
 import {
   QualificationZone,
   TableRowData,
@@ -47,7 +47,7 @@ export const useTableData = (career: Career, season: ClubData) => {
       }
     };
     fetchTable();
-  }, [career.id, season.id]);
+  }, [career.id, season.id, career.updatedAt]);
 
   const tableData = useMemo<TableRowData[]>(() => {
     const getQualificationZone = (

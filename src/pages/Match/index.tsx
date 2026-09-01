@@ -1,142 +1,112 @@
-import { useCallback, useRef, useState } from "react";
+import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperInstance } from "swiper";
+import BottomMenu from "../../ui/BottomMenu";
+import Navbar from "../../ui/Navbar";
+import ContainerButton from "../../components/ContainerButton";
+import HeaderSeason from "../../components/HeaderSeason";
 import Load from "../../components/Load";
 import NotFoundDisplay from "../../components/NotFoundDisplay";
-import Navbar from "../../ui/Navbar";
-import HeaderSeason from "../../components/HeaderSeason";
-import ContainerButton from "../../components/ContainerButton";
-import BottomMenu from "../../ui/BottomMenu";
 import { SeasonThemeProvider } from "../../contexts/SeasonThemeContext";
-import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
-import { useTabView } from "../../common/hooks/UseTabView";
-import { ModalType } from "../../common/types/enums/ModalType";
-import { getMatchTabsConfig } from "./constants/MatchTabsConfig";
-import { useMatchData } from "./hooks/useMatchData";
-import Styles from "./Match.module.css";
-import { useNavigate } from "react-router-dom";
 import { PlayerMatchModal } from "./components/LineupTab/components/PlayerMatchModal";
+import { MatchScreenRouter } from "./routes/MatchScreenRouter";
+import { useMatchPageController } from "./hooks/useMatchPageController";
+import Styles from "./Match.module.css";
 
 export const Match = () => {
+  const controller = useMatchPageController();
+
   const {
-    careerId,
-    seasonId,
-    matchesId,
     career,
     season,
     match,
     loading,
     goBack,
     isFromGeral,
-  } = useMatchData();
-  const navigate = useNavigate();
+    updateLocalMatch,
+  } = controller.data;
 
-  const { activeModal } = useModalManager();
-  const [isActionLoading, setIsActionLoading] = useState(false);
+  if (loading) {
+    return <Load />;
+  }
 
-  const [modalPlayerId, setModalPlayerId] = useState<string | null>(null);
+  if (!career || !season || !match) {
+    return <NotFoundDisplay />;
+  }
 
-  const saveLineupRef = useRef<(() => Promise<void> | void) | null>(null);
-
-  const storageKey = `match-tab-${careerId}-${matchesId}`;
-
-  const tabsConfig = getMatchTabsConfig(
-    careerId as string,
-    seasonId as string,
-    matchesId as string,
-    navigate,
-  );
-
-  const { activeIndex, swiperRef, handleTabClick, handleSlideChange } =
-    useTabView(storageKey);
-
-  const registerSave = useCallback((fn: () => Promise<void> | void) => {
-    saveLineupRef.current = fn;
-  }, []);
-
-  if (loading) return <Load />;
-  if (!career || !season || !match) return <NotFoundDisplay />;
-
-  const ActionButton = tabsConfig[activeIndex]?.actionButton;
-  const tabAction = tabsConfig[activeIndex]?.action;
-
-  const actionClick = async () => {
-    if (tabAction) {
-      tabAction();
-      return;
-    }
-
-    if (saveLineupRef.current) {
-      setIsActionLoading(true);
-      try {
-        await saveLineupRef.current();
-      } finally {
-        setIsActionLoading(false);
-      }
-    }
-  };
-
-  const selectedPlayer = modalPlayerId
-    ? season.players.find((p) => p.id === modalPlayerId)
-    : null;
+  const ActionButton = controller.action.button;
 
   return (
-    <>
-      {isActionLoading && <Load isTransfers />}
-      <SeasonThemeProvider careerId={career.id} career={career}>
-        <HeaderSeason
-          match={match}
-          careerId={career.id}
-          career={career}
-          backSeasons={goBack}
-          titleTextMatch={`${match.homeTeam} x ${match.awayTeam}`}
-        />
-        <Navbar
-          options={tabsConfig.map((tab) => tab.title)}
-          activeOption={activeIndex}
-          onOptionClick={handleTabClick}
-        />
+    <MatchScreenRouter
+      screen={controller.navigation.screen}
+      career={career}
+      season={season}
+      match={match}
+      onClose={controller.navigation.close}
+      onSaved={updateLocalMatch}
+    >
+      <>
+        {controller.action.isLoading && <Load isTransfers />}
 
-        {modalPlayerId && (
-          <PlayerMatchModal
-            isOpen={!!modalPlayerId}
-            closeModal={() => setModalPlayerId(null)}
+        <SeasonThemeProvider careerId={career.id} career={career}>
+          <HeaderSeason
             match={match}
-            player={selectedPlayer}
+            careerId={career.id}
+            career={career}
+            backSeasons={goBack}
+            titleTextMatch={`${match.homeTeam} x ${match.awayTeam}`}
           />
-        )}
 
-        {ActionButton && !isFromGeral && (
-          <ContainerButton className={Styles.container_button}>
-            <ActionButton onClick={actionClick} />
-          </ContainerButton>
-        )}
+          <Navbar
+            options={controller.tabs.titles}
+            activeOption={controller.tabs.activeIndex}
+            onOptionClick={controller.tabs.handleTabClick}
+          />
 
-        <Swiper
-          initialSlide={activeIndex}
-          onSwiper={(swiper: SwiperInstance) => {
-            swiperRef.current = swiper;
-          }}
-          onSlideChange={handleSlideChange}
-        >
-          {tabsConfig.map(({ title, component: TabComponent }) => (
-            <SwiperSlide key={title}>
-              <div className={Styles.container}>
-                <TabComponent
-                  match={match}
-                  season={season}
-                  career={career}
-                  isFromGeral={isFromGeral}
-                  onRegisterSave={registerSave}
-                  onOpenPlayerModal={setModalPlayerId}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+          {controller.playerModal.isOpen && (
+            <PlayerMatchModal
+              isOpen
+              closeModal={controller.playerModal.close}
+              match={match}
+              player={controller.playerModal.player}
+            />
+          )}
 
-        {activeModal === ModalType.NONE && <BottomMenu noHavePlayers />}
-      </SeasonThemeProvider>
-    </>
+          {ActionButton && !isFromGeral && (
+            <ContainerButton className={Styles.container_button}>
+              <ActionButton onClick={controller.action.execute} />
+            </ContainerButton>
+          )}
+
+          <Swiper
+            initialSlide={controller.tabs.activeIndex}
+            onSwiper={(swiper: SwiperInstance) => {
+              controller.tabs.swiperRef.current = swiper;
+            }}
+            onSlideChange={controller.tabs.handleSlideChange}
+          >
+            {controller.tabs.config.map(
+              ({ title, component: TabComponent }) => (
+                <SwiperSlide key={title}>
+                  <div className={Styles.container}>
+                    <TabComponent
+                      match={match}
+                      season={season}
+                      career={career}
+                      isFromGeral={isFromGeral}
+                      onRegisterSave={controller.action.registerSave}
+                      onOpenPlayerModal={controller.playerModal.open}
+                      onOpenScreen={controller.navigation.open}
+                      onSaved={updateLocalMatch}
+                    />
+                  </div>
+                </SwiperSlide>
+              ),
+            )}
+          </Swiper>
+
+          {controller.shouldShowBottomMenu && <BottomMenu noHavePlayers />}
+        </SeasonThemeProvider>
+      </>
+    </MatchScreenRouter>
   );
 };

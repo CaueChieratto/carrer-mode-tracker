@@ -6,8 +6,10 @@ import { ModalType } from "../../common/types/enums/ModalType";
 import BottomMenu from "../../ui/BottomMenu";
 import { useModalManager } from "../../common/hooks/Modal/UseModalManager";
 import SectionView from "../../layout/SectionView";
+import { useState } from "react";
 
 const Season = () => {
+  const [hasOpenScreen, setHasOpenScreen] = useState(false);
   const {
     loading,
     career,
@@ -32,6 +34,7 @@ const Season = () => {
         season={season}
         tabsConfig={tabsConfig}
         onOpenTransfers={handleOpenTransfers}
+        onScreenChange={setHasOpenScreen}
       />
       <TransfersModal
         isOpen={isModalOpen}
@@ -40,7 +43,7 @@ const Season = () => {
         playersToShow={playersToShow}
         currency={career.currency}
       />
-      {activeModal === ModalType.NONE && <BottomMenu />}
+      {activeModal === ModalType.NONE && !hasOpenScreen && <BottomMenu />}
     </>
   );
 };

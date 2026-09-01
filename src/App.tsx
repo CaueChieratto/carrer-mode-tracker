@@ -5,20 +5,13 @@ import { Career } from "./common/interfaces/Career";
 import { createElement } from "react";
 import AddSeasons from "./pages/AddSeasons";
 import Season from "./pages/Season";
-import AddPlayers from "./pages/AddPlayers";
 import Geral from "./pages/Geral";
 import Players from "./pages/Players";
 import Tutorial from "./pages/Tutorial";
-import { AddMatches } from "./pages/AddMatches";
 import { Match } from "./pages/Match";
-import { AddStatsMatch } from "./pages/AddStatsMatch";
-import { AddDetails } from "./pages/AddDetails";
-import { AddMatchStatsPlayer } from "./pages/AddMatchStatsPlayer";
 import { useIsMobile } from "./common/hooks/useIsMobile";
 import { ComparePlayers } from "./pages/ComparePlayers";
-import { AddTeamsToTable } from "./pages/AddTeamsToTable";
 import { Academy } from "./pages/Academy";
-import TransferPlayer from "./pages/TransferPlayer";
 import { GroupCareerPage } from "./pages/GroupCareerPage";
 
 type AppProps = {
@@ -55,10 +48,7 @@ export default function App({ career }: AppProps) {
       path: "/Career/:careerId/Season/:seasonId/Player/:playerId",
       element: <Players />,
     },
-    {
-      path: "/Career/:careerId/Season/:seasonId/TransferPlayer/:playerId",
-      element: <TransferPlayer />,
-    },
+
     { path: "/Career/:careerId", element: <AddSeasons /> },
     { path: "/Career/:careerId/Season/:seasonId", element: <Season /> },
     {
@@ -81,46 +71,12 @@ export default function App({ career }: AppProps) {
       path: "/Career/:careerId/Geral/Player/:playerId/Compare",
       element: <ComparePlayers />,
     },
-    {
-      path: "/Career/:careerId/Season/:seasonId/AddTeamsToTable",
-      element: <AddTeamsToTable />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/AddTeamsToTable/:teamId",
-      element: <AddTeamsToTable />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/AddPlayer",
-      element: <AddPlayers />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/EditPlayer/:playerId",
-      element: <AddPlayers />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/AddMatches",
-      element: <AddMatches />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/AddMatches/:matchesId",
-      element: <AddMatches />,
-    },
+
     {
       path: "/Career/:careerId/Season/:seasonId/Match/:matchesId",
       element: <Match />,
     },
-    {
-      path: "/Career/:careerId/Season/:seasonId/Match/:matchesId/AddStatsMatch",
-      element: <AddStatsMatch />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/Match/:matchesId/AddDetails",
-      element: <AddDetails />,
-    },
-    {
-      path: "/Career/:careerId/Season/:seasonId/Match/:matchesId/:playerId",
-      element: <AddMatchStatsPlayer />,
-    },
+
     { path: "/tutorial", element: <Tutorial /> },
   ]);
 
