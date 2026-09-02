@@ -59,6 +59,10 @@ export const usePlayerActions = ({
         player,
       );
       if (player) {
+        newPlayerData.loan = player.loan ?? false;
+        newPlayerData.sell = player.sell ?? false;
+        newPlayerData.incomingLoan = player.incomingLoan ?? false;
+
         Object.assign(player, newPlayerData);
       } else {
         season.players = [

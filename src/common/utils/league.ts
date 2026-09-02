@@ -108,6 +108,32 @@ export const leaguesByContinent: ContinentLeagues = {
         trophy: "/images/trophies/england/bsm.png",
       },
     ],
+    Itália: [
+      {
+        name: "Serie A",
+        logo: "/images/leagues/italy/serieA.png",
+        trophy: "/images/trophies/italy/serieA.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Coppa Itália",
+        logo: "/images/leagues/italy/coppaItalia.png",
+        trophy: "/images/trophies/italy/coppaItalia.png",
+      },
+      {
+        name: "Supercoppa",
+        logo: "/images/leagues/italy/supercopa.png",
+        trophy: "/images/trophies/italy/supercopa.png",
+      },
+      {
+        name: "Serie B",
+        logo: "/images/leagues/italy/serieB.png",
+        trophy: "/images/trophies/italy/serieB.png",
+        league: true,
+        isFirstDivision: false,
+      },
+    ],
     Alemanha: [
       {
         name: "Bundesliga",
@@ -141,9 +167,84 @@ export const leaguesByContinent: ContinentLeagues = {
         isFirstDivision: false,
       },
     ],
+    França: [
+      {
+        name: "Ligue 1",
+        logo: "/images/leagues/france/ligue1.png",
+        trophy: "/images/trophies/france/ligue1.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Coupe de France",
+        logo: "/images/leagues/france/coupeDeFrance.png",
+        trophy: "/images/trophies/france/coupeDeFrance.png",
+      },
+      {
+        name: "Trophée des Champions",
+        logo: "/images/leagues/france/tropheeDesChampions.png",
+        trophy: "/images/trophies/france/tropheeDesChampions.png",
+      },
+      {
+        name: "Ligue 2",
+        logo: "/images/leagues/france/ligue2.png",
+        trophy: "/images/trophies/france/ligue2.png",
+        league: true,
+        isFirstDivision: false,
+      },
+      {
+        name: "Barrages Ligue 1",
+        logo: "/images/leagues/france/barragesLigue1.png",
+        trophy: "/images/trophies/france/ligue2.png",
+        league: true,
+        isFirstDivision: false,
+      },
+    ],
+    Portugal: [
+      {
+        name: "Liga Portugal",
+        logo: "/images/leagues/portugal/ligaPortugal.png",
+        trophy: "/images/trophies/portugal/ligaPortugal.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Taça Portuguesa",
+        logo: "/images/leagues/portugal/copaPortugal.png",
+        trophy: "/images/trophies/portugal/copaPortugal.png",
+      },
+    ],
+    Holanda: [
+      {
+        name: "Eredivisie",
+        logo: "/images/leagues/netherlands/eredivisie.png",
+        trophy: "/images/trophies/netherlands/eredivisie.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Oranje Beker",
+        logo: "/images/leagues/netherlands/oranjeBeker.png",
+        trophy: "/images/trophies/netherlands/oranjeBeker.png",
+      },
+    ],
+    Turquia: [
+      {
+        name: "Süper Lig",
+        logo: "/images/leagues/turkiye/ligaTurca.png",
+        trophy: "/images/trophies/turkiye/ligaTurca.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Türkiye Kupası",
+        logo: "/images/leagues/turkiye/copaTurca.png",
+        trophy: "/images/trophies/turkiye/copaTurca.png",
+      },
+    ],
     Escócia: [
       {
-        name: "Scottish Prem",
+        name: "Scottish Premiership",
         logo: "/images/leagues/scotland/scottishPremiership.png",
         trophy: "/images/trophies/scotland/scottishPremiership.png",
         league: true,
@@ -153,6 +254,20 @@ export const leaguesByContinent: ContinentLeagues = {
         name: "Scottish Cup",
         logo: "/images/leagues/scotland/scottishCup.png",
         trophy: "/images/trophies/scotland/scottishCup.png",
+      },
+    ],
+    Roménia: [
+      {
+        name: "SUPERLIGA",
+        logo: "/images/leagues/romenia/superliga.png",
+        trophy: "/images/trophies/romenia/superliga.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "Cupa Națională",
+        logo: "/images/leagues/romenia/copaRomena.png",
+        trophy: "/images/trophies/romenia/copaRomena.png",
       },
     ],
   },
@@ -200,5 +315,54 @@ export const leaguesByContinent: ContinentLeagues = {
         trophy: "/images/trophies/argentina/ligaArgentina.png",
       },
     ],
+
+    "Estados Unidos": [
+      {
+        name: "MLS",
+        logo: "/images/leagues/usa/mls.png",
+        trophy: "/images/trophies/usa/mls.png",
+        league: true,
+        isFirstDivision: true,
+      },
+      {
+        name: "U.S. Open Cup",
+        logo: "/images/leagues/usa/openCup.png",
+        trophy: "/images/trophies/usa/openCup.png",
+      },
+    ],
   },
+  Asia: {
+    AFC: [
+      {
+        name: "AFC Champions League",
+        logo: "/images/leagues/afc/championsAsia.png",
+        trophy: "/images/trophies/afc/championsAsia.png",
+      },
+    ],
+    Arabia: [
+      {
+        name: "ROSHN Saudi League",
+        logo: "/images/leagues/arabia/ligaArabia.png",
+        trophy: "/images/trophies/arabia/ligaArabia.png",
+        league: true,
+        isFirstDivision: true,
+      },
+    ],
+  },
+};
+
+export const continentalLeagueByCountry: Record<string, string | undefined> = {
+  Espanha: "UEFA",
+  Inglaterra: "UEFA",
+  Itália: "UEFA",
+  Alemanha: "UEFA",
+  França: "UEFA",
+  Portugal: "UEFA",
+  Holanda: "UEFA",
+  Turquia: "UEFA",
+  Escócia: "UEFA",
+  Roménia: "UEFA",
+  Brasil: "Conmebol",
+  Argentina: "Conmebol",
+  Arabia: "AFC",
 };

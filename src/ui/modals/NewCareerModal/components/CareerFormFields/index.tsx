@@ -8,7 +8,7 @@ import { createCareerFields } from "../../constants/CreateCareerFields";
 import { leaguesByContinent } from "../../../../../common/utils/league";
 import { formatDateInput } from "../../../../../common/utils/Date";
 
-const excludedRegions = ["UEFA", "Conmebol"];
+const excludedRegions = ["UEFA", "Conmebol", "AFC"];
 const countryOptions = Object.values(leaguesByContinent)
   .flatMap((continent) => Object.keys(continent))
   .filter((region) => !excludedRegions.includes(region))

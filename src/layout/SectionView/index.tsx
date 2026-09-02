@@ -74,33 +74,42 @@ const SectionView = ({
     onScreenChange?.(!!screen);
   }, [screen, onScreenChange]);
 
-  const forceRefreshSeason = useCallback(async () => {
-    try {
-      const [matches, players] = await Promise.all([
-        ServiceMatches.getMatchesBySeason(localCareer.id, season.id),
-        ServicePlayers.getPlayersBySeason(localCareer.id, season.id),
-      ]);
-      setLocalCareer((prev) => {
-        const newCareer = { ...prev };
-        const sIndex = newCareer.clubData.findIndex((s) => s.id === season.id);
-        if (sIndex !== -1) {
-          newCareer.clubData[sIndex] = {
-            ...newCareer.clubData[sIndex],
-            matches,
-            players,
-          };
-        }
-        return newCareer;
-      });
-    } catch (e) {
-      console.error("Erro ao sincronizar cache local:", e);
-    }
-  }, [localCareer.id, season.id]);
+  const forceRefreshSeason = useCallback(
+    async (targetSeasonId?: string) => {
+      const seasonIdToRefresh = targetSeasonId || season.id;
+
+      try {
+        const [matches, players] = await Promise.all([
+          ServiceMatches.getMatchesBySeason(localCareer.id, seasonIdToRefresh),
+          ServicePlayers.getPlayersBySeason(localCareer.id, seasonIdToRefresh),
+        ]);
+        setLocalCareer((prev) => {
+          const newCareer = { ...prev, updatedAt: Date.now() };
+          const sIndex = newCareer.clubData.findIndex(
+            (s) => s.id === seasonIdToRefresh,
+          );
+          if (sIndex !== -1) {
+            newCareer.clubData[sIndex] = {
+              ...newCareer.clubData[sIndex],
+              matches,
+              players,
+            };
+          }
+          return newCareer;
+        });
+      } catch (e) {
+        console.error("Erro ao sincronizar cache local:", e);
+      }
+    },
+    [localCareer.id, season.id],
+  );
 
   const handleCloseScreen = useCallback(() => {
+    const seasonIdToRefresh = screen?.seasonId;
+
     closeScreen();
-    forceRefreshSeason();
-  }, [closeScreen, forceRefreshSeason]);
+    forceRefreshSeason(seasonIdToRefresh);
+  }, [closeScreen, forceRefreshSeason, screen]);
 
   const handleCloseModal = useCallback(() => {
     closeModal();

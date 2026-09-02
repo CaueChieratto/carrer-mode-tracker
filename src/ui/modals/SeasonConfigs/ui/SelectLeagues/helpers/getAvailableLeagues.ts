@@ -1,21 +1,21 @@
 import { League } from "../../../../../../common/interfaces/League";
-import { leaguesByContinent } from "../../../../../../common/utils/league";
+import {
+  continentalLeagueByCountry,
+  leaguesByContinent,
+} from "../../../../../../common/utils/league";
 
 export const getAvailableLeagues = (nation: string): League[] => {
-  for (const [continent, countries] of Object.entries(leaguesByContinent)) {
-    if (!countries[nation]) continue;
+  for (const countries of Object.values(leaguesByContinent)) {
+    const nationalLeagues = countries[nation];
 
-    const nationLeagues = [...countries[nation]];
+    if (!nationalLeagues) continue;
 
-    if (continent === "Europa" && countries["UEFA"]) {
-      return [...nationLeagues, ...countries["UEFA"]];
-    }
+    const continentalKey = continentalLeagueByCountry[nation];
 
-    if (continent === "América" && countries["Conmebol"]) {
-      return [...nationLeagues, ...countries["Conmebol"]];
-    }
-
-    return nationLeagues;
+    return [
+      ...nationalLeagues,
+      ...(continentalKey ? (countries[continentalKey] ?? []) : []),
+    ];
   }
 
   return [];

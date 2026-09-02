@@ -10,9 +10,11 @@ export const useLeagueOptions = (country: string) => {
     if (!continent) return [];
 
     const countryLeagues = leaguesByContinent[continent]?.[country] || [];
+
     const continentSpecificLeagues = {
       Europa: leaguesByContinent["Europa"]?.["UEFA"] || [],
       América: leaguesByContinent["América"]?.["Conmebol"] || [],
+      Asia: leaguesByContinent["Asia"]?.["AFC"] || [],
     };
 
     const specificLeagues =
