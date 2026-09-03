@@ -15,6 +15,29 @@ import { Teams } from "../../../../../../../../../common/interfaces/Teams";
 import { PlayerMatchStat } from "../../../../../../../../../common/interfaces/PlayerMatchStat";
 
 export const ServiceMatches = {
+  getAllTeamsAcrossUserCareers: async (): Promise<string[]> => {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Usuário não autenticado");
+
+    const careersRef = collection(db, `users/${user.uid}/careers`);
+    const snapshot = await getDocs(careersRef);
+
+    const teamsSet = new Set<string>();
+
+    for (const careerDoc of snapshot.docs) {
+      const careerData = careerDoc.data() as Career;
+      if (!careerData.clubData) continue;
+
+      for (const season of careerData.clubData) {
+        season.teams?.forEach((t) => {
+          if (t.name) teamsSet.add(t.name);
+        });
+      }
+    }
+
+    return Array.from(teamsSet).sort();
+  },
+
   findTeamInSpecialUserCareers: async (
     specialUserId: string,
     teamName: string,

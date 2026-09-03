@@ -10,7 +10,9 @@ import { TableTeamData } from "../../../../../../../common/interfaces/TableTeamD
 import { leaguesByContinent } from "../../../../../../../common/utils/league";
 
 export const useTableData = (career: Career, season: ClubData) => {
-  const [rawTableData, setRawTableData] = useState<TableTeamData[]>([]);
+  const [rawTableData, setRawTableData] = useState<TableTeamData[]>(() => {
+    return (season.table as unknown as TableTeamData[]) || [];
+  });
 
   const isFirstDivision = useMemo(() => {
     if (!season.leagues || season.leagues.length === 0) return true;
@@ -31,6 +33,12 @@ export const useTableData = (career: Career, season: ClubData) => {
 
     return true;
   }, [season.leagues]);
+
+  useEffect(() => {
+    if (season.table) {
+      setRawTableData(season.table as unknown as TableTeamData[]);
+    }
+  }, [season.table]);
 
   useEffect(() => {
     const fetchTable = async () => {

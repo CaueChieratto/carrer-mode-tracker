@@ -57,13 +57,15 @@ export function useMatchActions() {
 
     const opponentNameLower = formValues.opponentTeam.toLowerCase();
 
-    const teamAlreadyExistsInCurrentSeason = season.teams?.some(
+    const existingTeam = season.teams?.find(
       (team) => team.name.toLowerCase() === opponentNameLower,
     );
+    const teamAlreadyExistsInCurrentSeason = !!existingTeam;
+    const hasBadge = !!existingTeam?.badge;
 
     let newTeamData: Teams | null = null;
 
-    if (!teamAlreadyExistsInCurrentSeason) {
+    if (!teamAlreadyExistsInCurrentSeason || !hasBadge) {
       const teamFromUserHistory =
         await ServiceMatches.findTeamAcrossUserCareers(formValues.opponentTeam);
 
@@ -116,34 +118,53 @@ export function useMatchActions() {
 
       if (matchesId) {
         await ServiceMatches.updateMatchInSeason(careerId, seasonId, matchData);
-
-        const existingTeam = season.teams?.find(
-          (t) => t.name.toLowerCase() === opponentNameLower,
-        );
-
-        if (existingTeam && existingTeam.leagueName !== formValues.league) {
-          const updatedTeams =
-            season.teams?.map((t) =>
-              t.name.toLowerCase() === opponentNameLower
-                ? { ...t, leagueName: formValues.league }
-                : t,
-            ) || [];
-
-          await ServiceMatches.updateSeasonTeams(
-            careerId,
-            seasonId,
-            updatedTeams,
-          );
-        }
       } else {
         await ServiceMatches.addMatchToSeason(careerId, seasonId, matchData);
       }
 
       if (newTeamData) {
-        await ServiceMatches.addTeamToSeason(careerId, seasonId, newTeamData);
+        if (teamAlreadyExistsInCurrentSeason) {
+          const updatedTeams =
+            season.teams?.map((t) =>
+              t.name.toLowerCase() === opponentNameLower
+                ? {
+                    ...t,
+                    badge: newTeamData!.badge,
+                    leagueName: newTeamData!.leagueName || t.leagueName,
+                  }
+                : t,
+            ) || [];
+          await ServiceMatches.updateSeasonTeams(
+            careerId,
+            seasonId,
+            updatedTeams,
+          );
+        } else {
+          await ServiceMatches.addTeamToSeason(careerId, seasonId, newTeamData);
+        }
+      } else if (
+        matchesId &&
+        existingTeam &&
+        existingTeam.leagueName !== formValues.league
+      ) {
+        const updatedTeams =
+          season.teams?.map((t) =>
+            t.name.toLowerCase() === opponentNameLower
+              ? { ...t, leagueName: formValues.league }
+              : t,
+          ) || [];
+        await ServiceMatches.updateSeasonTeams(
+          careerId,
+          seasonId,
+          updatedTeams,
+        );
       }
 
-      onSuccess();
+      onSuccess({
+        type: matchesId ? "UPDATE" : "ADD",
+        match: matchData,
+        team: newTeamData || undefined,
+      });
     } catch (error) {
       console.error("Erro: ", error);
       alert("Ocorreu um erro ao salvar a partida. Tente novamente.");
@@ -198,7 +219,7 @@ export function useMatchActions() {
         }
       }
 
-      onSuccess();
+      onSuccess({ type: "DELETE", matchId: matchesId });
     } catch {
       alert("Erro ao excluir a partida. Tente novamente.");
     } finally {

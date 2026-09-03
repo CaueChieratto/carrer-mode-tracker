@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { ServiceTable } from "../../services/ServiceTable";
 import { useAddTeamsToTableContext } from "../../contexts/context";
+import { v4 as uuidv4 } from "uuid";
 
 export function useTableTeamActions() {
   const {
@@ -20,7 +21,7 @@ export function useTableTeamActions() {
     try {
       setIsSaving(true);
       await ServiceTable.deleteTeamFromTable(careerId, seasonId, teamId);
-      onSuccess();
+      onSuccess({ type: "DELETE_TABLE_TEAM", teamId });
     } catch (error) {
       console.error("Erro ao deletar time da tabela: ", error);
       alert("Ocorreu um erro ao deletar os dados. Tente novamente.");
@@ -96,7 +97,10 @@ export function useTableTeamActions() {
         }
       };
 
+      const newId = teamId || uuidv4();
+
       const tableTeamData = {
+        id: newId,
         name: formValues.teamName,
         badge: teamBadge,
         played,
@@ -120,7 +124,19 @@ export function useTableTeamActions() {
       } else {
         await ServiceTable.addTeamToTable(careerId, seasonId, tableTeamData);
       }
-      onSuccess();
+
+      if (teamId) {
+        await ServiceTable.updateTeamInTable(
+          careerId,
+          seasonId,
+          teamId,
+          tableTeamData,
+        );
+        onSuccess({ type: "UPDATE_TABLE_TEAM", team: tableTeamData });
+      } else {
+        await ServiceTable.addTeamToTable(careerId, seasonId, tableTeamData);
+        onSuccess({ type: "ADD_TABLE_TEAM", team: tableTeamData });
+      }
     } catch (error) {
       console.error("Erro ao salvar time na tabela: ", error);
       alert("Ocorreu um erro ao salvar os dados. Tente novamente.");

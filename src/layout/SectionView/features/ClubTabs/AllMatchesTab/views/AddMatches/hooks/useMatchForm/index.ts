@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getMatchFormFields } from "../../constants/MatchFormFields";
 import { Teams } from "../../../../../../../../../common/interfaces/Teams";
 import { useAddMatchesContext } from "../../contexts/context";
+import { ServiceMatches } from "../../services/ServiceMatches";
 
 export function useMatchForm() {
   const {
@@ -61,40 +62,86 @@ export function useMatchForm() {
     [season],
   );
 
-  const allTeams = useMemo(() => {
-    if (!career?.clubData) return [];
+  const localTeams = useMemo<Teams[]>(() => {
     const teamMap = new Map<string, Teams>();
-    career.clubData.forEach((season) => {
-      season.teams?.forEach((t) => {
-        if (t.showMatch === false) return;
 
-        const key = `${t.name.toLowerCase().replace(/\s/g, "")}-${t.leagueName || ""}`;
+    career?.clubData?.forEach((seasonData) => {
+      seasonData.teams?.forEach((team) => {
+        if (team.showMatch === false || !team.name) return;
+
+        const normalizedName = team.name
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "");
+
+        const key = `${normalizedName}-${team.leagueName ?? ""}`;
+
         if (!teamMap.has(key)) {
-          teamMap.set(key, t);
+          teamMap.set(key, team);
         }
       });
     });
+
     return Array.from(teamMap.values());
-  }, [career]);
+  }, [career?.clubData]);
+
+  const [globalTeamNames, setGlobalTeamNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchAllTeamsData = async () => {
+      try {
+        const globalTeams = await ServiceMatches.getAllTeamsAcrossUserCareers();
+
+        if (isActive) {
+          setGlobalTeamNames(globalTeams);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar times globais:", error);
+      }
+    };
+
+    void fetchAllTeamsData();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const teamOptions = useMemo(() => {
-    let filtered = allTeams;
+    const localTeamNames = localTeams
+      .filter(
+        (team) => !formValues.league || team.leagueName === formValues.league,
+      )
+      .map((team) => team.name);
 
-    if (formValues.league) {
-      filtered = filtered.filter((t) => t.leagueName === formValues.league);
-    }
+    const availableNames = formValues.league
+      ? localTeamNames
+      : [...localTeamNames, ...globalTeamNames];
 
-    const searchValue = (formValues.opponentTeam || "")
+    const searchValue = (formValues.opponentTeam ?? "")
+      .trim()
       .toLowerCase()
-      .replace(/\s/g, "");
-    if (searchValue) {
-      filtered = filtered.filter((t) =>
-        t.name.toLowerCase().replace(/\s/g, "").includes(searchValue),
-      );
-    }
+      .replace(/\s+/g, "");
 
-    return Array.from(new Set(filtered.map((t) => t.name)));
-  }, [allTeams, formValues.league, formValues.opponentTeam]);
+    const uniqueTeams = new Map<string, string>();
+
+    availableNames.forEach((teamName) => {
+      const normalizedName = teamName.trim().toLowerCase().replace(/\s+/g, "");
+
+      if (!normalizedName) return;
+      if (searchValue && !normalizedName.includes(searchValue)) return;
+
+      if (!uniqueTeams.has(normalizedName)) {
+        uniqueTeams.set(normalizedName, teamName);
+      }
+    });
+
+    return Array.from(uniqueTeams.values()).sort((a, b) =>
+      a.localeCompare(b, "pt-BR"),
+    );
+  }, [localTeams, globalTeamNames, formValues.league, formValues.opponentTeam]);
 
   const formFields = useMemo(
     () => getMatchFormFields(leagueOptions, savedMonth, teamOptions),

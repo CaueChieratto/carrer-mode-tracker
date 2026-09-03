@@ -5,7 +5,6 @@ import {
   getDocs,
   deleteDoc,
 } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
 import { updateCareerFirestore } from "../../../../../../../../../common/helpers/Setters";
 import { auth, db } from "../../../../../../../../../common/services/Firebase";
 import { TableTeamData } from "../../../../../../../../../common/interfaces/TableTeamData";
@@ -30,21 +29,18 @@ export const ServiceTable = {
   addTeamToTable: async (
     careerId: string,
     seasonId: string,
-    teamData: Omit<TableTeamData, "id">,
+    teamData: TableTeamData,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const newTeamId = uuidv4();
-    const newTeam: TableTeamData = { ...teamData, id: newTeamId };
-
     const teamRef = doc(
       db,
       `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/table`,
-      newTeamId,
+      teamData.id,
     );
 
-    await setDoc(teamRef, newTeam);
+    await setDoc(teamRef, teamData);
     await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
   },
 

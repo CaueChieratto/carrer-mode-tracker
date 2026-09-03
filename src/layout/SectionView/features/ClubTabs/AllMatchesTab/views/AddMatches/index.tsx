@@ -1,13 +1,20 @@
 import { Career } from "../../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
+import { Match } from "../../../../../../../common/interfaces/Match";
+import { Teams } from "../../../../../../../common/interfaces/Teams";
 import { AddMatchesProvider } from "./contexts/AddMatchesContext";
 import { AddMatchesScreen } from "./screens/AddMatchesScreen";
+
+export type OptimisticMatchData =
+  | { type: "ADD"; match: Match; team?: Teams }
+  | { type: "UPDATE"; match: Match; team?: Teams }
+  | { type: "DELETE"; matchId: string };
 
 type AddMatchesScreenProps = {
   career: Career;
   season: ClubData;
   matchesId?: string;
-  onClose: () => void;
+  onClose: (data?: OptimisticMatchData) => void;
 };
 
 export default function AddMatches(props: AddMatchesScreenProps) {

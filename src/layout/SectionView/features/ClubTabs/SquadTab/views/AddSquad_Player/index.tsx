@@ -1,5 +1,5 @@
 import Styles from "./screens/AddSquad_PlayerScreen/AddSquad_PlayerScreen.module.css";
-import { forwardRef, useMemo } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import { getSquadFormFields } from "./constants/SquadFormFields";
 import { useSquadPlayerForm } from "./hooks/useSquadPlayerForm";
 import {
@@ -13,6 +13,7 @@ import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
 import { Players } from "../../../../../../../common/interfaces/playersInfo/players";
 import { ModalType } from "../../../../../../../common/types/enums/ModalType";
 import FormSection from "../../../../../../../components/FormSection";
+import { ServiceMatches } from "../../../AllMatchesTab/views/AddMatches/services/ServiceMatches";
 
 type AddSquad_PlayerProps = {
   player?: Players;
@@ -39,6 +40,31 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
       isIncomingLoan,
     } = useSquadPlayerForm(player, career, season);
 
+    const [globalTeams, setGlobalTeams] = useState<string[]>(() => {
+      if (!career?.clubData) return [];
+      const teams = new Set<string>();
+      career.clubData.forEach((s) => {
+        s.teams?.forEach((t) => {
+          if (t.name) teams.add(t.name);
+        });
+      });
+      return Array.from(teams).sort();
+    });
+
+    useEffect(() => {
+      const fetchAllUserTeams = async () => {
+        try {
+          const allTeams = await ServiceMatches.getAllTeamsAcrossUserCareers();
+          if (allTeams.length > 0) {
+            setGlobalTeams(allTeams);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar times globais: ", error);
+        }
+      };
+      fetchAllUserTeams();
+    }, []);
+
     const filteredPastPlayerOptions = useMemo(() => {
       const searchValue = (formValues.selectedPastPlayer || "")
         .toLowerCase()
@@ -53,29 +79,18 @@ const AddSquad_Player = forwardRef<HTMLFormElement, AddSquad_PlayerProps>(
     }, [pastPlayerOptions, formValues.selectedPastPlayer]);
 
     const filteredTeamOptions = useMemo(() => {
-      if (!career?.clubData) return [];
-
-      const teams = new Set<string>();
-      career.clubData.forEach((s) => {
-        s.teams?.forEach((t) => {
-          if (t.name) teams.add(t.name);
-        });
-      });
-
-      const allTeams = Array.from(teams).sort();
-
       const searchValue = (formValues.fromClub || "")
         .toLowerCase()
         .replace(/\s/g, "");
 
       if (searchValue) {
-        return allTeams.filter((teamName) =>
+        return globalTeams.filter((teamName) =>
           teamName.toLowerCase().replace(/\s/g, "").includes(searchValue),
         );
       }
 
-      return allTeams;
-    }, [career, formValues.fromClub]);
+      return globalTeams;
+    }, [globalTeams, formValues.fromClub]);
 
     const dynamicFields = getSquadFormFields(
       formValues.nation || "",

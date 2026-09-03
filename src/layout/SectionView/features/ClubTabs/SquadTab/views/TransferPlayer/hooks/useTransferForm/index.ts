@@ -35,6 +35,30 @@ export const useTransferForm = ({
   const startingTab = initialMode === "loan" ? 2 : 1;
   const [activeTab] = useState<number>(startingTab);
   const [isLoading, setIsLoading] = useState(false);
+  const [globalTeams, setGlobalTeams] = useState<string[]>(() => {
+    if (!career?.clubData) return [];
+    const teams = new Set<string>();
+    career.clubData.forEach((s) => {
+      s.teams?.forEach((t) => {
+        if (t.name) teams.add(t.name);
+      });
+    });
+    return Array.from(teams).sort();
+  });
+
+  useEffect(() => {
+    const fetchAllUserTeams = async () => {
+      try {
+        const allTeams = await ServiceMatches.getAllTeamsAcrossUserCareers();
+        if (allTeams.length > 0) {
+          setGlobalTeams(allTeams);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar times globais: ", error);
+      }
+    };
+    fetchAllUserTeams();
+  }, []);
 
   const { formValues, setFormValues, handleInputChange } = useForm();
   const [booleanValues, setBooleanValues] = useState<BooleanValues>({
@@ -54,29 +78,18 @@ export const useTransferForm = ({
   });
 
   const filteredTeamOptions = useMemo(() => {
-    if (!career?.clubData) return [];
-
-    const teams = new Set<string>();
-    career.clubData.forEach((s) => {
-      s.teams?.forEach((t) => {
-        if (t.name) teams.add(t.name);
-      });
-    });
-
-    const allTeams = Array.from(teams).sort();
-
     const searchValue = (formValues.toClub || "")
       .toLowerCase()
       .replace(/\s/g, "");
 
     if (searchValue) {
-      return allTeams.filter((teamName) =>
+      return globalTeams.filter((teamName) =>
         teamName.toLowerCase().replace(/\s/g, "").includes(searchValue),
       );
     }
 
-    return allTeams;
-  }, [career, formValues.toClub]);
+    return globalTeams;
+  }, [globalTeams, formValues.toClub]);
 
   useEffect(() => {
     if (player?.loan) {
