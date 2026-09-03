@@ -9,6 +9,10 @@ import { updateCareerFirestore } from "../../../../../../../../../common/helpers
 import { auth, db } from "../../../../../../../../../common/services/Firebase";
 import { TableTeamData } from "../../../../../../../../../common/interfaces/TableTeamData";
 
+type NewTableTeamData = Omit<TableTeamData, "id"> & {
+  id?: string;
+};
+
 export const ServiceTable = {
   getTableBySeason: async (
     careerId: string,
@@ -29,19 +33,28 @@ export const ServiceTable = {
   addTeamToTable: async (
     careerId: string,
     seasonId: string,
-    teamData: TableTeamData,
+    teamData: NewTableTeamData,
   ): Promise<void> => {
     const user = auth.currentUser;
     if (!user) throw new Error("Usuário não autenticado");
 
-    const teamRef = doc(
+    const tableRef = collection(
       db,
       `users/${user.uid}/careers/${careerId}/seasons/${seasonId}/table`,
-      teamData.id,
     );
 
-    await setDoc(teamRef, teamData);
-    await updateCareerFirestore(user.uid, careerId, { updatedAt: Date.now() });
+    const teamRef = teamData.id ? doc(tableRef, teamData.id) : doc(tableRef);
+
+    const newTeamData: TableTeamData = {
+      ...teamData,
+      id: teamRef.id,
+    };
+
+    await setDoc(teamRef, newTeamData);
+
+    await updateCareerFirestore(user.uid, careerId, {
+      updatedAt: Date.now(),
+    });
   },
 
   updateTeamInTable: async (
