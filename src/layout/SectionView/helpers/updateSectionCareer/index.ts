@@ -1,12 +1,20 @@
 import type { Career } from "../../../../common/interfaces/Career";
 import type { ClubData } from "../../../../common/interfaces/club/clubData";
+import { Players } from "../../../../common/interfaces/playersInfo/players";
 import { TableRowData } from "../../../../common/interfaces/Table";
 import { TableTeamData } from "../../../../common/interfaces/TableTeamData";
 import type { OptimisticMatchData } from "../../features/ClubTabs/AllMatchesTab/views/AddMatches";
 import { OptimisticTableData } from "../../features/ClubTabs/TableTab/views/AddTeamsToTable";
 
-export type OptimisticUpdateData = OptimisticMatchData | OptimisticTableData;
+export type OptimisticPlayerData = {
+  type: "UPDATE_PLAYER";
+  player: Players;
+};
 
+export type OptimisticUpdateData =
+  | OptimisticMatchData
+  | OptimisticTableData
+  | OptimisticPlayerData;
 interface RefreshedSeasonData {
   matches: ClubData["matches"];
   players: ClubData["players"];
@@ -15,6 +23,18 @@ interface RefreshedSeasonData {
 
 type SeasonMatches = NonNullable<ClubData["matches"]>;
 type SeasonTeams = NonNullable<ClubData["teams"]>;
+
+const updatePlayers = (
+  players: ClubData["players"],
+  optimisticData: OptimisticPlayerData,
+): ClubData["players"] => {
+  const exists = players.some((p) => p.id === optimisticData.player.id);
+  return exists
+    ? players.map((p) =>
+        p.id === optimisticData.player.id ? optimisticData.player : p,
+      )
+    : [...players, optimisticData.player];
+};
 
 const updateTable = (
   table: TableTeamData[],
@@ -129,6 +149,13 @@ export function applyOptimisticUpdate(
         return {
           ...season,
           table: updatedTable as unknown as TableRowData[],
+        };
+      }
+
+      if (optimisticData.type === "UPDATE_PLAYER") {
+        return {
+          ...season,
+          players: updatePlayers(season.players, optimisticData),
         };
       }
 

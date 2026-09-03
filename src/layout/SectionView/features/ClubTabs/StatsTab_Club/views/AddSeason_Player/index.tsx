@@ -1,12 +1,13 @@
 import { Career } from "../../../../../../../common/interfaces/Career";
 import { ClubData } from "../../../../../../../common/interfaces/club/clubData";
+import { OptimisticUpdateData } from "../../../../../helpers/updateSectionCareer";
 import AddSeason_PlayerScreen from "./screens/AddSeason_PlayerScreen";
 
 type AddSeasonPlayerProps = {
   career: Career;
   season: ClubData;
   playerId?: string;
-  onClose: () => void;
+  onClose: (optimisticData?: OptimisticUpdateData) => void;
 };
 
 export default function AddSeason_Player(props: AddSeasonPlayerProps) {

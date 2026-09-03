@@ -11,12 +11,13 @@ import Load from "../../../../../../../../../components/Load";
 import Navbar from "../../../../../../../../../ui/Navbar";
 import { usePlayerStats } from "../../../../../../../../../common/hooks/Players/UsePlayerStats";
 import AddSeason_Player_Form from "../../components/AddSeason_Player_Form";
+import { OptimisticUpdateData } from "../../../../../../../helpers/updateSectionCareer";
 
 type Props = {
   career: Career;
   season: ClubData;
   player?: Players;
-  onClose: () => void;
+  onClose: (optimisticData?: OptimisticUpdateData) => void;
 };
 
 export default function AddSeason_PlayerScreen({
@@ -26,30 +27,53 @@ export default function AddSeason_PlayerScreen({
   onClose,
 }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
+  const pendingPlayerRef = useRef<Players | undefined>(undefined);
   const modalManager = useModalManager();
   const { clubColor, darkClubColor } = useSeasonTheme();
+
+  const handleGoBack = () => {
+    const updatedPlayer = pendingPlayerRef.current;
+    pendingPlayerRef.current = undefined;
+    if (updatedPlayer) {
+      onClose({ type: "UPDATE_PLAYER", player: updatedPlayer });
+      return;
+    }
+    onClose();
+  };
 
   const { handleStatsSave, isStatsLoading } = usePlayerStats({
     career,
     careerId: career.id,
     currentPlayers: season.players,
-    handleGoBack: onClose,
+    handleGoBack,
   });
 
   const handleSave = () => {
-    if (formRef.current) {
-      const formData = new FormData(formRef.current);
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
 
-      if (player) {
-        player.ballonDor = formData.get("ballonDor") === "true" ? 1 : 0;
-        const drafted = formData.get("draftedLeagues") as string;
-        if (drafted) {
-          player.statsLeagues = JSON.parse(drafted);
-        }
-      }
+    const drafted = formData.get("draftedLeagues") as string;
+    const statsLeagues = drafted ? JSON.parse(drafted) : undefined;
+    const ballonDor = formData.get("ballonDor") === "true" ? 1 : 0;
 
-      handleStatsSave(formData);
+    let targetPlayer = player;
+
+    if (!targetPlayer) {
+      const selectedName = formData.get("playerName") as string | null;
+      targetPlayer = selectedName
+        ? season.players.find((p) => p.name === selectedName)
+        : undefined;
     }
+
+    if (targetPlayer) {
+      pendingPlayerRef.current = {
+        ...targetPlayer,
+        ballonDor,
+        statsLeagues: statsLeagues ?? targetPlayer.statsLeagues,
+      };
+    }
+
+    handleStatsSave(formData);
   };
 
   return (
